@@ -106,14 +106,12 @@ export const solutions = [
   },
 ];
 
-export const partners = [
-  "Allen-Bradley",
-  "Rockwell Automation",
-  "Keyence",
-  "OneMotion®",
-  "Intralox",
-  "PulseRoller",
-  "KUKA",
+export const partners: { name: string; logo?: string; width: number; height: number }[] = [
+  { name: "Keyence", logo: "/images/logos/partners/keyence.png", width: 400, height: 70 },
+  { name: "OneMotion", logo: "/images/logos/partners/onemotion.png", width: 300, height: 58 },
+  { name: "Intralox", logo: "/images/logos/partners/intralox.png", width: 310, height: 131 },
+  { name: "Festo", logo: "/images/logos/partners/festo.png", width: 519, height: 97 },
+  { name: "NGI", logo: "/images/logos/partners/ngi.png", width: 300, height: 158 },
 ];
 
 export const industries = [
