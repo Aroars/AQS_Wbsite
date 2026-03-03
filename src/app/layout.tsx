@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
-import { SmoothScroll } from "@/components/ui/smooth-scroll";
-import { CursorGlow } from "@/components/ui/cursor-glow";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import { pageMetadata, organizationSchema } from "@/content/seo";
 import "./globals.css";
 
@@ -53,16 +50,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <SmoothScroll>
-          {/* Background effects */}
-          <div className="particle-grid" />
-          <div className="noise-overlay" />
-          <CursorGlow />
-          <CustomCursor />
-
-          {/* Page content */}
           <main className="relative z-10">{children}</main>
-        </SmoothScroll>
       </body>
     </html>
   );

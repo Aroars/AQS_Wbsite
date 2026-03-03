@@ -16,7 +16,6 @@ export function HeroSection() {
       {/* Background elements */}
       <GlowOrb top="-200px" left="-100px" size={600} />
       <GlowOrb top="200px" left="60%" size={500} color="0,102,255" />
-      <div className="scan-lines" />
 
       {/* Hero background image + video */}
       <div className="absolute inset-0 z-0">
