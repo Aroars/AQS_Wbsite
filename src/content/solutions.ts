@@ -87,6 +87,23 @@ export const solutions = [
     description:
       "Custom-engineered food-grade conveyor systems including freezer conveyors, accumulation systems, and modular belt configurations for washdown environments.",
   },
+  {
+    slug: "intellipak",
+    route: "/solutions/intellipak",
+    icon: "▦",
+    title: "IntelliPak Feed Systems",
+    subtitle: "Smart Infeed & Product Handling",
+    accent: "#f5a623",
+    shortFeatures: [
+      "Mag-Drive precision up to 500 PPM",
+      "Multi-lane collation & merging",
+      "Zero-pressure gentle accumulation",
+      "IP69K sanitary construction",
+      "Allen-Bradley + VeriPak SCADA ready",
+    ],
+    description:
+      "Precision product handling for sanitary packaging lines. Mag-Drive powered conveyors that gap, merge, collate, and time your products with servo-like accuracy — no gears, no oil, no guesswork.",
+  },
 ];
 
 export const partners = [

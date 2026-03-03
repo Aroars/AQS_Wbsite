@@ -46,6 +46,11 @@ export const pageMetadata = {
     description:
       "Custom-engineered food-grade conveyor systems including freezer conveyors, accumulation systems, and modular belt configurations. 50+ years combined engineering experience.",
   },
+  intellipak: {
+    title: "IntelliPak® Feed Systems — Smart Infeed & Product Handling | AQS",
+    description:
+      "Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears, zero oil, and servo-like accuracy.",
+  },
   about: {
     title: "About | AQS — Automated Quality Solutions",
     description:

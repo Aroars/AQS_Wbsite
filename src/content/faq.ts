@@ -30,6 +30,11 @@ export const faqItems = [
       "Custom sanitary conveyors including freezer-rated systems, accumulation conveyors, modular belt, flat-top chain, and roller configurations — all designed for washdown with quick-disconnect features.",
   },
   {
+    question: "What is IntelliPak?",
+    answer:
+      "IntelliPak is AQS's smart infeed and product handling platform. Powered by One Motion™ Mag-Drive technology, IntelliPak conveyors transform random, irregular product flow into precisely gapped, perfectly timed packages — ready for wrapping, sealing, cartoning, or casing. No servo motors, no gearboxes, no oil. Handles up to 500 products per minute with Allen-Bradley controls and VeriPak SCADA integration.",
+  },
+  {
     question: "Why doesn't vision-based leak detection work?",
     answer:
       "Camera systems inspect what a package looks like, not whether it's sealed. Pinholes, grease in seal zones, and internal board cuts are physically invisible to optical inspection at line speed. AQS is developing a mechanical dual-pull suction system that measures force and deflection delta — detecting actual atmosphere ingress through any breach regardless of visual appearance.",

@@ -79,4 +79,20 @@ export const solutions = [
     shortDescription:
       "Custom-engineered sanitary conveyor systems including freezer-rated, accumulation, and modular configurations for food production.",
   },
+  {
+    slug: "intellipak",
+    icon: "▦",
+    title: "IntelliPak",
+    subtitle: "Smart Infeed & Product Handling",
+    accent: "#f5a623",
+    features: [
+      "Mag-Drive precision up to 500 PPM",
+      "Multi-lane collation & merging",
+      "Zero-pressure gentle accumulation",
+      "IP69K sanitary construction",
+      "Allen-Bradley + VeriPak SCADA ready",
+    ],
+    shortDescription:
+      "Mag-Drive powered conveyors that gap, merge, collate, and time products with servo-like accuracy for sanitary packaging lines.",
+  },
 ];
