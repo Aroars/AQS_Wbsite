@@ -689,8 +689,8 @@ export function BeforeAfterAnimation() {
         <div
           className="rounded-xl overflow-hidden relative p-4"
           style={{
-            background: `${C.navyLight}66`,
-            border: `1px solid ${C.red}33`,
+            background: `${C.navyLight}44`,
+            border: `1px solid rgba(255,255,255,0.06)`,
           }}
         >
           <WithoutIntelliPak tick={tick} />
@@ -700,8 +700,8 @@ export function BeforeAfterAnimation() {
         <div
           className="rounded-xl overflow-hidden relative p-4"
           style={{
-            background: `${C.navyLight}66`,
-            border: `1px solid ${C.gold}33`,
+            background: `${C.navyLight}44`,
+            border: `1px solid rgba(255,255,255,0.06)`,
           }}
         >
           <WithIntelliPak tick={tick} />

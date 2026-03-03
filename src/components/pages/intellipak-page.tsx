@@ -70,35 +70,33 @@ export function IntelliPakContent() {
       <section className="px-8 mb-[50px]">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection delay={0.05}>
-            <div className="bg-black/40 border border-[rgba(0,0,0,0.25)] rounded-2xl p-8">
-              <div className="font-mono text-[0.58rem] text-[#f5a623] tracking-[0.12em] uppercase mb-4">
-                Live Product Flow &mdash; Random &rarr; Batched Precision
+            <div className="font-mono text-[0.58rem] text-[#f5a623] tracking-[0.12em] uppercase mb-4">
+              Live Product Flow &mdash; Random &rarr; Batched Precision
+            </div>
+            <ConveyorAnimation />
+            <div className="grid grid-cols-3 gap-4 mt-6">
+              <div className="text-center">
+                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">
+                  Infeed
+                </div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
+                  Random product arrival
+                </div>
               </div>
-              <ConveyorAnimation />
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="text-center">
-                  <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">
-                    Infeed
-                  </div>
-                  <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
-                    Random product arrival
-                  </div>
+              <div className="text-center">
+                <div className="font-mono text-[0.6rem] text-[#f5a623] tracking-[0.08em] uppercase">
+                  IntelliPak
                 </div>
-                <div className="text-center">
-                  <div className="font-mono text-[0.6rem] text-[#f5a623] tracking-[0.08em] uppercase">
-                    IntelliPak
-                  </div>
-                  <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
-                    Gapping, merging &amp; timing
-                  </div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
+                  Gapping, merging &amp; timing
                 </div>
-                <div className="text-center">
-                  <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">
-                    Output
-                  </div>
-                  <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
-                    Uniform batches at speed
-                  </div>
+              </div>
+              <div className="text-center">
+                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">
+                  Output
+                </div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">
+                  Uniform batches at speed
                 </div>
               </div>
             </div>
@@ -154,7 +152,7 @@ export function IntelliPakContent() {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             {intellipakCapabilities.map((cap, i) => (
               <StaggerItem key={i}>
-                <div className="bg-black/30 border border-[rgba(0,0,0,0.25)] rounded-xl p-7 h-full">
+                <div className="rounded-xl p-7 h-full" style={{ background: "rgba(17,34,64,0.5)", border: "1px solid rgba(255,255,255,0.06)" }}>
                   <div className="text-[1.5rem] mb-2">{cap.icon}</div>
                   <div
                     className="font-sans text-[1.02rem] font-bold mb-3"
@@ -306,7 +304,7 @@ export function IntelliPakContent() {
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             {intellipakApplications.map((app, i) => (
               <StaggerItem key={i}>
-                <div className="bg-black/30 border border-[rgba(0,0,0,0.25)] rounded-xl p-6 h-full border-l-[3px] border-l-[#00C6D7]">
+                <div className="rounded-xl p-6 h-full border-l-[3px] border-l-[#00C6D7]" style={{ background: "rgba(17,34,64,0.5)", border: "1px solid rgba(255,255,255,0.06)", borderLeft: "3px solid #00C6D7" }}>
                   <div className="font-sans text-[0.95rem] font-bold text-white mb-1">
                     {app.machine}
                   </div>
