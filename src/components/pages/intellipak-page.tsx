@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
@@ -11,6 +12,80 @@ import {
   intellipakApplications,
   magDriveSpecs,
 } from "@/data/intellipak";
+
+function CapabilityCard({
+  icon,
+  title,
+  accent,
+  items,
+}: {
+  icon: string;
+  title: string;
+  accent: string;
+  items: string[];
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-7 h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div className="text-[1.5rem] mb-2">{icon}</div>
+      <div
+        className="font-sans text-[1.02rem] font-bold mb-3"
+        style={{ color: accent }}
+      >
+        {title}
+      </div>
+      <ul className="flex flex-col gap-2">
+        {items.map((item, j) => (
+          <li key={j} className="flex gap-2 items-start">
+            <span
+              className="mt-[5px] shrink-0 text-[0.6rem]"
+              style={{ color: accent }}
+            >
+              &#9656;
+            </span>
+            <span className="font-sans text-[0.84rem] text-text-body leading-[1.55]">
+              {item}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ApplicationCard({ machine, desc }: { machine: string; desc: string }) {
+  const [hovered, setHovered] = useState(false);
+  const accent = "#00C6D7";
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-6 h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        borderLeft: `3px solid ${accent}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div className="font-sans text-[0.95rem] font-bold text-white mb-1">
+        {machine}
+      </div>
+      <div className="font-sans text-[0.84rem] text-text-body leading-[1.55]">
+        {desc}
+      </div>
+    </div>
+  );
+}
 
 export function IntelliPakContent() {
   return (
@@ -152,30 +227,12 @@ export function IntelliPakContent() {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             {intellipakCapabilities.map((cap, i) => (
               <StaggerItem key={i}>
-                <div className="rounded-xl p-7 h-full" style={{ background: "rgba(17,34,64,0.5)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div className="text-[1.5rem] mb-2">{cap.icon}</div>
-                  <div
-                    className="font-sans text-[1.02rem] font-bold mb-3"
-                    style={{ color: cap.accent }}
-                  >
-                    {cap.title}
-                  </div>
-                  <ul className="flex flex-col gap-2">
-                    {cap.items.map((item, j) => (
-                      <li key={j} className="flex gap-2 items-start">
-                        <span
-                          className="mt-[5px] shrink-0 text-[0.6rem]"
-                          style={{ color: cap.accent }}
-                        >
-                          &#9656;
-                        </span>
-                        <span className="font-sans text-[0.84rem] text-text-body leading-[1.55]">
-                          {item}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <CapabilityCard
+                  icon={cap.icon}
+                  title={cap.title}
+                  accent={cap.accent}
+                  items={cap.items}
+                />
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -304,14 +361,7 @@ export function IntelliPakContent() {
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             {intellipakApplications.map((app, i) => (
               <StaggerItem key={i}>
-                <div className="rounded-xl p-6 h-full border-l-[3px] border-l-[#00C6D7]" style={{ background: "rgba(17,34,64,0.5)", border: "1px solid rgba(255,255,255,0.06)", borderLeft: "3px solid #00C6D7" }}>
-                  <div className="font-sans text-[0.95rem] font-bold text-white mb-1">
-                    {app.machine}
-                  </div>
-                  <div className="font-sans text-[0.84rem] text-text-body leading-[1.55]">
-                    {app.desc}
-                  </div>
-                </div>
+                <ApplicationCard machine={app.machine} desc={app.desc} />
               </StaggerItem>
             ))}
           </StaggerContainer>
