@@ -264,16 +264,12 @@ export function MagDriveAnimation() {
 
   return (
     <div className="flex justify-center">
-      <div
-        className="rounded-xl border border-white/10 bg-[#112240]/60 p-3"
-        style={{ maxWidth: 280 }}
+      <svg
+        viewBox="0 0 240 240"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full"
+        style={{ display: "block", maxWidth: 360 }}
       >
-        <svg
-          viewBox="0 0 240 240"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full"
-          style={{ display: "block" }}
-        >
           {/* Outer shell — two rings for depth */}
           <circle cx={cx} cy={cy} r={outerR} fill="none" stroke={C.slateLight} strokeWidth="3" opacity="0.3" />
           <circle cx={cx} cy={cy} r={outerR - 8} fill="none" stroke={C.navyLight} strokeWidth="14" opacity="0.5" />
@@ -363,7 +359,6 @@ export function MagDriveAnimation() {
             );
           })}
         </svg>
-      </div>
     </div>
   );
 }
@@ -434,7 +429,7 @@ function WithoutIntelliPak({ tick }: { tick: number }) {
       </div>
 
       {/* Belt SVG */}
-      <div className="overflow-hidden rounded border border-white/10" style={{ backgroundColor: C.navyMid }}>
+      <div className="overflow-hidden rounded">
         <svg viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
           {/* Belt */}
           <rect x="0" y={beltY} width="220" height="6" rx="3" fill={isJammed ? `${C.red}44` : C.navyLight} />
@@ -588,7 +583,7 @@ function WithIntelliPak({ tick }: { tick: number }) {
       </div>
 
       {/* Belt SVG */}
-      <div className="overflow-hidden rounded border border-white/10" style={{ backgroundColor: C.navyMid }}>
+      <div className="overflow-hidden rounded">
         <svg viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
           {/* Belt */}
           <rect x="0" y={beltY} width="220" height="6" rx="3" fill={C.navyLight} />
