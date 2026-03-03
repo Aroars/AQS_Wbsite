@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 
-/* ─── Color Tokens ─── */
+/* ─── Color Tokens (matched to original reference) ─── */
 const C = {
-  navy: "#1a1d2b",
+  navy: "#0B1A2E",
   navyMid: "#112240",
   navyLight: "#1A3055",
   slate: "#8892B0",
@@ -13,81 +13,58 @@ const C = {
   gold: "#F5A623",
   goldDim: "#C4841A",
   cyan: "#00C6D7",
+  cyanDim: "#009DAA",
   green: "#34D399",
   red: "#F87171",
   accent: "#3B82F6",
 };
 
-/* ─── Helpers ─── */
-function seededRandom(seed: number): number {
-  const x = Math.sin(seed * 9301 + 49297) * 49271;
-  return x - Math.floor(x);
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════
    Component 1 — ConveyorAnimation
+   Faithful port of the original with inner detail rects, multi-color outfeed,
+   sensor sweep dots, zone glow, and batch brackets.
    ═══════════════════════════════════════════════════════════════════════════ */
-
-interface InfeedProduct {
-  id: number;
-  baseX: number;
-  width: number;
-  height: number;
-  color: string;
-  jitterY: number;
-}
-
-interface OutfeedGroup {
-  count: number;
-  baseX: number;
-}
-
-function buildInfeedProducts(): InfeedProduct[] {
-  const colors = [C.cyan, C.gold, C.accent, C.green, C.slateLight, C.goldDim, C.red];
-  return Array.from({ length: 7 }, (_, i) => ({
-    id: i,
-    baseX: 20 + i * 26,
-    width: 14 + seededRandom(i * 7) * 10,
-    height: 16 + seededRandom(i * 13) * 12,
-    color: colors[i % colors.length],
-    jitterY: 0,
-  }));
-}
-
-function buildOutfeedGroups(): OutfeedGroup[] {
-  const pattern = [3, 2, 3, 2];
-  const groups: OutfeedGroup[] = [];
-  let x = 420;
-  for (let g = 0; g < pattern.length; g++) {
-    groups.push({ count: pattern[g], baseX: x });
-    x += pattern[g] * 20 + 30;
-  }
-  return groups;
-}
 
 export function ConveyorAnimation() {
   const [tick, setTick] = useState(0);
-
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 28);
     return () => clearInterval(id);
   }, []);
 
-  const beltOffset = (tick * 1.8) % 40;
-  const infeedProducts = buildInfeedProducts();
-  const outfeedGroups = buildOutfeedGroups();
+  const beltSpeed = tick * 1.8;
 
-  /* belt texture lines */
-  const beltLines: number[] = [];
-  for (let x = -40; x < 740; x += 40) {
-    beltLines.push(x + beltOffset);
+  /* ── INFEED: random products moving LEFT → RIGHT ── */
+  const infeedProducts = [
+    { id: 1, spacing: 0, yOff: 0, size: 22, color: "#F5A623" },
+    { id: 2, spacing: 34, yOff: 5, size: 20, color: "#00C6D7" },
+    { id: 3, spacing: 56, yOff: -3, size: 24, color: "#34D399" },
+    { id: 4, spacing: 98, yOff: 2, size: 21, color: "#F5A623" },
+    { id: 5, spacing: 122, yOff: 6, size: 19, color: "#00C6D7" },
+    { id: 6, spacing: 158, yOff: -2, size: 23, color: "#34D399" },
+    { id: 7, spacing: 180, yOff: 4, size: 20, color: "#F5A623" },
+  ];
+
+  /* ── OUTFEED: batched groups [3, 2, 3, 2, 3, 2] ── */
+  const prodSize = 22;
+  const tightGap = 4;
+  const batchGap = 42;
+  const colors = ["#F5A623", "#00C6D7", "#34D399"];
+  const groupSizes = [3, 2, 3, 2, 3, 2];
+
+  const batchPattern: { offset: number; color: string }[] = [];
+  let cursor = 0;
+  let colorIdx = 0;
+  for (let g = 0; g < groupSizes.length; g++) {
+    const count = groupSizes[g];
+    for (let p = 0; p < count; p++) {
+      batchPattern.push({ offset: cursor, color: colors[colorIdx % 3] });
+      colorIdx++;
+      cursor += prodSize + tightGap;
+    }
+    cursor += batchGap;
   }
-
-  /* sensor beam pulse */
-  const sensorPulse = 0.3 + 0.7 * Math.abs(Math.sin(tick * 0.08));
-
-  /* processing arrow bob */
-  const arrowBob = Math.sin(tick * 0.1) * 3;
+  const totalPatternWidth = cursor;
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-[#112240]/60 p-2">
@@ -98,153 +75,167 @@ export function ConveyorAnimation() {
         style={{ display: "block" }}
       >
         {/* Belt base */}
-        <rect x="0" y="55" width="720" height="18" rx="3" fill="#333845" />
+        <rect x="0" y="55" width="720" height="8" rx="4" fill={C.navyLight} />
 
-        {/* Belt texture lines */}
-        {beltLines.map((lx, i) => (
-          <line
-            key={i}
-            x1={lx}
-            y1="56"
-            x2={lx}
-            y2="72"
-            stroke={C.slate}
-            strokeWidth="0.5"
-            opacity="0.35"
-          />
-        ))}
+        {/* Belt texture — moving */}
+        {Array.from({ length: 40 }, (_, i) => {
+          const x = (i * 18 + beltSpeed * 0.6) % 720;
+          return (
+            <line
+              key={i}
+              x1={x}
+              y1="56"
+              x2={x}
+              y2="62"
+              stroke={C.slate}
+              strokeWidth="0.5"
+              opacity="0.35"
+            />
+          );
+        })}
 
         {/* Zone dividers */}
-        <line
-          x1="210"
-          y1="8"
-          x2="210"
-          y2="90"
-          stroke={C.gold}
-          strokeWidth="1"
-          strokeDasharray="4 3"
-          opacity="0.6"
-        />
-        <line
-          x1="400"
-          y1="8"
-          x2="400"
-          y2="90"
-          stroke={C.gold}
-          strokeWidth="1"
-          strokeDasharray="4 3"
-          opacity="0.6"
-        />
+        <line x1="210" y1="46" x2="210" y2="72" stroke={C.gold} strokeWidth="1" strokeDasharray="3,3" opacity="0.6" />
+        <line x1="400" y1="46" x2="400" y2="72" stroke={C.cyan} strokeWidth="1" strokeDasharray="3,3" opacity="0.6" />
 
         {/* Zone labels */}
-        <text x="105" y="14" textAnchor="middle" fill={C.slateLight} fontSize="8" fontFamily="monospace">
+        <text x="105" y="90" fill={C.slate} fontSize="8" textAnchor="middle" fontFamily="monospace">
           RANDOM INFEED
         </text>
-        <text x="305" y="14" textAnchor="middle" fill={C.gold} fontSize="8" fontWeight="bold" fontFamily="monospace">
+        <text x="305" y="90" fill={C.gold} fontSize="8" textAnchor="middle" fontFamily="monospace">
           INTELLIPAK ZONE
         </text>
-        <text x="560" y="14" textAnchor="middle" fill={C.green} fontSize="8" fontFamily="monospace">
+        <text x="560" y="90" fill={C.cyan} fontSize="8" textAnchor="middle" fontFamily="monospace">
           BATCHED OUTPUT
         </text>
 
-        {/* ── INFEED Products ── */}
+        {/* ── INFEED Products — with inner detail rects ── */}
         {infeedProducts.map((p) => {
-          const drift = ((tick * 0.6 + p.baseX * 2) % 200);
-          const px = 10 + drift;
-          if (px > 205) return null;
-          const jy = Math.sin(tick * 0.15 + p.id * 1.7) * 3;
+          const cycleLen = 210;
+          const rawX = (p.spacing + beltSpeed * 0.7) % cycleLen - 20;
+          const x = rawX;
+          const jX = Math.sin(tick * 0.12 + p.id * 2.7) * 4;
+          const jY = Math.cos(tick * 0.15 + p.id * 1.3) * 2.5;
+          const baseY = 31 + p.yOff;
+          if (x + p.size < -5 || x > 210) return null;
           return (
-            <rect
-              key={`inf-${p.id}`}
-              x={px}
-              y={42 - p.height + jy}
-              width={p.width}
-              height={p.height}
-              rx="2"
-              fill={p.color}
-              opacity="0.85"
-            />
-          );
-        })}
-
-        {/* ── INTELLIPAK Sensor beams ── */}
-        {[0, 1, 2, 3, 4].map((i) => {
-          const sx = 240 + i * 30;
-          const beamOp = 0.2 + 0.6 * Math.abs(Math.sin(tick * 0.12 + i * 0.9));
-          return (
-            <line
-              key={`beam-${i}`}
-              x1={sx}
-              y1="20"
-              x2={sx}
-              y2="54"
-              stroke={C.cyan}
-              strokeWidth="1.5"
-              opacity={beamOp * sensorPulse}
-            />
-          );
-        })}
-
-        {/* Processing arrow */}
-        <polygon
-          points={`310,${34 + arrowBob} 330,${28 + arrowBob} 330,${24 + arrowBob} 350,${32 + arrowBob} 330,${40 + arrowBob} 330,${36 + arrowBob} 310,${36 + arrowBob}`}
-          fill={C.gold}
-          opacity="0.7"
-        />
-
-        {/* ── OUTFEED Batched products ── */}
-        {outfeedGroups.map((group, gi) => {
-          const groupDrift = ((tick * 0.8) % 300);
-          const gx = group.baseX + groupDrift;
-          if (gx > 740) return null;
-
-          const productEls: React.ReactElement[] = [];
-          const bracketX1 = gx;
-          const bracketX2 = gx + group.count * 18;
-
-          for (let pi = 0; pi < group.count; pi++) {
-            const px = gx + pi * 18;
-            if (px < 405 || px > 730) continue;
-            productEls.push(
+            <g key={`in-${p.id}`}>
               <rect
-                key={`out-${gi}-${pi}`}
-                x={px}
-                y="37"
-                width="14"
-                height="18"
-                rx="2"
-                fill={C.green}
-                opacity="0.8"
+                x={x + jX}
+                y={baseY + jY}
+                width={p.size}
+                height={p.size}
+                rx="3"
+                fill={p.color}
+                opacity="0.85"
               />
-            );
-          }
-
-          /* bracket + count label */
-          const midX = (bracketX1 + bracketX2) / 2;
-          const showBracket = bracketX1 > 405 && bracketX2 < 730;
-
-          return (
-            <g key={`grp-${gi}`}>
-              {productEls}
-              {showBracket && (
-                <>
-                  {/* bracket top */}
-                  <line x1={bracketX1} y1="30" x2={bracketX1} y2="34" stroke={C.slateLight} strokeWidth="0.8" />
-                  <line x1={bracketX2} y1="30" x2={bracketX2} y2="34" stroke={C.slateLight} strokeWidth="0.8" />
-                  <line x1={bracketX1} y1="30" x2={bracketX2} y2="30" stroke={C.slateLight} strokeWidth="0.8" />
-                  {/* group count */}
-                  <text x={midX} y="27" textAnchor="middle" fill={C.white} fontSize="7" fontFamily="monospace">
-                    x{group.count}
-                  </text>
-                </>
-              )}
+              <rect
+                x={x + jX + 3}
+                y={baseY + jY + 3}
+                width={p.size - 6}
+                height={p.size - 6}
+                rx="1"
+                fill="none"
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="0.5"
+              />
             </g>
           );
         })}
 
-        {/* Belt edge highlights */}
-        <line x1="0" y1="55" x2="720" y2="55" stroke={C.slate} strokeWidth="0.5" opacity="0.3" />
-        <line x1="0" y1="73" x2="720" y2="73" stroke={C.slate} strokeWidth="0.5" opacity="0.3" />
+        {/* ── INTELLIPAK ZONE — sensor beams, glow, sweep dots ── */}
+        <rect
+          x="210"
+          y="18"
+          width="190"
+          height="52"
+          rx="4"
+          fill={C.gold}
+          opacity={0.035 + Math.sin(tick * 0.06) * 0.025}
+        />
+        {[235, 265, 300, 335, 370].map((sx, i) => {
+          const intensity = 0.3 + Math.sin(tick * 0.18 + i * 1.4) * 0.35;
+          return (
+            <g key={sx}>
+              <line x1={sx} y1="22" x2={sx} y2="52" stroke={C.cyan} strokeWidth="1.2" opacity={intensity} />
+              <circle cx={sx} cy="22" r="2.5" fill={C.cyan} opacity={intensity + 0.2} />
+              {/* Sensor sweep dot */}
+              <circle
+                cx={sx}
+                cy={22 + ((tick * 0.6 + i * 7) % 30)}
+                r="1.2"
+                fill={C.gold}
+                opacity={intensity}
+              />
+            </g>
+          );
+        })}
+
+        {/* Processing arrow */}
+        <polygon points="392,38 406,48 392,58" fill={C.gold} opacity="0.7" />
+
+        {/* ── OUTFEED Products — multi-color with inner detail rects ── */}
+        {batchPattern.map((bp, i) => {
+          const speed = beltSpeed * 0.8;
+          const rawX = 410 + ((bp.offset + speed) % totalPatternWidth);
+          if (rawX > 720 || rawX + prodSize < 400) return null;
+          return (
+            <g key={`out-${i}`}>
+              <rect
+                x={rawX}
+                y={31}
+                width={prodSize}
+                height={prodSize}
+                rx="3"
+                fill={bp.color}
+                opacity="0.92"
+              />
+              <rect
+                x={rawX + 3}
+                y={34}
+                width={prodSize - 6}
+                height={prodSize - 6}
+                rx="1"
+                fill="none"
+                stroke="rgba(255,255,255,0.4)"
+                strokeWidth="0.5"
+              />
+            </g>
+          );
+        })}
+
+        {/* Batch group brackets */}
+        {(() => {
+          const speed = beltSpeed * 0.8;
+          const brackets: React.ReactElement[] = [];
+          let cur = 0;
+          for (let g = 0; g < groupSizes.length; g++) {
+            const count = groupSizes[g];
+            const startOff = cur;
+            const groupWidth = count * prodSize + (count - 1) * tightGap;
+            const bx = 410 + ((startOff + speed) % totalPatternWidth);
+            if (bx > 395 && bx + groupWidth < 725) {
+              brackets.push(
+                <g key={`br-${g}`}>
+                  <line x1={bx} y1="26" x2={bx + groupWidth} y2="26" stroke={C.cyan} strokeWidth="1" opacity="0.4" />
+                  <text
+                    x={bx + groupWidth / 2}
+                    y="22"
+                    fill={C.cyan}
+                    fontSize="8"
+                    textAnchor="middle"
+                    fontWeight="bold"
+                    opacity="0.6"
+                  >
+                    ×{count}
+                  </text>
+                </g>,
+              );
+            }
+            cur += count * (prodSize + tightGap) + batchGap;
+          }
+          return brackets;
+        })()}
       </svg>
     </div>
   );
@@ -252,6 +243,8 @@ export function ConveyorAnimation() {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Component 2 — MagDriveAnimation
+   Faithful port: outer shell with inner ring detail, unfilled stator coils,
+   correct proportions and rendering order.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function MagDriveAnimation() {
@@ -264,13 +257,10 @@ export function MagDriveAnimation() {
 
   const cx = 120;
   const cy = 120;
+  const outerR = 90;
+  const innerR = 55;
   const magnetR = 72;
-  const statorR = 55;
-  const magnetCount = 12;
-  const coilCount = 8;
-
-  /* force line pulse */
-  const forceOpacity = 0.25 + 0.45 * Math.abs(Math.sin((angle * Math.PI) / 90));
+  const numMagnets = 12;
 
   return (
     <div className="flex justify-center">
@@ -284,67 +274,36 @@ export function MagDriveAnimation() {
           className="w-full"
           style={{ display: "block" }}
         >
-          {/* Outer shell */}
-          <circle
-            cx={cx}
-            cy={cy}
-            r={90}
-            fill="none"
-            stroke={C.slate}
-            strokeWidth="2.5"
-            opacity="0.4"
-          />
+          {/* Outer shell — two rings for depth */}
+          <circle cx={cx} cy={cy} r={outerR} fill="none" stroke={C.slateLight} strokeWidth="3" opacity="0.3" />
+          <circle cx={cx} cy={cy} r={outerR - 8} fill="none" stroke={C.navyLight} strokeWidth="14" opacity="0.5" />
 
-          {/* Force lines (dashed) between stator and magnets */}
-          {Array.from({ length: 6 }, (_, i) => {
-            const fa = (i * 60 + angle * 0.5) * (Math.PI / 180);
-            const x1 = cx + Math.cos(fa) * (statorR + 2);
-            const y1 = cy + Math.sin(fa) * (statorR + 2);
-            const x2 = cx + Math.cos(fa) * (magnetR - 2);
-            const y2 = cy + Math.sin(fa) * (magnetR - 2);
-            return (
-              <line
-                key={`fl-${i}`}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke={C.cyan}
-                strokeWidth="1"
-                strokeDasharray="3 3"
-                opacity={forceOpacity}
-              />
-            );
-          })}
-
-          {/* Rotating magnets */}
-          {Array.from({ length: magnetCount }, (_, i) => {
-            const a = ((i * 360) / magnetCount + angle) * (Math.PI / 180);
-            const mx = cx + Math.cos(a) * magnetR;
-            const my = cy + Math.sin(a) * magnetR;
+          {/* Rotating magnets on outer shell */}
+          {Array.from({ length: numMagnets }, (_, i) => {
+            const a = ((i * 360) / numMagnets + angle) * (Math.PI / 180);
+            const x = cx + Math.cos(a) * magnetR;
+            const y = cy + Math.sin(a) * magnetR;
             const isN = i % 2 === 0;
             return (
-              <g key={`mag-${i}`}>
+              <g key={`outer-${i}`}>
                 <rect
-                  x={mx - 8}
-                  y={my - 5}
+                  x={x - 8}
+                  y={y - 5}
                   width="16"
                   height="10"
                   rx="2"
                   fill={isN ? C.red : C.accent}
-                  opacity="0.85"
-                  transform={`rotate(${(i * 360) / magnetCount + angle}, ${mx}, ${my})`}
+                  opacity="0.8"
+                  transform={`rotate(${(i * 360) / numMagnets + angle}, ${x}, ${y})`}
                 />
                 <text
-                  x={mx}
-                  y={my + 1}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill={C.white}
+                  x={x}
+                  y={y + 3}
+                  fill="white"
                   fontSize="6"
+                  textAnchor="middle"
                   fontWeight="bold"
-                  fontFamily="monospace"
-                  transform={`rotate(${(i * 360) / magnetCount + angle}, ${mx}, ${my})`}
+                  transform={`rotate(${(i * 360) / numMagnets + angle}, ${x}, ${y})`}
                 >
                   {isN ? "N" : "S"}
                 </text>
@@ -352,60 +311,57 @@ export function MagDriveAnimation() {
             );
           })}
 
-          {/* Inner stator circle */}
-          <circle
-            cx={cx}
-            cy={cy}
-            r={statorR}
-            fill={C.navyMid}
-            stroke={C.slateLight}
-            strokeWidth="1.5"
-            opacity="0.7"
-          />
+          {/* Stator (stationary center) */}
+          <circle cx={cx} cy={cy} r={innerR} fill={C.navyMid} stroke={C.slate} strokeWidth="2" />
 
-          {/* Stator coils (pulsing) */}
-          {Array.from({ length: coilCount }, (_, i) => {
-            const ca = (i * 360) / coilCount * (Math.PI / 180);
-            const coilX = cx + Math.cos(ca) * (statorR - 14);
-            const coilY = cy + Math.sin(ca) * (statorR - 14);
-            const pulse = 0.4 + 0.6 * Math.abs(Math.sin((angle * Math.PI) / 180 + i * 0.8));
+          {/* Stator coils — unfilled rings with pulsing opacity */}
+          {Array.from({ length: 8 }, (_, i) => {
+            const a = ((i * 360) / 8) * (Math.PI / 180);
+            const x = cx + Math.cos(a) * 38;
+            const y = cy + Math.sin(a) * 38;
             return (
               <circle
                 key={`coil-${i}`}
-                cx={coilX}
-                cy={coilY}
-                r={6}
-                fill={C.gold}
-                opacity={pulse}
+                cx={x}
+                cy={y}
+                r="8"
+                fill="none"
+                stroke={C.gold}
+                strokeWidth="1.5"
+                opacity={0.4 + Math.sin(angle * 0.05 + i) * 0.4}
               />
             );
           })}
 
           {/* Center label */}
-          <text
-            x={cx}
-            y={cy - 4}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={C.white}
-            fontSize="11"
-            fontWeight="bold"
-            fontFamily="monospace"
-          >
+          <text x={cx} y={cy - 4} fill={C.white} fontSize="8" textAnchor="middle" fontWeight="bold">
             MAG
           </text>
-          <text
-            x={cx}
-            y={cy + 9}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={C.white}
-            fontSize="11"
-            fontWeight="bold"
-            fontFamily="monospace"
-          >
+          <text x={cx} y={cy + 6} fill={C.white} fontSize="8" textAnchor="middle" fontWeight="bold">
             DRIVE
           </text>
+
+          {/* Force lines — between stator and magnets */}
+          {Array.from({ length: 6 }, (_, i) => {
+            const a = (((i * 60 + angle * 0.5) % 360) * Math.PI) / 180;
+            const x1 = cx + Math.cos(a) * (innerR + 4);
+            const y1 = cy + Math.sin(a) * (innerR + 4);
+            const x2 = cx + Math.cos(a) * (magnetR - 12);
+            const y2 = cy + Math.sin(a) * (magnetR - 12);
+            return (
+              <line
+                key={`force-${i}`}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke={C.cyan}
+                strokeWidth="1"
+                strokeDasharray="2,3"
+                opacity={0.3 + Math.sin(angle * 0.08 + i * 1.2) * 0.3}
+              />
+            );
+          })}
         </svg>
       </div>
     </div>
@@ -414,101 +370,116 @@ export function MagDriveAnimation() {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Component 3 — BeforeAfterAnimation
+   Faithful port: colored products, large metrics (22px), operator 🖐 icon,
+   per-product tilt during jams, sensor dots with circles, recovering phase.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-interface BeltProduct {
-  x: number;
-  tilt: number;
-}
-
 function WithoutIntelliPak({ tick }: { tick: number }) {
-  const cycleLen = 180;
-  const cycleTick = tick % cycleLen;
-  const isJammed = cycleTick >= 100 && cycleTick <= 150;
-  const jamProgress = isJammed ? (cycleTick - 100) / 50 : 0;
+  const beltY = 62;
+  const prodY = 38;
 
-  /* Products */
-  const products: BeltProduct[] = [];
-  for (let i = 0; i < 6; i++) {
-    const spacing = 22 + seededRandom(i * 5) * 18;
-    let px: number;
-    if (isJammed) {
-      /* pile-up: products compress toward jam point */
-      const baseX = 20 + i * spacing;
-      const jamX = 130;
-      const compression = jamProgress * 0.6;
-      px = baseX + (jamX - baseX) * compression;
-    } else {
-      px = ((20 + i * spacing + tick * 0.5) % 220);
-    }
-    const tilt = isJammed ? (seededRandom(i * 3 + 17) - 0.5) * jamProgress * 15 : 0;
-    products.push({ x: px, tilt });
-  }
+  /* Products with varied sizes and colors */
+  const manualProducts = [
+    { id: 1, baseX: 10, size: 20, color: "#F87171" },
+    { id: 2, baseX: 35, size: 22, color: "#FBBF24" },
+    { id: 3, baseX: 52, size: 18, color: "#F87171" },
+    { id: 4, baseX: 80, size: 21, color: "#FBBF24" },
+    { id: 5, baseX: 100, size: 19, color: "#F87171" },
+    { id: 6, baseX: 128, size: 22, color: "#FBBF24" },
+    { id: 7, baseX: 148, size: 20, color: "#F87171" },
+    { id: 8, baseX: 170, size: 18, color: "#FBBF24" },
+  ];
 
-  const beltColor = isJammed ? C.red : "#444B5C";
-  const oee = isJammed ? Math.max(38, 62 - jamProgress * 24) : 62 + Math.sin(tick * 0.03) * 4;
-  const productCount = Math.floor(tick * 0.12);
-  const status = isJammed ? "DOWN" : "RUN";
+  /* Jam cycle with recovery phase */
+  const jamCycle = 180;
+  const jamPhase = tick % jamCycle;
+  const isJammed = jamPhase > 100 && jamPhase < 150;
+  const isRecovering = jamPhase >= 150;
+  const manualSpeed = isJammed ? 0 : isRecovering ? tick * 0.4 : tick * 0.9;
+  const jamSqueeze = isJammed ? Math.min((jamPhase - 100) * 0.15, 4) : 0;
 
-  /* belt offset */
-  const beltOffset = isJammed ? 0 : (tick * 1.2) % 30;
+  /* OEE metrics */
+  const baseManualOEE = 62;
+  const manualOEEDelta = isJammed ? -12 : isRecovering ? -4 : Math.sin(tick * 0.02) * 3;
+  const manualOEE = Math.round(baseManualOEE + manualOEEDelta);
+  const manualCount = Math.floor(tick * 0.25 * (isJammed ? 0 : 1));
 
   return (
     <div>
-      {/* Header badge */}
-      <div className="mb-2 flex items-center justify-between">
-        <span
-          className="rounded px-2 py-0.5 text-xs font-bold tracking-wider"
-          style={{ backgroundColor: C.navyLight, color: C.slateLight, fontFamily: "monospace" }}
-        >
-          WITHOUT INTELLIPAK
-        </span>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <div>
+          <div style={{ fontSize: 9, color: C.red, letterSpacing: "0.15em", fontWeight: 700, fontFamily: "monospace" }}>
+            WITHOUT INTELLIPAK
+          </div>
+          <div style={{ fontSize: 11, color: C.slate, marginTop: 2 }}>Manual Infeed / Legacy System</div>
+        </div>
         {isJammed && (
-          <span
-            className="flex items-center gap-1 rounded px-2 py-0.5 text-xs font-bold"
-            style={{ backgroundColor: C.red, color: C.navy }}
+          <div
+            style={{
+              background: `${C.red}22`,
+              border: `1px solid ${C.red}66`,
+              borderRadius: 6,
+              padding: "3px 10px",
+              fontSize: 9,
+              color: C.red,
+              fontWeight: 800,
+              letterSpacing: "0.1em",
+              fontFamily: "monospace",
+            }}
           >
-            <span role="img" aria-label="warning">&#9888;</span> LINE STOP <span role="img" aria-label="hand">&#9995;</span>
-          </span>
+            ⚠ LINE STOP
+          </div>
         )}
       </div>
 
       {/* Belt SVG */}
       <div className="overflow-hidden rounded border border-white/10" style={{ backgroundColor: C.navyMid }}>
-        <svg viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
+        <svg viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
           {/* Belt */}
-          <rect x="0" y="42" width="220" height="14" rx="2" fill={beltColor} opacity="0.7" />
-          {/* Belt texture */}
-          {Array.from({ length: 12 }, (_, i) => {
-            const lx = (i * 20 + beltOffset) % 240 - 10;
-            return (
-              <line
-                key={i}
-                x1={lx}
-                y1="43"
-                x2={lx}
-                y2="55"
-                stroke={C.slate}
-                strokeWidth="0.4"
-                opacity="0.3"
-              />
-            );
-          })}
-
-          {/* Products */}
-          {products.map((p, i) => (
-            <rect
+          <rect x="0" y={beltY} width="220" height="6" rx="3" fill={isJammed ? `${C.red}44` : C.navyLight} />
+          {/* Belt texture lines */}
+          {Array.from({ length: 14 }, (_, i) => (
+            <line
               key={i}
-              x={p.x}
-              y="26"
-              width="14"
-              height="16"
-              rx="2"
-              fill={C.slateLight}
-              opacity="0.75"
-              transform={`rotate(${p.tilt}, ${p.x + 7}, ${26 + 8})`}
+              x1={(i * 16 + manualSpeed * 0.5) % 220}
+              y1={beltY + 1}
+              x2={(i * 16 + manualSpeed * 0.5) % 220}
+              y2={beltY + 5}
+              stroke={C.slate}
+              strokeWidth="0.4"
+              opacity="0.3"
             />
           ))}
+
+          {/* Products — jittery, piling during jam, with per-product tilt */}
+          {manualProducts.map((p, idx) => {
+            const spacing = isJammed ? p.baseX - jamSqueeze * idx * 1.5 : p.baseX;
+            const x = (spacing + manualSpeed * 0.5) % 210;
+            const jX = isJammed
+              ? Math.sin(tick * 0.3 + p.id) * 2
+              : Math.sin(tick * 0.1 + p.id * 2.5) * 3;
+            const jY = Math.cos(tick * 0.12 + p.id) * 2;
+            const tilt = isJammed
+              ? Math.sin(tick * 0.2 + idx) * 8
+              : Math.sin(tick * 0.05 + idx) * 2;
+            return (
+              <g
+                key={p.id}
+                transform={`rotate(${tilt}, ${x + jX + p.size / 2}, ${prodY + jY + p.size / 2})`}
+              >
+                <rect
+                  x={x + jX}
+                  y={prodY + jY}
+                  width={p.size}
+                  height={p.size}
+                  rx="2"
+                  fill={p.color}
+                  opacity={isJammed ? 0.95 : 0.75}
+                />
+              </g>
+            );
+          })}
 
           {/* Jam flash overlay */}
           {isJammed && (
@@ -516,42 +487,50 @@ function WithoutIntelliPak({ tick }: { tick: number }) {
               x="0"
               y="0"
               width="220"
-              height="70"
+              height="90"
               fill={C.red}
-              opacity={0.06 + 0.06 * Math.sin(tick * 0.4)}
+              opacity={0.02 + Math.sin(tick * 0.3) * 0.03}
             />
+          )}
+
+          {/* Operator intervention icon during jam */}
+          {isJammed && (
+            <g opacity={0.5 + Math.sin(tick * 0.25) * 0.4}>
+              <circle cx="190" cy="25" r="12" fill={C.red} opacity="0.15" />
+              <text x="190" y="29" fill={C.red} fontSize="14" textAnchor="middle">
+                🖐
+              </text>
+            </g>
           )}
         </svg>
       </div>
 
-      {/* Metrics */}
-      <div
-        className="mt-2 grid grid-cols-3 gap-2 rounded px-2 py-1.5 text-center"
-        style={{ backgroundColor: C.navy, fontFamily: "monospace" }}
-      >
+      {/* Metrics — large (22px) */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, fontFamily: "monospace" }}>
         <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>OEE</div>
-          <div style={{ color: isJammed ? C.red : C.slateLight, fontSize: 13, fontWeight: "bold" }}>
-            {oee.toFixed(0)}%
-          </div>
-        </div>
-        <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>PRODUCTS</div>
-          <div style={{ color: C.slateLight, fontSize: 13, fontWeight: "bold" }}>
-            {productCount}
-          </div>
-        </div>
-        <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>STATUS</div>
           <div
             style={{
-              color: status === "DOWN" ? C.red : C.green,
-              fontSize: 13,
-              fontWeight: "bold",
+              fontSize: 22,
+              fontWeight: 800,
+              color: isJammed ? C.red : "#FBBF24",
+              transition: "color 0.3s",
             }}
           >
-            {status}
+            {manualOEE}%
           </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>OEE</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.slate }}>
+            {manualCount}
+          </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>PRODUCTS</div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>
+            {isJammed ? "DOWN" : "RUN"}
+          </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>STATUS</div>
         </div>
       </div>
     </div>
@@ -559,128 +538,146 @@ function WithoutIntelliPak({ tick }: { tick: number }) {
 }
 
 function WithIntelliPak({ tick }: { tick: number }) {
-  const beltOffset = (tick * 1.4) % 30;
-  const oee = 91 + Math.sin(tick * 0.02) * 1.5;
-  const productCount = Math.floor(tick * 0.18);
+  const beltY = 62;
+  const prodY = 38;
 
-  /* Evenly spaced products */
-  const products: number[] = [];
-  for (let i = 0; i < 7; i++) {
-    const px = ((i * 28 + tick * 0.7) % 230) - 5;
-    if (px >= 0 && px <= 210) products.push(px);
-  }
+  const ipSpeed = tick * 1.3;
+  const ipProducts = [
+    { id: 10, offset: 0 },
+    { id: 11, offset: 30 },
+    { id: 12, offset: 60 },
+    { id: 13, offset: 90 },
+    { id: 14, offset: 120 },
+    { id: 15, offset: 150 },
+    { id: 16, offset: 180 },
+    { id: 17, offset: 210 },
+    { id: 18, offset: 240 },
+  ];
+  const ipCycleLen = 270;
+  const ipColors = [C.gold, C.cyan, C.green];
 
-  /* Sensor beam pulse */
-  const sensorPulse = 0.3 + 0.5 * Math.abs(Math.sin(tick * 0.1));
+  /* OEE stays high */
+  const ipOEE = Math.round(91 + Math.sin(tick * 0.015) * 1.5);
+  const ipCount = Math.floor(tick * 0.48);
 
   return (
     <div>
-      {/* Header badge */}
-      <div className="mb-2 flex items-center justify-between">
-        <span
-          className="rounded px-2 py-0.5 text-xs font-bold tracking-wider"
-          style={{ backgroundColor: C.navyLight, color: C.gold, fontFamily: "monospace" }}
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <div>
+          <div style={{ fontSize: 9, color: C.gold, letterSpacing: "0.15em", fontWeight: 700, fontFamily: "monospace" }}>
+            WITH INTELLIPAK
+          </div>
+          <div style={{ fontSize: 11, color: C.slate, marginTop: 2 }}>Automated Precision Infeed</div>
+        </div>
+        <div
+          style={{
+            background: `${C.green}22`,
+            border: `1px solid ${C.green}44`,
+            borderRadius: 6,
+            padding: "3px 10px",
+            fontSize: 9,
+            color: C.green,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            fontFamily: "monospace",
+          }}
         >
-          WITH INTELLIPAK
-        </span>
-        <span
-          className="flex items-center gap-1 rounded px-2 py-0.5 text-xs font-bold"
-          style={{ backgroundColor: `${C.green}22`, color: C.green }}
-        >
-          <span style={{ fontSize: 8 }}>{"\u25CF"}</span> RUNNING
-        </span>
+          ● RUNNING
+        </div>
       </div>
 
       {/* Belt SVG */}
       <div className="overflow-hidden rounded border border-white/10" style={{ backgroundColor: C.navyMid }}>
-        <svg viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
+        <svg viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: "block" }}>
           {/* Belt */}
-          <rect x="0" y="42" width="220" height="14" rx="2" fill="#444B5C" opacity="0.7" />
-          {/* Belt texture */}
-          {Array.from({ length: 12 }, (_, i) => {
-            const lx = (i * 20 + beltOffset) % 240 - 10;
-            return (
+          <rect x="0" y={beltY} width="220" height="6" rx="3" fill={C.navyLight} />
+          {/* Belt texture lines */}
+          {Array.from({ length: 14 }, (_, i) => (
+            <line
+              key={i}
+              x1={(i * 16 + ipSpeed * 0.6) % 220}
+              y1={beltY + 1}
+              x2={(i * 16 + ipSpeed * 0.6) % 220}
+              y2={beltY + 5}
+              stroke={C.slate}
+              strokeWidth="0.4"
+              opacity="0.3"
+            />
+          ))}
+
+          {/* Sensor beams with circle indicators */}
+          {[55, 110, 165].map((sx, i) => (
+            <g key={sx}>
               <line
-                key={i}
-                x1={lx}
-                y1="43"
-                x2={lx}
-                y2="55"
-                stroke={C.slate}
-                strokeWidth="0.4"
-                opacity="0.3"
+                x1={sx}
+                y1="28"
+                x2={sx}
+                y2={beltY - 2}
+                stroke={C.cyan}
+                strokeWidth="0.8"
+                opacity={0.25 + Math.sin(tick * 0.15 + i * 1.5) * 0.25}
+              />
+              <circle
+                cx={sx}
+                cy="28"
+                r="1.5"
+                fill={C.cyan}
+                opacity={0.4 + Math.sin(tick * 0.15 + i * 1.5) * 0.4}
+              />
+            </g>
+          ))}
+
+          {/* Products — smooth, evenly spaced, multi-color */}
+          {ipProducts.map((p, idx) => {
+            const x = (p.offset + ipSpeed * 0.6) % ipCycleLen;
+            if (x > 220) return null;
+            return (
+              <rect
+                key={p.id}
+                x={x}
+                y={prodY + 2}
+                width={20}
+                height={20}
+                rx="3"
+                fill={ipColors[idx % 3]}
+                opacity="0.9"
               />
             );
           })}
-
-          {/* Sensor beams */}
-          {[55, 110, 165].map((sx, i) => (
-            <line
-              key={`sb-${i}`}
-              x1={sx}
-              y1="12"
-              x2={sx}
-              y2="41"
-              stroke={C.cyan}
-              strokeWidth="1"
-              opacity={sensorPulse}
-            />
-          ))}
-
-          {/* Products (evenly spaced) */}
-          {products.map((px, i) => (
-            <rect
-              key={i}
-              x={px}
-              y="26"
-              width="14"
-              height="16"
-              rx="2"
-              fill={C.green}
-              opacity="0.8"
-            />
-          ))}
         </svg>
       </div>
 
-      {/* Metrics */}
-      <div
-        className="mt-2 grid grid-cols-3 gap-2 rounded px-2 py-1.5 text-center"
-        style={{ backgroundColor: C.navy, fontFamily: "monospace" }}
-      >
+      {/* Metrics — large (22px) */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, fontFamily: "monospace" }}>
         <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>OEE</div>
-          <div style={{ color: C.green, fontSize: 13, fontWeight: "bold" }}>
-            {oee.toFixed(0)}%
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.green }}>
+            {ipOEE}%
           </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>OEE</div>
         </div>
-        <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>PRODUCTS</div>
-          <div style={{ color: C.slateLight, fontSize: 13, fontWeight: "bold" }}>
-            {productCount}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.gold }}>
+            {ipCount}
           </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>PRODUCTS</div>
         </div>
-        <div>
-          <div style={{ color: C.slate, fontSize: 9 }}>STATUS</div>
-          <div style={{ color: C.green, fontSize: 13, fontWeight: "bold" }}>RUN</div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 22, fontWeight: 800, color: C.green }}>
+            RUN
+          </div>
+          <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em" }}>STATUS</div>
         </div>
       </div>
     </div>
   );
 }
 
-const comparisonItems = [
-  { label: "Line Stops", without: "Frequent", with: "Near Zero", color: C.red, goodColor: C.green },
-  { label: "Operator Intervention", without: "Constant", with: "Minimal", color: C.red, goodColor: C.green },
-  { label: "Throughput", without: "Inconsistent", with: "+26% Avg", color: C.slateLight, goodColor: C.gold },
-  { label: "Data Visibility", without: "None", with: "Real-time", color: C.slateLight, goodColor: C.cyan },
-];
-
 export function BeforeAfterAnimation() {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 28);
+    const id = setInterval(() => setTick((t) => t + 1), 35);
     return () => clearInterval(id);
   }, []);
 
@@ -690,35 +687,45 @@ export function BeforeAfterAnimation() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* LEFT — Without */}
         <div
-          className="rounded-xl border border-white/10 p-3"
-          style={{ backgroundColor: `${C.navyMid}99` }}
+          className="rounded-xl overflow-hidden relative p-4"
+          style={{
+            background: `${C.navyLight}66`,
+            border: `1px solid ${C.red}33`,
+          }}
         >
           <WithoutIntelliPak tick={tick} />
         </div>
 
         {/* RIGHT — With */}
         <div
-          className="rounded-xl border border-white/10 p-3"
-          style={{ backgroundColor: `${C.navyMid}99` }}
+          className="rounded-xl overflow-hidden relative p-4"
+          style={{
+            background: `${C.navyLight}66`,
+            border: `1px solid ${C.gold}33`,
+          }}
         >
           <WithIntelliPak tick={tick} />
         </div>
       </div>
 
       {/* Bottom comparison row */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {comparisonItems.map((item) => (
-          <div
-            key={item.label}
-            className="rounded-lg border border-white/5 p-3 text-center"
-            style={{ backgroundColor: C.navyMid, fontFamily: "monospace" }}
-          >
-            <div style={{ color: C.slate, fontSize: 10, marginBottom: 6 }}>{item.label}</div>
-            <div className="flex items-center justify-center gap-2 text-xs">
-              <span style={{ color: item.color, fontWeight: "bold" }}>{item.without}</span>
-              <span style={{ color: C.slate }}>{"\u2192"}</span>
-              <span style={{ color: item.goodColor, fontWeight: "bold" }}>{item.with}</span>
+      <div
+        className="flex flex-wrap justify-center gap-8 py-2.5"
+        style={{ fontFamily: "monospace" }}
+      >
+        {[
+          { label: "Line Stops", without: "Frequent", wit: "Near Zero" },
+          { label: "Operator Intervention", without: "Constant", wit: "Hands-Off" },
+          { label: "Throughput", without: "Inconsistent", wit: "Sustained" },
+          { label: "Data Visibility", without: "None", wit: "Real-Time" },
+        ].map((cmp) => (
+          <div key={cmp.label} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em", marginBottom: 4 }}>
+              {cmp.label}
             </div>
+            <div style={{ fontSize: 10, color: C.red, fontWeight: 600 }}>{cmp.without}</div>
+            <div style={{ fontSize: 8, color: C.slate, margin: "2px 0" }}>↓</div>
+            <div style={{ fontSize: 10, color: C.green, fontWeight: 700 }}>{cmp.wit}</div>
           </div>
         ))}
       </div>
