@@ -120,7 +120,7 @@ export function LeakDetectionContent() {
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {visionStats.map((s, i) => (
-                  <div key={i} className="bg-black/30 rounded-[10px] p-4 text-center">
+                  <div key={i} className="bg-black/30 rounded-xl p-4 text-center">
                     <div className="font-mono text-[1.2rem] font-bold" style={{ color: s.bad ? "#ff6666" : "#00c2ff" }}>
                       {s.v}
                     </div>
@@ -155,7 +155,7 @@ export function LeakDetectionContent() {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {dualPullSteps.map((s, i) => (
                 <StaggerItem key={i}>
-                  <div className="bg-bg-card border border-border-default rounded-[14px] p-7">
+                  <div className="bg-bg-card border border-border-default rounded-xl p-7">
                     <div className="font-mono text-[2rem] font-extrabold opacity-25 mb-1.5" style={{ color: s.color }}>
                       {s.step}
                     </div>
@@ -238,7 +238,7 @@ export function LeakDetectionContent() {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               {leakTypes.map((lt, i) => (
                 <StaggerItem key={i}>
-                  <div className="bg-bg-card border border-border-default rounded-[10px] p-[22px]">
+                  <div className="bg-bg-card border border-border-default rounded-xl p-[22px]">
                     <div className="font-sans text-[0.95rem] font-semibold text-white mb-1.5">
                       {lt.name}
                     </div>
@@ -280,7 +280,7 @@ export function LeakDetectionContent() {
               ].map((s) => (
                 <div
                   key={s.l}
-                  className="rounded-[10px] p-4 text-center"
+                  className="rounded-xl p-4 text-center"
                   style={{
                     background: "rgba(0,194,255,0.06)",
                     border: "1px solid rgba(0,194,255,0.1)",

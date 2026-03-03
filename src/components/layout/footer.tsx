@@ -7,6 +7,7 @@ const solutionLinks = [
   { label: "Leak Detection", href: "/solutions/leak-detection" },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
   { label: "Conveyors", href: "/solutions/conveyors" },
+  { label: "IntelliPak", href: "/solutions/intellipak" },
 ];
 
 const companyLinks = [

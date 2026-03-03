@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
@@ -17,6 +18,93 @@ const galleryImages = [
   { src: "/images/conveyors/sanitary-conveyor.jpg", alt: "Sanitary belt conveyor with washdown-rated stainless steel frame" },
   { src: "/images/conveyors/curved-conveyor.jpg", alt: "Curved modular belt conveyor for product routing" },
 ];
+
+function CaseStudyCard({
+  title,
+  subtitle,
+  description,
+  tags,
+  image,
+}: {
+  title: string;
+  subtitle: string;
+  description: string;
+  tags: string[];
+  image?: { src: string; alt: string };
+}) {
+  const [hovered, setHovered] = useState(false);
+  const accent = "#66b3ff";
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-8 h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      {image && (
+        <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-4 -mx-2 -mt-2">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+      )}
+      <div className="font-mono text-[0.58rem] text-[#66b3ff] tracking-[0.1em] uppercase mb-1.5">
+        Case Study
+      </div>
+      <div className="font-sans text-[1.15rem] font-bold text-white mb-1">
+        {title}
+      </div>
+      <div className="font-sans text-[0.78rem] text-accent-primary mb-3">
+        {subtitle}
+      </div>
+      <p className="font-sans text-[0.85rem] text-text-body leading-[1.6] mb-3.5">
+        {description}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {tags.map((t) => (
+          <span
+            key={t}
+            className="font-mono text-[0.56rem] text-[rgba(102,179,255,0.75)] border border-[rgba(102,179,255,0.18)] rounded-full px-2.5 py-1"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TypeCard({ title, description }: { title: string; description: string }) {
+  const [hovered, setHovered] = useState(false);
+  const accent = "#66b3ff";
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-[22px] h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div className="font-sans text-[0.95rem] font-semibold text-white mb-1">
+        {title}
+      </div>
+      <div className="font-sans text-[0.8rem] text-text-body leading-[1.5]">
+        {description}
+      </div>
+    </div>
+  );
+}
 
 export function ConveyorsContent() {
   return (
@@ -53,41 +141,13 @@ export function ConveyorsContent() {
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {caseStudies.map((cs, i) => (
             <StaggerItem key={i}>
-              <div className="bg-bg-card border border-border-default rounded-[14px] p-8 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
-                {caseStudyImages[i] && (
-                  <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-4 -mx-2 -mt-2">
-                    <Image
-                      src={caseStudyImages[i].src}
-                      alt={caseStudyImages[i].alt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                )}
-                <div className="font-mono text-[0.58rem] text-[#66b3ff] tracking-[0.1em] uppercase mb-1.5">
-                  Case Study
-                </div>
-                <div className="font-sans text-[1.15rem] font-bold text-white mb-1">
-                  {cs.title}
-                </div>
-                <div className="font-sans text-[0.78rem] text-accent-primary mb-3">
-                  {cs.subtitle}
-                </div>
-                <p className="font-sans text-[0.85rem] text-text-body leading-[1.6] mb-3.5">
-                  {cs.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {cs.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="font-mono text-[0.56rem] text-[rgba(102,179,255,0.75)] border border-[rgba(102,179,255,0.18)] rounded-full px-2.5 py-1"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <CaseStudyCard
+                title={cs.title}
+                subtitle={cs.subtitle}
+                description={cs.description}
+                tags={cs.tags}
+                image={caseStudyImages[i]}
+              />
             </StaggerItem>
           ))}
         </StaggerContainer>
@@ -115,14 +175,7 @@ export function ConveyorsContent() {
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {conveyorTypes.map((c, i) => (
                 <StaggerItem key={i}>
-                  <div className="bg-bg-card border border-border-default rounded-[10px] p-[22px] h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
-                    <div className="font-sans text-[0.95rem] font-semibold text-white mb-1">
-                      {c.title}
-                    </div>
-                    <div className="font-sans text-[0.8rem] text-text-body leading-[1.5]">
-                      {c.description}
-                    </div>
-                  </div>
+                  <TypeCard title={c.title} description={c.description} />
                 </StaggerItem>
               ))}
             </StaggerContainer>

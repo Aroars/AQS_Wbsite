@@ -115,7 +115,7 @@ export function VeriPakContent() {
                 {scadaStats.map((s, i) => (
                   <div
                     key={i}
-                    className="bg-black/30 rounded-[10px] p-4 text-center"
+                    className="bg-black/30 rounded-xl p-4 text-center"
                   >
                     <div
                       className="font-mono text-[1.3rem] font-bold"
@@ -179,7 +179,7 @@ export function VeriPakContent() {
             <h3 className="font-sans text-[1.3rem] font-bold text-white mb-5">
               What&apos;s Inside the VeriPak SCADA
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0.5 rounded-[14px] overflow-hidden border border-border-default">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0.5 rounded-xl overflow-hidden border border-border-default">
               {veripakSpecs.map((item, i) => (
                 <div key={i} className="bg-bg-card p-5">
                   <div className="font-mono text-[0.62rem] text-accent-primary tracking-[0.08em] uppercase mb-[7px]">
@@ -200,7 +200,7 @@ export function VeriPakContent() {
             <h3 className="font-sans text-[1.4rem] font-bold text-white mb-6 text-center">
               Feature Comparison
             </h3>
-            <div className="bg-bg-card border border-border-default rounded-[14px] overflow-hidden">
+            <div className="bg-bg-card border border-border-default rounded-xl overflow-hidden">
               <ComparisonTable />
             </div>
           </div>

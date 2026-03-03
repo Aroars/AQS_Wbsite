@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
@@ -37,6 +38,36 @@ const features = [
     desc: "Every recovery operation logged with traceability data. Export reports for compliance, auditing, and operational analysis.",
   },
 ];
+
+function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
+  const [hovered, setHovered] = useState(false);
+  const accent = "#00d4aa";
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-7 h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div
+        className="text-[1.5rem] mb-2.5 transition-transform duration-300"
+        style={{ transform: hovered ? "scale(1.1)" : "scale(1)" }}
+      >
+        {icon}
+      </div>
+      <div className="font-sans text-[1.02rem] font-bold text-white mb-1.5">
+        {title}
+      </div>
+      <div className="font-sans text-[0.85rem] text-text-body leading-[1.6]">
+        {desc}
+      </div>
+    </div>
+  );
+}
 
 export function EvacuPakContent() {
   return (
@@ -83,17 +114,7 @@ export function EvacuPakContent() {
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((item, i) => (
             <StaggerItem key={i}>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
-                <div className="text-[1.5rem] mb-2.5 group-hover:scale-110 transition-transform duration-300">
-                  {item.icon}
-                </div>
-                <div className="font-sans text-[1.02rem] font-bold text-white mb-1.5">
-                  {item.title}
-                </div>
-                <div className="font-sans text-[0.85rem] text-text-body leading-[1.6]">
-                  {item.desc}
-                </div>
-              </div>
+              <FeatureCard icon={item.icon} title={item.title} desc={item.desc} />
             </StaggerItem>
           ))}
         </StaggerContainer>

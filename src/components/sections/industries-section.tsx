@@ -24,7 +24,7 @@ export function IndustriesSection() {
         <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {industries.map((ind) => (
             <StaggerItem key={ind.name}>
-              <div className="bg-bg-card border border-border-default rounded-[10px] p-6 text-center group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
+              <div className="bg-bg-card border border-border-default rounded-xl p-6 text-center group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
                 <div className="text-[1.6rem] mb-2 group-hover:scale-110 transition-transform duration-300">
                   {ind.icon}
                 </div>

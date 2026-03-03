@@ -12,6 +12,7 @@ const solutionOptions = [
   "Leak Detection",
   "Sanitary Robotics",
   "Conveyors",
+  "IntelliPak Feed Systems",
   "Other",
 ];
 
@@ -68,9 +69,9 @@ export function ContactContent() {
           <SectionLabel>Get in Touch</SectionLabel>
           <SectionTitle>Start a Project Review</SectionTitle>
           <SectionDesc>
-            Whether you need VeriPak, EvacuPak, leak detection, sanitary
-            robotics, or custom conveyors — tell us about your project and
-            we&apos;ll architect a solution together.
+            Whether you need VeriPak, EvacuPak, IntelliPak, leak detection,
+            sanitary robotics, or custom conveyors — tell us about your
+            project and we&apos;ll architect a solution together.
           </SectionDesc>
         </AnimatedSection>
 

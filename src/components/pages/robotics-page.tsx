@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
@@ -20,6 +21,30 @@ const specCards = [
   { v: "USDA", l: "Compliant" },
   { v: "24/7", l: "Remote Support" },
 ];
+
+function AppCard({ title, description }: { title: string; description: string }) {
+  const [hovered, setHovered] = useState(false);
+  const accent = "#4d9fff";
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-[22px] h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div className="font-sans text-[0.95rem] font-semibold text-white mb-1">
+        {title}
+      </div>
+      <div className="font-sans text-[0.8rem] text-text-body leading-[1.5]">
+        {description}
+      </div>
+    </div>
+  );
+}
 
 export function RoboticsContent() {
   return (
@@ -151,14 +176,7 @@ export function RoboticsContent() {
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {roboticsApplications.map((app, i) => (
                 <StaggerItem key={i}>
-                  <div className="bg-bg-card border border-border-default rounded-[10px] p-[22px] h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400">
-                    <div className="font-sans text-[0.95rem] font-semibold text-white mb-1">
-                      {app.title}
-                    </div>
-                    <div className="font-sans text-[0.8rem] text-text-body leading-[1.5]">
-                      {app.description}
-                    </div>
-                  </div>
+                  <AppCard title={app.title} description={app.description} />
                 </StaggerItem>
               ))}
             </StaggerContainer>
