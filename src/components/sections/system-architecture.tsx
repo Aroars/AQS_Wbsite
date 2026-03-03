@@ -23,6 +23,8 @@ interface Stage {
   description: string;
   productSlug?: ProductSlug;
   subtitle: string;
+  /** Override color for non-AQS stages (e.g. Reject = red) */
+  color?: string;
 }
 
 interface LineConfig {
@@ -46,6 +48,8 @@ const ACCENT_COLORS: Record<ProductSlug, string> = {
 };
 
 const NEUTRAL_COLOR = "#8892B0";
+const REJECT_COLOR = "#F87171";
+const GAPPING_COLOR = "#A8B2D1";
 
 const SLUG_TO_ROUTE: Record<ProductSlug, string> = {
   veripak: "/solutions/veripak",
@@ -56,179 +60,732 @@ const SLUG_TO_ROUTE: Record<ProductSlug, string> = {
   intellipak: "/solutions/intellipak",
 };
 
-const LINE_CONFIGS: LineConfig[] = [
-  {
-    id: "protein",
-    name: "Protein / Thermoform Line",
-    description:
-      "Thermoformed packages are inspected, seal-tested, batched by IntelliPak, and robotically case-packed \u2014 every unit verified before it leaves the line.",
-    stages: [
-      {
-        label: "Thermoformer",
-        icon: "\u2699",
-        subtitle: "Form & Seal",
-        description:
-          "Thermoformer discharges vacuum-sealed packages at consistent machine cycle rates.",
-      },
-      {
-        label: "Conveyors",
-        icon: "\u2550",
-        productSlug: "conveyors",
-        subtitle: "Sanitary Transport",
-        description:
-          "Sanitary transport conveyors move product between stations with washdown-rated construction and quick-change belting.",
-      },
-      {
-        label: "VeriPak",
-        icon: "\u25C8",
-        productSlug: "veripak",
-        subtitle: "SCADA Inspection",
-        description:
-          "Real-time SCADA inspection catches seal defects, label errors, and weight variance \u2014 every package imaged and logged.",
-      },
-      {
-        label: "Leak Detection",
-        icon: "\u2298",
-        productSlug: "leak-detection",
-        subtitle: "Seal Integrity",
-        description:
-          "Dual-pull suction testing detects pinholes and seal failures that vision systems physically cannot see.",
-      },
-      {
-        label: "IntelliPak",
-        icon: "\u25A6",
-        productSlug: "intellipak",
-        subtitle: "Batch & Stage",
-        description:
-          "Mag-Drive belts batch and stage verified product into precise groupings at up to 500 PPM for the case packer.",
-      },
-      {
-        label: "Robotics",
-        icon: "\u2B21",
-        productSlug: "robotics",
-        subtitle: "Case Pack & Palletize",
-        description:
-          "Washdown-rated robotic case packing and palletizing with full traceability from product to pallet.",
-      },
-    ],
-  },
-  {
-    id: "dairy",
-    name: "Dairy / Liquid Processing",
-    description:
-      "Filled containers are inspected, product is recovered from rejects via EvacuPak, and verified units are staged and palletized \u2014 maximizing yield and minimizing waste.",
-    stages: [
-      {
-        label: "Filler",
-        icon: "\u2699",
-        subtitle: "Liquid Fill",
-        description:
-          "Filling equipment discharges liquid product containers onto the line at variable rates.",
-      },
-      {
-        label: "Conveyors",
-        icon: "\u2550",
-        productSlug: "conveyors",
-        subtitle: "Washdown Transport",
-        description:
-          "Food-grade conveyor transport between processing stations with full washdown capability.",
-      },
-      {
-        label: "VeriPak",
-        icon: "\u25C8",
-        productSlug: "veripak",
-        subtitle: "Inline Inspection",
-        description:
-          "Inline inspection verifies fill levels, cap integrity, label placement, and date codes in real time.",
-      },
-      {
-        label: "EvacuPak",
-        icon: "\u25C9",
-        productSlug: "evacupak",
-        subtitle: "Product Recovery",
-        description:
-          "Hygienic lances recover up to 97% of product from rejected containers \u2014 never exposed to atmosphere, 3A certified.",
-      },
-      {
-        label: "IntelliPak",
-        icon: "\u25A6",
-        productSlug: "intellipak",
-        subtitle: "Accumulation",
-        description:
-          "Precision staging and accumulation of verified containers for downstream packaging equipment.",
-      },
-      {
-        label: "Robotics",
-        icon: "\u2B21",
-        productSlug: "robotics",
-        subtitle: "Palletizing",
-        description:
-          "Sanitary palletizing systems stack cases with full VeriPak traceability from product to load.",
-      },
-    ],
-  },
-  {
-    id: "bakery",
-    name: "Bakery / Snack Line",
-    description:
-      "Product from the oven is gapped for inspection, quality-checked, seal-tested, and flow-wrapped \u2014 with IntelliPak controlling pitch and timing for wrapper registration.",
-    stages: [
-      {
-        label: "Oven",
-        icon: "\u2699",
-        subtitle: "Continuous Output",
-        description:
-          "Continuous oven output delivers product at variable rates requiring singulation and spacing.",
-      },
-      {
-        label: "Conveyors",
-        icon: "\u2550",
-        productSlug: "conveyors",
-        subtitle: "Gapping & Spacing",
-        description:
-          "Gapping conveyors create consistent spacing between products for accurate downstream inspection.",
-      },
-      {
-        label: "IntelliPak",
-        icon: "\u25A6",
-        productSlug: "intellipak",
-        subtitle: "Pitch Control",
-        description:
-          "Mag-Drive infeed creates tight pitch control and timing for wrapper registration \u2014 no servo motors needed.",
-      },
-      {
-        label: "VeriPak",
-        icon: "\u25C8",
-        productSlug: "veripak",
-        subtitle: "Quality Check",
-        description:
-          "Quality inspection verifies product integrity, dimensions, and foreign material before wrapping.",
-      },
-      {
-        label: "Leak Detection",
-        icon: "\u2298",
-        productSlug: "leak-detection",
-        subtitle: "Seal Testing",
-        description:
-          "Post-wrap seal integrity testing ensures every package is properly sealed before shipping.",
-      },
-      {
-        label: "Flow Wrapper",
-        icon: "\u2699",
-        subtitle: "HFFS / VFFS",
-        description:
-          "HFFS or VFFS flow wrapper receives perfectly spaced, fully inspected product stream.",
-      },
-    ],
-  },
-];
+/* ================================================
+   Per-Product Line Configurations
+   ================================================ */
+
+const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
+  /* ────────────────────────────────────────────────
+     IntelliPak — corrected per process logic:
+     Inspect → Reject → IntelliPak (always)
+     ──────────────────────────────────────────────── */
+  intellipak: [
+    {
+      id: "thermo-to-case",
+      name: "Thermoform to Case Packer",
+      description:
+        "Products are inspected and rejected individually, then IntelliPak batches the verified products for case packing — so every batch is complete and correct.",
+      stages: [
+        {
+          label: "Thermoformer",
+          icon: "⚙",
+          subtitle: "Form & Seal",
+          description:
+            "Discharges vacuum-sealed packages in 4/6/9 patterns at consistent machine cycle rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Vision Inspection",
+          description:
+            "Keyence vision detects seal defects, alignment issues, and label errors. Every package image is saved to the historian.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Defective packages are removed individually before batching — so downstream groups are never short-counted.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Batching & Staging",
+          description:
+            "With only verified product remaining, Mag-Drive belts batch and stage precise groupings at up to 500 ppm for the case packer.",
+        },
+        {
+          label: "Case Packer",
+          icon: "⬡",
+          subtitle: "Pack & Palletize",
+          description:
+            "Case packer receives complete, inspected batches ready for packing and palletizing with full traceability data.",
+        },
+      ],
+    },
+    {
+      id: "bowl-to-thermo",
+      name: "Bowl Feeder to Thermoformer",
+      description:
+        "Singulated product from a bowl feeder is gapped for inspection clearance, inspected, defects rejected, then IntelliPak collates and times verified product for the thermoformer loading cycle.",
+      stages: [
+        {
+          label: "Bowl Feeder",
+          icon: "◔",
+          subtitle: "Singulated Product",
+          description:
+            "Delivers singulated, randomly oriented product onto the line at variable rates.",
+        },
+        {
+          label: "Gapping",
+          icon: "↔",
+          subtitle: "Inspection Clearance",
+          color: GAPPING_COLOR,
+          description:
+            "A simple 1–2 belt gapping conveyor creates consistent spacing between products so VeriPak's cameras and sensors have the clearance they need for accurate inspection.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Vision Inspection",
+          description:
+            "Pre-packaging inspection catches product defects before they consume thermoformer film and cycle time.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Defective product is removed while still singulated — clean removal with no impact on downstream patterns.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Collation & Timing",
+          description:
+            "Collates and times only verified product into the precise patterns required by the thermoformer's loading cycle.",
+        },
+        {
+          label: "Thermoformer",
+          icon: "⚙",
+          subtitle: "Packaging",
+          description:
+            "Receives perfectly timed, fully inspected product ready for vacuum sealing — zero wasted film on bad product.",
+        },
+      ],
+    },
+    {
+      id: "multi-lane-wrapper",
+      name: "Multi-Lane Merge to Flow Wrapper",
+      description:
+        "Multiple lanes are gapped for inspection clearance, inspected individually, defects rejected, then IntelliPak merges verified product into a single precisely gapped stream for the wrapper.",
+      stages: [
+        {
+          label: "Multi-Lane",
+          icon: "☰",
+          subtitle: "Parallel Infeed",
+          description:
+            "Multiple parallel lanes deliver product at varying rates — common in bakery, snack, and protein lines.",
+        },
+        {
+          label: "Gapping",
+          icon: "↔",
+          subtitle: "Inspection Clearance",
+          color: GAPPING_COLOR,
+          description:
+            "Spaces products apart on each lane, giving VeriPak's cameras and sensors the clearance needed for accurate per-product inspection.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inline QC",
+          description:
+            "Each lane is inspected independently for product integrity, label accuracy, and defects before merging.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Per-Lane Removal",
+          color: REJECT_COLOR,
+          description:
+            "Non-conforming product is diverted per-lane while still separated — no disruption to the merged output stream.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Merge & Gapping",
+          description:
+            "Mag-Drive powered merge conveyors combine only verified product into a single stream with tight pitch control for wrapper registration.",
+        },
+        {
+          label: "Flow Wrapper",
+          icon: "◫",
+          subtitle: "HFFS / VFFS",
+          description:
+            "Receives a clean, perfectly spaced single-file stream — every product in the wrapper has passed inspection.",
+        },
+      ],
+    },
+  ],
+
+  /* ────────────────────────────────────────────────
+     VeriPak — inspection is the highlighted stage
+     ──────────────────────────────────────────────── */
+  veripak: [
+    {
+      id: "thermo-inspection",
+      name: "Thermoform Inspection Line",
+      description:
+        "Every vacuum-sealed package is vision-inspected for seal defects, label errors, and weight variance — defects are rejected before batching so every downstream group is complete.",
+      stages: [
+        {
+          label: "Thermoformer",
+          icon: "⚙",
+          subtitle: "Form & Seal",
+          description:
+            "Discharges vacuum-sealed packages at consistent machine cycle rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "SCADA Inspection",
+          description:
+            "Keyence vision detects seal defects, alignment issues, and label errors. Every package imaged, graded, and logged to the historian in real time.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Defective packages removed individually before downstream batching — groups are never short-counted.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Batching",
+          description:
+            "Batches verified product into precise groupings for the case packer.",
+        },
+        {
+          label: "Case Packer",
+          icon: "⬡",
+          subtitle: "Pack & Ship",
+          description:
+            "Receives complete, inspected batches ready for packing with full traceability.",
+        },
+      ],
+    },
+    {
+      id: "dairy-qa",
+      name: "Dairy Fill & Inspect",
+      description:
+        "Filled containers are inspected inline for fill level, cap integrity, and label placement — rejects are diverted for product recovery via EvacuPak.",
+      stages: [
+        {
+          label: "Filler",
+          icon: "⚙",
+          subtitle: "Liquid Fill",
+          description:
+            "Fill equipment discharges liquid containers at variable rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inline Inspection",
+          description:
+            "Inline inspection verifies fill levels, cap integrity, label placement, and date codes in real time — every container graded and logged.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Diversion",
+          color: REJECT_COLOR,
+          description:
+            "Non-conforming containers diverted for product recovery — minimizing waste.",
+        },
+        {
+          label: "EvacuPak",
+          icon: "◉",
+          productSlug: "evacupak",
+          subtitle: "Product Recovery",
+          description:
+            "Recovers up to 97% of product from rejected containers — 3A certified, never exposed to atmosphere.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "Palletizing systems stack verified cases with full traceability from product to load.",
+        },
+      ],
+    },
+    {
+      id: "multi-lane-qc",
+      name: "Multi-Lane Flow Wrap QC",
+      description:
+        "Multiple production lanes are individually inspected for product integrity and defects — VeriPak provides per-lane quality data before merging into a single output stream.",
+      stages: [
+        {
+          label: "Multi-Lane",
+          icon: "☰",
+          subtitle: "Parallel Infeed",
+          description:
+            "Multiple parallel lanes deliver product at varying rates.",
+        },
+        {
+          label: "Gapping",
+          icon: "↔",
+          subtitle: "Inspection Clearance",
+          color: GAPPING_COLOR,
+          description:
+            "Spaces products apart on each lane for accurate per-product inspection.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Per-Lane QC",
+          description:
+            "Each lane is inspected independently for product integrity, label accuracy, and defects before merging.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Per-Lane Removal",
+          color: REJECT_COLOR,
+          description:
+            "Non-conforming product diverted per-lane while still separated — no disruption to merged output.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Merge & Gapping",
+          description:
+            "Merges only verified product into a single stream with tight pitch control for wrapper registration.",
+        },
+        {
+          label: "Flow Wrapper",
+          icon: "◫",
+          subtitle: "HFFS / VFFS",
+          description:
+            "Receives a clean, perfectly spaced single-file stream — every product has passed inspection.",
+        },
+      ],
+    },
+  ],
+
+  /* ────────────────────────────────────────────────
+     EvacuPak — product recovery from rejects
+     ──────────────────────────────────────────────── */
+  evacupak: [
+    {
+      id: "dairy-recovery",
+      name: "Dairy Product Recovery",
+      description:
+        "Rejected containers are diverted to EvacuPak for hygienic product recovery — up to 97% of product is recovered and returned to the process, minimizing waste and maximizing yield.",
+      stages: [
+        {
+          label: "Filler",
+          icon: "⚙",
+          subtitle: "Liquid Fill",
+          description:
+            "Fill equipment discharges liquid containers at variable rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inline Inspection",
+          description:
+            "Inline inspection identifies containers with fill, seal, or label defects.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Diversion",
+          color: REJECT_COLOR,
+          description:
+            "Non-conforming containers diverted to the recovery station.",
+        },
+        {
+          label: "EvacuPak",
+          icon: "◉",
+          productSlug: "evacupak",
+          subtitle: "Product Recovery",
+          description:
+            "Hygienic lances recover up to 97% of product from rejected containers — 3A certified, closed-system processing, never exposed to atmosphere.",
+        },
+        {
+          label: "Reprocessing",
+          icon: "⟳",
+          subtitle: "Return to Process",
+          description:
+            "Recovered product is returned to the process stream — maximizing yield and minimizing waste.",
+        },
+      ],
+    },
+    {
+      id: "liquid-line",
+      name: "Liquid Line with Palletizing",
+      description:
+        "End-to-end liquid processing with inspection, recovery, and automated palletizing — every rejected container's product is recovered before disposal.",
+      stages: [
+        {
+          label: "Filler",
+          icon: "⚙",
+          subtitle: "Liquid Fill",
+          description:
+            "Filling equipment discharges containers onto the line at variable rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inline Inspection",
+          description:
+            "Verifies fill levels, cap integrity, and label placement in real time.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Diversion",
+          color: REJECT_COLOR,
+          description:
+            "Defective containers diverted to EvacuPak for product recovery.",
+        },
+        {
+          label: "EvacuPak",
+          icon: "◉",
+          productSlug: "evacupak",
+          subtitle: "Product Recovery",
+          description:
+            "Recovers valuable product from rejected containers before disposal — 3A certified, closed-system processing.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "Verified cases are stacked and palletized with full traceability from product to load.",
+        },
+      ],
+    },
+  ],
+
+  /* ────────────────────────────────────────────────
+     Leak Detection — seal integrity testing
+     ──────────────────────────────────────────────── */
+  "leak-detection": [
+    {
+      id: "thermo-seal-test",
+      name: "Post-Seal Integrity Testing",
+      description:
+        "After thermoforming and vision inspection, every package undergoes physical seal testing — catching pinholes and micro-leaks that cameras cannot see.",
+      stages: [
+        {
+          label: "Thermoformer",
+          icon: "⚙",
+          subtitle: "Form & Seal",
+          description:
+            "Discharges vacuum-sealed packages at consistent cycle rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Vision Inspection",
+          description:
+            "Vision inspection catches visual seal defects and label errors — the first quality gate.",
+        },
+        {
+          label: "Leak Detection",
+          icon: "⊙",
+          productSlug: "leak-detection",
+          subtitle: "Seal Integrity",
+          description:
+            "Dual-pull suction testing detects pinholes and seal failures that vision systems physically cannot see — the critical final quality gate.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Failed packages diverted before case packing — every downstream case is complete and verified.",
+        },
+        {
+          label: "Case Packer",
+          icon: "⬡",
+          subtitle: "Pack & Ship",
+          description:
+            "Receives fully inspected, seal-verified packages ready for packing.",
+        },
+      ],
+    },
+    {
+      id: "map-validation",
+      name: "MAP Package Validation",
+      description:
+        "Modified atmosphere packages require physical seal testing to ensure gas retention — leak detection validates that every package maintains its protective atmosphere.",
+      stages: [
+        {
+          label: "MAP Sealer",
+          icon: "⚙",
+          subtitle: "Gas Flush & Seal",
+          description:
+            "Modified atmosphere packaging equipment seals packages with controlled gas composition for shelf life extension.",
+        },
+        {
+          label: "Leak Detection",
+          icon: "⊙",
+          productSlug: "leak-detection",
+          subtitle: "Seal Integrity",
+          description:
+            "Validates seal integrity to ensure MAP gas retention — protecting shelf life and food safety.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Compromised Seals",
+          color: REJECT_COLOR,
+          description:
+            "Packages with compromised seals diverted before downstream processing — protecting brand and consumer safety.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Sanitary Transport",
+          description:
+            "Sanitary transport moves verified packages to palletizing.",
+        },
+        {
+          label: "Palletizing",
+          icon: "⬡",
+          subtitle: "Stack & Ship",
+          description:
+            "Verified packages stacked and palletized for distribution.",
+        },
+      ],
+    },
+  ],
+
+  /* ────────────────────────────────────────────────
+     Robotics — case packing & palletizing
+     ──────────────────────────────────────────────── */
+  robotics: [
+    {
+      id: "end-of-line",
+      name: "End-of-Line Palletizing",
+      description:
+        "After inspection and batching, washdown-rated robotics handle case packing and palletizing with full traceability from product to pallet.",
+      stages: [
+        {
+          label: "Thermoformer",
+          icon: "⚙",
+          subtitle: "Upstream",
+          description:
+            "Upstream packaging equipment discharges product at machine cycle rates.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inspection",
+          description:
+            "Every package inspected and logged before downstream batching.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Defective packages removed individually so every batch is complete.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Batching",
+          description:
+            "Batches and stages verified product into precise groupings for robotic handling.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Case Pack & Palletize",
+          description:
+            "Washdown-rated robotic case packing and palletizing with full VeriPak traceability from product to pallet.",
+        },
+      ],
+    },
+    {
+      id: "case-packing",
+      name: "Case Packing Line",
+      description:
+        "Sanitary conveyors feed IntelliPak-batched product to robotic case packing — the robot builds precise pallet patterns with real-time monitoring.",
+      stages: [
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Sanitary Transport",
+          description:
+            "Sanitary transport moves product from upstream processing.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Accumulation",
+          description:
+            "Accumulates and stages cases for robotic pickup patterns.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Case Pack & Palletize",
+          description:
+            "KUKA washdown-rated robots build precise pallet patterns with full traceability and real-time monitoring.",
+        },
+        {
+          label: "Stretch Wrapper",
+          icon: "⚙",
+          subtitle: "Ship Ready",
+          description:
+            "Finished pallets wrapped and prepared for shipping.",
+        },
+      ],
+    },
+  ],
+
+  /* ────────────────────────────────────────────────
+     Conveyors — sanitary transport & gapping
+     ──────────────────────────────────────────────── */
+  conveyors: [
+    {
+      id: "sanitary-transport",
+      name: "Sanitary Transport Line",
+      description:
+        "IP69K washdown-rated conveyors move product between processing stations with quick-change belting, tool-free maintenance, and food-grade construction throughout.",
+      stages: [
+        {
+          label: "Filler",
+          icon: "⚙",
+          subtitle: "Upstream Equipment",
+          description:
+            "Upstream fill equipment discharges containers at variable rates.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Sanitary Transport",
+          description:
+            "Food-grade sanitary conveyors with IP69K washdown construction, quick-change belting, and tool-free maintenance for maximum uptime.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inline Inspection",
+          description:
+            "Inline inspection verifies product quality before downstream processing.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Non-conforming product diverted before downstream processing.",
+        },
+        {
+          label: "Packaging",
+          icon: "⚙",
+          subtitle: "Downstream",
+          description:
+            "Verified product continues to packaging equipment.",
+        },
+      ],
+    },
+    {
+      id: "gapping-spacing",
+      name: "Gapping & Spacing Line",
+      description:
+        "Conveyors create consistent product spacing for accurate inspection — ensuring VeriPak cameras have the clearance needed for per-product quality checks.",
+      stages: [
+        {
+          label: "Upstream",
+          icon: "⚙",
+          subtitle: "Variable Output",
+          description:
+            "Production equipment discharges product at variable rates requiring spacing.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Gapping & Spacing",
+          description:
+            "Gapping conveyors create consistent product spacing for accurate downstream inspection — IP69K washdown rated with tool-free belt changes.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inspection",
+          description:
+            "Properly spaced product enables accurate per-product inspection.",
+        },
+        {
+          label: "Reject",
+          icon: "⊘",
+          subtitle: "Defect Removal",
+          color: REJECT_COLOR,
+          description:
+            "Defective product removed while still separated.",
+        },
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Merge & Timing",
+          description:
+            "Merges and times verified product for wrapper registration.",
+        },
+        {
+          label: "Flow Wrapper",
+          icon: "◫",
+          subtitle: "HFFS / VFFS",
+          description:
+            "Receives a perfectly spaced, fully inspected product stream.",
+        },
+      ],
+    },
+  ],
+};
 
 /* ================================================
    Connecting Arrow SVG
    ================================================ */
 
-function ConnectingArrow({ tick }: { tick: number }) {
-  // Dot travels from left to right over 3 ticks then resets
+function ConnectingArrow({
+  tick,
+  color,
+}: {
+  tick: number;
+  color: string;
+}) {
   const dotProgress = (tick % 60) / 60;
   const dotX = 4 + dotProgress * 32;
 
@@ -242,7 +799,6 @@ function ConnectingArrow({ tick }: { tick: number }) {
       className="shrink-0 self-center"
       aria-hidden="true"
     >
-      {/* Dashed line */}
       <line
         x1="4"
         y1="12"
@@ -252,13 +808,8 @@ function ConnectingArrow({ tick }: { tick: number }) {
         strokeWidth="1.5"
         strokeDasharray="3 3"
       />
-      {/* Arrowhead */}
-      <polygon
-        points="32,8 38,12 32,16"
-        fill="rgba(255,255,255,0.25)"
-      />
-      {/* Animated pulsing dot */}
-      <circle cx={dotX} cy="12" r="2.5" fill="#f5a623" opacity="0.9">
+      <polygon points="32,8 38,12 32,16" fill="rgba(255,255,255,0.25)" />
+      <circle cx={dotX} cy="12" r="2.5" fill={color} opacity="0.9">
         <animate
           attributeName="opacity"
           values="0.9;0.4;0.9"
@@ -288,10 +839,12 @@ function StageCard({
   onClick: () => void;
 }) {
   const isAQS = !!stage.productSlug;
+  const stageColor = stage.color ?? (isAQS ? accentColor : NEUTRAL_COLOR);
+
   const borderColor = isCurrentProduct
     ? accentColor
     : isActive
-      ? accentColor
+      ? stageColor
       : "rgba(0,0,0,0.25)";
 
   const card = (
@@ -329,14 +882,14 @@ function StageCard({
           boxShadow: isCurrentProduct
             ? `0 0 20px ${accentColor}20, inset 0 0 20px ${accentColor}08`
             : isActive
-              ? `0 0 12px ${accentColor}15`
+              ? `0 0 12px ${stageColor}15`
               : "none",
         }}
       >
         {/* Icon */}
         <div
           className="text-2xl mb-1.5 leading-none"
-          style={{ color: isAQS ? accentColor : NEUTRAL_COLOR }}
+          style={{ color: stageColor }}
         >
           {stage.icon}
         </div>
@@ -344,7 +897,7 @@ function StageCard({
         {/* Label */}
         <div
           className="font-sans text-[0.72rem] font-semibold leading-tight mb-0.5"
-          style={{ color: isAQS ? "#fff" : "rgba(255,255,255,0.6)" }}
+          style={{ color: isAQS || stage.color ? "#fff" : "rgba(255,255,255,0.6)" }}
         >
           {stage.label}
         </div>
@@ -387,17 +940,8 @@ export function SystemArchitecture({
   const [tick, setTick] = useState(0);
 
   const currentAccent = ACCENT_COLORS[currentProduct] ?? "#f5a623";
-  const activeConfig = LINE_CONFIGS[activeConfigIndex];
-
-  // Auto-select the config that contains the current product on mount
-  useEffect(() => {
-    const idx = LINE_CONFIGS.findIndex((config) =>
-      config.stages.some((s) => s.productSlug === currentProduct)
-    );
-    if (idx !== -1) {
-      setActiveConfigIndex(idx);
-    }
-  }, [currentProduct]);
+  const configs = PRODUCT_CONFIGS[currentProduct] ?? [];
+  const activeConfig = configs[activeConfigIndex];
 
   // Animated pulsing dot tick
   useEffect(() => {
@@ -415,13 +959,16 @@ export function SystemArchitecture({
 
   const getStageColor = useCallback(
     (stage: Stage): string => {
+      if (stage.color) return stage.color;
       if (stage.productSlug) {
         return ACCENT_COLORS[stage.productSlug];
       }
       return NEUTRAL_COLOR;
     },
-    []
+    [],
   );
+
+  if (!activeConfig) return null;
 
   return (
     <section className="py-[72px] px-8 relative">
@@ -429,21 +976,24 @@ export function SystemArchitecture({
         <AnimatedSection>
           {/* Section header */}
           <div className="mb-10">
-            <div className="font-mono text-[0.68rem] tracking-[0.15em] uppercase mb-3" style={{ color: currentAccent }}>
+            <div
+              className="font-mono text-[0.68rem] tracking-[0.15em] uppercase mb-3"
+              style={{ color: currentAccent }}
+            >
               System Architecture
             </div>
             <h2 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1]">
               Where It Fits in the Line
             </h2>
             <p className="font-sans text-[1.02rem] text-text-body max-w-[640px] leading-[1.7]">
-              See how this solution integrates into common production line configurations.
-              Click any AQS product to learn more.
+              See how this solution integrates into common production line
+              configurations. Click any AQS product to learn more.
             </p>
           </div>
 
           {/* Tab buttons */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {LINE_CONFIGS.map((config, idx) => {
+            {configs.map((config, idx) => {
               const isActive = idx === activeConfigIndex;
               return (
                 <button
@@ -452,12 +1002,10 @@ export function SystemArchitecture({
                   className="rounded-lg px-4 py-2 text-[0.78rem] font-medium transition-all duration-200 cursor-pointer"
                   style={{
                     backgroundColor: isActive
-                      ? "rgba(245,166,35,0.13)"
+                      ? `${currentAccent}18`
                       : "transparent",
-                    border: `1px solid ${
-                      isActive ? "#f5a623" : "rgba(0,0,0,0.25)"
-                    }`,
-                    color: isActive ? "#f5a623" : "rgba(255,255,255,0.55)",
+                    border: `1px solid ${isActive ? currentAccent : "rgba(0,0,0,0.25)"}`,
+                    color: isActive ? currentAccent : "rgba(255,255,255,0.55)",
                   }}
                 >
                   {config.name}
@@ -471,16 +1019,19 @@ export function SystemArchitecture({
             {activeConfig.description}
           </p>
 
-          {/* Production line flow */}
+          {/* Production line flow — centered */}
           <div className="bg-black/30 border border-[rgba(0,0,0,0.25)] rounded-xl p-6 md:p-8 overflow-x-auto">
-            <div className="flex items-start gap-0 min-w-max pt-8 pb-4 px-2">
+            <div className="flex items-start justify-center gap-0 min-w-max pt-8 pb-4 px-2">
               {activeConfig.stages.map((stage, idx) => {
                 const isCurrentStage = stage.productSlug === currentProduct;
                 const isActiveStage = activeStageIndex === idx;
                 const stageColor = getStageColor(stage);
 
                 return (
-                  <div key={`${activeConfig.id}-${idx}`} className="flex items-center">
+                  <div
+                    key={`${activeConfig.id}-${idx}`}
+                    className="flex items-center"
+                  >
                     <StageCard
                       stage={stage}
                       isCurrentProduct={isCurrentStage}
@@ -488,12 +1039,12 @@ export function SystemArchitecture({
                       accentColor={isCurrentStage ? currentAccent : stageColor}
                       onClick={() =>
                         setActiveStageIndex(
-                          activeStageIndex === idx ? null : idx
+                          activeStageIndex === idx ? null : idx,
                         )
                       }
                     />
                     {idx < activeConfig.stages.length - 1 && (
-                      <ConnectingArrow tick={tick} />
+                      <ConnectingArrow tick={tick} color={stageColor} />
                     )}
                   </div>
                 );
@@ -507,7 +1058,11 @@ export function SystemArchitecture({
                 Product Flow Direction
               </span>
               <svg width="16" height="8" viewBox="0 0 16 8" fill="none">
-                <path d="M0 4H14M14 4L10 0.5M14 4L10 7.5" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                <path
+                  d="M0 4H14M14 4L10 0.5M14 4L10 7.5"
+                  stroke="rgba(255,255,255,0.2)"
+                  strokeWidth="1"
+                />
               </svg>
             </div>
           </div>
@@ -523,9 +1078,7 @@ export function SystemArchitecture({
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-4 rounded-lg p-4 bg-black/50"
                 style={{
-                  border: `1px solid ${getStageColor(
-                    activeConfig.stages[activeStageIndex]
-                  )}55`,
+                  border: `1px solid ${getStageColor(activeConfig.stages[activeStageIndex])}55`,
                 }}
               >
                 <div className="flex items-start gap-3">
@@ -533,7 +1086,7 @@ export function SystemArchitecture({
                     className="text-xl shrink-0 mt-0.5"
                     style={{
                       color: getStageColor(
-                        activeConfig.stages[activeStageIndex]
+                        activeConfig.stages[activeStageIndex],
                       ),
                     }}
                   >
@@ -562,7 +1115,7 @@ export function SystemArchitecture({
                           className="inline-flex items-center gap-1 mt-2 font-mono text-[0.68rem] tracking-[0.1em] uppercase no-underline transition-opacity hover:opacity-80"
                           style={{
                             color: getStageColor(
-                              activeConfig.stages[activeStageIndex]
+                              activeConfig.stages[activeStageIndex],
                             ),
                           }}
                         >
