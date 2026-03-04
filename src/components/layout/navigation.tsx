@@ -9,11 +9,10 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 
 const solutions = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
-  { label: "EvacuPak Recovery", href: "/solutions/evacupak" },
   { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
-  { label: "Leak Detection", href: "/solutions/leak-detection" },
+  { label: "Custom Conveyors", href: "/solutions/conveyors" },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
-  { label: "Conveyor Systems", href: "/solutions/conveyors" },
+  { label: "EvacuPak Recovery", href: "/solutions/evacupak" },
 ];
 
 export function Navigation() {
@@ -64,7 +63,7 @@ export function Navigation() {
                 Automated Quality Solutions
               </div>
               <div className="font-mono text-[0.52rem] text-accent-primary/50 tracking-[0.15em] uppercase">
-                Boise, Idaho
+                Nampa, Idaho
               </div>
             </div>
           </Link>

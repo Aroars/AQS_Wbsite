@@ -51,8 +51,10 @@ export function StatCounter({
       className="text-center"
     >
       <div className="font-mono text-5xl font-bold text-accent-primary leading-none glow-text">
-        {count}
-        {suffix}
+        <span suppressHydrationWarning>{count}{suffix}</span>
+        <noscript>
+          <span>{value}{suffix}</span>
+        </noscript>
       </div>
       <div className="font-sans text-[0.78rem] text-text-dim mt-2 uppercase tracking-[0.12em]">
         {label}

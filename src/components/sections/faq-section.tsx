@@ -31,7 +31,7 @@ const faqs = [
     a: "Custom sanitary conveyors including freezer-rated systems, accumulation conveyors, modular belt, flat-top chain, and roller configurations — all designed for washdown with quick-disconnect features.",
   },
   {
-    q: "Why doesn't vision-based leak detection work?",
+    q: "How is AQS leak detection different from vision-based methods?",
     a: "Camera systems inspect what a package looks like, not whether it's sealed. Pinholes, grease in seal zones, and internal board cuts are physically invisible to optical inspection at line speed. AQS is developing a mechanical dual-pull suction system that measures force and deflection delta — detecting actual atmosphere ingress through any breach regardless of visual appearance.",
   },
 ];

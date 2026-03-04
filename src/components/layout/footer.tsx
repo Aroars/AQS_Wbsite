@@ -3,11 +3,10 @@ import Image from "next/image";
 
 const solutionLinks = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
-  { label: "EvacuPak", href: "/solutions/evacupak" },
-  { label: "Leak Detection", href: "/solutions/leak-detection" },
+  { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
+  { label: "Custom Conveyors", href: "/solutions/conveyors" },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
-  { label: "Conveyors", href: "/solutions/conveyors" },
-  { label: "IntelliPak", href: "/solutions/intellipak" },
+  { label: "EvacuPak", href: "/solutions/evacupak" },
 ];
 
 const companyLinks = [
@@ -34,8 +33,8 @@ export function Footer() {
             </span>
           </div>
           <p className="font-sans text-[0.78rem] text-text-dim leading-[1.7] max-w-[320px]">
-            Standalone SCADA, liquid recovery, leak detection, sanitary
-            conveyors, and washdown robotics — engineered in Boise, Idaho.
+            Standalone SCADA, intelligent feed systems, sanitary conveyors,
+            and washdown robotics — engineered in Nampa, Idaho.
           </p>
         </div>
 
@@ -93,7 +92,16 @@ export function Footer() {
             Contact
           </div>
           <div className="font-sans text-[0.78rem] text-text-dim leading-[1.8]">
-            Boise, Idaho
+            1420 W. Karcher Rd.
+            <br />
+            Nampa, ID 83687
+            <br />
+            <a
+              href="mailto:sales@automatedqs.com"
+              className="hover:text-white transition-colors"
+            >
+              sales@automatedqs.com
+            </a>
             <br />
             <a
               href="mailto:info@automatedqs.com"
@@ -101,8 +109,6 @@ export function Footer() {
             >
               info@automatedqs.com
             </a>
-            <br />
-            automatedqs.com
           </div>
         </div>
       </div>

@@ -136,7 +136,7 @@ export function SolutionsOverview() {
 
         {/* Mobile/tablet fallback — standard grid */}
         <AnimatedSection delay={0.15}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden" aria-hidden="true">
             {solutions.map((s) => (
               <Link key={s.slug} href={s.route} className="block">
                 <div

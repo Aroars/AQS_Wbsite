@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SplitText } from "@/components/ui/split-text";
 import { StatCounter } from "@/components/ui/stat-counter";
@@ -42,29 +40,6 @@ export function HeroSection() {
       </div>
 
       <div className="max-w-[1280px] mx-auto w-full relative z-10">
-        {/* Status badge */}
-        <AnimatedSection>
-          <motion.div
-            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-5"
-            style={{
-              background: "rgba(0,194,255,0.08)",
-              border: "1px solid rgba(0,194,255,0.15)",
-            }}
-            whileHover={{ scale: 1.02 }}
-          >
-            <div
-              className="w-1.5 h-1.5 rounded-full bg-accent-primary"
-              style={{
-                boxShadow: "0 0 8px #00c2ff",
-                animation: "pulse 2s infinite",
-              }}
-            />
-            <span className="font-mono text-[0.62rem] text-accent-primary tracking-[0.1em] uppercase">
-              Now Offering Sanitary Robotic Systems
-            </span>
-          </motion.div>
-        </AnimatedSection>
-
         {/* Headline with split text animation */}
         <AnimatedSection delay={0.1}>
           <h1 className="font-sans text-[clamp(2.5rem,5.5vw,4.6rem)] font-extrabold leading-[1.05] text-white max-w-[800px] mb-5">
@@ -82,9 +57,9 @@ export function HeroSection() {
         {/* Subtitle */}
         <AnimatedSection delay={0.2}>
           <p className="font-sans text-[1.12rem] text-text-body leading-[1.7] max-w-[620px] mb-9">
-            AQS engineers standalone SCADA platforms, liquid recovery systems,
-            leak detection technology, sanitary conveyors, and washdown robotics
-            that protect your brand, ensure compliance, and drive measurable ROI.
+            AQS engineers standalone SCADA platforms and intelligent automation
+            systems that protect your brand, ensure compliance, and drive
+            measurable ROI across food, dairy, and pharmaceutical packaging lines.
           </p>
         </AnimatedSection>
 
