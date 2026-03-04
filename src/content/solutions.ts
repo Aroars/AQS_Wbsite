@@ -76,7 +76,7 @@ export const solutions = [
     icon: "═",
     title: "Conveyors",
     subtitle: "Sanitary Material Handling",
-    accent: "#66b3ff",
+    accent: "#94A3B8",
     shortFeatures: [
       "Freezer, accumulation, & custom configs",
       "Food-grade belt & chain options",

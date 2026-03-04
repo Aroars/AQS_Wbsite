@@ -112,8 +112,8 @@ export function RoboticsContent() {
             >
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 -mx-2">
                 <Image
-                  src="/images/robotics/palletizing-stainless.jpg"
-                  alt="Stainless steel robotic palletizing in action at a food production facility"
+                  src="/images/robotics/palletizing-overhead.jpg"
+                  alt="Overhead view of robotic palletizer stacking product onto pallet with roller conveyor infeed"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -146,10 +146,10 @@ export function RoboticsContent() {
         <AnimatedSection delay={0.22}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-[40px] mb-[30px]">
             {[
-              { src: "/images/robotics/dramatic-lightsaber.jpg", alt: "Two ABB industrial robots with illuminated tools in a washdown cell" },
-              { src: "/images/robotics/palletizing-cleanroom.jpg", alt: "ABB robot performing palletizing in a clean room environment" },
-              { src: "/images/robotics/end-effectors-lineup.jpg", alt: "Five custom-built robotic end effectors for various product handling applications" },
-              { src: "/images/robotics/end-effector-detail.jpg", alt: "Close-up of precision-machined robotic end effector gripper" },
+              { src: "/images/robotics/kuka-robot-cell.jpg", alt: "KUKA industrial robot with custom stainless steel end effector in safety cage" },
+              { src: "/images/robotics/end-effector-closeup.jpg", alt: "Close-up of KUKA robot arm with custom-machined stainless steel end effector" },
+              { src: "/images/robotics/end-effectors-assembly.jpg", alt: "Custom robotic end effectors on assembly table showing precision stainless steel components" },
+              { src: "/images/robotics/case-packing-pies.jpg", alt: "Robotic case packing system handling pies with roller conveyor infeed" },
             ].map((img) => (
               <div key={img.src} className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border-default group">
                 <Image

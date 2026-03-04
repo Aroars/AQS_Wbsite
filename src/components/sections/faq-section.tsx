@@ -79,7 +79,12 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
-export function FAQSection() {
+export function FAQSection({
+  items,
+}: {
+  items?: { q: string; a: string }[];
+} = {}) {
+  const data = items ?? faqs;
   return (
     <section className="py-[70px] px-8 bg-black/[0.06]">
       <div className="max-w-[780px] mx-auto">
@@ -91,7 +96,7 @@ export function FAQSection() {
             </SectionTitle>
           </div>
         </AnimatedSection>
-        {faqs.map((item, i) => (
+        {data.map((item, i) => (
           <AnimatedSection key={i} delay={i * 0.03}>
             <FAQItem question={item.q} answer={item.a} />
           </AnimatedSection>

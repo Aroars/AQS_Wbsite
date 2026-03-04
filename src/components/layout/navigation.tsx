@@ -117,7 +117,7 @@ export function Navigation() {
                         key={s.href}
                         href={s.href}
                         className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
-                          pathname === s.href
+                          pathname?.startsWith(s.href)
                             ? "text-accent-primary"
                             : "text-text-body hover:text-white"
                         }`}

@@ -43,7 +43,7 @@ const ACCENT_COLORS: Record<ProductSlug, string> = {
   evacupak: "#00d4aa",
   "leak-detection": "#ff6666",
   robotics: "#4d9fff",
-  conveyors: "#66b3ff",
+  conveyors: "#94A3B8",
   intellipak: "#f5a623",
 };
 

@@ -42,9 +42,29 @@ export const pageMetadata = {
       "Fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, and end-of-line automation. 316L stainless, IP69K, USDA/FDA compliant. KUKA and Fanuc platforms.",
   },
   conveyors: {
-    title: "Sanitary Conveyor Systems | AQS — Automated Quality Solutions",
+    title: "Custom Sanitary Conveyors | AQS — Automated Quality Solutions",
     description:
-      "Custom-engineered food-grade conveyor systems including freezer conveyors, accumulation systems, and modular belt configurations. 50+ years combined engineering experience.",
+      "9 types of custom-engineered sanitary conveyors: belt, modular, MDR, chain, incline, accumulation, merge/divert, freezer, and washdown pallet systems. TIG-welded, mirror-polished, IP69K capable.",
+  },
+  conveyorsBelt: {
+    title: "Belt Conveyor Systems — Flat-Top, Modular, Incline & Freezer | AQS",
+    description:
+      "Sanitary belt conveyor systems: flat-top, modular, incline/decline, and freezer-rated arctic conveyors. TIG-welded stainless steel, FDA-approved belting, IP69K washdown capable.",
+  },
+  conveyorsRollerDrive: {
+    title: "Roller & Drive Systems — MDR, Accumulation & Merge/Divert | AQS",
+    description:
+      "Zone-controlled MDR conveyors, zero-pressure accumulation, and intelligent merge/divert systems for sanitary food processing. PulseRoller washdown-rated options available.",
+  },
+  conveyorsSpecialty: {
+    title: "Heavy-Duty & Pallet Conveyor Systems — Chain & Washdown Pallet | AQS",
+    description:
+      "Heavy-duty chain conveyors and washdown pallet handling systems for end-of-line sanitary environments. IP69K rated, KUKA robotic palletizing compatible.",
+  },
+  conveyorsProjects: {
+    title: "Conveyor Projects & Case Studies | AQS — Automated Quality Solutions",
+    description:
+      "Real-world conveyor projects: freezer conveyors for marshmallow production, dairy accumulation systems, and more. See how AQS solves sanitary conveyance challenges.",
   },
   intellipak: {
     title: "IntelliPak® Feed Systems — Smart Infeed & Product Handling | AQS",
