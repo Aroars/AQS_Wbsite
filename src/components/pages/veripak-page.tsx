@@ -342,6 +342,26 @@ export function VeriPakContent() {
       </section>
 
       {/* ══════════════════════════════════════════
+          VIDEO SHOWCASE
+          ══════════════════════════════════════════ */}
+      <section className="pb-[60px] px-6">
+        <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection delay={0.05}>
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <video
+                controls
+                preload="metadata"
+                poster="/images/veripak/showcase-poster.jpg"
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
           CONFIG B — QC INTEGRATION / PRODUCT JOURNEY
           ══════════════════════════════════════════ */}
       <section className="py-[100px] px-6 border-t border-border-default" style={{ background: "rgba(17,34,64,0.35)" }}>

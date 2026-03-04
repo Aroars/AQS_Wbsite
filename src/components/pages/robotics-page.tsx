@@ -81,6 +81,20 @@ export function RoboticsContent() {
           </div>
         </AnimatedSection>
 
+        {/* Video showcase */}
+        <AnimatedSection delay={0.08}>
+          <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default mb-[50px]">
+            <video
+              controls
+              preload="metadata"
+              poster="/images/robotics/showcase-poster.jpg"
+              className="w-full h-full object-cover"
+            >
+              <source src="/video/robotics-showcase.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </AnimatedSection>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-11">
           {/* Capabilities list */}
           <AnimatedSection delay={0.1}>
