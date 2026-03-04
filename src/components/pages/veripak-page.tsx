@@ -140,6 +140,19 @@ export function VeriPakContent() {
             <DeviceConnectionDiagram />
           </AnimatedSection>
 
+          {/* VeriPak enclosure render */}
+          <AnimatedSection delay={0.12}>
+            <div className="relative w-full max-w-[720px] mx-auto aspect-[16/9] my-8">
+              <Image
+                src="/images/veripak/veripak-render-wide.png"
+                alt="VeriPak SCADA stainless steel enclosure with integrated HMI touchscreen and stack light"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 720px"
+              />
+            </div>
+          </AnimatedSection>
+
           {/* CTAs */}
           <AnimatedSection delay={0.15}>
             <div className="flex gap-4 flex-wrap">
@@ -327,12 +340,12 @@ export function VeriPakContent() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border-default">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border-default bg-[#e8e8e8]">
                 <Image
-                  src="/images/veripak/system-enclosure.jpg"
-                  alt="VeriPak stainless steel enclosure with integrated HMI touchscreen"
+                  src="/images/veripak/veripak-render-detail.png"
+                  alt="VeriPak SCADA stainless steel enclosure — 3D render showing HMI, stack light, and sanitary cabinet"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
