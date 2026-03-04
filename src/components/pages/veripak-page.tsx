@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
+import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { ComparisonTable } from "@/components/ui/comparison-table";
 import {
@@ -99,11 +100,10 @@ export function VeriPakContent() {
       {/* ══════════════════════════════════════════
           HERO
           ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-16 px-6 overflow-hidden">
-        <GlowOrb top="-100px" left="30%" size={600} />
-        <GlowOrb top="50%" left="-10%" size={400} color="0,102,255" />
+      <section className="pt-[140px] pb-[100px] px-8 relative overflow-hidden">
+        <GlowOrb top="-100px" left="-5%" size={500} />
 
-        {/* Grid bg */}
+        {/* Subtle grid background */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -112,41 +112,37 @@ export function VeriPakContent() {
           }}
         />
 
-        <div className="relative z-10 flex flex-col items-center text-center max-w-[800px] mx-auto">
-          {/* Badge */}
-          <AnimatedSection delay={0}>
+        <div className="max-w-[1280px] mx-auto relative z-10">
+          <AnimatedSection>
             <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
-              style={{ background: `${accent}0D`, border: `1px solid ${accent}33` }}
+              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-[18px]"
+              style={{ background: `${accent}0D`, border: `1px solid ${accent}22` }}
             >
-              <span className="font-mono text-[0.62rem] text-accent-primary tracking-[0.2em] uppercase">
-                AQS \u2014 Automated Quality Solutions
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-primary" style={{ boxShadow: "0 0 8px #00c2ff" }} />
+              <span className="font-mono text-[0.62rem] text-accent-primary tracking-[0.1em] uppercase">
+                Standalone SCADA Platform
               </span>
             </div>
-          </AnimatedSection>
-
-          {/* Headline */}
-          <AnimatedSection delay={0.1}>
-            <h1 className="font-sans font-extrabold text-[clamp(36px,5.5vw,72px)] leading-[1.05] text-white mb-3">
+            <SectionLabel>VeriPak Inspection Systems</SectionLabel>
+            <SectionTitle>
               VeriPak<span className="text-accent-primary">&reg;</span> Packaging SCADA
-            </h1>
-          </AnimatedSection>
-
-          {/* Subhead */}
-          <AnimatedSection delay={0.2}>
-            <p className="font-sans text-[clamp(16px,2vw,22px)] leading-[1.6] text-text-body max-w-[640px] mb-12">
+            </SectionTitle>
+            <SectionDesc>
               Connect every QC device on your line. Record every product. Report everything.
-            </p>
+              VeriPak is a standalone SCADA system purpose-built for packaging quality control &mdash;
+              delivering real-time visibility, immediate operator feedback, and automated intervention
+              the moment something goes wrong.
+            </SectionDesc>
           </AnimatedSection>
 
           {/* Device Connection Diagram */}
-          <AnimatedSection delay={0.35}>
+          <AnimatedSection delay={0.1}>
             <DeviceConnectionDiagram />
           </AnimatedSection>
 
           {/* CTAs */}
-          <AnimatedSection delay={0.5}>
-            <div className="flex gap-4 flex-wrap justify-center">
+          <AnimatedSection delay={0.15}>
+            <div className="flex gap-4 flex-wrap">
               <Link
                 href="/contact"
                 className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
