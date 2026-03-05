@@ -86,6 +86,11 @@ export const pageMetadata = {
     description:
       "VeriPak hardware: NEMA 4X stainless enclosure, Allen-Bradley CompactLogix PLC, Optix HMI, dual-network security architecture. Full feature comparison and device compatibility.",
   },
+  reps: {
+    title: "For Reps — Authorized Rep Program | AQS — Automated Quality Solutions",
+    description:
+      "Become an authorized AQS rep partner. Carry VeriPak SCADA, IntelliPak feed systems, sanitary conveyors, and washdown robotics. Engineering support, protected territories, and rep-exclusive tools.",
+  },
   about: {
     title: "About | AQS — Automated Quality Solutions",
     description:

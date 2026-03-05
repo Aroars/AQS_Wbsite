@@ -170,6 +170,21 @@ export function Navigation() {
               About
             </Link>
 
+            <Link
+              href="/reps"
+              className={`font-sans font-medium transition-colors ${
+                pathname === "/reps"
+                  ? "text-accent-primary"
+                  : "text-text-body hover:text-white"
+              }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
+            >
+              For Reps
+            </Link>
+
             <MagneticButton
               as="a"
               href="/contact"
@@ -258,6 +273,13 @@ export function Navigation() {
                 onClick={() => setMobileOpen(false)}
               >
                 About
+              </Link>
+              <Link
+                href="/reps"
+                className="font-sans text-lg font-medium text-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                For Reps
               </Link>
               <Link
                 href="/contact"
