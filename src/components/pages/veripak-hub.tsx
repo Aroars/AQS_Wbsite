@@ -14,7 +14,6 @@ import {
   SectionTitle,
   SectionDesc,
 } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import {
   DeviceIcon,
   ProductJourneyAnimation,
@@ -103,7 +102,7 @@ function ModuleCarousel() {
               onMouseEnter={() => setHoveredIndex(i)}
             >
               <Link
-                href={`/solutions/veripak/${m.slug}`}
+                href={m.href || `/solutions/veripak/${m.slug}`}
                 className="block h-full no-underline"
               >
                 <div
@@ -175,7 +174,7 @@ function ModuleCarousel() {
         {veripakModules.map((m) => (
           <Link
             key={m.slug}
-            href={`/solutions/veripak/${m.slug}`}
+            href={m.href || `/solutions/veripak/${m.slug}`}
             className="block no-underline"
           >
             <div
@@ -235,11 +234,25 @@ export function VeriPakHubContent() {
   return (
     <>
       {/* ══════════════════════════════════════════
-          HERO
+          HERO — Full-width background video
           ══════════════════════════════════════════ */}
-      <section className="pt-[140px] pb-[100px] px-8 relative overflow-hidden">
-        <GlowOrb top="-100px" left="-5%" size={500} />
+      <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 540, maxHeight: "88vh" }}>
+        {/* Background video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/veripak/showcase-poster.jpg"
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+        </video>
 
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/[0.72]" />
+
+        {/* Grid texture */}
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -248,69 +261,71 @@ export function VeriPakHubContent() {
           }}
         />
 
-        <div className="max-w-[1280px] mx-auto relative z-10">
-          <AnimatedSection>
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-[18px]"
-              style={{
-                background: `${accent}0D`,
-                border: `1px solid ${accent}22`,
-              }}
-            >
-              <div
-                className="w-1.5 h-1.5 rounded-full bg-accent-primary"
-                style={{ boxShadow: `0 0 8px ${accent}` }}
-              />
-              <span className="font-mono text-[0.62rem] text-accent-primary tracking-[0.1em] uppercase">
-                Standalone SCADA Platform
-              </span>
-            </div>
-            <SectionLabel>VeriPak Inspection Systems</SectionLabel>
-            <SectionTitle>
-              VeriPak<span className="text-accent-primary">&reg;</span> Packaging
-              SCADA
-            </SectionTitle>
-            <SectionDesc>
-              Connect every QC device on your line. Record every product. Report
-              everything. VeriPak is a standalone SCADA system purpose-built for
-              packaging quality control &mdash; delivering real-time visibility,
-              immediate operator feedback, and automated intervention the moment
-              something goes wrong.
-            </SectionDesc>
-          </AnimatedSection>
+        {/* Text content — left-aligned */}
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-[1280px] mx-auto px-8 w-full">
+            <div className="max-w-[680px]">
+              <AnimatedSection>
+                {/* Badge pill */}
+                <div
+                  className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-5"
+                  style={{
+                    background: `${accent}15`,
+                    border: `1px solid ${accent}33`,
+                  }}
+                >
+                  <div
+                    className="w-1.5 h-1.5 rounded-full bg-accent-primary"
+                    style={{ boxShadow: `0 0 8px ${accent}` }}
+                  />
+                  <span className="font-mono text-[0.65rem] text-accent-primary tracking-[0.1em] uppercase">
+                    Standalone SCADA Platform
+                  </span>
+                </div>
 
-          {/* Hero Video */}
-          <AnimatedSection delay={0.1}>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default mt-8 mb-6">
-              <video
-                controls
-                preload="metadata"
-                poster="/images/veripak/showcase-poster.jpg"
-                className="w-full h-full object-cover"
-              >
-                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </AnimatedSection>
+                {/* Eyebrow */}
+                <div className="font-mono text-[0.7rem] text-accent-primary/70 tracking-[0.2em] uppercase mb-3">
+                  VeriPak Inspection Systems
+                </div>
 
-          {/* CTAs */}
-          <AnimatedSection delay={0.15}>
-            <div className="flex gap-4 flex-wrap">
-              <Link
-                href="/contact"
-                className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
-                style={{ boxShadow: `0 4px 20px ${accent}44` }}
-              >
-                Request a System Review &rarr;
-              </Link>
-              <a
-                href="#problem"
-                className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-white/15 text-text-body hover:border-accent-primary hover:text-white transition-all duration-200"
-              >
-                See How It Works
-              </a>
+                {/* Headline */}
+                <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white mb-6">
+                  VeriPak<span className="text-accent-primary">&reg;</span> Packaging SCADA
+                </h1>
+
+                {/* Lead line — bold and larger */}
+                <p className="font-sans font-bold text-[clamp(17px,2.2vw,22px)] text-white leading-[1.5] mb-3">
+                  Connect every QC device on your line. Record every product.
+                  Report everything.
+                </p>
+
+                {/* Body copy */}
+                <p className="font-sans text-[15px] text-text-body leading-[1.7] mb-8 max-w-[600px]">
+                  VeriPak is a standalone SCADA system purpose-built for
+                  packaging quality control &mdash; delivering real-time
+                  visibility, immediate operator feedback, and automated
+                  intervention the moment something goes wrong.
+                </p>
+
+                {/* CTAs */}
+                <div className="flex gap-4 flex-wrap">
+                  <a
+                    href="#problem"
+                    className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
+                    style={{ boxShadow: `0 4px 20px ${accent}44` }}
+                  >
+                    Explore VeriPak &rarr;
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-white/20 text-text-body hover:border-accent-primary hover:text-white transition-all duration-200"
+                  >
+                    Request a Quote
+                  </Link>
+                </div>
+              </AnimatedSection>
             </div>
-          </AnimatedSection>
+          </div>
         </div>
       </section>
 
@@ -462,7 +477,7 @@ export function VeriPakHubContent() {
           <AnimatedSection>
             <SectionLabel>Core Platform</SectionLabel>
             <SectionTitle>
-              VeriPak Doesn&apos;t Replace Your Equipment. It Connects It.
+              One Platform. Every QC Device. Connected.
             </SectionTitle>
             <SectionDesc>
               Trend and alarm any Ethernet-connected equipment. Log every
@@ -511,26 +526,56 @@ export function VeriPakHubContent() {
             </AnimatedSection>
           </div>
 
-          {/* Scale Smart callout */}
+          {/* Scale Smart — expanded section */}
           <AnimatedSection delay={0.25}>
-            <div
-              className="mt-10 rounded-xl p-7 flex gap-4 items-start max-w-[900px]"
-              style={{
-                background: `${accent}08`,
-                border: `1px solid ${accent}22`,
-              }}
-            >
-              <span className="text-2xl leading-none mt-0.5">&#x1F680;</span>
-              <div>
-                <div className="font-sans font-bold text-[1.05rem] text-white mb-1.5">
-                  Start Simple.{" "}
-                  <span className="text-accent-primary">Scale Smart.</span>
+            <div className="mt-16 mb-4">
+              <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-4">
+                Start Simple.{" "}
+                <span className="text-accent-primary">Scale Smart.</span>
+              </h2>
+              <p className="font-sans text-[16px] text-text-body leading-[1.7] max-w-[720px] mb-10">
+                Deploy VeriPak today as a standalone SCADA node monitoring your
+                existing equipment. Your quality program grows &mdash; VeriPak
+                grows with it. Every addition plugs into the same platform: same
+                HMI, same data engine, same reports. No rip-and-replace. No
+                retraining.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Left column — Connect Existing Equipment */}
+                <div>
+                  <div
+                    className="font-mono text-[0.62rem] tracking-[0.12em] uppercase mb-3"
+                    style={{ color: accent }}
+                  >
+                    Connect Existing Equipment
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {["Metal Detectors", "Checkweighers", "X-Ray Systems", "Code Date Printers", "Label Verifiers", "VFDs & Drives"].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent-primary shrink-0" />
+                        <span className="font-sans text-[0.88rem] text-text-body">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="font-sans text-[14px] text-text-body leading-[1.65]">
-                  Deploy VeriPak today as standalone SCADA monitoring. Add QC
-                  integration, vision inspection, leak detection, and reject
-                  modules as your quality program grows. Same HMI. Same data
-                  engine. Same reports. No rip-and-replace.
+
+                {/* Right column — Add AQS Modules */}
+                <div>
+                  <div
+                    className="font-mono text-[0.62rem] tracking-[0.12em] uppercase mb-3"
+                    style={{ color: accent }}
+                  >
+                    Add AQS Modules
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {["Keyence Vision Inspection", "Dual-Pull Leak Detection", "Pneumatic Reject System", "IntelliPak Feed Control"].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5">
+                        <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: accent }} />
+                        <span className="font-sans text-[0.88rem] text-text-body">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

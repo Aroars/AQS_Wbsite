@@ -5,11 +5,11 @@ export const VERIPAK_ACCENT = "#00c2ff";
 // ─── Core features for hub (condensed bullet list) ───
 export const coreFeatures = [
   { icon: "\uD83D\uDCCA", title: "Real-Time Trending", desc: "Monitor all connected devices from one dashboard" },
-  { icon: "\uD83D\uDEA8", title: "Alarm Escalation", desc: "Stack light \u2192 email \u2192 text \u2192 RACI routing" },
+  { icon: "\uD83D\uDEA8", title: "Alarm Escalation", desc: "Visible/Audible Alarm \u2192 Text/Email Notification \u2192 RACI Routing" },
   { icon: "\uD83D\uDC64", title: "Operator Tracking", desc: "Multi-level permissions with activity logging" },
   { icon: "\uD83D\uDCCB", title: "Audit-Ready Reports", desc: "Shift, SKU, and QC event reports on demand" },
-  { icon: "\uD83D\uDD10", title: "Dual-Network Security", desc: "No firewall bridging \u2014 IT approves this" },
-  { icon: "\uD83C\uDF10", title: "VPN Remote Support", desc: "AQS engineers access securely, anytime" },
+  { icon: "\uD83D\uDD10", title: "Dual-Network Security", desc: "Allen-Bradley secure dual-network architecture keeps your machine network fully isolated. HMI data transfers to your user network without bridging the firewall \u2014 satisfying most enterprise IT security requirements." },
+  { icon: "\uD83C\uDF10", title: "VPN Remote Support", desc: "Physical gateway port requires customer-side activation \u2014 outside access is impossible without your permission. 24/7 remote support available on demand." },
 ];
 
 // ─── Hub stats bar ───
@@ -23,6 +23,7 @@ export const hubStats = [
 // ─── Module cards for carousel ───
 export interface VeriPakModule {
   slug: string;
+  href?: string;
   icon: string;
   title: string;
   subtitle: string;
@@ -35,14 +36,14 @@ export const veripakModules: VeriPakModule[] = [
     slug: "full-inspection",
     icon: "\uD83D\uDD0D",
     title: "Full Inspection Suite",
-    subtitle: "Vision + Reject + Image Historian",
+    subtitle: "MD + Checkweigh + Code Date + Vision",
     description:
-      "Keyence vision inspection, Package Image Historian, and lane-specific pneumatic reject \u2014 all feeding into the VeriPak decision engine.",
+      "VeriPak connected to the full third-party QC suite: metal detection, checkweighing, code date printing, and vision inspection.",
     features: [
-      "Defect & label detection",
-      "Package Image Historian",
-      "Lane-specific reject",
-      "Unified pass/fail decision",
+      "Catch contaminants, weight errors & mislabeled product",
+      "Every package logged with time, SKU & operator",
+      "One-click audit reports across all inspection stations",
+      "Eliminate the scramble when an auditor walks in",
     ],
   },
   {
@@ -51,26 +52,27 @@ export const veripakModules: VeriPakModule[] = [
     title: "Leak Detection Module",
     subtitle: "Dual-Pull Aspiration Testing",
     description:
-      "Mechanical dual-pull suction detects micro-leaks and pinholes that vision physically cannot see. Binary pass/fail, no ML drift.",
+      "Mechanical dual-pull suction detects micro-leaks and pinholes that vision physically cannot see.",
     features: [
-      "Delta-Z integrity analysis",
-      "Binary pass/fail",
-      "Inline at full speed",
-      "No false-positive fatigue",
+      "Detect leaking packages before they reach retail",
+      "Identify seal obstructions and film integrity failures",
+      "Reduce retailer credits and consumer complaints",
+      "Binary pass/fail \u2014 no ML drift, no false-positive fatigue",
     ],
   },
   {
-    slug: "specifications",
-    icon: "\u2699\uFE0F",
-    title: "Technical Specifications",
-    subtitle: "Hardware, Network & Compatibility",
+    slug: "intellipak",
+    href: "/solutions/intellipak",
+    icon: "\u26A1",
+    title: "IntelliPak Feed Integration",
+    subtitle: "Intelligent Product Handling",
     description:
-      "NEMA 4X stainless enclosure, Allen-Bradley CompactLogix + Optix HMI, dual-network security architecture, and full device compatibility.",
+      "Verified product only \u2014 batching happens after inspection. Precise feed control integrated into the VeriPak data engine.",
     features: [
-      "NEMA 4X washdown-rated",
-      "Allen-Bradley native",
-      "Ethernet/IP + Modbus",
-      "Feature comparison table",
+      "Verified product only \u2014 batching happens after inspection",
+      "Precise gap, merge & timing control up to 500 PPM",
+      "Same VeriPak data engine underneath",
+      "Plug-in upgrade to existing line architecture",
     ],
   },
 ];

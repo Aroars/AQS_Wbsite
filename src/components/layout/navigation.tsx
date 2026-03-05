@@ -22,7 +22,7 @@ export function Navigation() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 50);
+    const handler = () => setScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -37,14 +37,15 @@ export function Navigation() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-[1000] transition-all duration-400"
+        className="fixed top-0 left-0 right-0 z-[1000]"
         style={{
-          padding: scrolled ? "9px 0" : "14px 0",
+          padding: scrolled ? "9px 0" : "18px 0",
           background: scrolled
             ? "rgba(26,29,43,0.95)"
             : "rgba(26,29,43,0.5)",
           backdropFilter: "blur(20px)",
           borderBottom: `1px solid ${scrolled ? "rgba(0,194,255,0.08)" : "transparent"}`,
+          transition: "padding 250ms ease, background 250ms ease, border-bottom 250ms ease",
         }}
       >
         <div className="max-w-[1280px] mx-auto px-8 flex items-center justify-between">
@@ -53,16 +54,33 @@ export function Navigation() {
             <Image
               src="/images/logos/aqs-favicon.png"
               alt="AQS"
-              width={34}
-              height={34}
+              width={44}
+              height={44}
               className="rounded-[7px] shadow-[0_0_16px_rgba(0,194,255,0.3)]"
+              style={{
+                width: scrolled ? 34 : 44,
+                height: scrolled ? 34 : 44,
+                transition: "width 250ms ease, height 250ms ease",
+              }}
               priority
             />
             <div>
-              <div className="font-sans font-bold text-[0.95rem] text-white">
+              <div
+                className="font-sans font-bold text-white"
+                style={{
+                  fontSize: scrolled ? "0.95rem" : "1.12rem",
+                  transition: "font-size 250ms ease",
+                }}
+              >
                 Automated Quality Solutions
               </div>
-              <div className="font-mono text-[0.52rem] text-accent-primary/50 tracking-[0.15em] uppercase">
+              <div
+                className="font-mono text-accent-primary/50 tracking-[0.15em] uppercase"
+                style={{
+                  fontSize: scrolled ? "0.52rem" : "0.58rem",
+                  transition: "font-size 250ms ease",
+                }}
+              >
                 Nampa, Idaho
               </div>
             </div>
@@ -72,11 +90,15 @@ export function Navigation() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/"
-              className={`font-sans text-[0.84rem] font-medium transition-colors ${
+              className={`font-sans font-medium transition-colors ${
                 pathname === "/"
                   ? "text-accent-primary"
                   : "text-text-body hover:text-white"
               }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
             >
               Home
             </Link>
@@ -89,11 +111,15 @@ export function Navigation() {
             >
               <Link
                 href="/solutions"
-                className={`font-sans text-[0.84rem] font-medium transition-colors ${
+                className={`font-sans font-medium transition-colors ${
                   isSolutionPage
                     ? "text-accent-primary"
                     : "text-text-body hover:text-white"
                 }`}
+                style={{
+                  fontSize: scrolled ? "0.84rem" : "0.95rem",
+                  transition: "font-size 250ms ease",
+                }}
               >
                 Solutions ▾
               </Link>
@@ -131,11 +157,15 @@ export function Navigation() {
 
             <Link
               href="/about"
-              className={`font-sans text-[0.84rem] font-medium transition-colors ${
+              className={`font-sans font-medium transition-colors ${
                 pathname === "/about"
                   ? "text-accent-primary"
                   : "text-text-body hover:text-white"
               }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
             >
               About
             </Link>
@@ -143,7 +173,11 @@ export function Navigation() {
             <MagneticButton
               as="a"
               href="/contact"
-              className="font-sans text-[0.84rem] font-semibold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] px-5 py-2.5 rounded-md shadow-[0_0_16px_rgba(0,194,255,0.2)] inline-block"
+              className={`font-sans font-semibold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] rounded-md shadow-[0_0_16px_rgba(0,194,255,0.2)] inline-block transition-all duration-[250ms] ${
+                scrolled
+                  ? "text-[0.84rem] px-5 py-2.5"
+                  : "text-[0.95rem] px-6 py-3"
+              }`}
             >
               Get a Quote
             </MagneticButton>
