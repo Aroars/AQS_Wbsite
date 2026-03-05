@@ -9,9 +9,7 @@ import { GlowOrb } from "@/components/ui/glow-orb";
 import { ComparisonTable } from "@/components/ui/comparison-table";
 import {
   DeviceIcon,
-  DeviceConnectionDiagram,
   ProductJourneyAnimation,
-  LeakDetectionAnimation,
 } from "@/components/ui/veripak-animations";
 import { veripakSpecs, feedbackLoop } from "@/data/veripak-specs";
 
@@ -29,45 +27,6 @@ const compatibleDevices = [
 ];
 
 const feedbackColors = [accent, accent, "#f5a623", "#00d4aa"];
-
-// ─── Modular build stages ───
-const modularStages = [
-  {
-    label: "Standalone SCADA",
-    headline: "Monitor What You Have",
-    desc: "Connect existing Ethernet equipment. Trend, alarm, log, report. No new hardware.",
-    features: ["Real-time trending", "Alarm faults", "Data logging", "User tracking"],
-    devices: 24,
-  },
-  {
-    label: "+ QC Suite",
-    headline: "Log Every Inspection",
-    desc: "Metal detectors, checkweighers, X-ray, code date \u2014 all reporting to one HMI.",
-    features: ["Setpoint control", "Pass/fail logging", "SKU selection", "Shift reports"],
-    devices: 32,
-  },
-  {
-    label: "+ Vision",
-    headline: "See Every Detail",
-    desc: "Keyence vision inspection for defect detection, label verification, and seal checks.",
-    features: ["Defect detection", "Label verification", "Package image historian", "Seal inspection"],
-    devices: 32,
-  },
-  {
-    label: "+ Leak Detection",
-    headline: "Test Every Seal",
-    desc: "Dual-pull aspiration detects micro-leaks that vision physically cannot see.",
-    features: ["Delta-Z integrity analysis", "Binary pass/fail", "No ML drift", "100% inline testing"],
-    devices: 48,
-  },
-  {
-    label: "+ Reject",
-    headline: "Remove Every Failure",
-    desc: "Pneumatic reject with lane-specific individual package removal.",
-    features: ["Lane-specific reject", "Individual package removal", "Full traceability", "Unified decision"],
-    devices: 60,
-  },
-];
 
 // ─── Standalone SCADA features ───
 const scadaFeatures = [
@@ -92,7 +51,6 @@ const machineDevices = ["CompactLogix PLC", "Metal Detectors", "Checkweighers", 
 const userServices = ["Operator Dashboards", "Shift & SKU Reports", "ERP / SAP / Maximo", "Email / Text Alerts", "Remote VPN Access"];
 
 export function VeriPakContent() {
-  const [activeStage, setActiveStage] = useState(0);
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
   return (
@@ -135,21 +93,17 @@ export function VeriPakContent() {
             </SectionDesc>
           </AnimatedSection>
 
-          {/* Device Connection Diagram */}
+          {/* Hero Video */}
           <AnimatedSection delay={0.1}>
-            <DeviceConnectionDiagram />
-          </AnimatedSection>
-
-          {/* VeriPak enclosure render */}
-          <AnimatedSection delay={0.12}>
-            <div className="relative w-full max-w-[720px] mx-auto aspect-[16/9] my-8">
-              <Image
-                src="/images/veripak/veripak-render-wide.png"
-                alt="VeriPak SCADA stainless steel enclosure with integrated HMI touchscreen and stack light"
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 720px"
-              />
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default mt-8 mb-6">
+              <video
+                controls
+                preload="metadata"
+                poster="/images/veripak/showcase-poster.jpg"
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+              </video>
             </div>
           </AnimatedSection>
 
@@ -321,6 +275,26 @@ export function VeriPakContent() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+
+          {/* Scale Smart callout */}
+          <AnimatedSection delay={0.15}>
+            <div
+              className="mt-10 rounded-xl p-7 flex gap-4 items-start"
+              style={{ background: `${accent}08`, border: `1px solid ${accent}22` }}
+            >
+              <span className="text-2xl leading-none mt-0.5">&#x1F680;</span>
+              <div>
+                <div className="font-sans font-bold text-[1.05rem] text-white mb-1.5">
+                  Start Simple. <span className="text-accent-primary">Scale Smart.</span>
+                </div>
+                <div className="font-sans text-[14px] text-text-body leading-[1.65]">
+                  Deploy VeriPak today as standalone SCADA monitoring. Add QC integration,
+                  vision inspection, leak detection, and reject modules as your quality program
+                  grows. Same HMI. Same data engine. Same reports. No rip-and-replace.
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -349,26 +323,6 @@ export function VeriPakContent() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          VIDEO SHOWCASE
-          ══════════════════════════════════════════ */}
-      <section className="pb-[60px] px-6">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection delay={0.05}>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
-              <video
-                controls
-                preload="metadata"
-                poster="/images/veripak/showcase-poster.jpg"
-                className="w-full h-full object-cover"
-              >
-                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
-              </video>
             </div>
           </AnimatedSection>
         </div>
@@ -416,141 +370,6 @@ export function VeriPakContent() {
                   record &mdash; even if a reject mechanism fails, you know exactly which product had which result,
                   where it went, and who was operating the line.
                 </div>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          CONFIG C — LEAK DETECTION
-          ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
-        <div className="max-w-[900px] mx-auto">
-          <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
-              Config C &mdash; Leak Detection
-            </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-4">
-              See What Vision Can&apos;t. <span className="text-accent-primary">Detect What Touch Can&apos;t.</span>
-            </h2>
-            <p className="font-sans text-[17px] leading-[1.75] text-text-body max-w-[640px] mb-12">
-              For vacuum-sealed and MAP packaging, visual inspection isn&apos;t enough.
-              AQS&apos;s dual-pull leak detection uses controlled aspiration and differential
-              pressure analysis to mechanically test every package &mdash; inline, at full speed.
-              Binary pass/fail. No ML drift. No false-positive fatigue.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.15}>
-            <LeakDetectionAnimation />
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          MODULAR BUILD
-          ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default" style={{ background: "rgba(17,34,64,0.35)" }}>
-        <div className="max-w-[900px] mx-auto">
-          <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
-              Modular Architecture
-            </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-4">
-              Start Simple. <span className="text-accent-primary">Scale Smart.</span>
-            </h2>
-            <p className="font-sans text-[17px] leading-[1.75] text-text-body max-w-[640px] mb-10">
-              Deploy VeriPak today as standalone SCADA monitoring. Add modules as your
-              quality program grows. Same HMI. Same data engine. Same reports. No rip-and-replace.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            {/* Stage selector */}
-            <div className="flex gap-1 mb-8 flex-wrap">
-              {modularStages.map((s, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveStage(i)}
-                  className="font-mono text-[11px] tracking-[0.06em] px-4 py-2 rounded-md cursor-pointer transition-all duration-300"
-                  style={{
-                    border: `1.5px solid ${i <= activeStage ? accent : "rgba(26,48,85,1)"}`,
-                    background: i <= activeStage ? `${accent}15` : "#0B1A2E",
-                    color: i <= activeStage ? accent : "#8892B0",
-                  }}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Active stage detail */}
-            <div
-              className="rounded-2xl p-8 transition-all duration-400"
-              style={{ background: "#0B1A2E", border: "1px solid rgba(26,48,85,1)" }}
-            >
-              <div className="flex justify-between items-start flex-wrap gap-5">
-                <div className="flex-1 min-w-[280px]">
-                  <h3 className="font-sans font-extrabold text-2xl text-white mb-2">
-                    {modularStages[activeStage].headline}
-                  </h3>
-                  <p className="font-sans text-[15px] text-text-body leading-[1.6] mb-5">
-                    {modularStages[activeStage].desc}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {modularStages[activeStage].features.map((f, i) => (
-                      <span
-                        key={i}
-                        className="font-mono text-[11px] text-accent-primary px-3 py-1 rounded-full"
-                        style={{ background: `${accent}11`, border: `1px solid ${accent}22` }}
-                      >
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Device capacity ring */}
-                <div className="w-[120px] h-[120px] relative flex items-center justify-center">
-                  <svg width="120" height="120" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(26,48,85,1)" strokeWidth="6" />
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="50"
-                      fill="none"
-                      stroke={accent}
-                      strokeWidth="6"
-                      strokeDasharray={`${(modularStages[activeStage].devices / 60) * 314} 314`}
-                      strokeLinecap="round"
-                      transform="rotate(-90 60 60)"
-                      style={{ transition: "stroke-dasharray 0.8s ease" }}
-                    />
-                  </svg>
-                  <div className="absolute text-center">
-                    <div className="font-mono font-bold text-[22px] text-accent-primary">
-                      {modularStages[activeStage].devices}
-                    </div>
-                    <div className="font-mono text-[8px] text-text-dim tracking-[0.1em] uppercase">
-                      Devices
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Progress bar */}
-              <div className="mt-7 flex gap-1 h-1.5 rounded-sm overflow-hidden" style={{ background: "rgba(26,48,85,1)" }}>
-                {modularStages.map((_, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-sm transition-all duration-400"
-                    style={{
-                      background: i <= activeStage ? accent : "transparent",
-                      opacity: i <= activeStage ? 0.4 + (i / modularStages.length) * 0.6 : 0,
-                    }}
-                  />
-                ))}
               </div>
             </div>
           </AnimatedSection>

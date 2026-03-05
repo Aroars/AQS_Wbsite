@@ -3,6 +3,7 @@
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
+import { LeakDetectionAnimation } from "@/components/ui/veripak-animations";
 import { leakTypes, visionMisses } from "@/data/leak-types";
 
 const visionStats = [
@@ -249,6 +250,25 @@ export function LeakDetectionContent() {
                 </StaggerItem>
               ))}
             </StaggerContainer>
+          </div>
+        </AnimatedSection>
+
+        {/* Inline Detection Animation */}
+        <AnimatedSection delay={0.28}>
+          <div className="mb-[60px]">
+            <div className="font-mono text-[0.65rem] text-accent-primary tracking-[0.12em] uppercase mb-2.5">
+              Inline Detection
+            </div>
+            <h3 className="font-sans text-[1.5rem] font-bold text-white mb-3.5">
+              See What Vision Can&apos;t. <span className="text-accent-primary">Detect What Touch Can&apos;t.</span>
+            </h3>
+            <p className="font-sans text-[0.92rem] text-text-body leading-[1.7] max-w-[700px] mb-8">
+              For vacuum-sealed and MAP packaging, visual inspection isn&apos;t enough.
+              AQS&apos;s dual-pull leak detection uses controlled aspiration and differential
+              pressure analysis to mechanically test every package — inline, at full speed.
+              Binary pass/fail. No ML drift. No false-positive fatigue.
+            </p>
+            <LeakDetectionAnimation />
           </div>
         </AnimatedSection>
 
