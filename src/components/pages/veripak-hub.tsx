@@ -33,6 +33,37 @@ const accent = VERIPAK_ACCENT;
 const feedbackColors = [accent, accent, "#f5a623", "#00d4aa"];
 
 /* ================================================
+   Core Feature Card (hover lift like IntelliPak)
+   ================================================ */
+
+function CoreFeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="rounded-xl p-5 h-full transition-all duration-300"
+      style={{
+        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+      }}
+    >
+      <div className="text-[1.3rem] mb-1.5">{icon}</div>
+      <div
+        className="font-sans text-[0.92rem] font-bold mb-1"
+        style={{ color: hovered ? accent : "#fff" }}
+      >
+        {title}
+      </div>
+      <div className="font-sans text-[0.82rem] text-text-body leading-[1.5]">
+        {desc}
+      </div>
+    </div>
+  );
+}
+
+/* ================================================
    Module Carousel Card
    ================================================ */
 
@@ -441,24 +472,16 @@ export function VeriPakHubContent() {
             </SectionDesc>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-4">
-            {/* Left: Feature list */}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 mt-4">
+            {/* Left: Feature cards */}
             <AnimatedSection delay={0.1}>
-              <div className="flex flex-col gap-[14px]">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                 {coreFeatures.map((f, i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <div className="text-[18px] mt-0.5 shrink-0">{f.icon}</div>
-                    <div>
-                      <div className="font-sans text-[0.92rem] font-semibold text-white">
-                        {f.title}
-                      </div>
-                      <div className="font-sans text-[0.82rem] text-text-body leading-[1.5]">
-                        {f.desc}
-                      </div>
-                    </div>
-                  </div>
+                  <StaggerItem key={i}>
+                    <CoreFeatureCard icon={f.icon} title={f.title} desc={f.desc} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             </AnimatedSection>
 
             {/* Right: Product Journey animation */}
