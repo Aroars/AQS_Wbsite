@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
-import { VeriPakHubContent } from "@/components/pages/veripak-hub";
+import { VeriPakSpecificationsContent } from "@/components/pages/veripak-specifications";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
-import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { pageMetadata } from "@/content/seo";
-import { veripakFAQs } from "@/data/veripak";
 
 export const metadata: Metadata = {
-  title: pageMetadata.veripak.title,
-  description: pageMetadata.veripak.description,
+  title: pageMetadata.veripakSpecifications.title,
+  description: pageMetadata.veripakSpecifications.description,
 };
 
-export default function VeriPakPage() {
+export default function VeriPakSpecificationsPage() {
   return (
     <>
       <Navigation />
-      <VeriPakHubContent />
+      <VeriPakSpecificationsContent />
       <SystemArchitecture currentProduct="veripak" />
-      <FAQSection items={veripakFAQs} />
       <CTASection />
       <Footer />
     </>

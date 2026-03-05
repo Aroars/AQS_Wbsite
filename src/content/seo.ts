@@ -71,6 +71,21 @@ export const pageMetadata = {
     description:
       "Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears, zero oil, and servo-like accuracy.",
   },
+  veripakFullInspection: {
+    title: "Full Inspection Suite — Vision, Reject & Image Historian | AQS VeriPak",
+    description:
+      "Complete package inspection with Keyence vision, lane-specific pneumatic reject, and Package Image Historian. Every image saved, every defect caught, every decision logged.",
+  },
+  veripakLeakDetection: {
+    title: "Leak Detection Module — Dual-Pull Aspiration Testing | AQS VeriPak",
+    description:
+      "Mechanical dual-pull suction detects micro-leaks and pinholes that vision cannot see. Binary pass/fail, inline at full speed, integrated with VeriPak SCADA.",
+  },
+  veripakSpecifications: {
+    title: "Technical Specifications — Hardware, Network & Compatibility | AQS VeriPak",
+    description:
+      "VeriPak hardware: NEMA 4X stainless enclosure, Allen-Bradley CompactLogix PLC, Optix HMI, dual-network security architecture. Full feature comparison and device compatibility.",
+  },
   about: {
     title: "About | AQS — Automated Quality Solutions",
     description:
