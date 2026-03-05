@@ -190,9 +190,33 @@ function ProjectPreviewCard({
 export function ConveyorsHubContent() {
   return (
     <>
-      {/* Hero */}
-      <section className="pt-[140px] pb-[100px] px-8 relative overflow-hidden">
+      {/* Hero with video background */}
+      <section className="relative min-h-[80vh] flex items-center pt-[140px] pb-[100px] px-8 overflow-hidden">
         <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
+
+        {/* Video background */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/conveyors/conveyor-hero-poster.jpg"
+            alt=""
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/video/conveyor-hero-loop.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1d2b]/80 via-[#1a1d2b]/60 to-[#1a1d2b]/90" />
+        </div>
+
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
             <div
@@ -222,20 +246,6 @@ export function ConveyorsHubContent() {
               TIG-welded, every surface mirror-polished, every system designed to
               move your product — not slow you down.
             </SectionDesc>
-          </AnimatedSection>
-
-          {/* Hero image */}
-          <AnimatedSection delay={0.05}>
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-border-default mt-8">
-              <Image
-                src="/images/conveyors/conveyor-hub-hero.jpg"
-                alt="Sanitary modular belt conveyor with stainless steel guide rails and Keyence sensors"
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
-            </div>
           </AnimatedSection>
         </div>
       </section>
