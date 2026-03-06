@@ -108,20 +108,6 @@ export function VeriPakContent() {
             </SectionDesc>
           </AnimatedSection>
 
-          {/* Hero Video */}
-          <AnimatedSection delay={0.1}>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default mt-8 mb-6">
-              <video
-                controls
-                preload="metadata"
-                poster="/images/veripak/showcase-poster.jpg"
-                className="w-full h-full object-cover"
-              >
-                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </AnimatedSection>
-
           {/* CTAs */}
           <AnimatedSection delay={0.15}>
             <div className="flex gap-4 flex-wrap">
@@ -138,6 +124,29 @@ export function VeriPakContent() {
               >
                 See How It Works
               </a>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SHOWCASE VIDEO
+          ══════════════════════════════════════════ */}
+      <section className="py-[60px] px-8">
+        <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection>
+            <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-3">
+              VeriPak In Action
+            </div>
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <video
+                controls
+                preload="metadata"
+                poster="/images/veripak/showcase-poster.jpg"
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+              </video>
             </div>
           </AnimatedSection>
         </div>
