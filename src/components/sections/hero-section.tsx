@@ -18,7 +18,7 @@ export function HeroSection() {
       {/* Hero background image + video */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero/hero-packaging-line.jpg"
+          src="/images/hero/hero-poster.jpg"
           alt=""
           fill
           className="object-cover"
