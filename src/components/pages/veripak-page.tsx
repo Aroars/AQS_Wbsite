@@ -59,6 +59,21 @@ export function VeriPakContent() {
           HERO
           ══════════════════════════════════════════ */}
       <section className="pt-[140px] pb-[100px] px-8 relative overflow-hidden">
+        {/* Hero background video loop */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/video/veripak-hero-loop.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1d2b]/85 via-[#1a1d2b]/70 to-[#1a1d2b]/90" />
+        </div>
+
         <GlowOrb top="-100px" left="-5%" size={500} />
 
         {/* Subtle grid background */}

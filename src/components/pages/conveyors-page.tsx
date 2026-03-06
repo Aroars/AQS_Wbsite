@@ -124,7 +124,7 @@ export function ConveyorsContent() {
           </SectionDesc>
         </AnimatedSection>
 
-        {/* Hero conveyor image */}
+        {/* Hero conveyor video + image fallback */}
         <AnimatedSection delay={0.05}>
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-border-default mb-[50px]">
             <Image
@@ -134,6 +134,17 @@ export function ConveyorsContent() {
               className="object-cover"
               sizes="100vw"
             />
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="/video/conveyor-hero-loop.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1d2b]/40 to-transparent" />
           </div>
         </AnimatedSection>
 

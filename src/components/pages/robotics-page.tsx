@@ -81,17 +81,39 @@ export function RoboticsContent() {
           </div>
         </AnimatedSection>
 
-        {/* Video showcase */}
+        {/* Video showcases */}
         <AnimatedSection delay={0.08}>
-          <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default mb-[50px]">
-            <video
-              controls
-              preload="metadata"
-              poster="/images/robotics/showcase-poster.jpg"
-              className="w-full h-full object-cover"
-            >
-              <source src="/video/robotics-showcase.mp4" type="video/mp4" />
-            </video>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-[50px]">
+            <div>
+              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+                Palletizing Showcase
+              </div>
+              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+                <video
+                  controls
+                  preload="metadata"
+                  poster="/images/robotics/showcase-poster.jpg"
+                  className="w-full h-full object-cover"
+                >
+                  <source src="/video/palletizing-showcase.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+            <div>
+              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+                Robotic Picking Showcase
+              </div>
+              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+                <video
+                  controls
+                  preload="metadata"
+                  poster="/images/robotics/showcase-poster.jpg"
+                  className="w-full h-full object-cover"
+                >
+                  <source src="/video/robotic-picking-showcase.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
           </div>
         </AnimatedSection>
 
