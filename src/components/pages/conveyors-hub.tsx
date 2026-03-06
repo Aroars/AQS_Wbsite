@@ -197,7 +197,7 @@ export function ConveyorsHubContent() {
         {/* Video background */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/conveyors/conveyor-hero-poster.jpg"
+            src="/images/conveyors/hero-loop-poster.jpg"
             alt=""
             fill
             className="object-cover"

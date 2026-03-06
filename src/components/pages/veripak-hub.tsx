@@ -242,7 +242,7 @@ export function VeriPakHubContent() {
           muted
           loop
           playsInline
-          poster="/images/veripak/showcase-poster.jpg"
+          poster="/images/veripak/hero-loop-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src="/video/veripak-hero-loop.mp4" type="video/mp4" />
