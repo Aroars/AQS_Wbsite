@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -246,7 +245,7 @@ export function VeriPakHubContent() {
           poster="/images/veripak/showcase-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+          <source src="/video/veripak-hero-loop.mp4" type="video/mp4" />
         </video>
 
         {/* Dark overlay */}
@@ -584,30 +583,23 @@ export function VeriPakHubContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SYSTEM IMAGERY
+          SHOWCASE VIDEO
           ══════════════════════════════════════════ */}
       <section className="pb-[50px] px-6">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection delay={0.05}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border-default">
-                <Image
-                  src="/images/veripak/hmi-dashboard.jpg"
-                  alt="VeriPak SCADA HMI dashboard displaying real-time packaging inspection data"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border-default bg-[#e8e8e8]">
-                <Image
-                  src="/images/veripak/veripak-render-detail.png"
-                  alt="VeriPak SCADA stainless steel enclosure — 3D render showing HMI, stack light, and sanitary cabinet"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
+            <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-3">
+              VeriPak In Action
+            </div>
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <video
+                controls
+                preload="metadata"
+                poster="/images/veripak/showcase-poster.jpg"
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+              </video>
             </div>
           </AnimatedSection>
         </div>
