@@ -171,6 +171,36 @@ export function Navigation() {
             </Link>
 
             <Link
+              href="/apps"
+              className={`font-sans font-medium transition-colors ${
+                pathname === "/apps"
+                  ? "text-accent-primary"
+                  : "text-text-body hover:text-white"
+              }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
+            >
+              Apps
+            </Link>
+
+            <Link
+              href="/blog"
+              className={`font-sans font-medium transition-colors ${
+                pathname?.startsWith("/blog")
+                  ? "text-accent-primary"
+                  : "text-text-body hover:text-white"
+              }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
+            >
+              Blog
+            </Link>
+
+            <Link
               href="/reps"
               className={`font-sans font-medium transition-colors ${
                 pathname === "/reps"
@@ -273,6 +303,20 @@ export function Navigation() {
                 onClick={() => setMobileOpen(false)}
               >
                 About
+              </Link>
+              <Link
+                href="/apps"
+                className="font-sans text-lg font-medium text-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                Apps
+              </Link>
+              <Link
+                href="/blog"
+                className="font-sans text-lg font-medium text-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                Blog
               </Link>
               <Link
                 href="/reps"
