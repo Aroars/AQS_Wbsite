@@ -6,6 +6,7 @@ import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { pageMetadata } from "@/content/seo";
+import { intellipakFAQs } from "@/data/intellipak";
 
 export const metadata: Metadata = {
   title: pageMetadata.intellipak.title,
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function IntelliPakPage() {
-  const schema = {"@context":"https://schema.org","@type":"Product","name":"IntelliPak Feed Systems","description":"Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears and zero oil.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Feed Systems","url":"https://www.automatedqs.com/solutions/intellipak"};
+  const schema = {"@context":"https://schema.org","@type":"Product","name":"IntelliPak Feed Systems","description":"Smart conveyor system with precision gapping and intelligent batching for sanitary packaging lines. Up to 500 PPM, up to 7 independent belt zones, on-the-fly batch size changes.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Feed Systems","url":"https://www.automatedqs.com/solutions/intellipak"};
 
   return (
     <>
@@ -28,7 +29,7 @@ export default function IntelliPakPage() {
       <Navigation />
       <IntelliPakContent />
       <SystemArchitecture currentProduct="intellipak" />
-      <FAQSection />
+      <FAQSection items={intellipakFAQs} />
       <CTASection />
       <Footer />
     </>

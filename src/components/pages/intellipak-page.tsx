@@ -35,23 +35,24 @@ export function IntelliPakContent() {
             </div>
 
             <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white max-w-[720px] mb-6">
-              Your Infeed Is the Most Expensive Problem{" "}
-              <span style={{ color: accent }}>You&apos;re Not Measuring</span>
+              Every Product in the Right Place.{" "}
+              <span style={{ color: accent }}>Every Time.</span>
             </h1>
 
             <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[620px]">
-              Misfeeds, oil leaks, encoder failures, unplanned sanitation &mdash;
-              conventional gearbox conveyors create costs that never show up on a
-              line item. IntelliPak eliminates the gearbox entirely.
+              IntelliPak is a smart conveyor system that creates precise gaps for
+              inspection and batches verified product into exact groups &mdash;
+              feeding thermoformers, case packers, flow wrappers, and hand-pack
+              stations at speed.
             </p>
 
             <div className="flex flex-wrap gap-3">
               <a
-                href="#hidden-cost"
+                href="#product-flow"
                 className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-white px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
                 style={{ background: `linear-gradient(135deg, ${accent}, #e09000)`, boxShadow: `0 4px 20px ${accent}44` }}
               >
-                See What Changes &rarr;
+                See How It Works &rarr;
               </a>
               <Link
                 href="/contact"
@@ -64,26 +65,28 @@ export function IntelliPakContent() {
         </div>
       </section>
 
-      {/* ── Conveyor Animation ── */}
-      <section className="px-8 mb-[50px]">
+      {/* ══════════════════════════════════════════
+          SECTION 2: PRODUCT FLOW ANIMATION
+          ══════════════════════════════════════════ */}
+      <section id="product-flow" className="px-8 mb-[50px]">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection delay={0.05}>
             <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-4" style={{ color: accent }}>
-              Live Product Flow &mdash; Random &rarr; Batched Precision
+              Live Product Flow &mdash; Random &rarr; Gapped &rarr; Batched
             </div>
             <ConveyorAnimation />
             <div className="grid grid-cols-3 gap-4 mt-6">
               <div className="text-center">
-                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">Infeed</div>
-                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Random product arrival</div>
+                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">Random Infeed</div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Product arrives at random intervals from upstream equipment</div>
               </div>
               <div className="text-center">
-                <div className="font-mono text-[0.6rem] tracking-[0.08em] uppercase" style={{ color: accent }}>IntelliPak</div>
-                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Gapping, merging &amp; timing</div>
+                <div className="font-mono text-[0.6rem] tracking-[0.08em] uppercase" style={{ color: accent }}>IntelliPak Gapping &amp; Batching</div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Sensors read each product&apos;s position. Belts accelerate and decelerate independently to create precise gaps and form exact groups.</div>
               </div>
               <div className="text-center">
-                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">Output</div>
-                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Uniform batches at speed</div>
+                <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.08em] uppercase">Grouped Output</div>
+                <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Uniform batches delivered at the cadence your packaging equipment needs</div>
               </div>
             </div>
           </AnimatedSection>
@@ -91,26 +94,31 @@ export function IntelliPakContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SECTION 2: THE HIDDEN COST
+          SECTION 3: THE INFEED BOTTLENECK
           ══════════════════════════════════════════ */}
       <section
-        id="hidden-cost"
         className="py-[100px] px-6 border-t border-border-default"
         style={{ background: "rgba(17,34,64,0.35)" }}
       >
         <div className="max-w-[900px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
-              The Real Problem
+              The Infeed Bottleneck
             </div>
             <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-7">
-              It&apos;s Not Just Downtime.{" "}
-              <span style={{ color: accent }}>It&apos;s Everything Around It.</span>
+              Your Packaging Equipment Is Only as Good as{" "}
+              <span style={{ color: accent }}>What Feeds It</span>
             </h2>
             <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px] mb-10">
-              Everyone knows a jammed infeed kills throughput. What nobody tracks
-              is the cascade of costs that comes with conventional gearbox-driven
-              feed systems:
+              Thermoformers, case packers, and flow wrappers are precision
+              machines &mdash; but they can&apos;t fix what arrives wrong. When product
+              shows up at random intervals with inconsistent spacing, you get
+              misfeeds, incomplete batches, line stops, and throughput you can
+              never fully recover.
+            </p>
+            <p className="font-sans text-[15px] text-text-body leading-[1.75] max-w-[700px] mb-10">
+              Most plants compensate with manual labor or oversized buffers.
+              IntelliPak solves it at the source.
             </p>
           </AnimatedSection>
 
@@ -118,23 +126,23 @@ export function IntelliPakContent() {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {[
                 {
-                  title: "Oil Leaks",
-                  body: "Trigger unplanned sanitation stops, product holds, and FSMA documentation. One contamination event on a dairy line can cost more than the conveyor itself.",
+                  title: "Inconsistent Gaps \u2192 Missed Inspections",
+                  body: "Without controlled spacing, your vision system can\u2019t reliably see each product. Defects slip through, or good product gets false-rejected because two items overlap in the inspection zone.",
                   color: "#ff6666",
                 },
                 {
-                  title: "Backlash & Slop",
-                  body: "Increases over time, degrading product spacing until misfeeds become a daily event. Your operators compensate by running slower \u2014 throughput drops and nobody flags it.",
+                  title: "Random Arrival \u2192 Incomplete Batches",
+                  body: "If your case packer needs groups of 4 but product arrives unpredictably, you get short-packed cases, line stops for manual correction, and downstream rework that compounds all shift long.",
                   color: accent,
                 },
                 {
-                  title: "Encoder Cable Failures",
-                  body: "The cable breaks, the motor loses position, the line stops. Your maintenance team patches it. It breaks again in three weeks.",
+                  title: "Speed Mismatch \u2192 Wasted Capacity",
+                  body: "Your downstream equipment can handle 400 PPM, but your infeed delivers 280 at best. That gap is unrealized throughput \u2014 and it costs you every hour of every shift.",
                   color: accent,
                 },
                 {
-                  title: "Sanitation Time",
-                  body: "Gearbox housings trap contamination. Full teardown cleaning adds hours per sanitation cycle, every cycle, every week.",
+                  title: "Manual Intervention \u2192 Labor Cost",
+                  body: "When operators are hand-sorting, re-staging, or manually timing product into equipment, you\u2019re paying skilled labor to do what a conveyor system should handle automatically.",
                   color: "#ff6666",
                 },
               ].map((item) => (
@@ -153,13 +161,67 @@ export function IntelliPakContent() {
                 </StaggerItem>
               ))}
             </StaggerContainer>
+          </AnimatedSection>
+        </div>
+      </section>
 
-            <p className="font-sans text-[15px] text-text-dim leading-[1.7] mt-8 max-w-[700px]">
-              None of these show up as a single line item. They&apos;re buried in
-              maintenance logs, sanitation records, and throughput reports that
-              nobody correlates. But they&apos;re real, and they add up.
+      {/* ══════════════════════════════════════════
+          SECTION 4: WHAT INTELLIPAK DOES
+          ══════════════════════════════════════════ */}
+      <section className="py-[100px] px-6 border-t border-border-default">
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+              What IntelliPak Does
+            </div>
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+              Precision Gapping. Intelligent Batching.{" "}
+              <span style={{ color: accent }}>Seamless Integration.</span>
+            </h2>
+            <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-12">
+              IntelliPak uses independently controlled belt zones with photo-eye
+              sensors to read each product&apos;s actual position &mdash; not assumed
+              timing &mdash; and dynamically adjusts belt speed per product. The
+              result is exact spacing for QC and exact grouping for packaging.
             </p>
           </AnimatedSection>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                title: "Gapping for Inspection",
+                body: "Creates consistent, repeatable gaps between products so your VeriPak vision system (or any QC device) gets a clean look at every single item. Typically runs 2 belts to establish the gap window.",
+                icon: "\u2316",
+              },
+              {
+                title: "Batching for Packaging",
+                body: "Groups verified product into exact counts \u2014 3s, 4s, 6s, 12s, whatever your packaging format requires. Batch sizes are adjustable on the fly from the HMI. Can run up to 7 belt zones for complex batching patterns.",
+                icon: "\u25A6",
+              },
+              {
+                title: "Timing & Metering",
+                body: "Synchronizes product delivery to your downstream machine\u2019s cycle \u2014 matching the thermoformer\u2019s index, the case packer\u2019s cadence, or the flow wrapper\u2019s pitch. Product arrives when the machine is ready for it.",
+                icon: "\u23F1",
+              },
+              {
+                title: "Merge & Divert",
+                body: "Multi-lane to single-lane merging, or single-lane to multi-lane diversion. Mag-Drive precision ensures consistent product spacing through every transition \u2014 no contact pressure, no product damage.",
+                icon: "\u21C4",
+              },
+            ].map((fn) => (
+              <StaggerItem key={fn.title}>
+                <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-300">
+                  <div className="text-[1.5rem] mb-3">{fn.icon}</div>
+                  <h3 className="font-sans text-[1.05rem] font-bold text-white mb-2 group-hover:text-[#f5a623] transition-colors">
+                    {fn.title}
+                  </h3>
+                  <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
+                    {fn.body}
+                  </p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 
@@ -184,46 +246,42 @@ export function IntelliPakContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SECTION 3: HOW MAG-DRIVE CHANGES THE EQUATION
+          SECTION 5: MAG-DRIVE TECHNOLOGY
           ══════════════════════════════════════════ */}
       <section className="py-[100px] px-6 border-t border-border-default">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
-              The IntelliPak Difference
+              The Technology Behind It
             </div>
             <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
-              No Gears. No Oil.{" "}
-              <span style={{ color: accent }}>No Excuses.</span>
+              Mag-Drive Precision &mdash;{" "}
+              <span style={{ color: accent }}>No Gears, No Drift, No Limits</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-10">
-              IntelliPak uses One Motion Mag-Drive hub motors &mdash; a direct-drive,
-              gearless, oil-free motor mounted inside the drive roller itself. No
-              gearbox. No oil. No encoder cables. No backlash.
+              IntelliPak is powered by magnetic direct-drive hub motors &mdash; a
+              permanent-magnet synchronous design built directly into each
+              conveyor roller. There&apos;s no mechanical coupling between the motor
+              and the belt &mdash; the magnetic field drives the roller directly.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
             {/* Text column */}
             <AnimatedSection delay={0.1}>
-              <h3 className="font-sans text-[1.2rem] font-bold text-white mb-5">How It Works</h3>
-              <p className="font-sans text-[0.9rem] text-text-body leading-[1.7] mb-6">
-                The motor is a permanent-magnet synchronous design built into the
-                conveyor roller. There&apos;s no mechanical coupling between the motor
-                and the belt &mdash; the magnetic field drives the roller directly.
-              </p>
-              <div className="flex flex-col gap-3">
+              <h3 className="font-sans text-[1.2rem] font-bold text-white mb-5">This matters for product handling because:</h3>
+              <div className="flex flex-col gap-4">
                 {[
-                  ["Zero oil contamination risk", "no lubricant exists in the system to leak"],
-                  ["Zero backlash", "magnetic coupling maintains exact position without mechanical slop"],
-                  ["Zero encoder cables", "open-loop synchronous operation eliminates the most common failure point"],
-                  ["Hub-mounted design", "the motor sits inside the roller, reducing footprint and simplifying maintenance"],
+                  ["Zero backlash", "Magnetic coupling maintains exact position without the mechanical slop that degrades in gearbox-driven conveyors over time. Your gaps stay precise on day 1,000 just like day 1."],
+                  ["Zero encoder cables", "Open-loop synchronous operation eliminates the most common failure point on conventional servo-driven infeed systems. No cables to break, no position loss, no unplanned stops."],
+                  ["Zero oil contamination risk", "No lubricant exists in the system. Period. For food, dairy, and pharma environments, this eliminates an entire category of sanitation risk."],
+                  ["Hub-mounted design", "The motor sits inside the roller, reducing the conveyor footprint and simplifying maintenance. No external drivetrain to clean around."],
                 ].map(([label, desc], i) => (
                   <div key={i} className="flex gap-3 items-start">
-                    <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={{ backgroundColor: accent, boxShadow: `0 0 6px ${accent}66` }} />
+                    <div className="w-1.5 h-1.5 rounded-full mt-2.5 shrink-0" style={{ backgroundColor: accent, boxShadow: `0 0 6px ${accent}66` }} />
                     <div>
-                      <span className="font-sans text-[0.88rem] font-semibold text-white">{label}</span>
-                      <span className="font-sans text-[0.84rem] text-text-body"> &mdash; {desc}</span>
+                      <span className="font-sans text-[0.92rem] font-semibold text-white">{label}</span>
+                      <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mt-0.5">{desc}</p>
                     </div>
                   </div>
                 ))}
@@ -255,12 +313,14 @@ export function IntelliPakContent() {
                 </thead>
                 <tbody>
                   {[
+                    ["Product spacing accuracy", "Degrades over time (backlash)", "Constant \u2014 permanent magnet sync"],
+                    ["Batch integrity after reject", "Manual re-staging required", "Automatic \u2014 only verified product batches"],
                     ["Speed", "200\u2013350 PPM typical", "Up to 500 PPM"],
+                    ["Changeover (batch size)", "Mechanical adjustment", "On-the-fly from HMI"],
+                    ["Encoder cable failures", "Common failure mode", "No encoder cables"],
+                    ["Oil contamination risk", "Ongoing", "Eliminated"],
                     ["Energy consumption", "Baseline", "55% reduction"],
                     ["Sanitation time", "Full teardown required", "50% faster \u2014 no housings to clean"],
-                    ["Oil contamination risk", "Ongoing", "Eliminated"],
-                    ["Encoder cable failure", "Common failure mode", "No encoder cables"],
-                    ["Backlash / drift", "Increases over time", "Zero \u2014 permanent magnet sync"],
                     ["Warranty", "Typically 1 year", "3-year AQS warranty"],
                   ].map(([metric, old, newVal], i) => (
                     <tr key={i} className="border-b border-border-default">
@@ -277,82 +337,12 @@ export function IntelliPakContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SECTION 4: THE DOLLAR CONVERSATION
+          SECTION 6: CONFIGURATIONS
           ══════════════════════════════════════════ */}
       <section
         className="py-[100px] px-6 border-t border-border-default"
         style={{ background: "rgba(17,34,64,0.35)" }}
       >
-        <div className="max-w-[900px] mx-auto">
-          <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
-              What This Costs You Today
-            </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-7">
-              Put a Number on It
-            </h2>
-            <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[700px] mb-10">
-              You already have the data to calculate what your current infeed is
-              costing you. Here&apos;s what to look at:
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <div className="flex flex-col gap-6 mb-10">
-              {[
-                {
-                  title: "Unplanned sanitation stops",
-                  body: "How many per quarter? What\u2019s the hourly cost of a stopped line? If a single oil contamination event triggers a 4-hour stop on a line running $X/hour in product value, that\u2019s your first number.",
-                },
-                {
-                  title: "Throughput gap",
-                  body: "If your infeed runs at 280 PPM but the downstream equipment can handle 400, that gap is unrealized capacity. Multiply the delta by your average package value and run hours per shift.",
-                },
-                {
-                  title: "Maintenance hours",
-                  body: "How many work orders per quarter are gearbox, encoder, or belt-tracking related? What\u2019s your fully-loaded maintenance labor rate?",
-                },
-                {
-                  title: "OEE impact",
-                  body: "A line running at 62% OEE versus 91% OEE on the same equipment is a 29-point spread. For a mid-size packaging line running two shifts, that spread often translates to hundreds of thousands in recovered annual throughput.",
-                },
-              ].map((item) => (
-                <div key={item.title}>
-                  <div className="font-sans text-[1rem] font-bold text-white mb-1.5">{item.title}</div>
-                  <div className="font-sans text-[0.9rem] text-text-body leading-[1.7]">{item.body}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* ROI Tool CTA */}
-            <div
-              className="rounded-xl px-7 py-6"
-              style={{
-                background: `${accent}08`,
-                border: `1px solid ${accent}22`,
-              }}
-            >
-              <div className="font-sans text-[15px] text-text-body leading-[1.75] mb-4">
-                <span className="font-bold text-white">Want to see your specific numbers?</span>{" "}
-                Our ROI Projection Tool calculates break-even timeline, 60-month cash
-                flow impact, and labor savings based on your line&apos;s actual data.
-              </div>
-              <Link
-                href="/apps"
-                className="inline-flex items-center gap-1.5 font-sans text-[0.88rem] font-semibold px-6 py-3 rounded-lg transition-all hover:-translate-y-0.5"
-                style={{ backgroundColor: accent, color: "#0B1A2E", boxShadow: `0 4px 16px ${accent}44` }}
-              >
-                Run Your ROI Projection &rarr;
-              </Link>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 5: CONFIGURATIONS
-          ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
@@ -372,19 +362,19 @@ export function IntelliPakContent() {
             {[
               {
                 title: "Smart Infeed Conveyor",
-                desc: "Precision product gapping and metering for downstream packaging equipment. Synchronous Mag-Drive feeding at up to 500 PPM with exact product spacing.",
+                desc: "Precision product gapping and metering for downstream packaging equipment. 2-belt Mag-Drive configuration creating exact inspection windows at up to 500 PPM.",
+              },
+              {
+                title: "Batching & Collation System",
+                desc: "Multi-belt configuration (up to 7 zones) that groups verified product into exact counts for case packers, thermoformers, or hand-pack stations. Batch sizes adjustable on the fly.",
               },
               {
                 title: "Accumulation System",
                 desc: "Buffer zones that absorb upstream/downstream speed differentials without stopping the line. Zero-pressure accumulation prevents product damage.",
               },
               {
-                title: "Merge & Divert",
-                desc: "Multi-lane to single-lane merging or single-lane to multi-lane diversion. Mag-Drive precision ensures consistent product spacing through transitions.",
-              },
-              {
-                title: "Complete Conveyor Architecture",
-                desc: "Full line design from depalletizer to palletizer. IntelliPak feed systems integrated with AQS Custom Conveyors and VeriPak SCADA for end-to-end control and traceability.",
+                title: "Complete Line Architecture",
+                desc: "Full infeed design from depalletizer to palletizer. IntelliPak feed systems integrated with AQS Custom Conveyors and VeriPak SCADA for end-to-end control and traceability.",
               },
             ].map((config) => (
               <StaggerItem key={config.title}>
@@ -406,12 +396,9 @@ export function IntelliPakContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SECTION 6: TECHNICAL SPECS
+          SECTION 7: TECHNICAL SPECS
           ══════════════════════════════════════════ */}
-      <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
-      >
+      <section className="py-[100px] px-6 border-t border-border-default">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
@@ -457,16 +444,19 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           CTA — Page-specific
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section
+        className="py-[100px] px-6 border-t border-border-default"
+        style={{ background: "rgba(17,34,64,0.35)" }}
+      >
         <div className="max-w-[700px] mx-auto text-center">
           <AnimatedSection>
             <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-white mb-5">
-              Find Out What Your Infeed Is Actually Costing You
+              See What IntelliPak Can Do for Your Line
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.7] mb-8">
-              Start with a project review. We&apos;ll evaluate your current line,
-              identify where you&apos;re losing throughput and margin, and spec an
-              IntelliPak system for your specific application.
+              Start with a project review. We&apos;ll evaluate your current infeed,
+              identify where you&apos;re losing throughput and batch integrity, and
+              spec an IntelliPak system for your specific application.
             </p>
             <div className="flex justify-center gap-4 flex-wrap">
               <Link
@@ -476,13 +466,15 @@ export function IntelliPakContent() {
               >
                 Start a Project Review &rarr;
               </Link>
-              <Link
-                href="/apps"
+              <a
+                href="https://apps.automatedqs.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-white/20 text-text-body hover:text-white transition-all duration-200"
                 style={{ borderColor: `${accent}33` }}
               >
                 Run the ROI Calculator &rarr;
-              </Link>
+              </a>
             </div>
           </AnimatedSection>
         </div>

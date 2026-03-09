@@ -69,9 +69,9 @@ export const pageMetadata = {
       "Real-world conveyor projects: freezer conveyors for marshmallow production, dairy accumulation systems, and more. See how AQS solves sanitary conveyance challenges.",
   },
   intellipak: {
-    title: "IntelliPak | Mag-Drive Smart Infeed \u2014 Zero Oil, 500 PPM, 55% Less Energy | AQS",
+    title: "IntelliPak | Precision Gapping & Intelligent Batching for Packaging Lines | AQS",
     description:
-      "IntelliPak replaces gearbox-driven infeeds with Mag-Drive hub motors \u2014 eliminating oil contamination, cutting energy 55%, and delivering 500 PPM synchronous feeding for sanitary packaging lines.",
+      "IntelliPak creates precise gaps for inspection and batches verified product into exact groups \u2014 feeding thermoformers, case packers, and flow wrappers at up to 500 PPM with Mag-Drive precision.",
   },
   veripakFullInspection: {
     title: "Full Inspection Suite — Vision, Reject & Image Historian | AQS VeriPak",
