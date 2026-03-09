@@ -9,6 +9,10 @@ import { pageMetadata } from "@/content/seo";
 export const metadata: Metadata = {
   title: pageMetadata.veripakSpecifications.title,
   description: pageMetadata.veripakSpecifications.description,
+  openGraph: {
+    title: pageMetadata.veripakSpecifications.title,
+    description: pageMetadata.veripakSpecifications.description,
+  },
 };
 
 export default function VeriPakSpecificationsPage() {

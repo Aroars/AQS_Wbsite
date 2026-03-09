@@ -9,6 +9,10 @@ import { pageMetadata } from "@/content/seo";
 export const metadata: Metadata = {
   title: pageMetadata.conveyorsProjects.title,
   description: pageMetadata.conveyorsProjects.description,
+  openGraph: {
+    title: pageMetadata.conveyorsProjects.title,
+    description: pageMetadata.conveyorsProjects.description,
+  },
 };
 
 export default function ConveyorsProjectsPage() {

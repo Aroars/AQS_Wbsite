@@ -10,11 +10,21 @@ import { pageMetadata } from "@/content/seo";
 export const metadata: Metadata = {
   title: pageMetadata.leakDetection.title,
   description: pageMetadata.leakDetection.description,
+  openGraph: {
+    title: pageMetadata.leakDetection.title,
+    description: pageMetadata.leakDetection.description,
+  },
 };
 
 export default function LeakDetectionPage() {
+  const schema = {"@context":"https://schema.org","@type":"Service","name":"Leak Detection — Dual-Pull Suction Technology","description":"Mechanical dual-pull suction system that detects pinholes, grease-in-seal, and board cuts that camera systems miss. Patent pending.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Leak Detection Systems","areaServed":"US","url":"https://www.automatedqs.com/solutions/leak-detection"};
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <Navigation />
       <LeakDetectionContent />
       <SystemArchitecture currentProduct="leak-detection" />

@@ -7,6 +7,10 @@ import { pageMetadata } from "@/content/seo";
 export const metadata: Metadata = {
   title: pageMetadata.reps.title,
   description: pageMetadata.reps.description,
+  openGraph: {
+    title: pageMetadata.reps.title,
+    description: pageMetadata.reps.description,
+  },
 };
 
 export default function RepsPage() {
