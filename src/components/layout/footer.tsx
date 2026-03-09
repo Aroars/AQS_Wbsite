@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { CookieSettingsButton } from "@/components/ui/cookie-settings-button";
 
 const solutionLinks = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
@@ -119,7 +120,7 @@ export function Footer() {
           &copy; 2026 Automated Quality Solutions. All rights reserved.
         </div>
         <div className="font-sans text-[0.72rem] text-white/[0.18]">
-          <a href="/privacy-policy" className="hover:text-white/30 transition-colors">Privacy Policy</a> &middot; <a href="/terms-of-service" className="hover:text-white/30 transition-colors">Terms of Service</a>
+          <a href="/privacy-policy" className="hover:text-white/30 transition-colors">Privacy Policy</a> &middot; <a href="/terms-of-service" className="hover:text-white/30 transition-colors">Terms of Service</a> &middot; <a href="/cookie-policy" className="hover:text-white/30 transition-colors">Cookie Policy</a> &middot; <CookieSettingsButton />
         </div>
       </div>
     </footer>
