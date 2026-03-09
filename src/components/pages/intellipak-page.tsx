@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorAnimation, MagDriveAnimation } from "@/components/ui/intellipak-animations";
+import { BatchDemo } from "@/components/ui/batch-demo";
 import { intellipakStats } from "@/data/intellipak";
 
 const accent = "#f5a623";
@@ -222,6 +223,20 @@ export function IntelliPakContent() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SECTION 5: INTERACTIVE BATCH DEMO
+          ══════════════════════════════════════════ */}
+      <section
+        className="py-[100px] px-6 border-t border-border-default"
+        style={{ background: "rgba(17,34,64,0.35)" }}
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <BatchDemo />
+          </AnimatedSection>
         </div>
       </section>
 
