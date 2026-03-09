@@ -1,0 +1,25 @@
+# Automated Quality Solutions — robots.txt
+# https://www.automatedqs.com
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.automatedqs.com/sitemap.xml
+
+# AI Crawlers — allowed for maximum visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /

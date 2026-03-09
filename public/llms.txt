@@ -1,0 +1,36 @@
+# Automated Quality Solutions (AQS)
+
+> AQS engineers standalone SCADA platforms, liquid recovery systems, leak detection technology, sanitary robotics, and custom conveyor systems for food production facilities. Based in Boise, Idaho.
+
+## Products & Solutions
+
+- [VeriPak Standalone SCADA](https://www.automatedqs.com/solutions/veripak): Packaging quality control SCADA platform. Allen-Bradley CompactLogix PLC, Optix HMI, real-time dashboards, sub-second alerts, auto line stop, audit-ready records. No middleware required. Connects metal detectors, checkweighers, code date printers, and vision systems to one dashboard.
+- [VeriPak Full Inspection Suite](https://www.automatedqs.com/solutions/veripak/full-inspection): Keyence vision inspection, lane-specific pneumatic reject, and Package Image Historian. Every image saved, every defect caught, every decision logged.
+- [VeriPak Leak Detection Module](https://www.automatedqs.com/solutions/veripak/leak-detection): Mechanical dual-pull aspiration testing that detects micro-leaks and pinholes that vision systems cannot see. Binary pass/fail, inline at full speed.
+- [IntelliPak Feed Systems](https://www.automatedqs.com/solutions/intellipak): Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears, zero oil, and servo-like accuracy.
+- [EvacuPak Liquid Recovery](https://www.automatedqs.com/solutions/evacupak): Patented fluid recovery system with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability. Product is never exposed to atmosphere.
+- [Leak Detection R&D](https://www.automatedqs.com/solutions/leak-detection): Dual-pull differential suction technology. Self-referencing (each package is its own baseline), binary pass/fail. Patent pending. Vision can't detect what physics can measure.
+- [Sanitary Robotics](https://www.automatedqs.com/solutions/robotics): Washdown robotic systems for palletizing, case packing, pick-and-place, depalletizing, and end-of-line automation. 316L stainless steel, IP69K, USDA/FDA compliant. KUKA and Fanuc platforms, Rockwell-native Allen-Bradley controls.
+- [Custom Sanitary Conveyors](https://www.automatedqs.com/solutions/conveyors): 9 types of custom-engineered sanitary conveyors including belt, modular, MDR, chain, incline, accumulation, merge/divert, freezer, and washdown pallet systems. TIG-welded, mirror-polished, IP69K capable.
+
+## Key Differentiators
+
+- Standalone SCADA — no middleware, no IT integration project, no third-party software
+- Allen-Bradley/Rockwell Automation native — the standard in food and protein facilities
+- Full washdown construction — 316L stainless, IP69K, USDA/FDA compliant
+- Single-point accountability — concept through commissioning
+- 24/7 VPN remote support
+
+## Company Information
+
+- **Location**: Boise, Idaho, USA
+- **Website**: https://www.automatedqs.com
+- **Email**: info@automatedqs.com
+- **LinkedIn**: https://www.linkedin.com/company/automatedqs/
+- **YouTube**: https://www.youtube.com/@AutomatedQS
+- **Leadership**: Travis Nebeker (CEO), Robert Byars (COO), David Mitchell (CRO)
+- **Industries Served**: Food & beverage, dairy, meat & protein, snack & confection, pharmaceutical, pet food
+
+## Contact
+
+For quotes, system reviews, or technical inquiries: https://www.automatedqs.com/contact

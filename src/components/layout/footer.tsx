@@ -119,7 +119,7 @@ export function Footer() {
           &copy; 2026 Automated Quality Solutions. All rights reserved.
         </div>
         <div className="font-sans text-[0.72rem] text-white/[0.18]">
-          Privacy Policy &middot; Terms of Service
+          <a href="/privacy-policy" className="hover:text-white/30 transition-colors">Privacy Policy</a> &middot; <a href="/terms-of-service" className="hover:text-white/30 transition-colors">Terms of Service</a>
         </div>
       </div>
     </footer>
