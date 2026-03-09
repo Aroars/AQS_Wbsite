@@ -131,24 +131,28 @@ export const testimonials = [
 
 export const whyAQS = [
   {
-    icon: "📋",
-    title: "Audit-Ready in One Click",
-    desc: "VeriPak records every product by time, date, SKU, and operator. When the auditor asks for proof, the answer is one screen, one report, done.",
+    icon: "◈",
+    title: "Every Package Has an Identity",
+    desc: "VeriPak SCADA assigns a verifiable record to each individual package — weight, metal detection, vision image, leak test, operator, timestamp. Not batch summaries. Not shift averages. Every single package.",
+    link: { label: "Learn about VeriPak →", href: "/solutions/veripak" },
   },
   {
-    icon: "📈",
-    title: "Fewer Line Stops, Higher OEE",
-    desc: "IntelliPak eliminates infeed errors and misfeeds that cause costly stoppages. Consistent product presentation means your packaging equipment runs at designed speed.",
+    icon: "✓",
+    title: "Your Next Audit Is Already Done",
+    desc: "When an auditor asks you to prove compliance for Tuesday's second shift, VeriPak gives you one screen, one query, one report. No binder scrambles. No USB drives. No reconstructing from memory.",
+    link: { label: "See how it works →", href: "/solutions/veripak" },
   },
   {
-    icon: "⚡",
-    title: "50% Faster Sanitation",
-    desc: "Continuous TIG-welded frames, mirror-polished stainless, and tool-less disassembly. Water sheds in seconds. Your sanitation crew finishes faster. Your line starts sooner.",
+    icon: "◆",
+    title: "Engineered for the Harshest Environments",
+    desc: "Every AQS system — conveyors, controls, enclosures — is designed for sanitary, washdown, and cold environments. NEMA 4X stainless steel, IP69K rated, TIG-welded construction. Because your packaging line doesn't stop for cleaning.",
+    link: { label: "Explore solutions →", href: "/solutions" },
   },
   {
-    icon: "🖥",
-    title: "One Platform, Complete Visibility",
-    desc: "VeriPak connects every QC device on your line — metal detectors, checkweighers, vision, code date printers — into a single dashboard. Stop walking between screens.",
+    icon: "⬡",
+    title: "Allen-Bradley Native. Vendor-Agnostic Integration.",
+    desc: "VeriPak runs on Allen-Bradley CompactLogix + Optix — the same platform most plants already standardize on. It connects to any QC device with Ethernet/IP or Modbus-TCP, regardless of manufacturer.",
+    link: { label: "See the architecture →", href: "/solutions/veripak/specifications" },
   },
 ];
 

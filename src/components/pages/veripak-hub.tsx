@@ -17,7 +17,6 @@ import {
   DeviceIcon,
   ProductJourneyAnimation,
 } from "@/components/ui/veripak-animations";
-import { feedbackLoop } from "@/data/veripak-specs";
 import {
   VERIPAK_ACCENT,
   coreFeatures,
@@ -28,10 +27,9 @@ import {
 } from "@/data/veripak";
 
 const accent = VERIPAK_ACCENT;
-const feedbackColors = [accent, accent, "#f5a623", "#00d4aa"];
 
 /* ================================================
-   Core Feature Card (hover lift like IntelliPak)
+   Core Feature Card (hover lift)
    ================================================ */
 
 function CoreFeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
@@ -233,7 +231,7 @@ export function VeriPakHubContent() {
   return (
     <>
       {/* ══════════════════════════════════════════
-          HERO — Full-width background video
+          SECTION 1: HERO
           ══════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 540, maxHeight: "88vh" }}>
         {/* Background video */}
@@ -278,42 +276,32 @@ export function VeriPakHubContent() {
                     style={{ boxShadow: `0 0 8px ${accent}` }}
                   />
                   <span className="font-mono text-[0.65rem] text-accent-primary tracking-[0.1em] uppercase">
-                    Standalone SCADA Platform
+                    VeriPak SCADA Platform
                   </span>
-                </div>
-
-                {/* Eyebrow */}
-                <div className="font-mono text-[0.7rem] text-accent-primary/70 tracking-[0.2em] uppercase mb-3">
-                  VeriPak Inspection Systems
                 </div>
 
                 {/* Headline */}
                 <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white mb-6">
-                  VeriPak<span className="text-accent-primary">&reg;</span> Packaging SCADA
+                  Stop Proving Quality
+                  <br />
+                  <span className="text-accent-primary">After the Fact</span>
                 </h1>
 
-                {/* Lead line — bold and larger */}
-                <p className="font-sans font-bold text-[clamp(17px,2.2vw,22px)] text-white leading-[1.5] mb-3">
-                  Connect every QC device on your line. Record every product.
-                  Report everything.
-                </p>
-
-                {/* Body copy */}
-                <p className="font-sans text-[15px] text-text-body leading-[1.7] mb-8 max-w-[600px]">
-                  VeriPak is a standalone SCADA system purpose-built for
-                  packaging quality control &mdash; delivering real-time
-                  visibility, immediate operator feedback, and automated
-                  intervention the moment something goes wrong.
+                {/* Subheadline */}
+                <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[600px]">
+                  Your plant runs quality checks on every package. But when an
+                  auditor or a customer asks you to prove a <em className="text-white not-italic font-medium">specific</em> package
+                  passed &mdash; you can&apos;t. VeriPak changes that.
                 </p>
 
                 {/* CTAs */}
                 <div className="flex gap-4 flex-wrap">
                   <a
-                    href="#problem"
+                    href="#product-journey"
                     className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
                     style={{ boxShadow: `0 4px 20px ${accent}44` }}
                   >
-                    Explore VeriPak &rarr;
+                    See How It Works &rarr;
                   </a>
                   <Link
                     href="/contact"
@@ -329,7 +317,7 @@ export function VeriPakHubContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          PROBLEM / SOLUTION
+          SECTION 2: THE PROBLEM (The Status Quo)
           ══════════════════════════════════════════ */}
       <section
         id="problem"
@@ -339,21 +327,47 @@ export function VeriPakHubContent() {
         <div className="max-w-[900px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
-              The Problem
+              The Status Quo
             </div>
             <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-7">
-              Your QC Devices Already Work.
+              Your QC Devices Work.
               <br />
               <span className="text-accent-red">
                 They Just Don&apos;t Talk.
               </span>
             </h2>
-            <p className="font-sans text-[17px] leading-[1.75] text-text-body max-w-[660px] mb-10">
-              Your metal detector logs to its own screen. Your checkweigher
-              prints its own reports. Your code date printer runs independently.
-              When an auditor walks in and asks for proof that every package was
-              inspected on Tuesday&apos;s second shift &mdash; you scramble.
-            </p>
+            <div className="space-y-5 mb-10">
+              <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px]">
+                Every packaging line has inspection equipment &mdash; metal detectors,
+                checkweighers, code date printers, maybe X-ray or vision. Each device
+                does its job. Each one logs data to its own screen, its own USB drive,
+                its own binder.
+              </p>
+              <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px]">
+                The problem isn&apos;t that bad product is getting through. Your
+                equipment catches it.
+              </p>
+              <p className="font-sans text-[16px] leading-[1.75] text-white font-medium max-w-[700px]">
+                The problem is what happens next.
+              </p>
+              <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px]">
+                An auditor shows up and asks you to prove every package was inspected
+                on Tuesday&apos;s second shift. A customer files a chargeback claiming
+                a case arrived underweight. Your QC manager gets a notification on
+                Friday that Thursday&apos;s run was ten percent over target weight
+                &mdash; margin you already gave away and can never recover.
+              </p>
+              <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px]">
+                In every one of these situations, you&apos;re working backwards.
+                Pulling logs from disconnected systems, cross-referencing timestamps
+                by hand, trying to reconstruct what happened after the fact. And even
+                when you piece it together, you still can&apos;t tie the data to a
+                specific package.
+              </p>
+              <p className="font-sans text-[16px] leading-[1.75] text-white font-semibold max-w-[700px]">
+                That&apos;s the gap VeriPak closes.
+              </p>
+            </div>
           </AnimatedSection>
 
           {/* Before / After */}
@@ -469,24 +483,28 @@ export function VeriPakHubContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          CORE PLATFORM — Merged Config A + Config B
+          SECTION 3: THE PRODUCT JOURNEY
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section id="product-journey" className="py-[100px] px-6 border-t border-border-default">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
-            <SectionLabel>Core Platform</SectionLabel>
-            <SectionTitle>
-              One Platform. Every QC Device. Connected.
-            </SectionTitle>
-            <SectionDesc>
-              Trend and alarm any Ethernet-connected equipment. Log every
-              product-level data point. Track operators by role. Tag every
-              package with its own unique quality record as it moves through
-              every station.
-            </SectionDesc>
+            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+              The VeriPak Difference
+            </div>
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-4">
+              One Package. One Identity.
+              <br />
+              <span className="text-accent-primary">Every Inspection Recorded.</span>
+            </h2>
+            <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[700px] mb-10">
+              VeriPak doesn&apos;t just monitor your inspection equipment &mdash; it assigns
+              a verifiable identity to every individual package and collects quality data
+              at every station along the line. Weight, metal detection, vision inspection,
+              leak testing, code date verification. All of it tied to one product record.
+            </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10 mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10">
             {/* Left: Feature cards */}
             <AnimatedSection delay={0.1}>
               <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
@@ -505,77 +523,25 @@ export function VeriPakHubContent() {
                   QC Integration &mdash; Product Journey
                 </div>
                 <ProductJourneyAnimation />
-                <div
-                  className="mt-3 rounded-lg p-3 flex gap-2.5 items-start"
-                  style={{
-                    background: `${accent}08`,
-                    border: `1px solid ${accent}18`,
-                  }}
-                >
-                  <span className="text-sm leading-none mt-0.5">
-                    &#x1F4A1;
-                  </span>
-                  <div className="font-sans text-[12px] text-text-body leading-[1.5]">
-                    Every package carries its own record &mdash; even if a
-                    reject mechanism fails, you know exactly which product had
-                    which result.
-                  </div>
-                </div>
               </div>
             </AnimatedSection>
           </div>
 
-          {/* Scale Smart — expanded section */}
+          {/* Callout box */}
           <AnimatedSection delay={0.25}>
-            <div className="mt-16 mb-4">
-              <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-4">
-                Start Simple.{" "}
-                <span className="text-accent-primary">Scale Smart.</span>
-              </h2>
-              <p className="font-sans text-[16px] text-text-body leading-[1.7] max-w-[720px] mb-10">
-                Deploy VeriPak today as a standalone SCADA node monitoring your
-                existing equipment. Your quality program grows &mdash; VeriPak
-                grows with it. Every addition plugs into the same platform: same
-                HMI, same data engine, same reports. No rip-and-replace. No
-                retraining.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Left column — Connect Existing Equipment */}
-                <div>
-                  <div
-                    className="font-mono text-[0.62rem] tracking-[0.12em] uppercase mb-3"
-                    style={{ color: accent }}
-                  >
-                    Connect Existing Equipment
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {["Metal Detectors", "Checkweighers", "X-Ray Systems", "Code Date Printers", "Label Verifiers", "VFDs & Drives"].map((item) => (
-                      <div key={item} className="flex items-center gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-primary shrink-0" />
-                        <span className="font-sans text-[0.88rem] text-text-body">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right column — Add AQS Modules */}
-                <div>
-                  <div
-                    className="font-mono text-[0.62rem] tracking-[0.12em] uppercase mb-3"
-                    style={{ color: accent }}
-                  >
-                    Add AQS Modules
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {["Keyence Vision Inspection", "Dual-Pull Leak Detection", "Pneumatic Reject System", "IntelliPak Feed Control"].map((item) => (
-                      <div key={item} className="flex items-center gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: accent }} />
-                        <span className="font-sans text-[0.88rem] text-text-body">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div
+              className="mt-10 rounded-xl px-7 py-6"
+              style={{
+                background: `${accent}08`,
+                border: `1px solid ${accent}22`,
+              }}
+            >
+              <div className="font-sans text-[15px] text-text-body leading-[1.75] max-w-[800px]">
+                <span className="font-bold text-white">The result:</span>{" "}
+                Every package that leaves your facility carries a verifiable data
+                trail &mdash; weight, metal detection, visual image, leak integrity,
+                operator, timestamp, SKU. If a customer ever questions a specific
+                product, you pull up the record and show them exactly what happened.
               </div>
             </div>
           </AnimatedSection>
@@ -583,69 +549,149 @@ export function VeriPakHubContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          SHOWCASE VIDEO
-          ══════════════════════════════════════════ */}
-      <section className="pb-[50px] px-6">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection delay={0.05}>
-            <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-3">
-              VeriPak In Action
-            </div>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
-              <video
-                controls
-                preload="metadata"
-                poster="/images/veripak/showcase-poster.jpg"
-                className="w-full h-full object-cover"
-              >
-                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          MODULE CAROUSEL
+          SECTION 4: THREE PROBLEMS VERIPAK SOLVES
           ══════════════════════════════════════════ */}
       <section
-        className="py-[72px] px-8 border-t border-border-default"
+        className="py-[100px] px-6 border-t border-border-default"
         style={{ background: "rgba(17,34,64,0.35)" }}
       >
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection>
-            <SectionLabel>Add-On Modules</SectionLabel>
-            <SectionTitle>Expand Your Quality Program</SectionTitle>
-            <SectionDesc>
-              VeriPak&apos;s modular architecture lets you add inspection, leak
-              detection, and reject capability when you&apos;re ready. Each
-              module integrates into the same platform &mdash; same HMI, same
-              data engine.
-            </SectionDesc>
-          </AnimatedSection>
-          <AnimatedSection delay={0.15}>
-            <ModuleCarousel />
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          NETWORK ARCHITECTURE
-          ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
-        <div className="max-w-[900px] mx-auto">
+        <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
-              Security Architecture
+              Why It Matters
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-12">
-              Data Flows Out.{" "}
-              <span className="text-accent-primary">
-                Threats Don&apos;t Flow In.
-              </span>
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-12">
+              Built for the Three Moments
+              <br />
+              <span className="text-accent-primary">That Cost You Money</span>
             </h2>
           </AnimatedSection>
 
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* 1. The Audit */}
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-primary mb-2">01</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Audit</h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
+                  An auditor asks your QC team to prove compliance for a specific
+                  production run. Without VeriPak, this is a two-week scramble
+                  through binders, USB drives, and spreadsheets. With VeriPak,
+                  it&apos;s one screen, one query, one report &mdash; every package,
+                  every inspection, every operator, timestamped and exportable.
+                </p>
+                <div
+                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
+                  style={{ color: accent }}
+                >
+                  Audit response: weeks &rarr; same day
+                </div>
+              </div>
+            </StaggerItem>
+
+            {/* 2. The Chargeback */}
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-primary mb-2">02</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Chargeback</h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
+                  A customer claims a case was underweight, a package was damaged,
+                  or a seal failed. Today, you can prove your equipment was running.
+                  But you can&apos;t prove <em className="text-white not-italic font-medium">that specific package</em> was
+                  in spec. VeriPak can. Pull up the unique product record &mdash;
+                  the weight reading, the metal detection pass, the package image.
+                </p>
+                <div
+                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
+                  style={{ color: accent }}
+                >
+                  Prove conformance per package
+                </div>
+              </div>
+            </StaggerItem>
+
+            {/* 3. The Discovery */}
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: "#f5a623" }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-warning mb-2">03</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Discovery</h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
+                  Your QC manager realizes Monday morning that Friday&apos;s second
+                  shift ran 10% overweight. That&apos;s margin you already gave away.
+                  With VeriPak, real-time dashboards and configurable alarm escalation
+                  catch drift as it happens &mdash; visual alerts on the floor, then
+                  email/text, then RACI-based routing if nobody responds.
+                </p>
+                <div
+                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
+                  style={{ color: "#f5a623" }}
+                >
+                  Real-time alarm escalation
+                </div>
+              </div>
+            </StaggerItem>
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SECTION 5: TECHNICAL ARCHITECTURE
+          ══════════════════════════════════════════ */}
+      <section className="py-[100px] px-6 border-t border-border-default">
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+              Under the Hood
+            </div>
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+              Standalone SCADA.{" "}
+              <span className="text-accent-primary">No Middleware. No IT Headaches.</span>
+            </h2>
+            <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-12">
+              VeriPak runs on its own Allen-Bradley CompactLogix PLC with a 12-inch
+              Optix touchscreen. It&apos;s the same controls platform most plants
+              already standardize on &mdash; no exotic hardware, no proprietary
+              software stack, no middleware layer between your equipment and your data.
+            </p>
+          </AnimatedSection>
+
+          {/* Three architecture points */}
+          <AnimatedSection delay={0.1}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+              <div className="bg-bg-card border border-border-default rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+                  Connects to What You Already Have
+                </h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
+                  VeriPak integrates with any QC device that speaks Ethernet/IP,
+                  Modbus-TCP, or digital I/O &mdash; regardless of manufacturer.
+                  You don&apos;t rip and replace. You connect and centralize.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+                  Dual-Network Security
+                </h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
+                  The machine network stays isolated. The HMI connects to your
+                  user network for dashboards and reporting without bridging the
+                  firewall. No attack surface created.
+                </p>
+              </div>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+                  Grows With Your Line
+                </h3>
+                <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
+                  Start with SCADA monitoring. Add third-party QC integration.
+                  Add AQS leak detection and vision. Scale to a full-stack quality
+                  control architecture. Every step builds on the same platform.
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* Network Architecture Diagram */}
           <AnimatedSection delay={0.15}>
             <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]">
               {/* Machine Network */}
@@ -738,6 +784,153 @@ export function VeriPakHubContent() {
               </span>
             </div>
           </AnimatedSection>
+
+          {/* Technical specs grid */}
+          <AnimatedSection delay={0.2}>
+            <div className="mt-14">
+              <h3 className="font-sans text-[1.1rem] font-bold text-white mb-6">
+                Technical Specifications
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-border-default rounded-xl overflow-hidden">
+                {[
+                  { label: "PLC", value: "Allen-Bradley CompactLogix with expandable I/O" },
+                  { label: "HMI", value: "Allen-Bradley Optix 12\u201D color touchscreen" },
+                  { label: "Network", value: "Ethernet/IP, Modbus-TCP, digital I/O" },
+                  { label: "Enclosure", value: "NEMA 4X stainless steel, IP69K washdown" },
+                  { label: "Vision", value: "Keyence camera integration via Ethernet/IP" },
+                  { label: "Devices", value: "Up to 24 / 32 / 60 depending on tier" },
+                  { label: "Operators", value: "Manual entry or RFID/HID badge scan" },
+                  { label: "Remote", value: "Secure VPN connectivity for AQS diagnostics" },
+                  { label: "ERP", value: "SAP, Maximo (Enterprise tier)" },
+                ].map((spec, i) => (
+                  <div
+                    key={i}
+                    className="p-4 border-b border-r border-border-default last:border-b-0"
+                    style={{ background: "rgba(17,34,64,0.3)" }}
+                  >
+                    <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-1">
+                      {spec.label}
+                    </div>
+                    <div className="font-sans text-[0.85rem] text-text-body leading-[1.5]">
+                      {spec.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SECTION 6: WHO VERIPAK IS FOR
+          ══════════════════════════════════════════ */}
+      <section
+        className="py-[100px] px-6 border-t border-border-default"
+        style={{ background: "rgba(17,34,64,0.35)" }}
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <AnimatedSection>
+            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+              Built for Your Role
+            </div>
+            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-10">
+              Who VeriPak Is For
+            </h2>
+          </AnimatedSection>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+                  QC Manager / Plant Engineer
+                </div>
+                <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
+                  You&apos;re the one pulling reports at 6 AM and rebuilding data
+                  trails from memory. VeriPak gives you one platform where every
+                  device on the line feeds into one dashboard, one historian, one
+                  report generator. Operator tracking, shift reports, SKU-level
+                  data &mdash; all automatic, all audit-ready.
+                </p>
+              </div>
+            </StaggerItem>
+
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+                  VP of Operations / Plant Director
+                </div>
+                <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
+                  You care about two things: protecting margin and protecting the
+                  company. VeriPak gives you real-time visibility into quality
+                  performance without waiting for your QC team to compile reports.
+                  When an auditor walks in or a customer disputes a shipment, the
+                  data is already there.
+                </p>
+              </div>
+            </StaggerItem>
+
+            <StaggerItem>
+              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+                  Multi-Facility Evaluator
+                </div>
+                <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
+                  Enterprise SCADA nodes connect into a Master Dashboard for
+                  plant-wide or multi-facility quality oversight. Historian export
+                  feeds your MES/ERP for OEE tracking, downtime logging, and
+                  compliance automation across locations.
+                </p>
+              </div>
+            </StaggerItem>
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SHOWCASE VIDEO
+          ══════════════════════════════════════════ */}
+      <section className="py-[72px] px-6 border-t border-border-default">
+        <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection delay={0.05}>
+            <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-3">
+              VeriPak In Action
+            </div>
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <video
+                controls
+                preload="metadata"
+                poster="/images/veripak/showcase-poster.jpg"
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/veripak-showcase.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          MODULE CAROUSEL
+          ══════════════════════════════════════════ */}
+      <section
+        className="py-[72px] px-8 border-t border-border-default"
+        style={{ background: "rgba(17,34,64,0.35)" }}
+      >
+        <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection>
+            <SectionLabel>Add-On Modules</SectionLabel>
+            <SectionTitle>Expand Your Quality Program</SectionTitle>
+            <SectionDesc>
+              VeriPak&apos;s modular architecture lets you add inspection, leak
+              detection, and reject capability when you&apos;re ready. Each
+              module integrates into the same platform &mdash; same HMI, same
+              data engine.
+            </SectionDesc>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <ModuleCarousel />
+          </AnimatedSection>
         </div>
       </section>
 
@@ -765,44 +958,29 @@ export function VeriPakHubContent() {
       </section>
 
       {/* ══════════════════════════════════════════
-          FEEDBACK LOOP
+          CTA — Page-specific
           ══════════════════════════════════════════ */}
       <section className="py-[100px] px-6 border-t border-border-default">
-        <div className="max-w-[1280px] mx-auto">
+        <div className="max-w-[700px] mx-auto text-center">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.12em] uppercase mb-2.5">
-              Immediate Feedback Loop
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-white mb-5">
+              See What Verifiable Quality Data Looks Like
+            </h2>
+            <p className="font-sans text-[16px] text-text-body leading-[1.7] mb-8">
+              Whether you need to connect existing equipment, prepare for an audit,
+              or build a complete inspection architecture &mdash; start with a
+              project review.
+            </p>
+            <div className="flex justify-center gap-4 flex-wrap">
+              <Link
+                href="/contact"
+                className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
+                style={{ boxShadow: `0 4px 20px ${accent}44` }}
+              >
+                Start a Project Review &rarr;
+              </Link>
             </div>
-            <h3 className="font-sans text-[1.3rem] font-bold text-white mb-6">
-              From Detection to Decision in Real Time
-            </h3>
           </AnimatedSection>
-
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {feedbackLoop.map((s, i) => (
-              <StaggerItem key={i}>
-                <div className="bg-bg-card border border-border-default rounded-xl p-6 relative h-full">
-                  <div
-                    className="font-mono text-[1.8rem] font-extrabold opacity-20 mb-1"
-                    style={{ color: feedbackColors[i] }}
-                  >
-                    {s.step}
-                  </div>
-                  <div className="font-sans text-[0.95rem] font-bold text-white mb-1.5">
-                    {s.title}
-                  </div>
-                  <div className="font-sans text-[0.82rem] text-text-body leading-[1.55]">
-                    {s.description}
-                  </div>
-                  {i < 3 && (
-                    <div className="hidden lg:block absolute -right-2.5 top-1/2 font-mono text-[0.9rem] text-accent-primary/20 z-10">
-                      &rarr;
-                    </div>
-                  )}
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
         </div>
       </section>
     </>

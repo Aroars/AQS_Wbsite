@@ -42,24 +42,25 @@ export function HeroSection() {
       <div className="max-w-[1280px] mx-auto w-full relative z-10">
         {/* Headline with split text animation */}
         <AnimatedSection delay={0.1}>
-          <h1 className="font-sans text-[clamp(2.5rem,5.5vw,4.6rem)] font-extrabold leading-[1.05] text-white max-w-[800px] mb-5">
-            <SplitText text="Precision Quality" delay={0.2} />
+          <h1 className="font-sans text-[clamp(2.2rem,5vw,4.2rem)] font-extrabold leading-[1.08] text-white max-w-[860px] mb-5">
+            <SplitText text="Your Equipment Catches" delay={0.2} />
             <br />
-            <SplitText text="Control for" delay={0.35} />{" "}
+            <SplitText text="Bad Product." delay={0.35} />{" "}
             <span className="gradient-text">
-              <SplitText text="Modern Food" delay={0.5} />
+              <SplitText text="Can It Prove" delay={0.5} />
             </span>
             <br />
-            <SplitText text="Production" delay={0.65} />
+            <span className="gradient-text">
+              <SplitText text="a Good One?" delay={0.65} />
+            </span>
           </h1>
         </AnimatedSection>
 
         {/* Subtitle */}
         <AnimatedSection delay={0.2}>
           <p className="font-sans text-[1.12rem] text-text-body leading-[1.7] max-w-[620px] mb-9">
-            AQS engineers standalone SCADA platforms and intelligent automation
-            systems that protect your brand, ensure compliance, and drive
-            measurable ROI across food, dairy, and pharmaceutical packaging lines.
+            AQS builds quality control systems that don&apos;t just inspect — they
+            record, trace, and prove. Every package. Every station. Every time.
           </p>
         </AnimatedSection>
 
@@ -71,7 +72,7 @@ export function HeroSection() {
               href="/solutions"
               className="font-sans text-[0.92rem] font-bold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] px-8 py-3.5 rounded-lg no-underline shadow-[0_0_28px_rgba(0,194,255,0.25)] inline-block"
             >
-              Explore Solutions →
+              See Our Solutions →
             </MagneticButton>
             <MagneticButton
               as="a"

@@ -227,46 +227,30 @@ export const compatibleDevices = [
   "I/O Link Devices",
 ];
 
-// ─── VeriPak-specific FAQs (from reference doc) ───
+// ─── VeriPak-specific FAQs (revised) ───
 export const veripakFAQs = [
   {
-    q: "What is VeriPak?",
-    a: "VeriPak is a standalone SCADA platform by AQS designed specifically for packaging quality control. It centralizes data, alarms, and reporting from metal detectors, checkweighers, vision systems, leak detection, X-ray, and other QC devices into a single Allen-Bradley-powered interface.",
+    q: "Do I need to replace my existing inspection equipment?",
+    a: "No. VeriPak connects to any QC device with Ethernet/IP, Modbus-TCP, or digital I/O \u2014 regardless of manufacturer. It centralizes data from your existing metal detectors, checkweighers, X-ray systems, and other devices without replacing them.",
   },
   {
-    q: "Do I need to replace my existing QC equipment?",
-    a: "No. VeriPak connects to your existing devices via standard Ethernet/IP, Modbus-TCP, or digital I/O. If your metal detectors and checkweighers have digital outputs or network connectivity, VeriPak can integrate with them \u2014 no replacement needed.",
+    q: "What if I only want monitoring and data logging \u2014 no AQS inspection modules?",
+    a: "That\u2019s Config A. VeriPak works as a standalone SCADA for monitoring and trending your existing Ethernet-connected equipment. You can add vision, leak detection, and reject modules later.",
   },
   {
-    q: "What if my equipment is older and lacks Ethernet connectivity?",
-    a: "VeriPak requires devices with digital outputs or Ethernet/IP communication. Antiquated analog-only equipment without any digital interface is not compatible. However, many modern upgrades to legacy devices can be connected.",
+    q: "How does VeriPak handle operator tracking?",
+    a: "Every product is logged under the operator on duty. Login can be manual entry or optional RFID/HID badge scanning for streamlined access. Multi-level permissions separate Operator, Maintenance, and QC roles.",
+  },
+  {
+    q: "What happens when something goes wrong on the line?",
+    a: "VeriPak uses configurable alarm escalation. First a visual/audible alert on the floor. If no response, email or text notification. If still unresolved, RACI-based routing escalates to the next tier. You define the rules.",
   },
   {
     q: "Can VeriPak integrate with our ERP system?",
-    a: "Yes. The Enterprise tier includes historian export to MES/ERP systems such as SAP and Maximo. You can monitor system status, OEE, and downtime logs from your existing enterprise platform.",
+    a: "The Enterprise tier includes historian export to MES/ERP systems like SAP and Maximo for OEE tracking, downtime logging, and system status monitoring.",
   },
   {
-    q: "Is VeriPak washdown-rated?",
-    a: "Yes. The VeriPak control enclosure is NEMA 4X stainless steel with a sloped top, fully rated for sanitary washdown environments. It includes sanitary feet by NGI and a Meltric switch-rated power receptacle.",
-  },
-  {
-    q: "How does VeriPak handle network security?",
-    a: "VeriPak uses a dual-network architecture. The HMI connects to the customer\u2019s user network for reporting and data access, but does NOT bridge the machine network firewall. IT departments approve this because it provides visibility without creating attack surface.",
-  },
-  {
-    q: "Can I add inspection capability later?",
-    a: "Absolutely. VeriPak\u2019s modular design means you can start with standalone SCADA monitoring and add vision inspection (Keyence), leak detection, reject systems, and IntelliPak feed systems at any time. Each module plugs into the existing VeriPak platform.",
-  },
-  {
-    q: "Does VeriPak support remote access?",
-    a: "Yes. Every VeriPak node ships with VPN-ready architecture for secure remote service, diagnostics, and software updates from AQS support engineers.",
-  },
-  {
-    q: "What does the Package Image Historian do?",
-    a: "When paired with vision inspection, VeriPak\u2019s Package Image Historian saves an image of every package \u2014 pass or fail. Images are stored on the customer\u2019s server and can be viewed and filtered by code date, providing visual proof of inspection for audits and recall investigations.",
-  },
-  {
-    q: "How is AQS leak detection different from vision-based methods?",
-    a: "AQS uses a mechanical dual-pull suction method, not vision-based detection. Controlled aspiration measures deflection response and Delta-Z analysis compares it to known-good baselines. It detects pinholes and micro-leaks that cameras physically cannot see \u2014 binary pass/fail with no ML drift.",
+    q: "Is VeriPak secure for our IT environment?",
+    a: "Yes. VeriPak uses a dual-network architecture. The machine network stays isolated. The HMI connects to your user network for reporting without bridging the firewall \u2014 no new attack surface.",
   },
 ];

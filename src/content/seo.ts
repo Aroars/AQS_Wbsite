@@ -14,9 +14,9 @@ export const siteConfig = {
 
 export const pageMetadata = {
   home: {
-    title: "Automated Quality Solutions | Packaging Automation for Food & Dairy",
+    title: "Automated Quality Solutions | Audit-Ready Packaging Quality Control",
     description:
-      "AQS designs intelligent automation systems for food packaging lines — SCADA quality control, Mag-Drive conveyors, leak detection, and sanitary robotics. Engineered for washdown environments.",
+      "Your equipment catches bad product — can it prove a good one? AQS builds quality control systems that record, trace, and prove every package. VeriPak SCADA, IntelliPak conveyors, sanitary robotics.",
   },
   solutions: {
     title: "Packaging Automation Solutions | VeriPak, IntelliPak & More | AQS",
@@ -24,9 +24,9 @@ export const pageMetadata = {
       "Explore AQS packaging line solutions: VeriPak SCADA, IntelliPak smart conveyors, EvacuPak liquid recovery, custom sanitary conveyors, leak detection, and washdown robotics.",
   },
   veripak: {
-    title: "VeriPak SCADA | Packaging Quality Control & Inspection Platform | AQS",
+    title: "VeriPak SCADA | Audit-Ready Quality Control for Packaging Lines | AQS",
     description:
-      "VeriPak is a standalone packaging SCADA system that connects your metal detectors, checkweighers, and QC devices into one auditable network. Every product recorded, every event logged.",
+      "VeriPak ties inspection data to every individual package \u2014 weight, metal detection, vision, leak testing \u2014 so you can prove compliance, defend chargebacks, and stop managing quality backwards.",
   },
   evacupak: {
     title: "EvacuPak | Liquid Recovery System — Up to 97% Product Recovery | AQS",
@@ -69,9 +69,9 @@ export const pageMetadata = {
       "Real-world conveyor projects: freezer conveyors for marshmallow production, dairy accumulation systems, and more. See how AQS solves sanitary conveyance challenges.",
   },
   intellipak: {
-    title: "IntelliPak | Mag-Drive Smart Infeed Conveyors for Packaging Lines | AQS",
+    title: "IntelliPak | Mag-Drive Smart Infeed \u2014 Zero Oil, 500 PPM, 55% Less Energy | AQS",
     description:
-      "IntelliPak Mag-Drive conveyors deliver servo-like precision with no gears, no oil, and 55% energy savings. Infeed, gapping, collation, and batching up to 500 PPM for sanitary environments.",
+      "IntelliPak replaces gearbox-driven infeeds with Mag-Drive hub motors \u2014 eliminating oil contamination, cutting energy 55%, and delivering 500 PPM synchronous feeding for sanitary packaging lines.",
   },
   veripakFullInspection: {
     title: "Full Inspection Suite — Vision, Reject & Image Historian | AQS VeriPak",
