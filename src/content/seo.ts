@@ -4,47 +4,49 @@ export const siteConfig = {
   name: "Automated Quality Solutions",
   shortName: "AQS",
   url: "https://www.automatedqs.com",
-  email: "info@automatedqs.com",
-  location: "Boise, Idaho",
+  email: "sales@automatedqs.com",
+  phone: "(208) 297-4420",
+  location: "Nampa, Idaho",
+  address: "1420 W. Karcher Rd., Nampa, ID 83687",
   linkedin: "https://www.linkedin.com/company/automatedqs/",
   youtube: "https://www.youtube.com/@AutomatedQS",
 };
 
 export const pageMetadata = {
   home: {
-    title: "Automated Quality Solutions | Packaging SCADA, Liquid Recovery & Sanitary Robotics",
+    title: "Automated Quality Solutions | Packaging Automation for Food & Dairy",
     description:
-      "AQS engineers standalone SCADA platforms, liquid recovery systems, leak detection technology, sanitary conveyors, and washdown robotics for food production facilities. Based in Boise, Idaho.",
+      "AQS designs intelligent automation systems for food packaging lines — SCADA quality control, Mag-Drive conveyors, leak detection, and sanitary robotics. Engineered for washdown environments.",
   },
   solutions: {
-    title: "Solutions | AQS — Automated Quality Solutions",
+    title: "Packaging Automation Solutions | VeriPak, IntelliPak & More | AQS",
     description:
-      "Explore AQS solutions: VeriPak SCADA, EvacuPak liquid recovery, leak detection, sanitary robotics, and custom conveyor systems for food production facilities.",
+      "Explore AQS packaging line solutions: VeriPak SCADA, IntelliPak smart conveyors, EvacuPak liquid recovery, custom sanitary conveyors, leak detection, and washdown robotics.",
   },
   veripak: {
-    title: "VeriPak Standalone SCADA Platform | AQS — Automated Quality Solutions",
+    title: "VeriPak SCADA | Packaging Quality Control & Inspection Platform | AQS",
     description:
-      "VeriPak is a standalone SCADA system for packaging quality control. Real-time dashboards, sub-second alerts, auto-reject, and audit-ready records. Allen-Bradley CompactLogix. No middleware required.",
+      "VeriPak is a standalone packaging SCADA system that connects your metal detectors, checkweighers, and QC devices into one auditable network. Every product recorded, every event logged.",
   },
   evacupak: {
-    title: "EvacuPak Liquid Recovery System | AQS — Automated Quality Solutions",
+    title: "EvacuPak | Liquid Recovery System — Up to 97% Product Recovery | AQS",
     description:
-      "Patented fluid recovery with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability. Never exposed to atmosphere.",
+      "EvacuPak liquid recovery systems achieve up to 97% product recovery with a patented hygienic lance design. 3A certified, CIP capable, full HACCP traceability.",
   },
   leakDetection: {
-    title: "Leak Detection — Dual-Pull Suction Technology | AQS — Automated Quality Solutions",
+    title: "Package Leak Detection | Mechanical Integrity Testing | AQS",
     description:
-      "Vision can't detect what physics can measure. AQS is developing a mechanical dual-pull suction system that detects pinholes, grease-in-seal, and board cuts that camera systems miss.",
+      "Dual-pull suction leak detection finds pinholes and micro-leaks that vision systems miss. Mechanical testing with binary pass/fail — no ML drift, no false positives. VeriPak integrated.",
   },
   robotics: {
-    title: "Sanitary Robotics — Washdown Robotic Systems | AQS — Automated Quality Solutions",
+    title: "Sanitary Robotics | Washdown-Rated Palletizing & Case Packing | AQS",
     description:
-      "Fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, and end-of-line automation. 316L stainless, IP69K, USDA/FDA compliant. KUKA and Fanuc platforms.",
+      "KUKA and Staubli washdown-rated robotic systems for palletizing, case packing, and pick-and-place in food production. 316L stainless steel, Rockwell-native programming.",
   },
   conveyors: {
-    title: "Custom Sanitary Conveyors | AQS — Automated Quality Solutions",
+    title: "Custom Sanitary Conveyors | TIG-Welded Stainless Steel | AQS",
     description:
-      "9 types of custom-engineered sanitary conveyors: belt, modular, MDR, chain, incline, accumulation, merge/divert, freezer, and washdown pallet systems. TIG-welded, mirror-polished, IP69K capable.",
+      "Purpose-built sanitary conveyors with continuous TIG-welded 304/316 stainless steel frames. Flat-top, modular belt, MDR, freezer, and accumulation systems for food and dairy plants.",
   },
   conveyorsBelt: {
     title: "Belt Conveyor Systems — Flat-Top, Modular, Incline & Freezer | AQS",
@@ -67,9 +69,9 @@ export const pageMetadata = {
       "Real-world conveyor projects: freezer conveyors for marshmallow production, dairy accumulation systems, and more. See how AQS solves sanitary conveyance challenges.",
   },
   intellipak: {
-    title: "IntelliPak® Feed Systems — Smart Infeed & Product Handling | AQS",
+    title: "IntelliPak | Mag-Drive Smart Infeed Conveyors for Packaging Lines | AQS",
     description:
-      "Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears, zero oil, and servo-like accuracy.",
+      "IntelliPak Mag-Drive conveyors deliver servo-like precision with no gears, no oil, and 55% energy savings. Infeed, gapping, collation, and batching up to 500 PPM for sanitary environments.",
   },
   veripakFullInspection: {
     title: "Full Inspection Suite — Vision, Reject & Image Historian | AQS VeriPak",
@@ -87,19 +89,19 @@ export const pageMetadata = {
       "VeriPak hardware: NEMA 4X stainless enclosure, Allen-Bradley CompactLogix PLC, Optix HMI, dual-network security architecture. Full feature comparison and device compatibility.",
   },
   reps: {
-    title: "For Reps — Authorized Rep Program | AQS — Automated Quality Solutions",
+    title: "Sales Representative Resources | AQS Partner Portal",
     description:
-      "Become an authorized AQS rep partner. Carry VeriPak SCADA, IntelliPak feed systems, sanitary conveyors, and washdown robotics. Engineering support, protected territories, and rep-exclusive tools.",
+      "Resources and information for authorized AQS sales representatives. Access product specs, quoting tools, and sales support materials.",
   },
   about: {
-    title: "About | AQS — Automated Quality Solutions",
+    title: "About AQS | Packaging Automation Engineers in Nampa, Idaho",
     description:
-      "Meet the AQS leadership team and learn about our core values: Solutions Seekers, Motivated to Achieve, Integrity in Everything. Based in Boise, Idaho.",
+      "Automated Quality Solutions is a Nampa, Idaho company engineering intelligent automation for food, dairy, protein, and pharma packaging lines. 50+ years combined engineering experience.",
   },
   contact: {
-    title: "Contact | AQS — Automated Quality Solutions",
+    title: "Get a Quote | Contact Automated Quality Solutions",
     description:
-      "Get a quote for VeriPak SCADA, EvacuPak liquid recovery, leak detection, sanitary robotics, or conveyor systems. Contact AQS in Boise, Idaho.",
+      "Request a quote for VeriPak SCADA, IntelliPak conveyors, custom sanitary conveyors, robotics, or leak detection. Contact AQS at (208) 297-4420 or sales@automatedqs.com.",
   },
 };
 
@@ -113,10 +115,14 @@ export const organizationSchema = {
     "AQS designs and manufactures standalone SCADA platforms, liquid recovery systems, leak detection technology, sanitary robotics, and conveyor systems for food production facilities.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Boise",
+    streetAddress: "1420 W. Karcher Rd.",
+    addressLocality: "Nampa",
     addressRegion: "ID",
+    postalCode: "83687",
     addressCountry: "US",
   },
+  telephone: "(208) 297-4420",
+  email: "sales@automatedqs.com",
   founder: [
     { "@type": "Person", name: "Travis Nebeker", jobTitle: "CEO and Co-Founder" },
     { "@type": "Person", name: "Robert Byars", jobTitle: "COO and Co-Founder" },

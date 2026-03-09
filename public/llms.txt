@@ -1,36 +1,102 @@
 # Automated Quality Solutions (AQS)
 
-> AQS engineers standalone SCADA platforms, liquid recovery systems, leak detection technology, sanitary robotics, and custom conveyor systems for food production facilities. Based in Boise, Idaho.
-
-## Products & Solutions
-
-- [VeriPak Standalone SCADA](https://www.automatedqs.com/solutions/veripak): Packaging quality control SCADA platform. Allen-Bradley CompactLogix PLC, Optix HMI, real-time dashboards, sub-second alerts, auto line stop, audit-ready records. No middleware required. Connects metal detectors, checkweighers, code date printers, and vision systems to one dashboard.
-- [VeriPak Full Inspection Suite](https://www.automatedqs.com/solutions/veripak/full-inspection): Keyence vision inspection, lane-specific pneumatic reject, and Package Image Historian. Every image saved, every defect caught, every decision logged.
-- [VeriPak Leak Detection Module](https://www.automatedqs.com/solutions/veripak/leak-detection): Mechanical dual-pull aspiration testing that detects micro-leaks and pinholes that vision systems cannot see. Binary pass/fail, inline at full speed.
-- [IntelliPak Feed Systems](https://www.automatedqs.com/solutions/intellipak): Mag-Drive powered precision infeed for sanitary packaging lines. Gap, merge, collate, and time products at up to 500 PPM with zero gears, zero oil, and servo-like accuracy.
-- [EvacuPak Liquid Recovery](https://www.automatedqs.com/solutions/evacupak): Patented fluid recovery system with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability. Product is never exposed to atmosphere.
-- [Leak Detection R&D](https://www.automatedqs.com/solutions/leak-detection): Dual-pull differential suction technology. Self-referencing (each package is its own baseline), binary pass/fail. Patent pending. Vision can't detect what physics can measure.
-- [Sanitary Robotics](https://www.automatedqs.com/solutions/robotics): Washdown robotic systems for palletizing, case packing, pick-and-place, depalletizing, and end-of-line automation. 316L stainless steel, IP69K, USDA/FDA compliant. KUKA and Fanuc platforms, Rockwell-native Allen-Bradley controls.
-- [Custom Sanitary Conveyors](https://www.automatedqs.com/solutions/conveyors): 9 types of custom-engineered sanitary conveyors including belt, modular, MDR, chain, incline, accumulation, merge/divert, freezer, and washdown pallet systems. TIG-welded, mirror-polished, IP69K capable.
-
-## Key Differentiators
-
-- Standalone SCADA — no middleware, no IT integration project, no third-party software
-- Allen-Bradley/Rockwell Automation native — the standard in food and protein facilities
-- Full washdown construction — 316L stainless, IP69K, USDA/FDA compliant
-- Single-point accountability — concept through commissioning
-- 24/7 VPN remote support
+> Automated Quality Solutions designs and manufactures intelligent automation systems for packaging lines in food, dairy, protein, pharma, and high-care environments. Based in Nampa, Idaho.
 
 ## Company Information
 
-- **Location**: Boise, Idaho, USA
-- **Website**: https://www.automatedqs.com
-- **Email**: info@automatedqs.com
-- **LinkedIn**: https://www.linkedin.com/company/automatedqs/
-- **YouTube**: https://www.youtube.com/@AutomatedQS
-- **Leadership**: Travis Nebeker (CEO), Robert Byars (COO), David Mitchell (CRO)
-- **Industries Served**: Food & beverage, dairy, meat & protein, snack & confection, pharmaceutical, pet food
+- Website: https://www.automatedqs.com
+- Location: 1420 W. Karcher Rd., Nampa, ID 83687
+- Phone: (208) 297-4420
+- Email: sales@automatedqs.com
+- Industries Served: Dairy & Ice Cream, Protein & Meat, Bakery & Snacks, Beverages, Fresh Produce, Nutraceuticals/Pharma
+
+## Products
+
+### VeriPak SCADA — Standalone Packaging Quality Control Platform
+- URL: https://www.automatedqs.com/solutions/veripak
+- Purpose-built SCADA system that centralizes, records, and reports inspection data from QC devices across the packaging line
+- Connects metal detectors, checkweighers, X-ray, label printers, and code date systems into a unified, auditable quality control network
+- Allen-Bradley CompactLogix PLC + Optix HMI
+- Dual-network security architecture (machine network isolated from user network)
+- Product-level traceability: every product individually recorded and every event logged
+- Available configurations: Standalone SCADA, QC Integration Hub, Leak Detection Module, Full Stack
+- Includes optional dual-pull suction integrity testing for detecting pinholes and micro-leaks (mechanical, not vision-based)
+- Package Image Historian saves every image for traceability, filterable by code date
+- Vendor-agnostic: works with any device with Ethernet/IP or digital I/O
+
+### IntelliPak — Smart Infeed & Product Handling Conveyors
+- URL: https://www.automatedqs.com/solutions/intellipak
+- Precision product handling for sanitary packaging lines between upstream production and downstream packaging
+- Powered by One Motion Mag-Drive (magnetic direct-drive hub motor): no gears, no oil, no backlash
+- Capabilities: infeed, gapping, multi-lane collation, merging, zero-pressure accumulation, dynamic batching, precise timing/metering
+- Speeds up to 500 PPM, per-lane feed rate up to 320 PPM
+- 55% energy savings vs. conventional drives
+- IP69K washdown safe, fully sealed, oil-free
+- 3-year drive warranty from One Motion
+- Allen-Bradley CompactLogix PLC + Optix HMI with Keyence sensor integration
+- Ships with full automation onboard, not just conveyance hardware
+
+### Custom Conveyors — Engineered Sanitary Material Handling
+- URL: https://www.automatedqs.com/solutions/conveyors
+- Purpose-built sanitary conveyor systems engineered for each customer's product, layout, and sanitary requirements
+- Types: flat-top belt, modular belt, motorized drive roll (MDR), chain, accumulation, incline/decline, merge/divert, freezer/arctic (-40F/-40C), washdown pallet
+- 304/316 stainless steel, continuous TIG-welded frames (no bolted joints, no bacterial harborage)
+- Mirror-polished surfaces, sloped and curved design for aggressive water shedding
+- Reduces sanitation time by up to 50%
+- Tool-less disassembly with quick-release belt lifters
+- FDA-approved belting, USDA/3-A compliant
+- IP54 through IP69K protection ratings
+
+### EvacuPak — Liquid Recovery System
+- URL: https://www.automatedqs.com/solutions/evacupak
+- Up to 97% product recovery
+- 3A certified, CIP capable
+- Patented hygienic lance design
+- Full HACCP traceability
+- Product never exposed to atmosphere
+
+### Sanitary Robotics — Washdown Robotic Systems
+- URL: https://www.automatedqs.com/solutions/robotics
+- KUKA and Staubli platforms, true washdown rated
+- Palletizing, case packing, pick-and-place
+- 316L stainless steel construction
+- Rockwell-native programming
+- Full end-of-line integration
+
+### Leak Detection — Package Integrity Testing
+- URL: https://www.automatedqs.com/solutions/leak-detection
+- Dual-pull suction integrity testing (mechanical, not vision-based)
+- Stage 1: controlled aspiration measures structural response
+- Stage 2: differential aspiration with Delta-Z integrity analysis
+- Detects pinholes and micro-leaks invisible to vision systems
+- Binary pass/fail with no ML drift or false-positive fatigue
+- VeriPak SCADA integrated module
+
+## Key Differentiators
+
+1. Mag-Drive technology eliminates oil leaks, gearbox maintenance, and encoder cables
+2. Continuous TIG-welded stainless steel frames (competitors bolt)
+3. Standalone packaging SCADA (not middleware or general-purpose)
+4. Mechanical leak detection catches defects vision systems miss
+5. Dual-network security architecture for IT/OT isolation
+6. 100% product-level traceability and audit-ready recordkeeping
+7. Allen-Bradley/Rockwell native controls (the standard most food plants already use)
+8. Full ecosystem integration: VeriPak + IntelliPak + Leak Detection + Robotics
+
+## Technology Partners
+
+- One Motion: Mag-Drive hub motors
+- Allen-Bradley / Rockwell Automation: PLC, HMI, VFD
+- Keyence: Vision and sensors
+- KUKA: Robotics
+- NGI: Sanitary hardware
+- Intralox / Habasit: FDA-approved belting
+- PulseRoller: Washdown MDR conveyors
+- Meltric: Power connections
 
 ## Contact
 
-For quotes, system reviews, or technical inquiries: https://www.automatedqs.com/contact
+For quotes, technical questions, or partnership inquiries:
+- Quote form: https://www.automatedqs.com/contact
+- Email: sales@automatedqs.com
+- Phone: (208) 297-4420
