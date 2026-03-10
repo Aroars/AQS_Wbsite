@@ -227,29 +227,37 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
   ],
 
   /* ────────────────────────────────────────────────
-     VeriPak — inspection is the highlighted stage
+     VeriPak — the brain of the ecosystem
      ──────────────────────────────────────────────── */
   veripak: [
     {
-      id: "thermo-inspection",
-      name: "Thermoform Inspection Line",
+      id: "meat-thermoform",
+      name: "Meat / Thermoform Line",
       description:
-        "Every vacuum-sealed package is vision-inspected for seal defects, label errors, and weight variance — defects are rejected before batching so every downstream group is complete.",
+        "AQS's strongest full-ecosystem story. Leak detection after the thermoformer removes the manual touchpoint — once the person is out of the loop, robotic case packing becomes possible. VeriPak sits underneath as the decision engine, fusing leak detection data with vision inspection into a single reject decision and unified product record.",
       stages: [
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Infeed Timing",
+          description:
+            "Times raw product into the thermoformer at the correct cadence, ensuring consistent loading cycles and maximizing machine utilization.",
+        },
         {
           label: "Thermoformer",
           icon: "⚙",
           subtitle: "Form & Seal",
           description:
-            "Discharges vacuum-sealed packages at consistent machine cycle rates.",
+            "Vacuum-seals meat products (bacon, sliced ham, chicken tenders) into thermoformed packages at consistent cycle rates.",
         },
         {
           label: "VeriPak",
           icon: "◈",
           productSlug: "veripak",
-          subtitle: "SCADA Inspection",
+          subtitle: "Inspection + Leak",
           description:
-            "Keyence vision detects seal defects, alignment issues, and label errors. Every package imaged, graded, and logged to the historian in real time.",
+            "VeriPak QC Decision Engine: Keyence vision inspection fused with physical leak detection into a single pass/fail decision. Every package imaged, tested, graded, and logged. Data fusion, unified record, and image historian — all from one platform.",
         },
         {
           label: "Reject",
@@ -257,7 +265,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           subtitle: "Defect Removal",
           color: REJECT_COLOR,
           description:
-            "Defective packages removed individually before downstream batching — groups are never short-counted.",
+            "Defective and leaking packages removed individually before batching — every downstream group is complete and verified.",
         },
         {
           label: "IntelliPak",
@@ -265,53 +273,23 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           productSlug: "intellipak",
           subtitle: "Batching",
           description:
-            "Batches verified product into precise groupings for the case packer.",
+            "Batches verified product into precise groupings (×3, ×4, ×6, ×12) for the robotic case packer. Format changes happen on the fly from the HMI.",
         },
         {
-          label: "Case Packer",
+          label: "Robotics",
           icon: "⬡",
-          subtitle: "Pack & Ship",
+          productSlug: "robotics",
+          subtitle: "Case Pack",
           description:
-            "Receives complete, inspected batches ready for packing with full traceability.",
-        },
-      ],
-    },
-    {
-      id: "dairy-qa",
-      name: "Dairy Fill & Inspect",
-      description:
-        "Filled containers are inspected inline for fill level, cap integrity, and label placement — rejects are diverted for product recovery via EvacuPak.",
-      stages: [
-        {
-          label: "Filler",
-          icon: "⚙",
-          subtitle: "Liquid Fill",
-          description:
-            "Fill equipment discharges liquid containers at variable rates.",
+            "KUKA washdown-rated robotic case packer receives complete, inspected batches. Only possible because automated leak detection removed the manual touchpoint.",
         },
         {
-          label: "VeriPak",
-          icon: "◈",
-          productSlug: "veripak",
-          subtitle: "Inline Inspection",
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Transport",
           description:
-            "Inline inspection verifies fill levels, cap integrity, label placement, and date codes in real time — every container graded and logged.",
-        },
-        {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Defect Diversion",
-          color: REJECT_COLOR,
-          description:
-            "Non-conforming containers diverted for product recovery — minimizing waste.",
-        },
-        {
-          label: "EvacuPak",
-          icon: "◉",
-          productSlug: "evacupak",
-          subtitle: "Product Recovery",
-          description:
-            "Recovers up to 97% of product from rejected containers — 3A certified, never exposed to atmosphere.",
+            "AQS sanitary conveyors transport packed cases to palletizing — IP69K washdown rated with tool-free belt changes.",
         },
         {
           label: "Robotics",
@@ -319,164 +297,130 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           productSlug: "robotics",
           subtitle: "Palletizing",
           description:
-            "Palletizing systems stack verified cases with full traceability from product to load.",
+            "KUKA KR Quantec palletizer stacks cases with full VeriPak traceability from product to pallet load.",
         },
       ],
     },
     {
-      id: "multi-lane-qc",
-      name: "Multi-Lane Flow Wrap QC",
+      id: "liquid-beverage",
+      name: "Liquid / Beverage Line",
       description:
-        "Multiple production lanes are individually inspected for product integrity and defects — VeriPak provides per-lane quality data before merging into a single output stream.",
+        "Liquid producers inspect at two separate points — after filling the primary container and again after casing. VeriPak ties both inspection points into one unified quality record, something visitors won't assume is possible from physically separate stations.",
       stages: [
         {
-          label: "Multi-Lane",
-          icon: "☰",
-          subtitle: "Parallel Infeed",
+          label: "Filler",
+          icon: "⚙",
+          subtitle: "Liquid Fill",
           description:
-            "Multiple parallel lanes deliver product at varying rates.",
+            "Filling equipment discharges liquid containers onto the line at production rates.",
         },
         {
-          label: "Gapping",
-          icon: "↔",
-          subtitle: "Inspection Clearance",
-          color: GAPPING_COLOR,
+          label: "Capper",
+          icon: "⚙",
+          subtitle: "Cap & Seal",
           description:
-            "Spaces products apart on each lane for accurate per-product inspection.",
+            "Applies and torques caps to filled containers before inspection.",
+        },
+        {
+          label: "Labeler",
+          icon: "⚙",
+          subtitle: "Label Application",
+          description:
+            "Applies product labels, date codes, and lot tracking information.",
         },
         {
           label: "VeriPak",
           icon: "◈",
           productSlug: "veripak",
-          subtitle: "Per-Lane QC",
+          subtitle: "Inspection Pt. 1",
           description:
-            "Each lane is inspected independently for product integrity, label accuracy, and defects before merging.",
+            "First inspection point: verifies leak integrity, cap torque, label placement, and date codes on every primary container. Results logged to the unified product record.",
         },
         {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Per-Lane Removal",
-          color: REJECT_COLOR,
+          label: "Case Packer",
+          icon: "⚙",
+          subtitle: "Case Packing",
           description:
-            "Non-conforming product diverted per-lane while still separated — no disruption to merged output.",
+            "Off-the-shelf mechanical case packing — AQS doesn't do the casing, but VeriPak monitors it.",
         },
         {
-          label: "IntelliPak",
-          icon: "▦",
-          productSlug: "intellipak",
-          subtitle: "Merge & Gapping",
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "Inspection Pt. 2",
           description:
-            "Merges only verified product into a single stream with tight pitch control for wrapper registration.",
+            "Second inspection point: metal detection and case label inspection. VeriPak SCADA ties this data back to the same unified record from Inspection Point 1 — one product, one record, two physical stations.",
         },
         {
-          label: "Flow Wrapper",
-          icon: "◫",
-          subtitle: "HFFS / VFFS",
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Transport",
           description:
-            "Receives a clean, perfectly spaced single-file stream — every product has passed inspection.",
+            "AQS sanitary conveyors move verified cases to palletizing.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "KUKA palletizer stacks verified cases with full traceability from both inspection points.",
+        },
+      ],
+    },
+    {
+      id: "standalone-retrofit",
+      name: "Standalone SCADA Retrofit",
+      description:
+        "The lowest-barrier entry point for VeriPak and how most sales start. No new inspection hardware required — your existing QC devices stay. VeriPak just connects them. Centralized logging means every product is recorded, every shift is auditable, and audit response goes from a two-week scramble to same-day.",
+      stages: [
+        {
+          label: "Metal Detector",
+          icon: "⊙",
+          subtitle: "Existing Device",
+          description:
+            "Your existing metal detection system — already running independently on the line. VeriPak connects to it without replacing it.",
+        },
+        {
+          label: "Checkweigher",
+          icon: "⊙",
+          subtitle: "Existing Device",
+          description:
+            "Your existing checkweigher running independently. VeriPak pulls weight data into the unified record alongside all other QC points.",
+        },
+        {
+          label: "X-Ray / Printer",
+          icon: "⊙",
+          subtitle: "Existing Devices",
+          description:
+            "X-ray systems, code printers, label verifiers — whatever QC devices you already have running. VeriPak connects to all of them.",
+        },
+        {
+          label: "VeriPak",
+          icon: "◈",
+          productSlug: "veripak",
+          subtitle: "SCADA Node",
+          description:
+            "VeriPak SCADA connects to your existing QC devices and fuses their data into a single platform. No middleware, no IT integration project — Allen-Bradley CompactLogix talks directly to your equipment.",
+        },
+        {
+          label: "Dashboard",
+          icon: "▣",
+          subtitle: "Unified Platform",
+          description:
+            "Real-time dashboards, shift reports, and audit-ready records from every connected device. Same-day audit response instead of a two-week scramble through paper logs.",
         },
       ],
     },
   ],
 
   /* ────────────────────────────────────────────────
-     EvacuPak — product recovery from rejects
+     EvacuPak — no "Where It Fits" section.
+     Rework system, not inline production equipment.
+     Empty array so the component renders nothing.
      ──────────────────────────────────────────────── */
-  evacupak: [
-    {
-      id: "dairy-recovery",
-      name: "Dairy Product Recovery",
-      description:
-        "Rejected containers are diverted to EvacuPak for hygienic product recovery — up to 97% of product is recovered and returned to the process, minimizing waste and maximizing yield.",
-      stages: [
-        {
-          label: "Filler",
-          icon: "⚙",
-          subtitle: "Liquid Fill",
-          description:
-            "Fill equipment discharges liquid containers at variable rates.",
-        },
-        {
-          label: "VeriPak",
-          icon: "◈",
-          productSlug: "veripak",
-          subtitle: "Inline Inspection",
-          description:
-            "Inline inspection identifies containers with fill, seal, or label defects.",
-        },
-        {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Defect Diversion",
-          color: REJECT_COLOR,
-          description:
-            "Non-conforming containers diverted to the recovery station.",
-        },
-        {
-          label: "EvacuPak",
-          icon: "◉",
-          productSlug: "evacupak",
-          subtitle: "Product Recovery",
-          description:
-            "Hygienic lances recover up to 97% of product from rejected containers — 3A certified, closed-system processing, never exposed to atmosphere.",
-        },
-        {
-          label: "Reprocessing",
-          icon: "⟳",
-          subtitle: "Return to Process",
-          description:
-            "Recovered product is returned to the process stream — maximizing yield and minimizing waste.",
-        },
-      ],
-    },
-    {
-      id: "liquid-line",
-      name: "Liquid Line with Palletizing",
-      description:
-        "End-to-end liquid processing with inspection, recovery, and automated palletizing — every rejected container's product is recovered before disposal.",
-      stages: [
-        {
-          label: "Filler",
-          icon: "⚙",
-          subtitle: "Liquid Fill",
-          description:
-            "Filling equipment discharges containers onto the line at variable rates.",
-        },
-        {
-          label: "VeriPak",
-          icon: "◈",
-          productSlug: "veripak",
-          subtitle: "Inline Inspection",
-          description:
-            "Verifies fill levels, cap integrity, and label placement in real time.",
-        },
-        {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Defect Diversion",
-          color: REJECT_COLOR,
-          description:
-            "Defective containers diverted to EvacuPak for product recovery.",
-        },
-        {
-          label: "EvacuPak",
-          icon: "◉",
-          productSlug: "evacupak",
-          subtitle: "Product Recovery",
-          description:
-            "Recovers valuable product from rejected containers before disposal — 3A certified, closed-system processing.",
-        },
-        {
-          label: "Robotics",
-          icon: "⬡",
-          productSlug: "robotics",
-          subtitle: "Palletizing",
-          description:
-            "Verified cases are stacked and palletized with full traceability from product to load.",
-        },
-      ],
-    },
-  ],
+  evacupak: [],
 
   /* ────────────────────────────────────────────────
      Leak Detection — seal integrity testing
@@ -577,21 +521,83 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
   ],
 
   /* ────────────────────────────────────────────────
-     Robotics — case packing & palletizing
+     Robotics — end-of-line anchor
      ──────────────────────────────────────────────── */
   robotics: [
     {
-      id: "end-of-line",
-      name: "End-of-Line Palletizing",
+      id: "eol-palletizing",
+      name: "End-of-Line Palletizing (Dairy/Protein)",
       description:
-        "After inspection and batching, washdown-rated robotics handle case packing and palletizing with full traceability from product to pallet.",
+        "The primary robotics story. MDR accumulation stages cases for the robot with zero back-pressure so cases don't collide. Chain conveyor handles full pallet weight. All conveyors are washdown-rated for dairy and protein environments.",
+      stages: [
+        {
+          label: "Case Packer",
+          icon: "⚙",
+          subtitle: "Upstream",
+          description:
+            "Case packer discharges packed cases onto the line.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "MDR Accumulation",
+          description:
+            "AQS MDR accumulation conveyors stage cases for the robot — zero-pressure so cases don't collide or jam. Washdown-rated for dairy/protein environments.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "KUKA Palletizer",
+          description:
+            "KUKA KR Quantec palletizer — IP69K washdown rated, 316L stainless steel, builds precise pallet patterns with full traceability and real-time monitoring via VeriPak SCADA.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Chain Conveyor",
+          description:
+            "AQS heavy-duty chain conveyors handle full pallet weight from the palletizer to the stretch wrapper.",
+        },
+        {
+          label: "Stretch Wrapper",
+          icon: "⚙",
+          subtitle: "Ship Ready",
+          description:
+            "Finished pallets wrapped and prepared for cold storage or shipping.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Pallet Conveyor",
+          description:
+            "AQS pallet conveyors transport wrapped pallets to the dock or cold storage.",
+        },
+      ],
+    },
+    {
+      id: "full-production",
+      name: "Full Production Line with Robotic End-of-Line",
+      description:
+        "Zoomed-out view showing robotics as the final stage of a complete AQS-equipped line. The robotic palletizing cell isn't a standalone purchase — it's the anchor at the end of an integrated system where VeriPak monitors everything, IntelliPak handles batching, and Conveyors connect all stages.",
       stages: [
         {
           label: "Thermoformer",
           icon: "⚙",
-          subtitle: "Upstream",
+          subtitle: "Packaging",
           description:
-            "Upstream packaging equipment discharges product at machine cycle rates.",
+            "Upstream thermoformer discharges vacuum-sealed packages.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Transport",
+          description:
+            "AQS sanitary conveyors transport product from packaging to inspection.",
         },
         {
           label: "VeriPak",
@@ -599,7 +605,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           productSlug: "veripak",
           subtitle: "Inspection",
           description:
-            "Every package inspected and logged before downstream batching.",
+            "VeriPak inspects every package and logs results — the SCADA platform monitors the entire line from this point forward.",
         },
         {
           label: "Reject",
@@ -607,7 +613,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           subtitle: "Defect Removal",
           color: REJECT_COLOR,
           description:
-            "Defective packages removed individually so every batch is complete.",
+            "Defective packages removed before batching — every downstream group is complete.",
         },
         {
           label: "IntelliPak",
@@ -615,129 +621,113 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           productSlug: "intellipak",
           subtitle: "Batching",
           description:
-            "Batches and stages verified product into precise groupings for robotic handling.",
+            "Batches verified product into precise groupings for the case packer.",
         },
         {
-          label: "Robotics",
-          icon: "⬡",
-          productSlug: "robotics",
-          subtitle: "Case Pack & Palletize",
+          label: "Case Packer",
+          icon: "⚙",
+          subtitle: "Packing",
           description:
-            "Washdown-rated robotic case packing and palletizing with full VeriPak traceability from product to pallet.",
+            "Case packer receives complete, inspected batches.",
         },
-      ],
-    },
-    {
-      id: "case-packing",
-      name: "Case Packing Line",
-      description:
-        "Sanitary conveyors feed IntelliPak-batched product to robotic case packing — the robot builds precise pallet patterns with real-time monitoring.",
-      stages: [
         {
           label: "Conveyors",
           icon: "═",
           productSlug: "conveyors",
-          subtitle: "Sanitary Transport",
-          description:
-            "Sanitary transport moves product from upstream processing.",
-        },
-        {
-          label: "IntelliPak",
-          icon: "▦",
-          productSlug: "intellipak",
           subtitle: "Accumulation",
           description:
-            "Accumulates and stages cases for robotic pickup patterns.",
+            "AQS MDR accumulation stages cases for palletizing.",
         },
         {
           label: "Robotics",
           icon: "⬡",
           productSlug: "robotics",
-          subtitle: "Case Pack & Palletize",
+          subtitle: "Palletizing",
           description:
-            "KUKA washdown-rated robots build precise pallet patterns with full traceability and real-time monitoring.",
+            "KUKA palletizer — the anchor of the integrated AQS line. Full VeriPak traceability from raw product to finished pallet.",
+        },
+      ],
+    },
+    {
+      id: "robotic-case-packing",
+      name: "Robotic Case Packing",
+      description:
+        "Robotics in a different role — not just palletizing, but vision-guided case packing. IntelliPak stages product for robotic pick-and-place with lane balancing. Demonstrates AQS's capability for primary AND secondary packaging robotics.",
+      stages: [
+        {
+          label: "IntelliPak",
+          icon: "▦",
+          productSlug: "intellipak",
+          subtitle: "Product Staging",
+          description:
+            "IntelliPak stages and presents verified product in precise patterns for robotic pick-and-place with vision-guided lane balancing.",
         },
         {
-          label: "Stretch Wrapper",
-          icon: "⚙",
-          subtitle: "Ship Ready",
+          label: "Vision System",
+          icon: "◈",
+          subtitle: "Guidance",
           description:
-            "Finished pallets wrapped and prepared for shipping.",
+            "Vision system identifies product position and orientation for the robot's pick-and-place cycle.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Pick & Place",
+          description:
+            "KUKA robot picks individual products and places them into case patterns — vision-guided for flexible product handling. Full washdown, 316L stainless steel.",
+        },
+        {
+          label: "Case Sealer",
+          icon: "⚙",
+          subtitle: "Seal & Close",
+          description:
+            "Cases sealed after robotic loading.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Transport",
+          description:
+            "AQS sanitary conveyors transport sealed cases to the palletizer.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "Second KUKA robot builds pallet patterns from sealed cases — same line, two robotic cells, full AQS integration.",
         },
       ],
     },
   ],
 
   /* ────────────────────────────────────────────────
-     Conveyors — sanitary transport & gapping
+     Conveyors — connective tissue of every line
      ──────────────────────────────────────────────── */
   conveyors: [
     {
-      id: "sanitary-transport",
-      name: "Sanitary Transport Line",
+      id: "full-line-positions",
+      name: "Full Production Line — Conveyor Positions",
       description:
-        "IP69K washdown-rated conveyors move product between processing stations with quick-change belting, tool-free maintenance, and food-grade construction throughout.",
+        "AQS doesn't just build one conveyor — they build the full conveyance infrastructure that connects every stage. Each segment is labeled by type so visitors understand the range: belt for transport, MDR for zero-pressure accumulation, chain for full pallet weight.",
       stages: [
         {
-          label: "Filler",
+          label: "Production",
           icon: "⚙",
-          subtitle: "Upstream Equipment",
+          subtitle: "Upstream",
           description:
-            "Upstream fill equipment discharges containers at variable rates.",
+            "Upstream production equipment discharges product onto the line.",
         },
         {
           label: "Conveyors",
           icon: "═",
           productSlug: "conveyors",
-          subtitle: "Sanitary Transport",
+          subtitle: "Belt Transport",
           description:
-            "Food-grade sanitary conveyors with IP69K washdown construction, quick-change belting, and tool-free maintenance for maximum uptime.",
-        },
-        {
-          label: "VeriPak",
-          icon: "◈",
-          productSlug: "veripak",
-          subtitle: "Inline Inspection",
-          description:
-            "Inline inspection verifies product quality before downstream processing.",
-        },
-        {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Defect Removal",
-          color: REJECT_COLOR,
-          description:
-            "Non-conforming product diverted before downstream processing.",
-        },
-        {
-          label: "Packaging",
-          icon: "⚙",
-          subtitle: "Downstream",
-          description:
-            "Verified product continues to packaging equipment.",
-        },
-      ],
-    },
-    {
-      id: "gapping-spacing",
-      name: "Gapping & Spacing Line",
-      description:
-        "Conveyors create consistent product spacing for accurate inspection — ensuring VeriPak cameras have the clearance needed for per-product quality checks.",
-      stages: [
-        {
-          label: "Upstream",
-          icon: "⚙",
-          subtitle: "Variable Output",
-          description:
-            "Production equipment discharges product at variable rates requiring spacing.",
-        },
-        {
-          label: "Conveyors",
-          icon: "═",
-          productSlug: "conveyors",
-          subtitle: "Gapping & Spacing",
-          description:
-            "Gapping conveyors create consistent product spacing for accurate downstream inspection — IP69K washdown rated with tool-free belt changes.",
+            "AQS sanitary belt conveyors move product from production to inspection — IP69K washdown rated, quick-change belting, tool-free maintenance.",
         },
         {
           label: "VeriPak",
@@ -745,30 +735,107 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
           productSlug: "veripak",
           subtitle: "Inspection",
           description:
-            "Properly spaced product enables accurate per-product inspection.",
-        },
-        {
-          label: "Reject",
-          icon: "⊘",
-          subtitle: "Defect Removal",
-          color: REJECT_COLOR,
-          description:
-            "Defective product removed while still separated.",
+            "VeriPak inspects every product inline before downstream processing.",
         },
         {
           label: "IntelliPak",
           icon: "▦",
           productSlug: "intellipak",
-          subtitle: "Merge & Timing",
+          subtitle: "Batching",
           description:
-            "Merges and times verified product for wrapper registration.",
+            "IntelliPak batches verified product into groups for case packing.",
         },
         {
-          label: "Flow Wrapper",
-          icon: "◫",
-          subtitle: "HFFS / VFFS",
+          label: "Case Packer",
+          icon: "⚙",
+          subtitle: "Packing",
           description:
-            "Receives a perfectly spaced, fully inspected product stream.",
+            "Case packer receives complete, inspected batches.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "MDR Accumulation",
+          description:
+            "AQS MDR (Motor Driven Roller) accumulation conveyors stage cases for the palletizer with zero back-pressure — cases never collide or jam.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "KUKA palletizer stacks cases into pallet patterns.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Chain / Pallet",
+          description:
+            "AQS heavy-duty chain conveyors handle full pallet weight from the palletizer to the stretch wrapper and shipping dock.",
+        },
+      ],
+    },
+    {
+      id: "freezer-transition",
+      name: "Specialty — Freezer Transition",
+      description:
+        "A differentiator story most sanitary conveyor companies can't match. AQS builds arctic-rated conveyors for sustained −40°F operation with condensation management at freezer-to-ambient transitions. Speaks directly to protein and ice cream producers.",
+      stages: [
+        {
+          label: "Packaging",
+          icon: "⚙",
+          subtitle: "Upstream",
+          description:
+            "Upstream packaging equipment seals product before freezing.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Incline",
+          description:
+            "AQS incline conveyors elevate product to the blast freezer entry — sanitary construction with positive product control on steep angles.",
+        },
+        {
+          label: "Blast Freezer",
+          icon: "❄",
+          subtitle: "−40°F",
+          description:
+            "Spiral or tunnel blast freezer brings product to target core temperature.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Arctic Conveyor",
+          description:
+            "AQS arctic-rated conveyors operate continuously at −40°F with materials and lubricants rated for sustained cryogenic temperatures. Condensation management at the freezer-to-ambient transition prevents ice buildup.",
+        },
+        {
+          label: "Case Packer",
+          icon: "⚙",
+          subtitle: "Ambient Packing",
+          description:
+            "Product returns to ambient temperature zone for case packing.",
+        },
+        {
+          label: "Conveyors",
+          icon: "═",
+          productSlug: "conveyors",
+          subtitle: "Accumulation",
+          description:
+            "AQS MDR accumulation stages packed cases for palletizing — zero back-pressure prevents product damage on frozen goods.",
+        },
+        {
+          label: "Robotics",
+          icon: "⬡",
+          productSlug: "robotics",
+          subtitle: "Palletizing",
+          description:
+            "Palletizer stacks frozen cases for cold storage with full traceability.",
         },
       ],
     },
@@ -986,8 +1053,8 @@ export function SystemArchitecture({
               Where It Fits in the Line
             </h2>
             <p className="font-sans text-[1.02rem] text-text-body max-w-[640px] leading-[1.7]">
-              See how this solution integrates into common production line
-              configurations. Click any AQS product to learn more.
+              See how this solution integrates into real production line
+              configurations. Explore AQS products in this line.
             </p>
           </div>
 
