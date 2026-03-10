@@ -13,6 +13,7 @@ export interface ConveyorType {
   description: string;
   features: string[];
   idealFor: string[];
+  image?: { src: string; alt: string };
 }
 
 export interface ConveyorCategory {
@@ -20,6 +21,7 @@ export interface ConveyorCategory {
   title: string;
   subtitle: string;
   description: string;
+  heroImage?: { src: string; alt: string };
   types: ConveyorType[];
 }
 
@@ -30,6 +32,7 @@ export const categories: ConveyorCategory[] = [
     subtitle: "Flat-Top, Modular, Incline & Freezer",
     description:
       "From simple point-A-to-point-B transport to freezer-rated arctic systems and steep elevation changes — belt conveyors handle the widest range of sanitary applications.",
+    heroImage: { src: "/images/conveyors/dairy-line-full.jpg", alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment" },
     types: [
       {
         title: "Flat-Top Belt Conveyors",
@@ -44,6 +47,7 @@ export const categories: ConveyorCategory[] = [
           "Adjustable speed via VFD or Mag-Drive",
         ],
         idealFor: ["Packaged products", "Trays & cartons", "Pouches", "Bottles"],
+        image: { src: "/images/conveyors/flat-top-belt-sanitary.jpg", alt: "Sanitary flat-top belt conveyor with FDA-approved blue urethane belting and TIG-welded stainless steel frame" },
       },
       {
         title: "Modular Belt Conveyors",
@@ -58,6 +62,7 @@ export const categories: ConveyorCategory[] = [
           "Drainage-capable perforated options",
         ],
         idealFor: ["Wet environments", "Products requiring drainage", "Curved conveyor paths"],
+        image: { src: "/images/conveyors/modular-belt-sanitary.jpg", alt: "Sanitary modular belt conveyor showing interlocking plastic belt modules on stainless steel frame" },
       },
       {
         title: "Incline & Decline Conveyors",
@@ -72,6 +77,7 @@ export const categories: ConveyorCategory[] = [
           "Side rails and product guides",
         ],
         idealFor: ["Mezzanine feeds", "Gravity-to-powered transitions", "Overhead packing areas"],
+        image: { src: "/images/conveyors/incline-conveyor.jpg", alt: "Stainless steel incline conveyor with cleated belt for positive product control at elevation changes" },
       },
       {
         title: "Freezer / Arctic Conveyors",
@@ -95,6 +101,7 @@ export const categories: ConveyorCategory[] = [
     subtitle: "MDR, Accumulation & Merge/Divert",
     description:
       "Zone-controlled roller conveyors and intelligent traffic management — from zero-pressure accumulation to multi-line merging and SKU-based sorting.",
+    heroImage: { src: "/images/conveyors/sanitary-motor-detail.jpg", alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction" },
     types: [
       {
         title: "Motorized Drive Roll (MDR) Conveyors",
@@ -110,6 +117,7 @@ export const categories: ConveyorCategory[] = [
           "Washdown-rated MDR options (PulseRoller)",
         ],
         idealFor: ["Case packing areas", "Palletizing infeed", "Warehouse-to-production transitions"],
+        image: { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
       },
       {
         title: "Accumulation Conveyors",
@@ -340,12 +348,12 @@ export const conveyorProjects: ConveyorProject[] = [
 ];
 
 export const galleryImages = [
-  { src: "/images/conveyors/dairy-facility.jpg", alt: "Dual conveyor lines installed in a dairy production facility" },
-  { src: "/images/conveyors/flat-top-belt-detail.jpg", alt: "Flat-top belt conveyor with blue urethane belt and stainless steel frame" },
+  { src: "/images/conveyors/flat-top-belt-sanitary.jpg", alt: "Sanitary flat-top belt conveyor with FDA-approved blue urethane belting and TIG-welded stainless steel frame" },
+  { src: "/images/conveyors/modular-belt-sanitary.jpg", alt: "Sanitary modular belt conveyor showing interlocking plastic belt modules on stainless steel frame" },
+  { src: "/images/conveyors/incline-conveyor.jpg", alt: "Stainless steel incline conveyor with cleated belt for positive product control at elevation changes" },
+  { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
   { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in dairy production environment" },
-  { src: "/images/conveyors/drive-rollers-underside.jpg", alt: "Underside view of conveyor showing blue drive roller assembly" },
-  { src: "/images/conveyors/dairy-line-full.jpg", alt: "Full dairy production line with stainless steel conveyors" },
-  { src: "/images/conveyors/belt-end-motor.jpg", alt: "Close-up of conveyor end with motor assembly and stainless frame" },
+  { src: "/images/conveyors/sanitary-motor-detail.jpg", alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction" },
 ];
 
 /* ================================================
