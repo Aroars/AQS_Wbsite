@@ -99,12 +99,13 @@ export function BatchDemo() {
   }, [ppm]);
 
   const spawnProduct = useCallback((startX?: number): Product => {
-    const sf = ppmRef.current / 200;
+    // Incoming speed scales with PPM — half-rate representation
+    const halfSf = (ppmRef.current / 2) / 200;
     return {
       id: generateId(),
       x: startX !== undefined ? startX : -PRODUCT_SIZE - Math.random() * 20,
       color: PRODUCT_COLORS[Math.floor(Math.random() * PRODUCT_COLORS.length)],
-      speed: (0.8 + Math.random() * 0.8) * sf,
+      speed: (0.8 + Math.random() * 0.8) * halfSf,
       zone: "infeed",
       batchGroup: -1,
       opacity: 1,
@@ -293,9 +294,10 @@ export function BatchDemo() {
     const products = productsRef.current;
     const sf = ppmRef.current / 200;
 
-    // ─── Spawn ───
+    // ─── Spawn — rate is half the PPM ───
     spawnTimerRef.current++;
-    const interval = Math.max(10, Math.round(60 / sf)) + Math.floor(Math.random() * 8);
+    const halfSf = (ppmRef.current / 2) / 200;
+    const interval = Math.max(12, Math.round(60 / halfSf)) + Math.floor(Math.random() * 8);
     if (spawnTimerRef.current >= interval) {
       if (canSpawn()) {
         spawnTimerRef.current = 0;
@@ -304,12 +306,15 @@ export function BatchDemo() {
     }
 
     // ─── Update each product ───
+    const halfSfMove = (ppmRef.current / 2) / 200;
     products.forEach((p) => {
       const cx = p.x + PRODUCT_SIZE / 2;
 
       if (cx < ZONES.gapping.start) {
-        // ── INFEED: random speed, collision avoidance ──
+        // ── INFEED: random speed scaled to half-PPM, collision avoidance ──
         p.zone = "infeed";
+        // Re-scale base speed to current half-PPM each frame for responsiveness
+        p.speed = (0.8 + Math.random() * 0.15) * halfSfMove;
         let nextSpeed = p.speed;
         let nearestDist = Infinity;
         for (let j = 0; j < products.length; j++) {
@@ -343,7 +348,7 @@ export function BatchDemo() {
           p.x += 2.0 * sf;
         }
       } else if (cx < ZONES.batching.end) {
-        // ── BATCHING: leader slows, trailers speed up ──
+        // ── BATCHING: leader crawls/stops waiting for trailers to group up ──
         p.zone = "batching";
 
         if (p.batchGroup < 0) {
@@ -364,11 +369,18 @@ export function BatchDemo() {
           const leader = myGroup[myGroup.length - 1];
 
           if (p.id === leader.id) {
-            const allClose = myGroup.every(
-              (m) => leader.x - m.x < myGroup.length * (PRODUCT_SIZE + 4) + 10,
-            );
+            // Leader: check how far behind the trailer (last in group) is
+            const trailer = myGroup[0];
+            const groupSpan = leader.x - trailer.x;
+            const idealSpan = (myGroup.length - 1) * (PRODUCT_SIZE + 4);
 
-            if (allClose) {
+            // How "grouped" are we? 1.0 = perfectly tight, 0.0 = very spread out
+            const groupedness = idealSpan > 0
+              ? Math.max(0, 1 - (groupSpan - idealSpan) / (idealSpan * 2 + 40))
+              : 1;
+
+            if (groupedness > 0.9) {
+              // Group is formed — move at normal output speed, check for groups ahead
               const groupsAhead = products.filter(
                 (o) =>
                   o.batchGroup >= 0 &&
@@ -379,25 +391,36 @@ export function BatchDemo() {
               if (groupsAhead.length > 0) {
                 const nearestAhead = groupsAhead.reduce((a, b) => (a.x < b.x ? a : b));
                 const groupGap = nearestAhead.x - (p.x + PRODUCT_SIZE);
-                p.x += (groupGap < 60 ? 0.6 : 1.6) * sf;
+                p.x += (groupGap < 60 ? 0.4 : 1.4) * sf;
               } else {
-                p.x += 1.6 * sf;
+                p.x += 1.4 * sf;
               }
             } else {
-              p.x += 0.3 * sf;
+              // Group not formed — leader crawls or stops, waiting for trailers
+              // The more spread out, the slower the leader goes (down to 0)
+              const crawlSpeed = groupedness * 0.4 * sf;
+              p.x += crawlSpeed;
             }
           } else {
+            // Trailer/middle: speed up to close gap with leader
             const idx = myGroup.indexOf(p);
             const targetX = leader.x - (myGroup.length - 1 - idx) * (PRODUCT_SIZE + 4);
             const distToTarget = targetX - p.x;
 
-            if (Math.abs(distToTarget) > 3) {
-              p.x += Math.min(distToTarget * 0.2, 3.0 * sf);
+            if (distToTarget > 2) {
+              // Accelerate toward target — faster when further away
+              const catchUpSpeed = Math.min(distToTarget * 0.15, 3.5 * sf);
+              p.x += Math.max(catchUpSpeed, 1.2 * sf);
+            } else if (distToTarget > 0) {
+              // Close — ease into position
+              p.x += distToTarget * 0.3;
             } else {
+              // Already at or past target — match leader
               p.x += (targetX - p.x) * 0.25;
             }
           }
         } else {
+          // Unbatched product entering batching zone — move at moderate speed
           const batchedAhead = products.filter(
             (o) => o.batchGroup >= 0 && o.x > p.x && o.x - p.x < 60 && o.zone === "batching",
           );
@@ -509,8 +532,8 @@ export function BatchDemo() {
             <input
               type="range"
               min="50"
-              max="500"
-              step="50"
+              max="300"
+              step="25"
               value={ppm}
               onChange={(e) => setPpm(parseInt(e.target.value))}
               className="w-40 h-1.5 rounded-full outline-none cursor-pointer"
