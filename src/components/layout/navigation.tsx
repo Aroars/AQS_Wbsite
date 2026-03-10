@@ -15,9 +15,16 @@ const solutions = [
   { label: "EvacuPak Recovery", href: "/solutions/evacupak" },
 ];
 
+const company = [
+  { label: "About AQS", href: "/about" },
+  { label: "For Reps", href: "/reps" },
+  { label: "Blog", href: "/blog" },
+];
+
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [companyDropdown, setCompanyDropdown] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -33,6 +40,7 @@ export function Navigation() {
   }, [pathname]);
 
   const isSolutionPage = pathname?.startsWith("/solutions");
+  const isCompanyPage = pathname === "/about" || pathname === "/reps" || pathname?.startsWith("/blog");
 
   return (
     <>
@@ -155,60 +163,71 @@ export function Navigation() {
               </AnimatePresence>
             </div>
 
+            {/* Company dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setCompanyDropdown(true)}
+              onMouseLeave={() => setCompanyDropdown(false)}
+            >
+              <Link
+                href="/about"
+                className={`font-sans font-medium transition-colors ${
+                  isCompanyPage
+                    ? "text-accent-primary"
+                    : "text-text-body hover:text-white"
+                }`}
+                style={{
+                  fontSize: scrolled ? "0.84rem" : "0.95rem",
+                  transition: "font-size 250ms ease",
+                }}
+              >
+                Company ▾
+              </Link>
+              <AnimatePresence>
+                {companyDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute top-full left-[-10px] mt-1 min-w-[160px] py-1.5 rounded-[10px] shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
+                    style={{
+                      background: "rgba(18,20,32,0.97)",
+                      backdropFilter: "blur(20px)",
+                      border: "1px solid rgba(0,0,0,0.25)",
+                    }}
+                  >
+                    {company.map((c) => (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
+                          pathname?.startsWith(c.href)
+                            ? "text-accent-primary"
+                            : "text-text-body hover:text-white"
+                        }`}
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link
-              href="/about"
+              href="/apps"
               className={`font-sans font-medium transition-colors ${
-                pathname === "/about"
+                pathname === "/apps"
                   ? "text-accent-primary"
                   : "text-text-body hover:text-white"
               }`}
-              style={{
-                fontSize: scrolled ? "0.84rem" : "0.95rem",
-                transition: "font-size 250ms ease",
-              }}
-            >
-              About
-            </Link>
-
-            <a
-              href="https://apps.automatedqs.com"
-              className="font-sans font-medium transition-colors text-text-body hover:text-white"
               style={{
                 fontSize: scrolled ? "0.84rem" : "0.95rem",
                 transition: "font-size 250ms ease",
               }}
             >
               Apps
-            </a>
-
-            <Link
-              href="/blog"
-              className={`font-sans font-medium transition-colors ${
-                pathname?.startsWith("/blog")
-                  ? "text-accent-primary"
-                  : "text-text-body hover:text-white"
-              }`}
-              style={{
-                fontSize: scrolled ? "0.84rem" : "0.95rem",
-                transition: "font-size 250ms ease",
-              }}
-            >
-              Blog
-            </Link>
-
-            <Link
-              href="/reps"
-              className={`font-sans font-medium transition-colors ${
-                pathname === "/reps"
-                  ? "text-accent-primary"
-                  : "text-text-body hover:text-white"
-              }`}
-              style={{
-                fontSize: scrolled ? "0.84rem" : "0.95rem",
-                transition: "font-size 250ms ease",
-              }}
-            >
-              For Reps
             </Link>
 
             <MagneticButton
@@ -293,33 +312,27 @@ export function Navigation() {
                   </Link>
                 ))}
               </div>
+              <div className="text-center">
+                <span className="font-sans text-lg font-medium text-white block mb-4">
+                  Company
+                </span>
+                {company.map((c) => (
+                  <Link
+                    key={c.href}
+                    href={c.href}
+                    className="block font-sans text-sm text-text-body py-1.5"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
               <Link
-                href="/about"
-                className="font-sans text-lg font-medium text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                About
-              </Link>
-              <a
-                href="https://apps.automatedqs.com"
+                href="/apps"
                 className="font-sans text-lg font-medium text-white"
                 onClick={() => setMobileOpen(false)}
               >
                 Apps
-              </a>
-              <Link
-                href="/blog"
-                className="font-sans text-lg font-medium text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                Blog
-              </Link>
-              <Link
-                href="/reps"
-                className="font-sans text-lg font-medium text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                For Reps
               </Link>
               <Link
                 href="/contact"

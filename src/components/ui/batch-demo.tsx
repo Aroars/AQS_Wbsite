@@ -88,8 +88,9 @@ export function BatchDemo() {
   useEffect(() => {
     if (batchSizeRef.current !== batchSize) {
       transitionFlash.current = 30;
+      // Clear the buffer but DON'T reset batchCountRef — old groups still on
+      // screen use those IDs, resetting causes collisions (e.g. 4→3 = group of 7)
       batchBufferRef.current = [];
-      batchCountRef.current = 0;
     }
     batchSizeRef.current = batchSize;
   }, [batchSize]);
@@ -306,15 +307,14 @@ export function BatchDemo() {
     }
 
     // ─── Update each product ───
-    const halfSfMove = (ppmRef.current / 2) / 200;
     products.forEach((p) => {
       const cx = p.x + PRODUCT_SIZE / 2;
 
       if (cx < ZONES.gapping.start) {
-        // ── INFEED: random speed scaled to half-PPM, collision avoidance ──
+        // ── INFEED: random speed at full PPM rate, collision avoidance ──
         p.zone = "infeed";
-        // Re-scale base speed to current half-PPM each frame for responsiveness
-        p.speed = (0.8 + Math.random() * 0.15) * halfSfMove;
+        // Full-rate movement — half-rate is only for spawn frequency
+        p.speed = (1.0 + Math.random() * 0.6) * sf;
         let nextSpeed = p.speed;
         let nearestDist = Infinity;
         for (let j = 0; j < products.length; j++) {
