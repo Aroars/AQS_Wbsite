@@ -100,26 +100,25 @@ export function BatchDemo() {
   }, [ppm]);
 
   const spawnProduct = useCallback((startX?: number): Product => {
-    // Incoming speed scales with PPM — half-rate representation
-    const halfSf = (ppmRef.current / 2) / 200;
+    const sf = ppmRef.current / 200;
     return {
       id: generateId(),
-      x: startX !== undefined ? startX : -PRODUCT_SIZE - Math.random() * 20,
+      x: startX !== undefined ? startX : -PRODUCT_SIZE - Math.random() * 10,
       color: PRODUCT_COLORS[Math.floor(Math.random() * PRODUCT_COLORS.length)],
-      speed: (0.8 + Math.random() * 0.8) * halfSf,
+      speed: (1.0 + Math.random() * 0.6) * sf,
       zone: "infeed",
       batchGroup: -1,
       opacity: 1,
     };
   }, []);
 
-  // Pre-seed products
+  // Pre-seed products across the full belt
   useEffect(() => {
     if (productsRef.current.length === 0) {
       let seedX = 5;
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 18; i++) {
         productsRef.current.push(spawnProduct(seedX));
-        seedX += PRODUCT_SIZE + MIN_GAP + Math.random() * 25 + 8;
+        seedX += PRODUCT_SIZE + MIN_GAP + Math.random() * 18 + 6;
       }
     }
   }, [spawnProduct]);
@@ -127,7 +126,8 @@ export function BatchDemo() {
   const canSpawn = useCallback(() => {
     const products = productsRef.current;
     for (let i = 0; i < products.length; i++) {
-      if (products[i].x < PRODUCT_SIZE + MIN_GAP + 5) return false;
+      // Only block if a product is physically overlapping the spawn point
+      if (products[i].x < PRODUCT_SIZE + 2) return false;
     }
     return true;
   }, []);
@@ -295,11 +295,11 @@ export function BatchDemo() {
     const products = productsRef.current;
     const sf = ppmRef.current / 200;
 
-    // ─── Spawn — rate is half the PPM ───
+    // ─── Spawn at PPM rate ───
+    // 60fps, PPM products/min → one product every (3600/PPM) frames
     spawnTimerRef.current++;
-    const halfSf = (ppmRef.current / 2) / 200;
-    const interval = Math.max(12, Math.round(60 / halfSf)) + Math.floor(Math.random() * 8);
-    if (spawnTimerRef.current >= interval) {
+    const spawnInterval = Math.max(6, Math.round(3600 / ppmRef.current));
+    if (spawnTimerRef.current >= spawnInterval) {
       if (canSpawn()) {
         spawnTimerRef.current = 0;
         products.push(spawnProduct());
