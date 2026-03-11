@@ -90,13 +90,12 @@ export const solutions = [
 
 export const partners: { name: string; logo?: string; width: number; height: number }[] = [
   { name: "Allen-Bradley", logo: "/images/logos/partners/allen-bradley.png", width: 400, height: 94 },
-  { name: "KUKA", logo: "/images/logos/partners/kuka.png", width: 300, height: 51 },
   { name: "Stäubli", logo: "/images/logos/partners/staubli.png", width: 300, height: 81 },
   { name: "Keyence", logo: "/images/logos/partners/keyence.png", width: 400, height: 70 },
   { name: "OneMotion", logo: "/images/logos/partners/onemotion.png", width: 300, height: 58 },
   { name: "Intralox", logo: "/images/logos/partners/intralox.png", width: 310, height: 131 },
   { name: "Festo", logo: "/images/logos/partners/festo.png", width: 519, height: 97 },
-  { name: "NGI", logo: "/images/logos/partners/ngi.png", width: 300, height: 158 },
+  { name: "NGI", logo: "/images/logos/partners/ngi.png", width: 300, height: 95 },
 ];
 
 export const industries = [
