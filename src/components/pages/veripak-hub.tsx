@@ -38,21 +38,23 @@ function CoreFeatureCard({ icon, title, desc }: { icon: string; title: string; d
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="rounded-xl p-5 h-full transition-all duration-300"
+      className="rounded-xl px-4 py-3 h-full transition-all duration-300"
       style={{
         background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
         border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
       }}
     >
-      <div className="text-[1.3rem] mb-1.5">{icon}</div>
-      <div
-        className="font-sans text-[0.92rem] font-bold mb-1"
-        style={{ color: hovered ? accent : "#fff" }}
-      >
-        {title}
+      <div className="flex items-center gap-2.5 mb-1">
+        <div className="text-[1rem] leading-none">{icon}</div>
+        <div
+          className="font-sans text-[0.88rem] font-bold"
+          style={{ color: hovered ? accent : "#fff" }}
+        >
+          {title}
+        </div>
       </div>
-      <div className="font-sans text-[0.82rem] text-text-body leading-[1.5]">
+      <div className="font-sans text-[0.78rem] text-text-body leading-[1.5] pl-[1.65rem]">
         {desc}
       </div>
     </div>
@@ -516,7 +518,7 @@ export function VeriPakHubContent() {
               </StaggerContainer>
             </AnimatedSection>
 
-            {/* Right: Product Journey animation */}
+            {/* Right: Product Journey animation + result callout */}
             <AnimatedSection delay={0.2}>
               <div className="rounded-2xl overflow-hidden border border-border-default p-4 bg-black/20">
                 <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-2">
@@ -524,27 +526,25 @@ export function VeriPakHubContent() {
                 </div>
                 <ProductJourneyAnimation />
               </div>
+
+              {/* Callout box */}
+              <div
+                className="mt-4 rounded-xl px-7 py-5"
+                style={{
+                  background: `${accent}08`,
+                  border: `1px solid ${accent}22`,
+                }}
+              >
+                <div className="font-sans text-[14px] text-text-body leading-[1.75]">
+                  <span className="font-bold text-white">The result:</span>{" "}
+                  Every package that leaves your facility carries a verifiable data
+                  trail &mdash; weight, metal detection, visual image, leak integrity,
+                  operator, timestamp, SKU. If a customer ever questions a specific
+                  product, you pull up the record and show them exactly what happened.
+                </div>
+              </div>
             </AnimatedSection>
           </div>
-
-          {/* Callout box */}
-          <AnimatedSection delay={0.25}>
-            <div
-              className="mt-10 rounded-xl px-7 py-6"
-              style={{
-                background: `${accent}08`,
-                border: `1px solid ${accent}22`,
-              }}
-            >
-              <div className="font-sans text-[15px] text-text-body leading-[1.75] max-w-[800px]">
-                <span className="font-bold text-white">The result:</span>{" "}
-                Every package that leaves your facility carries a verifiable data
-                trail &mdash; weight, metal detection, visual image, leak integrity,
-                operator, timestamp, SKU. If a customer ever questions a specific
-                product, you pull up the record and show them exactly what happened.
-              </div>
-            </div>
-          </AnimatedSection>
         </div>
       </section>
 

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
-import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { roboticsApplications } from "@/data/case-studies";
 
@@ -47,43 +46,61 @@ function AppCard({ title, description }: { title: string; description: string })
 }
 
 export function RoboticsContent() {
+  const accent = "#4d9fff";
   return (
     <section className="pt-[140px] pb-[100px] px-8 relative">
-      <GlowOrb top="0" left="-5%" size={500} color="77,159,255" />
+      <GlowOrb top="-100px" left="-5%" size={500} color="77,159,255" />
       <div className="max-w-[1280px] mx-auto relative z-10">
         <AnimatedSection>
-          <SectionLabel>Sanitary Robotics</SectionLabel>
-          <SectionTitle>
-            Washdown Robotic Systems
-            <br />
-            Built for Food Production
-          </SectionTitle>
-          <SectionDesc>
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-5"
+            style={{
+              background: `${accent}15`,
+              border: `1px solid ${accent}33`,
+            }}
+          >
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
+            />
+            <span className="font-mono text-[0.62rem] tracking-[0.1em] uppercase" style={{ color: accent }}>
+              Sanitary Robotics
+            </span>
+          </div>
+
+          <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white max-w-[720px] mb-6">
+            Washdown Robotic Systems{" "}
+            <span style={{ color: accent }}>Built for Food Production</span>
+          </h1>
+
+          <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[620px]">
             AQS designs, integrates, and supports fully sanitary robotic systems
             for palletizing, case packing, pick-and-place, and end-of-line
-            automation — engineered from the ground up for USDA and FDA washdown
+            automation &mdash; engineered from the ground up for USDA and FDA washdown
             environments with single-point accountability from concept through
             commissioning.
-          </SectionDesc>
-        </AnimatedSection>
+          </p>
 
-        {/* Hero image - robot cell wide shot */}
-        <AnimatedSection delay={0.05}>
-          <div className="relative aspect-[20/9] rounded-2xl overflow-hidden border border-border-default mb-[50px]">
-            <Image
-              src="/images/robotics/hero-robot-cell.jpg"
-              alt="ABB washdown robotic palletizing cell in a sanitary food production environment"
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1d2b]/50 to-transparent" />
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="#showcases"
+              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-white px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
+              style={{ background: `linear-gradient(135deg, ${accent}, #2266cc)`, boxShadow: `0 4px 20px ${accent}44` }}
+            >
+              See It In Action &rarr;
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-text-body px-8 py-3.5 rounded-lg border border-white/20 hover:border-[#4d9fff] hover:text-white transition-all duration-200"
+            >
+              Request a Quote
+            </a>
           </div>
         </AnimatedSection>
 
         {/* Video showcases */}
         <AnimatedSection delay={0.08}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-[50px]">
+          <div id="showcases" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-[50px]">
             <div>
               <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
                 Palletizing Showcase

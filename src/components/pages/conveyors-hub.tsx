@@ -13,7 +13,6 @@ import {
   SectionTitle,
   SectionDesc,
 } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import {
   CONVEYOR_ACCENT,
   categories,
@@ -243,63 +242,98 @@ function ProjectPreviewCard({
 export function ConveyorsHubContent() {
   return (
     <>
-      {/* Hero with video background */}
-      <section className="relative min-h-[80vh] flex items-center pt-[140px] pb-[100px] px-8 overflow-hidden">
-        <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
+      {/* Hero with video background — matches VeriPak hero format */}
+      <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 540, maxHeight: "88vh" }}>
+        {/* Background video */}
+        <Image
+          src="/images/conveyors/hero-loop-poster.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/video/conveyor-hero-loop.mp4" type="video/mp4" />
+        </video>
 
-        {/* Video background */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/conveyors/hero-loop-poster.jpg"
-            alt=""
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/video/conveyor-hero-loop.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1d2b]/80 via-[#1a1d2b]/60 to-[#1a1d2b]/90" />
-        </div>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/[0.72]" />
 
-        <div className="max-w-[1280px] mx-auto relative z-10">
-          <AnimatedSection>
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-[18px]"
-              style={{
-                background: `${accent}0D`,
-                border: `1px solid ${accent}22`,
-              }}
-            >
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
-              />
-              <span
-                className="font-mono text-[0.62rem] tracking-[0.1em] uppercase"
-                style={{ color: accent }}
-              >
-                Custom Sanitary Conveyance
-              </span>
+        {/* Grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(${accent} 1px, transparent 1px), linear-gradient(90deg, ${accent} 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Text content — left-aligned */}
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-[1280px] mx-auto px-8 w-full">
+            <div className="max-w-[680px]">
+              <AnimatedSection>
+                {/* Badge pill */}
+                <div
+                  className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 mb-5"
+                  style={{
+                    background: `${accent}15`,
+                    border: `1px solid ${accent}33`,
+                  }}
+                >
+                  <div
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
+                  />
+                  <span
+                    className="font-mono text-[0.65rem] tracking-[0.1em] uppercase"
+                    style={{ color: accent }}
+                  >
+                    Custom Sanitary Conveyance
+                  </span>
+                </div>
+
+                {/* Headline */}
+                <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white mb-6">
+                  Custom Sanitary Conveyors
+                  <br />
+                  <span style={{ color: accent }}>Built for Your Line</span>
+                </h1>
+
+                {/* Subheadline */}
+                <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[600px]">
+                  Engineered for your line. Built for your washdown. Every frame
+                  TIG-welded, every surface mirror-polished, every system designed to
+                  move your product &mdash; not slow you down.
+                </p>
+
+                {/* CTAs */}
+                <div className="flex gap-4 flex-wrap">
+                  <a
+                    href="#categories"
+                    className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-white px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
+                    style={{ background: `linear-gradient(135deg, ${accent}, #3388cc)`, boxShadow: `0 4px 20px ${accent}44` }}
+                  >
+                    Explore Systems &rarr;
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-text-body px-8 py-3.5 rounded-lg border border-white/20 hover:border-[#66b3ff] hover:text-white transition-all duration-200"
+                  >
+                    Request a Quote
+                  </Link>
+                </div>
+              </AnimatedSection>
             </div>
-            <SectionLabel>Conveyor Systems</SectionLabel>
-            <SectionTitle>
-              Custom Sanitary Conveyors
-            </SectionTitle>
-            <SectionDesc>
-              Engineered for your line. Built for your washdown. Every frame
-              TIG-welded, every surface mirror-polished, every system designed to
-              move your product — not slow you down.
-            </SectionDesc>
-          </AnimatedSection>
+          </div>
         </div>
       </section>
 
@@ -346,7 +380,7 @@ export function ConveyorsHubContent() {
       </section>
 
       {/* Category Navigation */}
-      <section className="py-[72px] px-8">
+      <section id="categories" className="py-[72px] px-8">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>System Categories</SectionLabel>
