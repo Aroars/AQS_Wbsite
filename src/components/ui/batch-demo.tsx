@@ -78,9 +78,9 @@ export function BatchDemo() {
   const spawnTimerRef = useRef(0);
   const batchBufferRef = useRef<Product[]>([]);
   const batchCountRef = useRef(0);
-  const [batchSize, setBatchSize] = useState(4);
+  const [batchSize, setBatchSize] = useState(3);
   const [ppm, setPpm] = useState(200);
-  const batchSizeRef = useRef(4);
+  const batchSizeRef = useRef(3);
   const ppmRef = useRef(200);
   const transitionFlash = useRef(0);
 
@@ -482,7 +482,7 @@ export function BatchDemo() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const batchOptions = [3, 4, 6, 12];
+  // batch size slider range
 
   return (
     <div
@@ -506,22 +506,30 @@ export function BatchDemo() {
 
         {/* Controls row */}
         <div className="flex gap-6 flex-wrap items-end">
-          {/* Batch size toggles */}
-          <div className="flex gap-2 flex-wrap">
-            {batchOptions.map((size) => (
-              <button
-                key={size}
-                onClick={() => setBatchSize(size)}
-                className="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
-                style={{
-                  background: batchSize === size ? COLORS.gold : "rgba(255,255,255,0.06)",
-                  color: batchSize === size ? COLORS.navy : COLORS.slateLight,
-                  border: `1px solid ${batchSize === size ? COLORS.gold : "rgba(255,255,255,0.12)"}`,
-                }}
-              >
-                Groups of {size}
-              </button>
-            ))}
+          {/* Batch size slider */}
+          <div className="flex items-center gap-3">
+            <span className="font-sans text-xs font-semibold whitespace-nowrap" style={{ color: COLORS.slateLight }}>
+              Batch Size
+            </span>
+            <input
+              type="range"
+              min="2"
+              max="6"
+              step="1"
+              value={batchSize}
+              onChange={(e) => setBatchSize(parseInt(e.target.value))}
+              className="w-32 h-1.5 rounded-full outline-none cursor-pointer"
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                accentColor: COLORS.gold,
+              }}
+            />
+            <span
+              className="font-mono text-sm font-bold"
+              style={{ color: COLORS.gold, minWidth: 80, textAlign: "right" }}
+            >
+              Groups of {batchSize}
+            </span>
           </div>
 
           {/* PPM slider */}
