@@ -91,7 +91,9 @@ body {
 /* ========================================
    Utility Classes
    ======================================== */
-.gradient-text {
+.gradient-text,
+.gradient-text span,
+.gradient-text span span {
   background: linear-gradient(135deg, #00c2ff 0%, #0066ff 50%, #00c2ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
