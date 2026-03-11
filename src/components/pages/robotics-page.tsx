@@ -92,7 +92,7 @@ export function RoboticsContent() {
                 <video
                   controls
                   preload="metadata"
-                  poster="/images/robotics/showcase-poster.jpg"
+                  poster="/images/robotics/palletizing-poster.jpg"
                   className="w-full h-full object-cover"
                 >
                   <source src="/video/palletizing-showcase.mp4" type="video/mp4" />
@@ -107,7 +107,7 @@ export function RoboticsContent() {
                 <video
                   controls
                   preload="metadata"
-                  poster="/images/robotics/showcase-poster.jpg"
+                  poster="/images/robotics/picking-poster.jpg"
                   className="w-full h-full object-cover"
                 >
                   <source src="/video/robotic-picking-showcase.mp4" type="video/mp4" />
