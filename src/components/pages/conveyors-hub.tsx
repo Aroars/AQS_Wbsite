@@ -30,6 +30,17 @@ const accent = CONVEYOR_ACCENT;
    Category Navigation Card
    ================================================ */
 
+const categoryCardImages: Record<string, { src: string; alt: string }> = {
+  "belt-systems": {
+    src: "/images/conveyors/modular-clamshell-production.jpg",
+    alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment",
+  },
+  "roller-drive": {
+    src: "/images/conveyors/sanitary-motor-detail.jpg",
+    alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction",
+  },
+};
+
 function CategoryCard({
   slug,
   title,
@@ -44,38 +55,80 @@ function CategoryCard({
   typeCount: number;
 }) {
   const [hovered, setHovered] = useState(false);
+  const cardImage = categoryCardImages[slug];
+
   return (
     <Link href={`/solutions/conveyors/${slug}`} className="no-underline block h-full">
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="rounded-xl p-8 h-full transition-all duration-300 flex flex-col"
+        className="rounded-xl h-full transition-all duration-300 flex flex-col relative overflow-hidden"
         style={{
-          background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+          background: cardImage ? "transparent" : hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
           border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
-          transform: hovered ? "translateY(-4px)" : "translateY(0)",
+          minHeight: cardImage ? "380px" : undefined,
         }}
       >
-        <div
-          className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3"
-          style={{ color: accent }}
-        >
-          {typeCount} System Types
-        </div>
-        <div className="font-sans text-[1.25rem] font-bold text-white mb-1">
-          {title}
-        </div>
-        <div className="font-sans text-[0.82rem] text-text-body mb-3">
-          {subtitle}
-        </div>
-        <p className="font-sans text-[0.85rem] text-text-body/70 leading-[1.6] mb-5 flex-1">
-          {description}
-        </p>
-        <div
-          className="font-mono text-[0.72rem] tracking-[0.08em] uppercase transition-colors"
-          style={{ color: hovered ? "#fff" : accent }}
-        >
-          Explore Systems →
+        {/* Background image + overlay */}
+        {cardImage && (
+          <>
+            <div className="absolute inset-0 z-0">
+              <Image
+                src={cardImage.src}
+                alt={cardImage.alt}
+                fill
+                className="object-cover transition-transform duration-500 ease-out"
+                style={{ transform: hovered ? "scale(1.05)" : "scale(1)" }}
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+            <div
+              className="absolute inset-0 z-[1] transition-all duration-400"
+              style={{
+                background: hovered
+                  ? "linear-gradient(to top, rgba(10,12,20,0.92) 45%, rgba(10,12,20,0.4) 100%)"
+                  : "linear-gradient(to top, rgba(10,12,20,0.85) 20%, rgba(10,12,20,0.25) 100%)",
+              }}
+            />
+          </>
+        )}
+
+        {/* Content */}
+        <div className={`relative z-[2] flex flex-col h-full ${cardImage ? "p-8 justify-end" : "p-8"}`}>
+          <div
+            className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3"
+            style={{ color: accent }}
+          >
+            {typeCount} System Types
+          </div>
+          <div className="font-sans text-[1.25rem] font-bold text-white mb-1">
+            {title}
+          </div>
+          <div className="font-sans text-[0.82rem] text-text-body mb-3">
+            {subtitle}
+          </div>
+          <div
+            className="transition-all duration-400 overflow-hidden"
+            style={{
+              maxHeight: hovered ? "200px" : "0px",
+              opacity: hovered ? 1 : 0,
+            }}
+          >
+            <p className="font-sans text-[0.85rem] text-text-body/70 leading-[1.6] mb-5">
+              {description}
+            </p>
+          </div>
+          {!cardImage && (
+            <p className="font-sans text-[0.85rem] text-text-body/70 leading-[1.6] mb-5 flex-1">
+              {description}
+            </p>
+          )}
+          <div
+            className="font-mono text-[0.72rem] tracking-[0.08em] uppercase transition-colors"
+            style={{ color: hovered ? "#fff" : accent }}
+          >
+            Explore Systems →
+          </div>
         </div>
       </div>
     </Link>

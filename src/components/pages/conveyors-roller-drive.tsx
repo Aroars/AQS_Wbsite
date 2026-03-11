@@ -41,55 +41,58 @@ function TypeDetailCard({ type }: { type: ConveyorType }) {
         border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
       }}
     >
-      {type.image && (
-        <div className="relative aspect-[16/7] overflow-hidden">
-          <Image
-            src={type.image.src}
-            alt={type.image.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 1280px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[rgba(17,34,64,0.7)] to-transparent" />
-        </div>
-      )}
-      <div className="p-8">
-        <div
-          className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2"
-          style={{ color: accent }}
-        >
-          {type.useCase}
-        </div>
-        <h3 className="font-sans text-[1.25rem] font-bold text-white mb-3">
-          {type.title}
-        </h3>
-        <p className="font-sans text-[0.88rem] text-text-body leading-[1.65] mb-4">
-          {type.description}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-4">
-          {type.features.map((f) => (
-            <div
-              key={f}
-              className="flex items-start gap-2 text-[0.82rem] text-text-body"
-            >
-              <span style={{ color: accent }} className="mt-0.5 shrink-0">
-                ✓
+      <div className={`flex flex-col ${type.image ? "md:flex-row" : ""}`}>
+        {/* Text content */}
+        <div className={`p-8 ${type.image ? "md:flex-1" : ""}`}>
+          <div
+            className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2"
+            style={{ color: accent }}
+          >
+            {type.useCase}
+          </div>
+          <h3 className="font-sans text-[1.25rem] font-bold text-white mb-3">
+            {type.title}
+          </h3>
+          <p className="font-sans text-[0.88rem] text-text-body leading-[1.65] mb-4">
+            {type.description}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-4">
+            {type.features.map((f) => (
+              <div
+                key={f}
+                className="flex items-start gap-2 text-[0.82rem] text-text-body"
+              >
+                <span style={{ color: accent }} className="mt-0.5 shrink-0">
+                  ✓
+                </span>
+                {f}
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {type.idealFor.map((tag) => (
+              <span
+                key={tag}
+                className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
+                style={{ color: `${accent}BF`, borderColor: `${accent}2E` }}
+              >
+                {tag}
               </span>
-              {f}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          {type.idealFor.map((tag) => (
-            <span
-              key={tag}
-              className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
-              style={{ color: `${accent}BF`, borderColor: `${accent}2E` }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        {/* Inline image on right */}
+        {type.image && (
+          <div className="relative w-full md:w-[380px] md:min-h-[280px] aspect-[4/3] md:aspect-auto shrink-0 overflow-hidden">
+            <Image
+              src={type.image.src}
+              alt={type.image.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 380px"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
