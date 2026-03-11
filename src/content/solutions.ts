@@ -95,7 +95,7 @@ export const partners: { name: string; logo?: string; width: number; height: num
   { name: "OneMotion", logo: "/images/logos/partners/onemotion.png", width: 300, height: 58 },
   { name: "Intralox", logo: "/images/logos/partners/intralox.png", width: 310, height: 131 },
   { name: "Festo", logo: "/images/logos/partners/festo.png", width: 519, height: 97 },
-  { name: "NGI", logo: "/images/logos/partners/ngi.png", width: 300, height: 95 },
+  { name: "NGI", logo: "/images/logos/partners/ngi.png", width: 210, height: 70 },
 ];
 
 export const industries = [
