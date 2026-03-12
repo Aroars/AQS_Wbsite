@@ -305,7 +305,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
       id: "liquid-beverage",
       name: "Liquid / Beverage Line",
       description:
-        "Liquid producers inspect at two separate points — after filling the primary container and again after casing. VeriPak ties both inspection points into one unified quality record, something visitors won't assume is possible from physically separate stations.",
+        "Liquid producers inspect at two separate points — after filling the primary container and again after casing. VeriPak ties both inspection points into one unified quality record, something visitors won't assume is possible from physically separate stations.\n\nNote: Beverage and liquid carton applications are on our development roadmap. Current leak detection capability is validated for vacuum-sealed and MAP thermoformed packaging. Contact us for availability updates on liquid line configurations.",
       stages: [
         {
           label: "Filler",

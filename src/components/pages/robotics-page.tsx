@@ -7,7 +7,7 @@ import { GlowOrb } from "@/components/ui/glow-orb";
 import { roboticsApplications } from "@/data/case-studies";
 
 const capabilities = [
-  { t: "Robotic Palletizing", d: "High-speed, full-layer palletizing in USDA/FDA washdown zones with KUKA and Fanuc platforms." },
+  { t: "Robotic Palletizing", d: "High-speed, full-layer palletizing in USDA/FDA washdown zones with KUKA and Stäubli platforms." },
   { t: "Case Packing & Pick-and-Place", d: "Precision robotic handling for RSC, display-ready, and specialty packaging formats at production speed." },
   { t: "End-of-Line Integration", d: "Complete line ownership from infeed conveyance through robotic cell to stretch wrapper and outfeed." },
   { t: "Sanitary Cell Design", d: "Full 316L stainless steel frames, IP69K-rated enclosures, sanitary guarding, and washdown-ready cable management." },

@@ -27,6 +27,7 @@ export interface VeriPakModule {
   icon: string;
   title: string;
   subtitle: string;
+  badge?: string;
   description: string;
   features: string[];
 }
@@ -51,6 +52,7 @@ export const veripakModules: VeriPakModule[] = [
     icon: "\uD83E\uDDEA",
     title: "Leak Detection Module",
     subtitle: "Dual-Pull Aspiration Testing",
+    badge: "Founding Partner Program \u2022 Patent Pending",
     description:
       "Mechanical dual-pull suction detects micro-leaks and pinholes that vision physically cannot see.",
     features: [

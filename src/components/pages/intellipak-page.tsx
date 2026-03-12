@@ -432,7 +432,7 @@ export function IntelliPakContent() {
                 { label: "Max Speed", value: "500+ PPM (application dependent)" },
                 { label: "Control Platform", value: "Allen-Bradley CompactLogix + Optix HMI" },
                 { label: "Construction", value: "TIG-welded 304/316 stainless steel" },
-                { label: "Washdown Rating", value: "IP69K, NEMA 4X" },
+                { label: "Washdown Rating", value: "IP69K (system / field components); NEMA 4X (electrical enclosure)" },
                 { label: "Energy Savings", value: "Up to 55% vs conventional gearbox" },
                 { label: "Sanitation", value: "Up to 50% reduction in cleaning time" },
                 { label: "Warranty", value: "3 years (standard)" },

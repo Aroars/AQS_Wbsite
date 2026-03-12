@@ -156,8 +156,8 @@ export const whyAQS = [
 ];
 
 export const heroStats = [
-  { value: 100, suffix: "%", label: "Package Inspection" },
-  { value: 60, suffix: "+", label: "Devices Connected" },
-  { value: 50, suffix: "+", label: "Years Combined Exp." },
-  { value: 0, suffix: "", label: "Costly Recalls" },
+  { value: 100, suffix: "%", label: "Product-Level Traceability" },
+  { value: 60, suffix: "+", label: "QC Devices. One Platform." },
+  { value: 50, suffix: "+", label: "Audit Hours Recovered" },
+  { value: 0, suffix: "", label: "Customer Recalls" },
 ];

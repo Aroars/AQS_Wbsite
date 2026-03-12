@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: "Does AQS offer sanitary robotic systems?",
-    a: "Yes. AQS designs fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, depalletizing, and custom automation. All systems use 316L stainless steel, IP69K-rated enclosures, and Rockwell/Allen-Bradley programming for USDA/FDA environments with KUKA and Fanuc platforms.",
+    a: "Yes. AQS designs fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, depalletizing, and custom automation. All systems use 316L stainless steel, IP69K-rated enclosures, and Rockwell/Allen-Bradley programming for USDA/FDA environments with KUKA and Stäubli platforms.",
   },
   {
     q: "What conveyor types does AQS build?",
@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: "How is AQS leak detection different from vision-based methods?",
-    a: "Camera systems inspect what a package looks like, not whether it's sealed. Pinholes, grease in seal zones, and internal board cuts are physically invisible to optical inspection at line speed. AQS is developing a mechanical dual-pull suction system that measures force and deflection delta — detecting actual atmosphere ingress through any breach regardless of visual appearance.",
+    a: "Camera systems inspect what a package looks like, not whether it's sealed. Pinholes, grease in seal zones, and internal board cuts are physically invisible to optical inspection at line speed. AQS has engineered a mechanical dual-pull suction system that measures force and deflection delta — detecting actual atmosphere ingress through any breach regardless of visual appearance. This technology is patent pending and available through our Founding Partner Program.",
   },
 ];
 

@@ -134,11 +134,19 @@ function ModuleCarousel() {
                     {m.title}
                   </div>
                   <div
-                    className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-3 relative z-10"
+                    className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2 relative z-10"
                     style={{ color: accent }}
                   >
                     {m.subtitle}
                   </div>
+                  {m.badge && (
+                    <div
+                      className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3 relative z-10"
+                      style={{ background: "rgba(0,194,255,0.1)", border: "1px solid rgba(0,194,255,0.2)", color: "#00c2ff" }}
+                    >
+                      {m.badge}
+                    </div>
+                  )}
                   <div className="flex-1 relative z-10">
                     {m.features.map((f, fi) => (
                       <div
@@ -190,11 +198,19 @@ function ModuleCarousel() {
                 {m.title}
               </div>
               <div
-                className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-3"
+                className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2"
                 style={{ color: accent }}
               >
                 {m.subtitle}
               </div>
+              {m.badge && (
+                <div
+                  className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3"
+                  style={{ background: "rgba(0,194,255,0.1)", border: "1px solid rgba(0,194,255,0.2)", color: "#00c2ff" }}
+                >
+                  {m.badge}
+                </div>
+              )}
               <div className="flex-1">
                 {m.features.slice(0, 3).map((f, fi) => (
                   <div

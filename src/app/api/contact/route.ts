@@ -69,7 +69,7 @@ function buildConfirmationEmail(name: string, solutionList: string) {
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;">
         <tr><td align="center" style="padding:24px 0 10px;">
           <p style="margin:0;font-size:12px;color:#555d75;">
-            Automated Quality Solutions &mdash; Boise, Idaho
+            Automated Quality Solutions &mdash; Nampa, Idaho
           </p>
           <p style="margin:4px 0 0;font-size:12px;color:#555d75;">
             &copy; ${new Date().getFullYear()} AQS. All rights reserved.

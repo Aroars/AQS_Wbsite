@@ -233,7 +233,7 @@ export function ContactContent() {
                 Location
               </div>
               <div className="font-sans text-[0.88rem] text-text-body">
-                Boise, Idaho
+                Nampa, Idaho
               </div>
             </div>
             <div>
