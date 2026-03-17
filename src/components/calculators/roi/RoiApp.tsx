@@ -57,9 +57,8 @@ export function RoiApp() {
   });
   useEffect(() => { localStorage.setItem('roi-modified-fields', JSON.stringify([...modifiedFields])); }, [modifiedFields]);
 
-  const [hasAccess, setHasAccess] = useState(() => {
-    return typeof window !== 'undefined' && localStorage.getItem('roi-email-submitted') === 'true';
-  });
+  // Email gate bypassed — re-enable when HubSpot is configured
+  const hasAccess = true;
 
   useEffect(() => {
     try {
@@ -100,7 +99,6 @@ export function RoiApp() {
     setModifiedFields((prev) => { const next = new Set(prev); next.add(key); return next; });
   }, [setInputs]);
 
-  if (!hasAccess) return <EmailGate onAccessGranted={() => setHasAccess(true)} />;
   if (!inputs.paymentSchedule) return <div className="flex items-center justify-center h-64"><p className="text-[var(--roi-text-secondary)]">Loading...</p></div>;
 
   return (
