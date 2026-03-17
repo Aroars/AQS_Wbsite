@@ -80,7 +80,7 @@ export function RoiApp() {
   }, []);
 
   const outputs = useMemo(() => calculateRoi(inputs), [inputs]);
-  const [delayMonths, setDelayMonths] = useState(0);
+  const [delayMonths, setDelayMonths] = useState(6);
 
   const shiftedChartData = useMemo((): ChartDataPoint[] => {
     if (delayMonths === 0) return outputs.chartData;

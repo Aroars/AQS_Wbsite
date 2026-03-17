@@ -125,8 +125,8 @@ export interface RoiOutputs {
 
 // Default values from Excel model
 export const DEFAULT_INPUTS: RoiInputs = {
-  equipmentCost: 1139475,
-  installationCost: 76200,
+  equipmentCost: 1000000,
+  installationCost: 50000,
   paymentSchedule: {
     downpaymentPercent: 0.40,
     optionalMilestones: [
@@ -151,7 +151,7 @@ export const DEFAULT_INPUTS: RoiInputs = {
   contributionMarginPerUnit: 1.75,
   commissioningMonth: 8,
   installationMonth: 8,
-  lostProductionCost: 34000,
+  lostProductionCost: 25000,
   lostProductionMonth: 8,
   annualDiscountRate: 0.12,
 };

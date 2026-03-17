@@ -19,8 +19,8 @@ export function OutputPanel({ outputs, commissioningMonth, delayMonths, onDelayC
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-3 gap-3">
-        <ResultCard label="Break-even" value={breakEvenDisplay} sublabel="Project Month" size="large" />
-        <ResultCard label="Break-even" value={afterCommDisplay} sublabel={`Months after Mo. ${commissioningMonth}`} size="large" />
+        <ResultCard label="From Initial Investment" value={breakEvenDisplay} sublabel="Break-even Month" size="large" />
+        <ResultCard label="From Installation" value={afterCommDisplay} sublabel={`Months after Mo. ${commissioningMonth}`} size="large" />
         <ResultCard label="Payback \u2264 24 Mo?" value={outputs.paybackWithin24Months} variant={paybackVariant} size="large" />
       </div>
       <OpportunityCostSection monthlyOperatingMargin={outputs.monthlyOperatingMargin} delayMonths={delayMonths} onDelayChange={onDelayChange} />
