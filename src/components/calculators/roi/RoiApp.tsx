@@ -115,7 +115,7 @@ export function RoiApp() {
         <div className="roi-print-header-row">
           <div className="roi-print-logo">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/logos/aqs-logo-full.png" alt="AQS" style={{ height: 36 }} />
+            <img src="/images/logos/aqs-logo-horizontal.png" alt="Automated Quality Solutions" style={{ height: 36 }} />
           </div>
           <div className="roi-print-title">
             <div style={{ fontSize: 18, fontWeight: 700 }}>ROI Projection</div>
