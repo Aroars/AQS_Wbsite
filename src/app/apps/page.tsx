@@ -36,9 +36,9 @@ const apps = [
     title: "ROI Projection Tool",
     badge: "FINANCIAL TOOL",
     accent: "#00C6D7",
-    href: "#",
+    href: "/calculators/roi",
     external: false,
-    comingSoon: true,
+    comingSoon: false,
     description:
       "Build a conservative 60-month financial projection for capital equipment purchases. Calculate break-even timelines, labor savings, and capacity gains with interactive charts ready for executive presentations.",
     features: [
