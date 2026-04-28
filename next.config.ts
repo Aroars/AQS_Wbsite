@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
         destination: "/solutions/conveyors",
         permanent: true,
       },
+      {
+        source: "/customsolutions",
+        destination: "/solutions/intellipak",
+        permanent: true,
+      },
     ];
   },
 };
