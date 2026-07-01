@@ -26,108 +26,42 @@ import {
 const accent = CONVEYOR_ACCENT;
 
 /* ================================================
-   Category Navigation Card
+   Type Index Card — direct link to one conveyor type
    ================================================ */
 
-const categoryCardImages: Record<string, { src: string; alt: string }> = {
-  "belt-systems": {
-    src: "/images/conveyors/modular-clamshell-production.jpg",
-    alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment",
-  },
-  "roller-drive": {
-    src: "/images/conveyors/sanitary-motor-detail.jpg",
-    alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction",
-  },
-};
-
-function CategoryCard({
-  slug,
+function TypeIndexCard({
+  href,
   title,
-  subtitle,
-  description,
-  typeCount,
+  useCase,
 }: {
-  slug: string;
+  href: string;
   title: string;
-  subtitle: string;
-  description: string;
-  typeCount: number;
+  useCase: string;
 }) {
   const [hovered, setHovered] = useState(false);
-  const cardImage = categoryCardImages[slug];
-
   return (
-    <Link href={`/solutions/conveyors/${slug}`} className="no-underline block h-full">
+    <Link href={href} className="no-underline block h-full">
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="rounded-xl h-full transition-all duration-300 flex flex-col relative overflow-hidden"
+        className="rounded-xl p-5 h-full flex flex-col transition-all duration-300"
         style={{
-          background: cardImage ? "transparent" : hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
+          background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
           border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
-          minHeight: cardImage ? "380px" : undefined,
+          transform: hovered ? "translateY(-3px)" : "translateY(0)",
         }}
       >
-        {/* Background image + overlay */}
-        {cardImage && (
-          <>
-            <div className="absolute inset-0 z-0">
-              <Image
-                src={cardImage.src}
-                alt={cardImage.alt}
-                fill
-                className="object-cover transition-transform duration-500 ease-out"
-                style={{ transform: hovered ? "scale(1.05)" : "scale(1)" }}
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            </div>
-            <div
-              className="absolute inset-0 z-[1] transition-all duration-400"
-              style={{
-                background: hovered
-                  ? "linear-gradient(to top, rgba(10,12,20,0.92) 45%, rgba(10,12,20,0.4) 100%)"
-                  : "linear-gradient(to top, rgba(10,12,20,0.85) 20%, rgba(10,12,20,0.25) 100%)",
-              }}
-            />
-          </>
-        )}
-
-        {/* Content */}
-        <div className={`relative z-[2] flex flex-col h-full ${cardImage ? "p-8 justify-end" : "p-8"}`}>
-          <div
-            className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3"
-            style={{ color: accent }}
-          >
-            {typeCount} System Types
-          </div>
-          <div className="font-sans text-[1.25rem] font-bold text-white mb-1">
-            {title}
-          </div>
-          <div className="font-sans text-[0.82rem] text-text-body mb-3">
-            {subtitle}
-          </div>
-          <div
-            className="transition-all duration-400 overflow-hidden"
-            style={{
-              maxHeight: hovered ? "200px" : "0px",
-              opacity: hovered ? 1 : 0,
-            }}
-          >
-            <p className="font-sans text-[0.85rem] text-text-body/70 leading-[1.6] mb-5">
-              {description}
-            </p>
-          </div>
-          {!cardImage && (
-            <p className="font-sans text-[0.85rem] text-text-body/70 leading-[1.6] mb-5 flex-1">
-              {description}
-            </p>
-          )}
-          <div
-            className="font-mono text-[0.72rem] tracking-[0.08em] uppercase transition-colors"
-            style={{ color: hovered ? "#fff" : accent }}
-          >
-            Explore Systems →
-          </div>
+        <div className="font-sans text-[1rem] font-bold text-white mb-1.5">
+          {title}
+        </div>
+        <p className="font-sans text-[0.78rem] text-text-body leading-[1.55] mb-3 flex-1">
+          {useCase}
+        </p>
+        <div
+          className="font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors"
+          style={{ color: hovered ? "#fff" : accent }}
+        >
+          View Details →
         </div>
       </div>
     </Link>
@@ -358,6 +292,55 @@ export function ConveyorsHubContent() {
         </div>
       </section>
 
+      {/* Find Your Conveyor — full type index, grouped by category */}
+      <section id="categories" className="py-[72px] px-8">
+        <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection>
+            <SectionLabel>Find Your Conveyor</SectionLabel>
+            <SectionTitle>Nine System Types. One Click Each.</SectionTitle>
+            <SectionDesc>
+              Every AQS conveyor shares the same sanitary construction DNA —
+              welded stainless frames, mirror polish, aggressive drainage, and
+              tool-less maintenance access. Pick the system your line needs.
+            </SectionDesc>
+          </AnimatedSection>
+          {categories.map((cat) => (
+            <div key={cat.slug} className="mt-9 first:mt-4">
+              <AnimatedSection>
+                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4 pb-2.5 border-b border-white/[0.06]">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-sans text-[1.05rem] font-bold text-white">
+                      {cat.title}
+                    </span>
+                    <span className="font-sans text-[0.78rem] text-text-dim hidden sm:inline">
+                      {cat.subtitle}
+                    </span>
+                  </div>
+                  <Link
+                    href={`/solutions/conveyors/${cat.slug}`}
+                    className="font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
+                    style={{ color: accent }}
+                  >
+                    View Category →
+                  </Link>
+                </div>
+              </AnimatedSection>
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {cat.types.map((type) => (
+                  <StaggerItem key={type.slug}>
+                    <TypeIndexCard
+                      href={`/solutions/conveyors/${cat.slug}#${type.slug}`}
+                      title={type.shortTitle}
+                      useCase={type.useCase}
+                    />
+                  </StaggerItem>
+                ))}
+              </StaggerContainer>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Showcase Video */}
       <section className="pb-[50px] pt-[20px] px-6">
         <div className="max-w-[1280px] mx-auto">
@@ -376,34 +359,6 @@ export function ConveyorsHubContent() {
               </video>
             </div>
           </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Category Navigation */}
-      <section id="categories" className="py-[72px] px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection>
-            <SectionLabel>System Categories</SectionLabel>
-            <SectionTitle>Every Conveyor Type. One Sanitary Standard.</SectionTitle>
-            <SectionDesc>
-              AQS designs and builds the full range of sanitary conveyors. Every
-              type shares the same construction DNA — welded stainless frames,
-              mirror polish, aggressive drainage, and tool-less maintenance access.
-            </SectionDesc>
-          </AnimatedSection>
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-            {categories.map((cat) => (
-              <StaggerItem key={cat.slug}>
-                <CategoryCard
-                  slug={cat.slug}
-                  title={cat.title}
-                  subtitle={cat.subtitle}
-                  description={cat.description}
-                  typeCount={cat.types.length}
-                />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
         </div>
       </section>
 

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
+import { ConveyorTypeSwitcher } from "@/components/ui/conveyor-type-switcher";
 import {
   CONVEYOR_ACCENT,
   categories,
@@ -33,9 +34,10 @@ function TypeDetailCard({ type }: { type: ConveyorType }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div
+      id={type.slug}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="rounded-xl overflow-hidden transition-all duration-300"
+      className="rounded-xl overflow-hidden transition-all duration-300 scroll-mt-[110px]"
       style={{
         background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
         border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
@@ -134,6 +136,11 @@ export function ConveyorsBeltSystemsContent() {
       {/* Type Detail Cards */}
       <section className="pb-[72px] px-8">
         <div className="max-w-[1280px] mx-auto">
+          <AnimatedSection>
+            <div className="mb-6">
+              <ConveyorTypeSwitcher currentCategory="belt-systems" />
+            </div>
+          </AnimatedSection>
           <StaggerContainer className="flex flex-col gap-4">
             {category.types.map((type) => (
               <StaggerItem key={type.slug}>

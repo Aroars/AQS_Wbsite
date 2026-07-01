@@ -8,6 +8,7 @@ export const CONVEYOR_ACCENT = "#94A3B8";
 
 export interface ConveyorType {
   title: string;
+  shortTitle: string;
   slug: string;
   useCase: string;
   description: string;
@@ -36,6 +37,7 @@ export const categories: ConveyorCategory[] = [
     types: [
       {
         title: "Flat-Top Belt Conveyors",
+        shortTitle: "Flat-Top Belt",
         slug: "flat-top-belt",
         useCase: "General-purpose sanitary product transport between process stages.",
         description:
@@ -51,6 +53,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Modular Belt Conveyors",
+        shortTitle: "Modular Belt",
         slug: "modular-belt",
         useCase: "Applications requiring belt flexibility, drainage, or product grip.",
         description:
@@ -66,6 +69,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Incline & Decline Conveyors",
+        shortTitle: "Incline & Decline",
         slug: "incline-decline",
         useCase: "Elevation changes between production levels, mezzanines, or process stages.",
         description:
@@ -81,6 +85,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Freezer / Arctic Conveyors",
+        shortTitle: "Freezer / Arctic",
         slug: "freezer-arctic",
         useCase: "Product transport in sub-zero environments — blast freezers, cold storage, frozen product handling.",
         description:
@@ -105,6 +110,7 @@ export const categories: ConveyorCategory[] = [
     types: [
       {
         title: "Motorized Drive Roll (MDR) Conveyors",
+        shortTitle: "MDR Roller",
         slug: "mdr",
         useCase: "Case and pallet handling with zone-based accumulation.",
         description:
@@ -121,6 +127,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Accumulation Conveyors",
+        shortTitle: "Accumulation",
         slug: "accumulation",
         useCase: "Buffering between process stages to absorb speed differences and downstream stoppages.",
         description:
@@ -140,6 +147,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Merge & Divert Systems",
+        shortTitle: "Merge & Divert",
         slug: "merge-divert",
         useCase: "Combining multiple lines into one, or splitting one line to multiple destinations.",
         description:
@@ -167,6 +175,7 @@ export const categories: ConveyorCategory[] = [
     types: [
       {
         title: "Chain Conveyors",
+        shortTitle: "Chain",
         slug: "chain",
         useCase: "Heavy-load and pallet transport in sanitary environments.",
         description:
@@ -181,6 +190,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         title: "Washdown Pallet Conveyors",
+        shortTitle: "Washdown Pallet",
         slug: "washdown-pallet",
         useCase: "End-of-line pallet handling in full washdown environments.",
         description:
