@@ -22,6 +22,20 @@
   --color-text-body: rgba(255, 255, 255, 0.55);
   --color-text-dim: rgba(255, 255, 255, 0.35);
 
+  /* Engineering Toolbox tokens (src/toolbox) — shares --color-text-primary above */
+  --color-dark-900: #0A1628;
+  --color-dark-800: #0F1D2F;
+  --color-dark-700: #162A40;
+  --color-border: #2A4562;
+  --color-primary: #00B4D8;
+  --color-primary-dark: #0077B6;
+  --color-primary-light: #90E0EF;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
@@ -359,4 +373,43 @@ body {
     margin: 0.5in;
     size: letter;
   }
+}
+
+/* ========================================
+   Engineering Toolbox Scoped Styles
+   (base rules from the standalone app's index.css, limited to .toolbox-scope)
+   ======================================== */
+.toolbox-scope ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.toolbox-scope ::-webkit-scrollbar-track {
+  background: var(--color-dark-900);
+}
+
+.toolbox-scope ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.toolbox-scope ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Remove number input spinners */
+.toolbox-scope input[type="number"]::-webkit-inner-spin-button,
+.toolbox-scope input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.toolbox-scope input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.toolbox-scope :focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }

@@ -108,6 +108,11 @@ export const pageMetadata = {
     description:
       "AQS builds purpose-built digital tools for packaging automation sales — including a conveyor quote builder with 3D preview and an ROI projection calculator for capital equipment decisions.",
   },
+  toolbox: {
+    title: "Engineering Toolbox | Free Conveyor Calculators & Reference Charts | AQS",
+    description:
+      "Free browser-based engineering toolbox: belt pull, conveyor flow, belt load, and wearstrip span calculators, unit converters, and reference charts for bolts, wire gauge, ISO fits, pneumatics, and machine safety. No login — your work is saved locally.",
+  },
   blog: {
     title: "Blog | Packaging Automation Insights | AQS",
     description:

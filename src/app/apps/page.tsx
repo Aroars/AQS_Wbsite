@@ -21,6 +21,7 @@ const apps = [
     accent: "#F5A623",
     href: "https://apps.automatedqs.com",
     external: true,
+    loginRequired: true,
     comingSoon: false,
     description:
       "Configure and price custom sanitary conveyors in minutes. Select conveyor type and dimensions, choose materials and drive options, and generate a professional PDF quote — all from your browser.",
@@ -38,6 +39,7 @@ const apps = [
     accent: "#00C6D7",
     href: "/calculators/roi",
     external: false,
+    loginRequired: true,
     comingSoon: false,
     description:
       "Build a conservative 60-month financial projection for capital equipment purchases. Calculate break-even timelines, labor savings, and capacity gains with interactive charts ready for executive presentations.",
@@ -48,6 +50,24 @@ const apps = [
       "Conservative methodology — no inflated projections",
     ],
     footer: "Authorized reps and partners",
+  },
+  {
+    title: "Engineering Toolbox",
+    badge: "ENGINEERING TOOL",
+    accent: "#00B4D8",
+    href: "/toolbox",
+    external: false,
+    loginRequired: false,
+    comingSoon: false,
+    description:
+      "Conveyor calculators, unit converters, and engineering reference charts in one browser tab. Built for engineers docked beside CAD — your work is saved locally, no account needed.",
+    features: [
+      "Belt pull, conveyor flow, belt load, and wearstrip span calculators",
+      "Reference charts: bolts, wire gauge, ISO fits, pneumatics, safety",
+      "Unit converter with saved, pinnable converters",
+      "Command palette (⌘K) to jump to any tool by name or size",
+    ],
+    footer: "Free for everyone",
   },
 ] as const;
 
@@ -120,16 +140,17 @@ export default function AppsPage() {
               AQS Apps
             </h1>
             <p className="text-[rgba(255,255,255,0.55)] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Purpose-built tools that help our team and partners move faster
-              — from quoting custom conveyors to building defensible ROI
-              projections for capital equipment purchases.
+              Purpose-built tools that help our team, partners, and fellow
+              engineers move faster — from quoting custom conveyors and
+              building defensible ROI projections to everyday conveyor math
+              and reference lookups.
             </p>
           </div>
         </section>
 
         {/* App Cards Grid */}
         <section className="px-6 pb-20">
-          <div className="mx-auto max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {apps.map((app) => {
               const cardContent = (
                 <div
@@ -170,12 +191,18 @@ export default function AppsPage() {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-[rgba(255,255,255,0.35)]">
-                        <LockIcon className="w-3 h-3" />
-                        <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase">
-                          Login required
+                      {app.loginRequired ? (
+                        <div className="flex items-center gap-1.5 text-[rgba(255,255,255,0.35)]">
+                          <LockIcon className="w-3 h-3" />
+                          <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase">
+                            Login required
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase text-[rgba(255,255,255,0.35)]">
+                          No login
                         </span>
-                      </div>
+                      )}
                     </div>
 
                     <h2 className="font-sans text-xl font-bold text-white mb-3">
@@ -235,12 +262,15 @@ export default function AppsPage() {
                 );
               }
 
+              const linkProps = app.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {};
+              const LinkTag = app.external ? "a" : Link;
               return (
-                <a
+                <LinkTag
                   key={app.title}
                   href={app.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...linkProps}
                   className="group block"
                   style={
                     {
@@ -255,7 +285,7 @@ export default function AppsPage() {
                     }
                   `}</style>
                   {cardContent}
-                </a>
+                </LinkTag>
               );
             })}
           </div>

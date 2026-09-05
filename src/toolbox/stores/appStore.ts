@@ -1,0 +1,285 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { SavedConverter, TabId } from '@/toolbox/lib/types'
+import { generateId } from '@/toolbox/lib/utils'
+import { unitCategories } from '@/toolbox/data/unitCategories'
+
+interface AreaMemoryEntry {
+    id: string
+    shape: string
+    dimensions: number[]
+    area: number
+    unit: string
+}
+
+interface FlowHistoryEntry {
+    id: string
+    expression: string
+    result: number
+    label?: string
+}
+
+interface FormulaHistoryEntry {
+    id: string
+    expression: string
+    result: number
+    variable?: string
+    label?: string
+}
+
+interface PowerEquipment {
+    id: string
+    label: string
+    watts: number
+    quantity: number
+    type: 'ac' | 'dc'
+    voltage?: number
+    phase?: number
+}
+
+// Matches the runtime shape produced by createCard() in data/conveyorCardTypes.ts
+interface ConveyorFlowCard {
+    id: string
+    type: string
+    inputs: Record<string, number | string | null>
+    units: Record<string, string>
+    outputs?: Record<string, unknown>
+}
+
+interface AppState {
+    // Navigation
+    activeTab: TabId
+    setActiveTab: (tab: TabId) => void
+
+    // Converters
+    savedConverters: SavedConverter[]
+    converterStates: Record<string, { fromUnit: string; toUnit: string }>
+    addConverter: (category: string) => void
+    rememberConverterUnits: (category: string, fromUnit: string, toUnit: string) => void
+    removeConverter: (id: string) => void
+    duplicateConverter: (id: string) => void
+    updateConverter: (id: string, updates: Partial<SavedConverter>) => void
+    reorderConverters: (fromIndex: number, toIndex: number) => void
+
+    // Area Calculator
+    areaMemory: AreaMemoryEntry[]
+    addAreaMemory: (entry: Omit<AreaMemoryEntry, 'id'>) => void
+    removeAreaMemory: (id: string) => void
+    clearAreaMemory: () => void
+
+    // Expression Calculator
+    calculatorMode: 'flow' | 'formula'
+    setCalculatorMode: (mode: 'flow' | 'formula') => void
+    flowHistory: FlowHistoryEntry[]
+    flowLastAnswer: number
+    addFlowEntry: (entry: Omit<FlowHistoryEntry, 'id'>) => void
+    removeFlowEntry: (id: string) => void
+    clearFlowHistory: () => void
+    setFlowLastAnswer: (val: number) => void
+    formulaHistory: FormulaHistoryEntry[]
+    formulaLastAnswer: number
+    addFormulaEntry: (entry: Omit<FormulaHistoryEntry, 'id'>) => void
+    removeFormulaEntry: (id: string) => void
+    clearFormulaHistory: () => void
+    setFormulaLastAnswer: (val: number) => void
+
+    // Power Calculator
+    powerEquipment: PowerEquipment[]
+    addPowerEquipment: (eq: Omit<PowerEquipment, 'id'>) => void
+    removePowerEquipment: (id: string) => void
+    updatePowerEquipment: (id: string, updates: Partial<PowerEquipment>) => void
+    clearPowerEquipment: () => void
+
+    // Conveyor Flow (cards are always written as a whole recalculated chain)
+    conveyorCards: ConveyorFlowCard[]
+    setConveyorCards: (cards: ConveyorFlowCard[]) => void
+    clearConveyorCards: () => void
+
+    // Belt Pull calculator (serialized BeltPullConfig — owned by lib/calculators/beltPull)
+    beltPullConfig: string | null
+    setBeltPullConfig: (json: string) => void
+    /** One-shot cross-tool message: Belt Load card -> Belt Pull calculator (not persisted) */
+    beltPullInbox: Record<string, unknown> | null
+    sendToBeltPull: (patch: Record<string, unknown>) => void
+    clearBeltPullInbox: () => void
+
+    // Belt Load converter (serialized inputs)
+    beltLoadState: string | null
+    setBeltLoadState: (json: string) => void
+
+    // Wearstrip span calculator (serialized WearstripConfig)
+    wearstripConfig: string | null
+    setWearstripConfig: (json: string) => void
+
+    // Belt pull calibration log (serialized rows: conveyor/date/central/vendor/measured)
+    beltPullCalLog: string | null
+    setBeltPullCalLog: (json: string) => void
+
+    // Pinning
+    pinnedCharts: string[]
+    pinnedCalculators: string[]
+    togglePinChart: (chartId: string) => void
+    togglePinCalculator: (calcId: string) => void
+    movePinned: (kind: 'chart' | 'calculator', id: string, dir: -1 | 1) => void
+}
+
+const defaultConverters: SavedConverter[] = [
+    { id: generateId(), category: 'Length', fromUnit: 'Inch', toUnit: 'Millimeter', fromValue: '', toValue: '' },
+    { id: generateId(), category: 'Weight', fromUnit: 'Pound', toUnit: 'Kilogram', fromValue: '', toValue: '' },
+    { id: generateId(), category: 'Temperature', fromUnit: 'Fahrenheit', toUnit: 'Celsius', fromValue: '', toValue: '' },
+]
+
+export const useAppStore = create<AppState>()(
+    persist(
+        (set) => ({
+            // Navigation
+            activeTab: 'home',
+            setActiveTab: (tab) => set({ activeTab: tab }),
+
+            // Converters
+            savedConverters: defaultConverters,
+            converterStates: {},
+            addConverter: (category) =>
+                set((state) => {
+                    // Prefer the user's last-used units for this category, else first two units
+                    const unitNames = Object.keys(unitCategories[category]?.units ?? {})
+                    const remembered = state.converterStates[category]
+                    return {
+                        savedConverters: [...state.savedConverters, {
+                            id: generateId(), category,
+                            fromUnit: remembered?.fromUnit ?? unitNames[0] ?? '',
+                            toUnit: remembered?.toUnit ?? unitNames[1] ?? unitNames[0] ?? '',
+                            fromValue: '', toValue: '',
+                        }],
+                    }
+                }),
+            rememberConverterUnits: (category, fromUnit, toUnit) =>
+                set((state) => ({ converterStates: { ...state.converterStates, [category]: { fromUnit, toUnit } } })),
+            removeConverter: (id) => set((state) => ({ savedConverters: state.savedConverters.filter((c) => c.id !== id) })),
+            duplicateConverter: (id) =>
+                set((state) => {
+                    const orig = state.savedConverters.find((c) => c.id === id)
+                    if (!orig) return state
+                    const idx = state.savedConverters.findIndex((c) => c.id === id)
+                    const arr = [...state.savedConverters]
+                    arr.splice(idx + 1, 0, { ...orig, id: generateId() })
+                    return { savedConverters: arr }
+                }),
+            updateConverter: (id, updates) =>
+                set((state) => ({ savedConverters: state.savedConverters.map((c) => c.id === id ? { ...c, ...updates } : c) })),
+            reorderConverters: (fromIndex, toIndex) =>
+                set((state) => {
+                    const arr = [...state.savedConverters]
+                    const [moved] = arr.splice(fromIndex, 1)
+                    arr.splice(toIndex, 0, moved)
+                    return { savedConverters: arr }
+                }),
+
+            // Area Calculator
+            areaMemory: [],
+            addAreaMemory: (entry) => set((state) => ({ areaMemory: [...state.areaMemory, { ...entry, id: generateId() }] })),
+            removeAreaMemory: (id) => set((state) => ({ areaMemory: state.areaMemory.filter((e) => e.id !== id) })),
+            clearAreaMemory: () => set({ areaMemory: [] }),
+
+            // Expression Calculator
+            calculatorMode: 'flow',
+            setCalculatorMode: (mode) => set({ calculatorMode: mode }),
+            flowHistory: [],
+            flowLastAnswer: 0,
+            addFlowEntry: (entry) => set((state) => ({ flowHistory: [...state.flowHistory, { ...entry, id: generateId() }] })),
+            removeFlowEntry: (id) => set((state) => ({ flowHistory: state.flowHistory.filter((e) => e.id !== id) })),
+            clearFlowHistory: () => set({ flowHistory: [], flowLastAnswer: 0 }),
+            setFlowLastAnswer: (val) => set({ flowLastAnswer: val }),
+            formulaHistory: [],
+            formulaLastAnswer: 0,
+            addFormulaEntry: (entry) => set((state) => ({ formulaHistory: [...state.formulaHistory, { ...entry, id: generateId() }] })),
+            removeFormulaEntry: (id) => set((state) => ({ formulaHistory: state.formulaHistory.filter((e) => e.id !== id) })),
+            clearFormulaHistory: () => set({ formulaHistory: [], formulaLastAnswer: 0 }),
+            setFormulaLastAnswer: (val) => set({ formulaLastAnswer: val }),
+
+            // Power Calculator
+            powerEquipment: [],
+            addPowerEquipment: (eq) => set((state) => ({ powerEquipment: [...state.powerEquipment, { ...eq, id: generateId() }] })),
+            removePowerEquipment: (id) => set((state) => ({ powerEquipment: state.powerEquipment.filter((e) => e.id !== id) })),
+            updatePowerEquipment: (id, updates) =>
+                set((state) => ({ powerEquipment: state.powerEquipment.map((e) => e.id === id ? { ...e, ...updates } : e) })),
+            clearPowerEquipment: () => set({ powerEquipment: [] }),
+
+            // Conveyor Flow
+            conveyorCards: [],
+            setConveyorCards: (cards) => set({ conveyorCards: cards }),
+            clearConveyorCards: () => set({ conveyorCards: [] }),
+
+            // Belt Pull calculator
+            beltPullConfig: null,
+            setBeltPullConfig: (json) => set({ beltPullConfig: json }),
+            beltPullInbox: null,
+            sendToBeltPull: (patch) => set({ beltPullInbox: patch }),
+            clearBeltPullInbox: () => set({ beltPullInbox: null }),
+
+            // Belt Load converter
+            beltLoadState: null,
+            setBeltLoadState: (json) => set({ beltLoadState: json }),
+
+            // Wearstrip span calculator
+            wearstripConfig: null,
+            setWearstripConfig: (json) => set({ wearstripConfig: json }),
+
+            // Belt pull calibration log
+            beltPullCalLog: null,
+            setBeltPullCalLog: (json) => set({ beltPullCalLog: json }),
+
+            // Pinning
+            pinnedCharts: [],
+            pinnedCalculators: [],
+            togglePinChart: (chartId) =>
+                set((state) => ({
+                    pinnedCharts: state.pinnedCharts.includes(chartId)
+                        ? state.pinnedCharts.filter((id) => id !== chartId)
+                        : [...state.pinnedCharts, chartId],
+                })),
+            togglePinCalculator: (calcId) =>
+                set((state) => ({
+                    pinnedCalculators: state.pinnedCalculators.includes(calcId)
+                        ? state.pinnedCalculators.filter((id) => id !== calcId)
+                        : [...state.pinnedCalculators, calcId],
+                })),
+            movePinned: (kind, id, dir) =>
+                set((state) => {
+                    const key = kind === 'chart' ? 'pinnedCharts' : 'pinnedCalculators'
+                    const arr = [...state[key]]
+                    const from = arr.indexOf(id)
+                    const to = from + dir
+                    if (from === -1 || to < 0 || to >= arr.length) return state
+                    arr.splice(to, 0, arr.splice(from, 1)[0])
+                    return { [key]: arr }
+                }),
+        }),
+        {
+            name: 'engineering-toolbox',
+            // Versioned so future shape changes can migrate instead of silently
+            // misreading (or discarding) a user's persisted work
+            version: 1,
+            migrate: (persisted) => persisted as AppState,
+            partialize: (state) => ({
+                activeTab: state.activeTab,
+                savedConverters: state.savedConverters,
+                converterStates: state.converterStates,
+                areaMemory: state.areaMemory,
+                calculatorMode: state.calculatorMode,
+                flowHistory: state.flowHistory,
+                flowLastAnswer: state.flowLastAnswer,
+                formulaHistory: state.formulaHistory,
+                formulaLastAnswer: state.formulaLastAnswer,
+                powerEquipment: state.powerEquipment,
+                conveyorCards: state.conveyorCards,
+                beltPullConfig: state.beltPullConfig,
+                beltLoadState: state.beltLoadState,
+                wearstripConfig: state.wearstripConfig,
+                beltPullCalLog: state.beltPullCalLog,
+                pinnedCharts: state.pinnedCharts,
+                pinnedCalculators: state.pinnedCalculators,
+            }),
+        }
+    )
+)

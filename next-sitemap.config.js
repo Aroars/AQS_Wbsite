@@ -14,6 +14,7 @@ module.exports = {
       "/solutions/robotics",
       "/solutions/evacupak",
       "/solutions/leak-detection",
+      "/toolbox",
       "/contact",
       "/about",
     ];

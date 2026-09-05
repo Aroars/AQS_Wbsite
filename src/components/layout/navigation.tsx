@@ -230,6 +230,21 @@ export function Navigation() {
               Apps
             </Link>
 
+            <Link
+              href="/toolbox"
+              className={`font-sans font-medium transition-colors ${
+                pathname === "/toolbox"
+                  ? "text-accent-primary"
+                  : "text-text-body hover:text-white"
+              }`}
+              style={{
+                fontSize: scrolled ? "0.84rem" : "0.95rem",
+                transition: "font-size 250ms ease",
+              }}
+            >
+              Toolbox
+            </Link>
+
             <MagneticButton
               as="a"
               href="/contact"
@@ -333,6 +348,13 @@ export function Navigation() {
                 onClick={() => setMobileOpen(false)}
               >
                 Apps
+              </Link>
+              <Link
+                href="/toolbox"
+                className="font-sans text-lg font-medium text-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                Toolbox
               </Link>
               <Link
                 href="/contact"
