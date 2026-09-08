@@ -4,6 +4,7 @@ import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { hubMotorData, interpolateMotorSpecs } from '@/toolbox/data/hubMotorData'
+import { useBeltSpecs, beltChoices, toolboxBuild, type BeltChoice } from '@/toolbox/lib/beltSpecs'
 import {
     calculateBeltPull, calculateAllScenarios, pathSummary, isIncline, isStraight, isTurn,
     inclineSlopeDeg, resolveProductType, resolveMaxPlainIncline,
@@ -124,6 +125,32 @@ export function BeltPullCalculator() {
 
     const result = useMemo(() => calculateBeltPull(cfg), [cfg])
     const scenarios = useMemo(() => calculateAllScenarios(cfg), [cfg])
+
+    // Catalog belts from the quoting tool's spec feed: pick one to fill the belt fields
+    const specs = useBeltSpecs()
+    const catalog = useMemo(() => beltChoices(specs.feed), [specs.feed])
+    const catalogChoice = catalog.find((c) => c.key === cfg.catalogBeltKey) ?? null
+    const near = (a: number, b: number | null) => b !== null && Math.abs(a - b) < 1e-6
+    const catalogModified = catalogChoice !== null && !(
+        near(cfg.beltWeightLbFt2, catalogChoice.build.weightLbFt2 ?? cfg.beltWeightLbFt2)
+        && near(cfg.straightRatingKgfM, catalogChoice.build.ratingKgfM ?? cfg.straightRatingKgfM)
+        && cfg.beltBuild === toolboxBuild(catalogChoice.build.build)
+        && near(cfg.collapseFactor, catalogChoice.belt.collapseFactor ?? cfg.collapseFactor)
+    )
+    const applyCatalogBelt = (choice: BeltChoice | null) => {
+        if (!choice) { upd({ catalogBeltKey: null }); return }
+        const { belt, build } = choice
+        setCfg((c) => ({
+            ...c,
+            catalogBeltKey: choice.key,
+            beltWeightLbFt2: build.weightLbFt2 ?? c.beltWeightLbFt2,
+            beltBuild: toolboxBuild(build.build),
+            straightRatingKgfM: build.ratingKgfM ?? c.straightRatingKgfM,
+            collapseFactor: belt.collapseFactor ?? c.collapseFactor,
+            curveDerate: belt.curveRatingFraction ?? c.curveDerate,
+        }))
+        if (belt.pitchMm) setPitchMm(String(belt.pitchMm))
+    }
     const activeScenario = cfg.wearId
     const productType: ProductType = resolveProductType(cfg)
     const maxPlain = resolveMaxPlainIncline(cfg)
@@ -485,6 +512,24 @@ export function BeltPullCalculator() {
                 {/* ── Belt & load ── */}
                 <div className="space-y-2">
                     <div className="text-xs text-text-secondary uppercase tracking-wider">Belt & Load</div>
+                    <div className="flex flex-wrap items-end gap-2">
+                        <div className="flex-1 min-w-[240px]">
+                            <label className={labelCls}>Catalog Belt <span className="text-text-muted">({specs.source === 'live' ? 'live' : specs.source === 'cache' ? 'cached' : 'snapshot'} — fills weight, rating, build, collapse factor, pitch)</span></label>
+                            <select value={cfg.catalogBeltKey ?? ''} className={selectCls}
+                                onChange={(e) => applyCatalogBelt(catalog.find((c) => c.key === e.target.value) ?? null)}>
+                                <option value="">Custom — enter belt specs below</option>
+                                {catalog.map((c) => <option key={c.key} value={c.key}>{c.label}{c.belt.radiusCapable ? ' (radius)' : ''}</option>)}
+                            </select>
+                        </div>
+                        {catalogChoice && (
+                            <span className={`text-[10px] font-mono px-1.5 py-1 rounded border ${catalogModified ? 'border-warning/40 text-warning' : 'border-success/40 text-success'}`}>
+                                {catalogModified ? 'modified from catalog' : 'catalog values'}
+                            </span>
+                        )}
+                        {catalog.length === 0 && !specs.loading && (
+                            <span className="text-[10px] text-text-muted pb-2">No belts published yet — see the Belt Specs chart.</span>
+                        )}
+                    </div>
                     <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">
                         <div>
                             <label className={labelCls}>Belt Width (in)</label>

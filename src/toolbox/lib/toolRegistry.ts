@@ -22,6 +22,7 @@ export const chartTools: ToolEntry[] = [
     { id: 'connector', label: 'Connectors & Protocols', keywords: 'connector protocol ethernet profinet ethercat m12 m8 rj45 db9 usb devicenet io-link pinout communication', tab: 'charts' },
     { id: 'tolerance', label: 'Hole/Shaft Tolerance', keywords: 'tolerance iso 286 fit hole shaft clearance interference transition press sliding running h7 h6 h8 h11 g6 f7 c11 k7 m7 n7 p6 p7 js7 bearing', tab: 'charts' },
     { id: 'airfitting', label: 'Air Fittings & Threads', keywords: 'air fitting thread npt nptf bsp bspp bspt g r rc pneumatic pipe seal o-ring ptfe teflon tube push-in', tab: 'charts' },
+    { id: 'beltspecs', label: 'Belt Specs', keywords: 'belt specs catalog intralox volta ngb modular pitch rating tension weight radius collapse factor curve open area speed compare brands', tab: 'charts' },
     { id: 'hubmotor', label: 'Hub Motor (MDR)', keywords: 'hub motor mdr motorized drive roller conveyor torque belt pull width rpm', tab: 'charts' },
     { id: 'safety', label: 'Safety & Compliance', keywords: 'safety distance guard opening clearance risk plr performance level noise dba twa osha iso 13849 13855 light curtain interlock e-stop', tab: 'charts' },
 ]

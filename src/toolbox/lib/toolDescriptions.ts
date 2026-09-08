@@ -14,6 +14,7 @@ export const toolDescriptions: Record<string, string> = {
     connector: 'Industrial connector and protocol reference: M8, M12, RJ45, DB9, and USB pinouts for Ethernet/IP, PROFINET, EtherCAT, IO-Link, and DeviceNet.',
     tolerance: 'ISO 286 hole and shaft tolerance lookup for clearance, transition, and interference fits, including H7, h6, g6, f7, k7, n7, and p6.',
     airfitting: 'Air fitting and pipe thread reference covering NPT, NPTF, BSPP, and BSPT, with sealing methods and push-in tube sizes.',
+    beltspecs: 'Belt spec reference chart comparing the modular and flat belts AQS runs across brands: pitch, thickness, weight, allowable tension, radius capability and collapse factor, curve rating, open area, and speed limits, fed live from the AQS catalog.',
     hubmotor: 'Motorized drive roller (MDR) hub motor selection chart: torque, belt pull, roller width, and RPM.',
     safety: 'Machine safety reference for guard opening distances, light curtain safety distance, performance level (PLr), and noise exposure per OSHA and ISO 13849/13855.',
 

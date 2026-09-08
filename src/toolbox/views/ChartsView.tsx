@@ -9,6 +9,7 @@ import { ConnectorChart } from '@/toolbox/components/charts/ConnectorChart'
 import { ToleranceChart } from '@/toolbox/components/charts/ToleranceChart'
 import { AirFittingChart } from '@/toolbox/components/charts/AirFittingChart'
 import { HubMotorChart } from '@/toolbox/components/charts/HubMotorChart'
+import { BeltSpecsChart } from '@/toolbox/components/charts/BeltSpecsChart'
 import { SafetyChart } from '@/toolbox/components/charts/SafetyChart'
 import { ToolBoundary } from '@/toolbox/components/ui/ToolBoundary'
 import { chartTools } from '@/toolbox/lib/toolRegistry'
@@ -23,6 +24,7 @@ const chartComponents: Record<string, React.FC> = {
     connector: ConnectorChart,
     tolerance: ToleranceChart,
     airfitting: AirFittingChart,
+    beltspecs: BeltSpecsChart,
     hubmotor: HubMotorChart,
     safety: SafetyChart,
 }
