@@ -35,8 +35,8 @@ export const calculatorTools: ToolEntry[] = [
 export const conveyorTools: ToolEntry[] = [
     { id: 'conveyorFlow', label: 'Conveyor Flow', keywords: 'conveyor flow rate spacing product speed accumulation buffer merge split throughput ppm', tab: 'conveyor' },
     { id: 'conveyorSpec', label: 'Conveyor Spec Solver', keywords: 'conveyor spec geometry incline decline length height angle belt loading l z straight', tab: 'conveyor' },
-    { id: 'beltLoad', label: 'Belt Load / Throughput', keywords: 'belt load throughput packages lb/hr lb/day bulk density packager bagger rate', tab: 'conveyor' },
-    { id: 'beltPull', label: 'Belt Pull Calculator', keywords: 'belt pull radius s-conveyor turn capstan tension drive hp torque wear mu friction calibration corner', tab: 'conveyor' },
+    { id: 'beltLoad', label: 'Belt Load / Throughput', keywords: 'belt load throughput packages bulk lb/hr lb/day loose density bed capacity packager bagger rate', tab: 'conveyor' },
+    { id: 'beltPull', label: 'Belt Pull Calculator', keywords: 'belt pull radius s-conveyor incline l z straight turn capstan tension drive hp torque motor onemotion flights pockets bulk wear mu friction calibration corner', tab: 'conveyor' },
     { id: 'wearstrip', label: 'Wearstrip Span Calculator', keywords: 'wearstrip span beam deflection uhmw ultralube hdpe overhang cantilever creep support', tab: 'conveyor' },
 ]
 

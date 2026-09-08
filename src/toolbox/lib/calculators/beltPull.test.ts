@@ -344,3 +344,203 @@ describe('parametric corner speed ceiling (thermal q = μ·p·V)', () => {
         expect(fast.railHeatWorstW!).toBeCloseTo(slow.railHeatWorstW! * 2, 6)
     })
 })
+
+// ═════════ Load model: product type, per-section loads, flighted pockets ═════════
+import {
+    pocketWedge, pocketCapacityLb, resolveProductType, resolveMaxPlainIncline, inclineSlopeDeg, pathSummary,
+} from './beltPull'
+
+describe('per-section loads keep the legacy spread unless a section owns its load', () => {
+    it('no pockets / overrides → every carry piece carries the uniform lb/ft and the fixtures are untouched', () => {
+        const r = calculateBeltPull(a1)
+        expect(r.productType).toBe('packages')
+        expect(r.sectionLoads.every((s) => s.source === 'uniform')).toBe(true)
+        expect(r.sectionLoads.reduce((s, x) => s + x.lbf, 0)).toBeCloseTo(r.productLoadLbf, 9)
+        expect(r.centralLbf).toBeCloseTo(26.70, 1)
+        expect(r.pockets).toHaveLength(0)
+        expect(r.slipSections).toHaveLength(0)
+    })
+
+    it('legacy bed-mode config resolves to bulk without the field', () => {
+        expect(resolveProductType({ loadMode: 'bulk' })).toBe('bulk')
+        expect(resolveProductType({ loadMode: 'rate' })).toBe('packages')
+        expect(resolveMaxPlainIncline({ loadMode: 'bulk' })).toBe(20)
+        expect(resolveMaxPlainIncline({ loadMode: 'rate', maxPlainInclineDeg: 30 })).toBe(30)
+    })
+
+    it('an entered lb/ft on an incline replaces the spread there; direct mode spreads the rest', () => {
+        // 120" flat infeed + 120" incline carrying its own 3 lb/ft; 60 lbf direct total goes on the infeed only
+        const cfg: BeltPullConfig = {
+            ...straight, infeedStraightIn: 120, loadMode: 'direct', directLoadLbf: 60,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 24, productLbfPerFt: 3 }],
+        }
+        const r = calculateBeltPull(cfg)
+        const infeed = r.sectionLoads.find((s) => s.index === -1)!
+        const incline = r.sectionLoads.find((s) => s.kind === 'incline')!
+        expect(infeed.lbfPerFt).toBeCloseTo(6, 9)     // 60 lbf over 10 ft
+        expect(incline.lbfPerFt).toBe(3)
+        expect(incline.source).toBe('override')
+        expect(r.productLoadLbf).toBeCloseTo(60 + 30, 9)
+    })
+
+    it('friction and lift are separated: the lift term does not scale with the wear scenario', () => {
+        // Empty-belt incline, no product: the worn scenario raises friction only
+        const cfg: BeltPullConfig = {
+            ...straight, infeedStraightIn: 0, loadMode: 'direct', directLoadLbf: 0,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60 }],
+            returnSegments: [{ lengthIn: null, support: 'slider' }],
+        }
+        const clean = calculateBeltPull(cfg)
+        const worn = calculateAllScenarios(cfg).find((s) => s.id === 'worn')!.result
+        const wPerFt = clean.beltWeightPerFt
+        const frictionClean = 0.18 * wPerFt * (Math.sqrt(75) + 10)
+        const frictionWorn = 0.25 * wPerFt * (Math.sqrt(75) + 10)
+        expect(clean.centralLbf).toBeCloseTo(frictionClean, 6)   // lift cancels over the loop
+        expect(worn.centralLbf).toBeCloseTo(frictionWorn, 6)
+    })
+})
+
+describe('pocket wedge geometry', () => {
+    it('slope at or below repose: full bed h × pitch', () => {
+        const w = pocketWedge(2, 12, 30, 35)
+        expect(w.areaIn2).toBeCloseTo(24, 9)
+        expect(w.fillsPitch).toBe(true)
+    })
+
+    it('steep slope, short run: triangle ½·h·run with run = h / tan(slope − repose)', () => {
+        // slope 60°, repose 35° → tan 25° = 0.4663; run = 2 / 0.4663 = 4.289 in < 12 in pitch
+        const w = pocketWedge(2, 12, 60, 35)
+        const run = 2 / Math.tan(25 * Math.PI / 180)
+        expect(w.runIn).toBeCloseTo(run, 6)
+        expect(w.areaIn2).toBeCloseTo(0.5 * 2 * run, 6)
+        expect(w.fillsPitch).toBe(false)
+    })
+
+    it('moderate slope, run beyond the pitch: trapezoid p·h − ½·p²·tan(slope − repose)', () => {
+        // slope 40°, repose 35° → tan 5° = 0.0875; run = 2 / 0.0875 = 22.9 in > 12 in pitch
+        const d = Math.tan(5 * Math.PI / 180)
+        const w = pocketWedge(2, 12, 40, 35)
+        expect(w.fillsPitch).toBe(true)
+        expect(w.areaIn2).toBeCloseTo(12 * 2 - 0.5 * 144 * d, 9)
+    })
+
+    it('capacity = wedge × usable width × fill × density; a measured weight overrides it', () => {
+        const spec = { flightHeightIn: 2, pitchIn: 12 }
+        const geo = pocketCapacityLb(spec, 30, 14, 1, 35, 0.85, 45)
+        // full bed 24 in² × (14 − 2) in usable = 288 in³ = 1/6 ft³ × 0.85 × 45 = 6.375 lb
+        expect(geo.lb).toBeCloseTo(6.375, 6)
+        expect(geo.measured).toBe(false)
+        const measured = pocketCapacityLb({ ...spec, lbPerPocketOverride: 4 }, 30, 14, 1, 35, 0.85, 45)
+        expect(measured.lb).toBe(4)
+        expect(measured.measured).toBe(true)
+    })
+
+    it('slope helper', () => {
+        expect(inclineSlopeDeg({ kind: 'incline', lengthIn: 120, riseIn: 60 })).toBeCloseTo(30, 6)
+        expect(inclineSlopeDeg({ kind: 'incline', lengthIn: 0, riseIn: 60 })).toBe(0)
+    })
+})
+
+describe('flighted incline: pockets drive the incline load, the infeed keeps the rate', () => {
+    // 10 ft flat infeed at 3000 lb/hr @ 60 fpm (0.833 lb/ft), then a 30° flighted incline
+    const flighted: BeltPullConfig = {
+        ...straight, productType: 'bulk', loadMode: 'rate', throughputLbHr: 3000, beltSpeedFpm: 60,
+        infeedStraightIn: 120, beltWidthIn: 14, edgeMarginIn: 1, bulkDensityLbFt3: 45, reposeDeg: 35, pocketFillFraction: 0.85,
+        sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60, pocket: { flightHeightIn: 2, pitchIn: 12 } }],
+    }
+
+    it('pocket summary: 6.375 lb per pocket, 10 pockets, 6.375 lb/ft, 22,950 lb/hr achievable', () => {
+        const r = calculateBeltPull(flighted)
+        expect(r.pockets).toHaveLength(1)
+        const p = r.pockets[0]
+        expect(p.lbPerPocket).toBeCloseTo(6.375, 6)
+        expect(p.pocketsOnSection).toBeCloseTo(10, 9)
+        expect(p.lbfPerFt).toBeCloseTo(6.375, 6)
+        expect(p.achievedLbHr).toBeCloseTo(6.375 * (60 * 12 / 12) * 60, 6)
+        expect(r.bulkCapacityLbHr).toBeCloseTo(p.achievedLbHr, 6)
+    })
+
+    it('section loads: infeed at the rate spread, incline at pocket capacity; total is their sum', () => {
+        const r = calculateBeltPull(flighted)
+        const infeed = r.sectionLoads.find((s) => s.index === -1)!
+        const incline = r.sectionLoads.find((s) => s.kind === 'incline')!
+        expect(infeed.lbfPerFt).toBeCloseTo(3000 / 3600, 9)
+        expect(incline.source).toBe('pocket')
+        expect(incline.lbfPerFt).toBeCloseTo(6.375, 6)
+        expect(r.productLoadLbf).toBeCloseTo(3000 / 3600 * 10 + 6.375 * 10, 6)
+    })
+
+    it('pockets lift more than a uniform spread would: pull rises with the heavier incline', () => {
+        const plain = calculateBeltPull({ ...flighted, sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60 }], maxPlainInclineDeg: 45 })
+        expect(calculateBeltPull(flighted).centralLbf).toBeGreaterThan(plain.centralLbf)
+    })
+
+    it('demanded rate above pocket capability warns and names the pockets', () => {
+        const r = calculateBeltPull({ ...flighted, throughputLbHr: 40000 })
+        expect(r.warnings.some((w) => w.includes('flight pockets'))).toBe(true)
+        expect(calculateBeltPull(flighted).warnings.some((w) => w.includes('exceeds what'))).toBe(false)
+    })
+
+    it('a bulk rate config reports bed capacity when bed inputs exist, and warns when the bed cannot keep up', () => {
+        const bed = calculateBeltPull({ ...flighted, sections: [], bedDepthIn: 2 })
+        // 12 in usable × 2 in = 24 in² = 1/6 ft² × 45 = 7.5 lb/ft × 60 fpm × 60 = 27,000 lb/hr
+        expect(bed.bulkAchievedLbHr).toBeCloseTo(27000, 6)
+        expect(bed.bulkCapacityLbHr).toBeCloseTo(27000, 6)
+        const starved = calculateBeltPull({ ...flighted, sections: [], bedDepthIn: 2, throughputLbHr: 30000 })
+        expect(starved.warnings.some((w) => w.includes('the bed'))).toBe(true)
+    })
+
+    it('path summary marks the pocketed incline', () => {
+        expect(pathSummary(flighted)).toContain('⌸2"@12"')
+    })
+})
+
+describe('plain-belt slip screen', () => {
+    it('bulk on an unflighted 30° incline trips the 20° default; pockets clear it', () => {
+        const plain = calculateBeltPull({
+            ...straight, productType: 'bulk', loadMode: 'rate', throughputLbHr: 3000, beltSpeedFpm: 60,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60 }],
+        })
+        expect(plain.slipSections).toEqual([0])
+        expect(plain.warnings.some((w) => w.includes('Flights'))).toBe(true)
+        const pocketed = calculateBeltPull({
+            ...straight, productType: 'bulk', loadMode: 'rate', throughputLbHr: 3000, beltSpeedFpm: 60,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60, pocket: { flightHeightIn: 2, pitchIn: 12 } }],
+        })
+        expect(pocketed.slipSections).toHaveLength(0)
+    })
+
+    it('packages use the 25° default and ask for cleats; an empty belt never slips', () => {
+        const steep = calculateBeltPull({ ...straight, loadMode: 'rate', throughputLbHr: 3000, sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60 }] })
+        expect(steep.slipSections).toEqual([0])
+        expect(steep.warnings.some((w) => w.includes('Cleats'))).toBe(true)
+        const gentle = calculateBeltPull({ ...straight, loadMode: 'rate', throughputLbHr: 3000, sections: [{ kind: 'incline', lengthIn: 120, riseIn: 40 }] })
+        expect(gentle.slipSections).toHaveLength(0) // 19.5°
+        const empty = calculateBeltPull({ ...straight, loadMode: 'direct', directLoadLbf: 0, sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60 }] })
+        expect(empty.slipSections).toHaveLength(0)
+    })
+})
+
+describe('engineer override on a steep plain incline', () => {
+    it('allowPlainIncline silences the slip warning and records an assumption instead', () => {
+        const cfg: BeltPullConfig = {
+            ...straight, productType: 'bulk', loadMode: 'rate', throughputLbHr: 3000, beltSpeedFpm: 60,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 60, allowPlainIncline: true }],
+        }
+        const r = calculateBeltPull(cfg)
+        expect(r.slipSections).toHaveLength(0)
+        expect(r.warnings.some((w) => w.includes('slides back'))).toBe(false)
+        expect(r.assumptions.some((a) => a.includes('engineer accepted'))).toBe(true)
+    })
+
+    it('a Z path: infeed straight, incline, discharge straight — carry length sums all three', () => {
+        const cfg: BeltPullConfig = {
+            ...straight, infeedStraightIn: 60,
+            sections: [{ kind: 'incline', lengthIn: 120, riseIn: 40 }, { kind: 'straight', lengthIn: 36 }],
+        }
+        expect(carrywayLengthIn(cfg)).toBeCloseTo(216, 9)
+        const r = calculateBeltPull(cfg)
+        expect(r.sectionLoads.map((s) => s.kind)).toEqual(['straight', 'incline', 'straight'])
+        expect(pathSummary(cfg)).toBe('60in — ↗120in+40in — 36in')
+    })
+})

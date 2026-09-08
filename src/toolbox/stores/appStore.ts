@@ -106,6 +106,12 @@ interface AppState {
     // Belt Load converter (serialized inputs)
     beltLoadState: string | null
     setBeltLoadState: (json: string) => void
+    /**
+     * The product as defined on the Belt Load card, published for the Conveyor Spec (incline /
+     * flight solver) and Belt Pull cards to read. Serialized LoadDefinition (lib/calculators/loadDefinition).
+     */
+    loadDefinition: string | null
+    setLoadDefinition: (json: string | null) => void
 
     // Wearstrip span calculator (serialized WearstripConfig)
     wearstripConfig: string | null
@@ -220,6 +226,8 @@ export const useAppStore = create<AppState>()(
             // Belt Load converter
             beltLoadState: null,
             setBeltLoadState: (json) => set({ beltLoadState: json }),
+            loadDefinition: null,
+            setLoadDefinition: (json) => set({ loadDefinition: json }),
 
             // Wearstrip span calculator
             wearstripConfig: null,
@@ -275,6 +283,7 @@ export const useAppStore = create<AppState>()(
                 conveyorCards: state.conveyorCards,
                 beltPullConfig: state.beltPullConfig,
                 beltLoadState: state.beltLoadState,
+                loadDefinition: state.loadDefinition,
                 wearstripConfig: state.wearstripConfig,
                 beltPullCalLog: state.beltPullCalLog,
                 pinnedCharts: state.pinnedCharts,

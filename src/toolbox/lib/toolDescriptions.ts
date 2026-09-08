@@ -25,7 +25,7 @@ export const toolDescriptions: Record<string, string> = {
     // Conveyor
     conveyorFlow: 'Conveyor flow rate calculator for product spacing, belt speed, throughput in packages per minute, accumulation buffers, and merges.',
     conveyorSpec: 'Conveyor geometry solver for incline and decline sections: solve length, rise, and angle for straight, L, and Z conveyors.',
-    beltLoad: 'Belt load and throughput calculator converting packages per minute to pounds per hour and per day from product weight and bulk density.',
-    beltPull: 'Belt pull calculator for radius and S-conveyors: turn tension, capstan effect, drive horsepower, torque, and wearstrip friction with calibration log.',
+    beltLoad: 'Belt load and throughput calculator for packages or bulk product: packages per minute, pounds per hour and per day, loose density, and bed capacity at belt speed.',
+    beltPull: 'Belt pull and drive calculator for straight, incline, L, Z, radius, and S-conveyors: chained path sections, flight pockets for bulk inclines, turn tension and capstan effect, OneMotion drive pick, torque, and wearstrip friction with calibration log.',
     wearstrip: 'Wearstrip span calculator for UHMW, UltraLube, and HDPE support beams: deflection, overhang, cantilever, and creep limits.',
 }

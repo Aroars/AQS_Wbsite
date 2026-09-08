@@ -11,7 +11,11 @@
  * without touching the pull math. Its output feeds Belt Pull via the store.
  */
 
+export type LoadProductType = 'packages' | 'bulk'
+
 export interface BeltLoadInput {
+    /** Discrete packages (default) or loose bulk product. Bulk skips the piece math and adds density / bed fields. */
+    productType?: LoadProductType
     /** Throughput as quoted, lb/hr (null = derive from lb/day or pieces if possible) */
     throughputLbHr: number | null
     /** Throughput as quoted per day — converted using OPERATING hours, not clock hours */
@@ -38,12 +42,26 @@ export interface BeltLoadInput {
     pkgHeightIn?: number | null
     /** Fill fraction 0–1 (headspace/voids); default 1.0 = geometric volume */
     fillFraction?: number | null
+
+    // ── Bulk (loose product): rate by weight or volume, and an optional bed-capacity check ──
+    /** Loose, as-conveyed density, lb/ft³ (material fluffs up off the pile — not the settled figure) */
+    looseDensityLbFt3?: number | null
+    /** Rate quoted by volume, ft³/hr — converted through loose density when lb/hr is not given */
+    throughputFt3Hr?: number | null
+    /** Belt width, in — with bed depth and edge margin, sets what the bed can carry at speed */
+    beltWidthIn?: number | null
+    bedDepthIn?: number | null
+    /** Unusable belt edge per side, in (default 1) */
+    edgeMarginIn?: number | null
+    /** Angle of repose, degrees — carried through to the incline / pocket solver (no effect here) */
+    reposeDeg?: number | null
 }
 
-export type ThroughputSource = 'entered' | 'per-day' | 'pieces'
+export type ThroughputSource = 'entered' | 'per-day' | 'pieces' | 'volume'
 export type PieceWeightSource = 'entered' | 'dims' | 'rate' | null
 
 export interface BeltLoadResult {
+    productType: LoadProductType
     /** Throughput, lb/hr (entered, or derived from bulk flow or piece data) */
     throughputLbHr: number
     throughputSource: ThroughputSource
@@ -70,11 +88,85 @@ export interface BeltLoadResult {
     packagerUtilizationPct: number | null
     /** Set when entered throughput, package weight, and PPM disagree by >5% */
     consistencyWarning: string | null
+
+    // ── Bulk only (null for packages) ──
+    /** Volumetric rate at loose density, ft³/hr */
+    ft3PerHr: number | null
+    /** What the stated bed (width − margins) × depth carries at belt speed, lb/hr */
+    bedCapacityLbHr: number | null
+    /** Demanded rate as % of bed capacity */
+    bedUtilizationPct: number | null
+    /** Bed depth that would carry the demanded rate at belt speed, in */
+    bedDepthNeededIn: number | null
 }
 
 const IN3_PER_FT3 = 1728
 
+/** Loose product: rate by weight or volume, lb/ft at speed, and the bed-capacity check */
+function calculateBulkLoad(input: BeltLoadInput): BeltLoadResult | null {
+    const speed = input.beltSpeedFpm && input.beltSpeedFpm > 0 ? input.beltSpeedFpm : null
+    const density = input.looseDensityLbFt3 && input.looseDensityLbFt3 > 0 ? input.looseDensityLbFt3 : null
+
+    // Throughput priority: entered lb/hr > ft³/hr × loose density > lb/day ÷ operating hours
+    let thr = input.throughputLbHr && input.throughputLbHr > 0 ? input.throughputLbHr : null
+    let throughputSource: ThroughputSource = 'entered'
+    if (thr === null && input.throughputFt3Hr && input.throughputFt3Hr > 0 && density !== null) {
+        thr = input.throughputFt3Hr * density
+        throughputSource = 'volume'
+    }
+    if (thr === null && input.throughputLbPerDay && input.throughputLbPerDay > 0) {
+        const hrs = input.operatingHrsPerDay && input.operatingHrsPerDay > 0 ? Math.min(input.operatingHrsPerDay, 24) : 24
+        thr = input.throughputLbPerDay / hrs
+        throughputSource = 'per-day'
+    }
+    if (thr === null) return null
+
+    const lbPerMin = thr / 60
+    const lbPerFt = speed !== null ? thr / (speed * 60) : null
+    const ft3PerHr = density !== null ? thr / density : null
+
+    // Bed capacity: usable width × depth is the cross-section the belt can present at speed
+    const width = input.beltWidthIn && input.beltWidthIn > 0 ? input.beltWidthIn : null
+    const depth = input.bedDepthIn && input.bedDepthIn > 0 ? input.bedDepthIn : null
+    const margin = input.edgeMarginIn ?? 1
+    const usableWidthIn = width !== null ? Math.max(width - 2 * Math.max(margin, 0), 0) : null
+    let bedCapacityLbHr: number | null = null
+    let bedUtilizationPct: number | null = null
+    let bedDepthNeededIn: number | null = null
+    if (density !== null && speed !== null && usableWidthIn !== null && usableWidthIn > 0) {
+        const perFtPerInDepth = density * (usableWidthIn / 144)   // lb/ft of belt per inch of bed depth
+        bedDepthNeededIn = lbPerFt !== null ? lbPerFt / perFtPerInDepth : null
+        if (depth !== null) {
+            bedCapacityLbHr = perFtPerInDepth * depth * speed * 60
+            bedUtilizationPct = (thr / bedCapacityLbHr) * 100
+        }
+    }
+
+    return {
+        productType: 'bulk',
+        throughputLbHr: thr,
+        throughputSource,
+        throughputDerived: throughputSource !== 'entered',
+        lbPerMin,
+        lbPerFt,
+        pieceWeightLb: null,
+        pieceWeightSource: null,
+        pkgCapacityLb: null,
+        ppm: null,
+        packagesPerHour: null,
+        pitchIn: null,
+        piecesPerFt: null,
+        packagerUtilizationPct: null,
+        consistencyWarning: null,
+        ft3PerHr,
+        bedCapacityLbHr,
+        bedUtilizationPct,
+        bedDepthNeededIn,
+    }
+}
+
 export function calculateBeltLoad(input: BeltLoadInput): BeltLoadResult | null {
+    if (input.productType === 'bulk') return calculateBulkLoad(input)
     const speed = input.beltSpeedFpm && input.beltSpeedFpm > 0 ? input.beltSpeedFpm : null
     const wIn = input.pieceWeightLb && input.pieceWeightLb > 0 ? input.pieceWeightLb : null
     const ppmIn = input.ppm && input.ppm > 0 ? input.ppm : null
@@ -151,6 +243,7 @@ export function calculateBeltLoad(input: BeltLoadInput): BeltLoadResult | null {
     }
 
     return {
+        productType: 'packages',
         throughputLbHr: thr,
         throughputSource,
         throughputDerived: throughputSource !== 'entered',
@@ -165,5 +258,9 @@ export function calculateBeltLoad(input: BeltLoadInput): BeltLoadResult | null {
         piecesPerFt,
         packagerUtilizationPct,
         consistencyWarning,
+        ft3PerHr: null,
+        bedCapacityLbHr: null,
+        bedUtilizationPct: null,
+        bedDepthNeededIn: null,
     }
 }

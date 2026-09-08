@@ -34,17 +34,54 @@ export interface TurnSection {
     straightAfterIn: number
 }
 
+/** Loose product (bulk) or discrete packages. Decides which load entries apply and which screens run. */
+export type ProductType = 'packages' | 'bulk'
+
+/**
+ * Flighted pockets on an incline: bulk product stops being a bed and travels as
+ * discrete buckets behind each flight. Capacity is geometric (wedge behind the
+ * flight at the product's angle of repose) unless a measured weight is given.
+ */
+export interface PocketSpec {
+    /** Flight height above the belt surface, in */
+    flightHeightIn: number
+    /** Flight pitch along the belt, in */
+    pitchIn: number
+    /** Measured weight per pocket, lb — overrides the geometric estimate when > 0 */
+    lbPerPocketOverride?: number | null
+}
+
 /** Inclined run: length measured ALONG the belt, rise positive up / negative down */
 export interface InclineSection {
     kind: 'incline'
     lengthIn: number
     riseIn: number
+    /** Flighted pockets (bulk on an incline). Absent = plain belt carrying the uniform load. */
+    pocket?: PocketSpec | null
+    /** Explicit product load on this section, lb per ft — overrides the uniform spread and the pocket estimate */
+    productLbfPerFt?: number | null
+    /** Engineer override: accept a plain belt past the slip limit (logged as an assumption, not a warning) */
+    allowPlainIncline?: boolean
 }
 
-export type PathSection = TurnSection | InclineSection
+/** Plain horizontal run (e.g. the discharge leg of a Z conveyor) */
+export interface StraightSection {
+    kind: 'straight'
+    lengthIn: number
+}
+
+export type PathSection = TurnSection | InclineSection | StraightSection
 
 export function isIncline(s: PathSection): s is InclineSection {
     return (s as InclineSection).kind === 'incline'
+}
+
+export function isStraight(s: PathSection): s is StraightSection {
+    return (s as StraightSection).kind === 'straight'
+}
+
+export function isTurn(s: PathSection): s is TurnSection {
+    return !isIncline(s) && !isStraight(s)
 }
 
 export interface FrictionSet {
@@ -123,14 +160,26 @@ export interface BeltPullConfig {
     curveDerate: number
     /** Belt's minimum inside-radius ratio ("collapse factor"): r_min = factor × width */
     collapseFactor: number
+    /** Packages (default) or loose bulk. Bulk enables the repose / slip / pocket / bed-capacity screens. */
+    productType?: ProductType
     loadMode: LoadMode
     throughputLbHr: number
     directLoadLbf: number
     productLengthIn: number
     productWeightLb: number
+    /** Loose (as-conveyed) density, lb/ft³ — bed mode and pocket capacity */
     bulkDensityLbFt3: number
     bedDepthIn: number
     edgeMarginIn: number
+    /** Bulk product angle of repose (surcharge), degrees — shapes the pocket wedge behind each flight */
+    reposeDeg?: number
+    /** Pocket fill fraction 0–1 (spillage, uneven feed); default 0.85 */
+    pocketFillFraction?: number
+    /**
+     * Steepest incline a plain (unflighted) belt carries this product without slip, degrees.
+     * Product-on-belt friction, not repose. Defaults: bulk 20°, packages 25°.
+     */
+    maxPlainInclineDeg?: number
     beltSpeedFpm: number
     frictions: FrictionSet
     materials: SurfaceMaterials
@@ -167,7 +216,44 @@ export interface TurnBreakdownRow {
     tensionOutHigh: number
 }
 
+/** Product load on one carry piece, in path order (index −1 = the infeed straight) */
+export interface SectionLoadRow {
+    index: number
+    kind: 'straight' | 'incline' | 'turn'
+    lengthIn: number
+    lbfPerFt: number
+    lbf: number
+    /** uniform = spread from the load mode; pocket = flight-pocket capacity; override = entered lb/ft */
+    source: 'uniform' | 'pocket' | 'override'
+}
+
+/** Flighted-pocket capacity on one incline section */
+export interface PocketSummary {
+    /** Section index in cfg.sections */
+    index: number
+    slopeDeg: number
+    /** Wedge cross-section behind one flight, in² (before fill fraction) */
+    areaIn2: number
+    /** Material runs the whole pitch (trapezoid / full bed) rather than a partial wedge */
+    fillsPitch: boolean
+    lbPerPocket: number
+    /** Whether lbPerPocket came from the measured override */
+    measured: boolean
+    pocketsOnSection: number
+    lbfPerFt: number
+    /** Rate these pockets deliver at belt speed, lb/hr */
+    achievedLbHr: number
+}
+
 export interface BeltPullResult {
+    productType: ProductType
+    /** Product load per carry piece — shows where a pocket or override departs from the uniform spread */
+    sectionLoads: SectionLoadRow[]
+    pockets: PocketSummary[]
+    /** Incline section indexes where loose product on a plain belt is steeper than repose (flights required) */
+    slipSections: number[]
+    /** Bulk only: the rate the limiting bed or pocket section can deliver at belt speed, lb/hr (null = no capacity inputs) */
+    bulkCapacityLbHr: number | null
     /** Central band — THE sizing value (beltPullLbf === centralLbf) */
     beltPullLbf: number
     beltPullN: number
@@ -275,6 +361,7 @@ export const defaultBeltPullConfig: BeltPullConfig = {
     straightRatingKgfM: 205,
     curveDerate: 0.23,
     collapseFactor: 1.5,
+    productType: 'packages',
     loadMode: 'rate',
     throughputLbHr: 0,
     directLoadLbf: 0,
@@ -283,6 +370,8 @@ export const defaultBeltPullConfig: BeltPullConfig = {
     bulkDensityLbFt3: 45,
     bedDepthIn: 2,
     edgeMarginIn: 1,
+    reposeDeg: 35,
+    pocketFillFraction: 0.85,
     beltSpeedFpm: 60,
     frictions: { ...frictionScenarios[0].frictions },
     materials: { carrywayBase: 0.18, railBase: 0.18, returnBase: 0.18 },
@@ -315,7 +404,7 @@ export function turnArcIn(t: TurnSection, beltWidthIn: number): number {
 
 export function carrywayLengthIn(cfg: BeltPullConfig): number {
     return cfg.sections.reduce(
-        (sum, s) => isIncline(s)
+        (sum, s) => isIncline(s) || isStraight(s)
             ? sum + (s.lengthIn || 0)
             : sum + turnArcIn(s, cfg.beltWidthIn) + (s.straightAfterIn || 0),
         cfg.infeedStraightIn || 0
@@ -324,6 +413,59 @@ export function carrywayLengthIn(cfg: BeltPullConfig): number {
 
 export function pathRiseIn(cfg: BeltPullConfig): number {
     return cfg.sections.reduce((sum, s) => sum + (isIncline(s) ? (s.riseIn || 0) : 0), 0)
+}
+
+/** Product type with the legacy rule: a saved bed-mode config is bulk even if it predates the field */
+export function resolveProductType(cfg: Pick<BeltPullConfig, 'productType' | 'loadMode'>): ProductType {
+    return cfg.productType ?? (cfg.loadMode === 'bulk' ? 'bulk' : 'packages')
+}
+
+/** Plain-belt incline limit: entered, else the product-type default */
+export const PLAIN_BELT_MAX_INCLINE_DEG: Record<ProductType, number> = { bulk: 20, packages: 25 }
+export function resolveMaxPlainIncline(cfg: Pick<BeltPullConfig, 'productType' | 'loadMode' | 'maxPlainInclineDeg'>): number {
+    return cfg.maxPlainInclineDeg ?? PLAIN_BELT_MAX_INCLINE_DEG[resolveProductType(cfg)]
+}
+
+/** Slope of an incline section, degrees (rise over belt length) */
+export function inclineSlopeDeg(s: InclineSection): number {
+    if (!(s.lengthIn > 0) || Math.abs(s.riseIn) > s.lengthIn) return 0
+    return Math.asin(s.riseIn / s.lengthIn) * 180 / Math.PI
+}
+
+/**
+ * Cross-section of the product wedge behind one flight, in².
+ * The belt climbs at `slopeDeg`; the free surface of loose product sits at the
+ * angle of repose `reposeDeg` above horizontal. Measured from the flight:
+ *   - slope ≤ repose: the product stands as steep as the belt, so the pocket is
+ *     bounded only by the next flight — a full bed h × pitch (capacity ceiling).
+ *   - otherwise the surface falls back to the belt over run = h / tan(slope − repose):
+ *     a triangle ½·h·run when the run fits inside the pitch, else the trapezoid that
+ *     reaches the next flight, pitch·h − ½·pitch²·tan(slope − repose).
+ */
+export function pocketWedge(flightHeightIn: number, pitchIn: number, slopeDeg: number, reposeDeg: number): { areaIn2: number; runIn: number; fillsPitch: boolean } {
+    const h = Math.max(flightHeightIn, 0)
+    const p = Math.max(pitchIn, 0)
+    if (h <= 0 || p <= 0) return { areaIn2: 0, runIn: 0, fillsPitch: false }
+    const d = Math.tan(Math.max(slopeDeg - reposeDeg, 0) * Math.PI / 180)
+    if (d < 1e-9) return { areaIn2: h * p, runIn: p, fillsPitch: true }
+    const run = h / d
+    if (run >= p) return { areaIn2: p * h - 0.5 * p * p * d, runIn: p, fillsPitch: true }
+    return { areaIn2: 0.5 * h * run, runIn: run, fillsPitch: false }
+}
+
+/** Geometric pocket capacity, lb: wedge × usable width × fill × density */
+export function pocketCapacityLb(
+    spec: PocketSpec, slopeDeg: number, beltWidthIn: number, edgeMarginIn: number,
+    reposeDeg: number, fillFraction: number, densityLbFt3: number
+): { lb: number; areaIn2: number; fillsPitch: boolean; measured: boolean } {
+    const wedge = pocketWedge(spec.flightHeightIn, spec.pitchIn, slopeDeg, reposeDeg)
+    if (spec.lbPerPocketOverride && spec.lbPerPocketOverride > 0) {
+        return { lb: spec.lbPerPocketOverride, areaIn2: wedge.areaIn2, fillsPitch: wedge.fillsPitch, measured: true }
+    }
+    const usableWidthIn = Math.max(beltWidthIn - 2 * Math.max(edgeMarginIn, 0), 0)
+    const fill = Math.min(Math.max(fillFraction, 0), 1)
+    const lb = (wedge.areaIn2 * usableWidthIn / 1728) * fill * Math.max(densityLbFt3, 0)
+    return { lb, areaIn2: wedge.areaIn2, fillsPitch: wedge.fillsPitch, measured: false }
 }
 
 /**
@@ -373,30 +515,140 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
     const carryIn = carrywayLengthIn(cfg)
     const carryFt = carryIn / 12
 
-    // ── Product load (unchanged from pre-Rev-B) ──
-    let productLoadLbf = 0
+    // ── Product load: a uniform per-foot spread from the load mode, then any incline section
+    //    that carries its own load (flighted pockets, or an entered lb/ft) replaces the spread there ──
+    const productType = resolveProductType(cfg)
+    const reposeDeg = cfg.reposeDeg ?? defaultBeltPullConfig.reposeDeg!
+    const fillFraction = cfg.pocketFillFraction ?? defaultBeltPullConfig.pocketFillFraction!
+    const speedFpm = cfg.beltSpeedFpm || 0
+
+    const pockets: PocketSummary[] = []
+    const ownLoad = new Map<number, { perFt: number; source: 'pocket' | 'override' }>()
+    cfg.sections.forEach((s, i) => {
+        if (!isIncline(s)) return
+        if (s.productLbfPerFt !== undefined && s.productLbfPerFt !== null && s.productLbfPerFt >= 0) {
+            ownLoad.set(i, { perFt: s.productLbfPerFt, source: 'override' })
+            return
+        }
+        if (s.pocket && s.pocket.flightHeightIn > 0 && s.pocket.pitchIn > 0) {
+            const slope = inclineSlopeDeg(s)
+            const cap = pocketCapacityLb(s.pocket, slope, cfg.beltWidthIn, cfg.edgeMarginIn || 0, reposeDeg, fillFraction, cfg.bulkDensityLbFt3 || 0)
+            const perFt = cap.lb * 12 / s.pocket.pitchIn
+            pockets.push({
+                index: i, slopeDeg: slope, areaIn2: cap.areaIn2, fillsPitch: cap.fillsPitch,
+                lbPerPocket: cap.lb, measured: cap.measured,
+                pocketsOnSection: (s.lengthIn || 0) / s.pocket.pitchIn,
+                lbfPerFt: perFt,
+                achievedLbHr: cap.lb * (speedFpm * 12 / s.pocket.pitchIn) * 60,
+            })
+            ownLoad.set(i, { perFt, source: 'pocket' })
+        }
+    })
+    const ownLoadIn = cfg.sections.reduce((sum, s, i) => sum + (isIncline(s) && ownLoad.has(i) ? (s.lengthIn || 0) : 0), 0)
+    const uniformFt = Math.max(carryIn - ownLoadIn, 0) / 12
+
+    let uniformPerFt = 0
     let bulkAchievedLbHr: number | null = null
     let bulkAchievedFt3Hr: number | null = null
-    if (cfg.loadMode === 'rate') {
-        const perFt = cfg.beltSpeedFpm > 0 ? cfg.throughputLbHr / (cfg.beltSpeedFpm * 60) : 0
-        productLoadLbf = perFt * carryFt
-    } else if (cfg.loadMode === 'direct') {
-        productLoadLbf = cfg.directLoadLbf || 0
-    } else if (cfg.loadMode === 'bulk') {
-        const usableWidthIn = Math.max(cfg.beltWidthIn - 2 * (cfg.edgeMarginIn || 0), 0)
-        const bedAreaFt2 = (usableWidthIn * (cfg.bedDepthIn || 0)) / 144
-        const perFt = (cfg.bulkDensityLbFt3 || 0) * bedAreaFt2
-        productLoadLbf = perFt * carryFt
-        bulkAchievedFt3Hr = bedAreaFt2 * (cfg.beltSpeedFpm || 0) * 60
-        bulkAchievedLbHr = perFt * (cfg.beltSpeedFpm || 0) * 60
-    } else {
-        const pieces = cfg.productLengthIn > 0 ? carryIn / cfg.productLengthIn : 0
-        productLoadLbf = pieces * (cfg.productWeightLb || 0)
+    const usableWidthIn = Math.max(cfg.beltWidthIn - 2 * (cfg.edgeMarginIn || 0), 0)
+    const bedAreaFt2 = (usableWidthIn * (cfg.bedDepthIn || 0)) / 144
+    const bedPerFt = (cfg.bulkDensityLbFt3 || 0) * bedAreaFt2
+    if (productType === 'bulk' && bedPerFt > 0) {
+        // Bed capacity at speed is reported for every bulk config; it only DRIVES the load in bed mode
+        bulkAchievedFt3Hr = bedAreaFt2 * speedFpm * 60
+        bulkAchievedLbHr = bedPerFt * speedFpm * 60
     }
+    if (cfg.loadMode === 'rate') {
+        uniformPerFt = speedFpm > 0 ? cfg.throughputLbHr / (speedFpm * 60) : 0
+    } else if (cfg.loadMode === 'direct') {
+        // A stated total spreads over the carry that has no load of its own
+        uniformPerFt = uniformFt > 0 ? (cfg.directLoadLbf || 0) / uniformFt : 0
+    } else if (cfg.loadMode === 'bulk') {
+        uniformPerFt = bedPerFt
+        if (bulkAchievedLbHr === null) {
+            bulkAchievedFt3Hr = bedAreaFt2 * speedFpm * 60
+            bulkAchievedLbHr = bedPerFt * speedFpm * 60
+        }
+    } else {
+        uniformPerFt = cfg.productLengthIn > 0 ? (cfg.productWeightLb || 0) * 12 / cfg.productLengthIn : 0
+    }
+
+    // Carry pieces in path order, each with its own load. Friction and gravity are kept apart so the
+    // wear scenarios can rescale friction without touching the lift term.
+    type CarryPiece = {
+        kind: 'straight' | 'incline' | 'turn'
+        index: number
+        lengthIn: number
+        perFt: number
+        source: SectionLoadRow['source']
+        frictionLbf: number
+        gravityLbf: number
+        turn?: TurnSection
+    }
+    const runPiece = (kind: 'straight' | 'incline', index: number, lengthIn: number, riseIn: number, perFt: number, source: SectionLoadRow['source']): CarryPiece => {
+        const lenFt = (lengthIn || 0) / 12
+        const riseFt = (riseIn || 0) / 12
+        const horizFt = kind === 'incline' ? Math.sqrt(Math.max(lenFt * lenFt - riseFt * riseFt, 0)) : lenFt
+        const w = beltPerFt + perFt
+        return { kind, index, lengthIn: lengthIn || 0, perFt, source, frictionLbf: mu.carryway * w * horizFt, gravityLbf: w * riseFt }
+    }
+    const pieces: CarryPiece[] = [runPiece('straight', -1, cfg.infeedStraightIn, 0, uniformPerFt, 'uniform')]
+    cfg.sections.forEach((s, i) => {
+        if (isIncline(s)) {
+            const own = ownLoad.get(i)
+            pieces.push(runPiece('incline', i, s.lengthIn, s.riseIn, own?.perFt ?? uniformPerFt, own?.source ?? 'uniform'))
+        } else if (isStraight(s)) {
+            pieces.push(runPiece('straight', i, s.lengthIn, 0, uniformPerFt, 'uniform'))
+        } else {
+            pieces.push({ kind: 'turn', index: i, lengthIn: turnArcIn(s, cfg.beltWidthIn), perFt: uniformPerFt, source: 'uniform', frictionLbf: 0, gravityLbf: 0, turn: s })
+            pieces.push(runPiece('straight', i, s.straightAfterIn, 0, uniformPerFt, 'uniform'))
+        }
+    })
+    const sectionLoads: SectionLoadRow[] = pieces
+        .filter((p) => p.lengthIn > 0)
+        .map((p) => ({ index: p.index, kind: p.kind, lengthIn: p.lengthIn, lbfPerFt: p.perFt, lbf: p.perFt * p.lengthIn / 12, source: p.source }))
+    const productLoadLbf = sectionLoads.reduce((s, r) => s + r.lbf, 0)
     const productPerFt = carryFt > 0 ? productLoadLbf / carryFt : 0
-    const wCarry = beltPerFt + productPerFt
+    /** Turns always carry the uniform spread (pockets exist only on inclines) */
+    const wCarry = beltPerFt + uniformPerFt
     const backTension = (cfg.backTensionLbfPerFtWidth || 0) * widthFt
     if (backTension > 0) assumptions.push(`Back tension ${backTension.toFixed(1)} lbf entered — modular belts with catenary take-up normally run ~0.`)
+
+    // ── Slip screen: product on a plain incline steeper than the belt can hold it ──
+    const slipSections: number[] = []
+    const maxPlain = resolveMaxPlainIncline(cfg)
+    cfg.sections.forEach((s, i) => {
+        if (!isIncline(s) || ownLoad.get(i)?.source === 'pocket') return
+        const perFt = ownLoad.get(i)?.perFt ?? uniformPerFt
+        const slope = Math.abs(inclineSlopeDeg(s))
+        if (perFt > 0 && slope > maxPlain + 1e-9) {
+            if (s.allowPlainIncline) {
+                assumptions.push(`Incline ${i + 1}: engineer accepted a plain belt at ${slope.toFixed(1)}° (past the ${maxPlain}° ${productType} limit) — retention by belt surface, cleats, or product behaviour to be confirmed.`)
+                return
+            }
+            slipSections.push(i)
+            warnings.push(productType === 'bulk'
+                ? `Incline ${i + 1} climbs ${slope.toFixed(1)}° with loose product on a plain belt — past the ${maxPlain}° plain-belt limit, so the product slides back. Flights (pockets) or a shallower slope required.`
+                : `Incline ${i + 1} climbs ${slope.toFixed(1)}° — past the ${maxPlain}° plain-belt limit for packages. Cleats, a high-friction belt surface, or a shallower slope required.`)
+        }
+    })
+
+    // ── Bulk capacity: can the bed / pockets deliver the demanded rate ──
+    let bulkCapacityLbHr: number | null = null
+    if (productType === 'bulk') {
+        const capacities = [...pockets.map((p) => p.achievedLbHr), ...(cfg.loadMode !== 'bulk' && bulkAchievedLbHr !== null ? [bulkAchievedLbHr] : [])]
+        if (capacities.length > 0) {
+            bulkCapacityLbHr = Math.min(...capacities)
+            if (cfg.loadMode === 'rate' && cfg.throughputLbHr > bulkCapacityLbHr + 1e-9) {
+                const limiter = pockets.length > 0 && bulkCapacityLbHr === Math.min(...pockets.map((p) => p.achievedLbHr))
+                    ? 'the flight pockets' : 'the bed'
+                warnings.push(`Demanded ${cfg.throughputLbHr.toFixed(0)} lb/hr exceeds what ${limiter} can deliver at ${speedFpm} ft/min (${bulkCapacityLbHr.toFixed(0)} lb/hr) — raise speed, flight height, or pitch, or deepen the bed.`)
+            }
+        }
+        if (pockets.length > 0) {
+            assumptions.push(`Pocket capacity = wedge behind each flight at ${reposeDeg}° repose × usable width × ${(fillFraction * 100).toFixed(0)}% fill × ${cfg.bulkDensityLbFt3} lb/ft³ loose density — geometric estimate; a measured lb/pocket overrides it.`)
+        }
+    }
 
     // ── Return: segmented, belt weight only; regain on net rise ──
     const returnResolved = resolveReturnSegments(cfg, carryIn).map((r) => {
@@ -410,21 +662,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
         assumptions.push(`Bearinged-roller return μ = ${(cfg.muRoller || 0.04).toFixed(2)} (assumed, plausible 0.03–0.05).`)
     }
 
-    // ── Non-turn carry friction (straights + inclines) ──
     const dragModel = cfg.turnDragModel ?? defaultBeltPullConfig.turnDragModel
-    type CarryPiece = { kind: 'straight' | 'incline' | 'turn'; frictionLbf?: number; turn?: TurnSection }
-    const pieces: CarryPiece[] = [{ kind: 'straight', frictionLbf: mu.carryway * wCarry * ((cfg.infeedStraightIn || 0) / 12) }]
-    for (const s of cfg.sections) {
-        if (isIncline(s)) {
-            const lenFt = (s.lengthIn || 0) / 12
-            const riseFt = (s.riseIn || 0) / 12
-            const horizFt = Math.sqrt(Math.max(lenFt * lenFt - riseFt * riseFt, 0))
-            pieces.push({ kind: 'incline', frictionLbf: mu.carryway * wCarry * horizFt + wCarry * riseFt })
-        } else {
-            pieces.push({ kind: 'turn', turn: s })
-            pieces.push({ kind: 'straight', frictionLbf: mu.carryway * wCarry * ((s.straightAfterIn || 0) / 12) })
-        }
-    }
 
     // ── March, three bands ──
     const runBand = (band: 'low' | 'central' | 'high') => {
@@ -433,7 +671,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
         let T = backTension + returnTotal // slack side leaves the drive: return runs first
         if (cfg.ordering === 'worst-case') {
             // all non-turn friction before the turns (conservative, ref §2.3)
-            for (const p of pieces) if (p.kind !== 'turn') T += p.frictionLbf || 0
+            for (const p of pieces) if (p.kind !== 'turn') T += p.frictionLbf + p.gravityLbf
             for (const p of pieces) {
                 if (p.kind !== 'turn') continue
                 const t = p.turn!
@@ -448,7 +686,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
             }
         } else {
             for (const p of pieces) {
-                if (p.kind !== 'turn') { T += p.frictionLbf || 0; continue }
+                if (p.kind !== 'turn') { T += p.frictionLbf + p.gravityLbf; continue }
                 const t = p.turn!
                 const rcFt = (t.insideRadiusIn + cfg.beltWidthIn / 2) / 12
                 const theta = t.angleDeg * Math.PI / 180
@@ -475,7 +713,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
     }
 
     // Per-turn table (Central band) + High exits for the curve check
-    const turns = cfg.sections.filter((s): s is TurnSection => !isIncline(s))
+    const turns = cfg.sections.filter(isTurn)
     const perTurn: TurnBreakdownRow[] = turns.map((t, i) => {
         const ratio = cfg.beltWidthIn > 0 ? t.insideRadiusIn / cfg.beltWidthIn : 0
         const muEff = effectiveRailMu(mu.rail, ratio, dragModel)
@@ -562,7 +800,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
                 let T = (cfg.backTensionLbfPerFtWidth || 0) * widthFt
                     + returnResolved.reduce((s2, r) => s2 + beltPerFt * (r.lengthIn / 12) * (r.support === 'slider' ? frs.return : (cfg.muRoller || 0.04)), 0)
                     - beltPerFt * totalRiseFt
-                for (const pc of pieces) if (pc.kind !== 'turn') T += (pc.frictionLbf || 0) * (frs.carryway / mu.carryway || 1)
+                for (const pc of pieces) if (pc.kind !== 'turn') T += pc.frictionLbf * (frs.carryway / mu.carryway || 1) + pc.gravityLbf
                 let worst = { t: 0, rcIn: 1 }
                 for (const pc of pieces) {
                     if (pc.kind !== 'turn') continue
@@ -642,7 +880,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
     }
 
     // ── Drawing sanity screens ──
-    const allStraights: number[] = [cfg.infeedStraightIn, ...turns.map((t) => t.straightAfterIn), ...cfg.sections.filter(isIncline).map((s) => s.lengthIn)]
+    const allStraights: number[] = [cfg.infeedStraightIn, ...turns.map((t) => t.straightAfterIn), ...cfg.sections.filter((s) => isIncline(s) || isStraight(s)).map((s) => (s as InclineSection | StraightSection).lengthIn)]
     if (allStraights.some((s) => s > 600 || (s > 0 && s < 3))) {
         warnings.push('A straight length looks unit-suspicious (>600 in or <3 in) — check units: inches expected.')
     }
@@ -674,6 +912,11 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
     assumptions.push('μ_g (belt-edge-to-curve-rail) taken equal to the rail μ setting — measured value collapses the Central↔High band.')
 
     return {
+        productType,
+        sectionLoads,
+        pockets,
+        slipSections,
+        bulkCapacityLbHr,
         beltPullLbf: centralLbf,
         beltPullN: centralLbf * LBF_TO_N,
         lowLbf: Math.max(low.pull, 0),
@@ -720,7 +963,7 @@ export function calculateBeltPull(cfg: BeltPullConfig, frictionsOverride?: Frict
  * Calibration back-solver: solve base rail μ reproducing a trusted CENTRAL pull.
  */
 export function solveRailMu(cfg: BeltPullConfig, targetPullLbf: number): number | null {
-    if (!cfg.sections.some((s) => !isIncline(s))) return null
+    if (!cfg.sections.some(isTurn)) return null
     const pullAt = (railMu: number) =>
         calculateBeltPull(cfg, { ...cfg.frictions, rail: railMu }).centralLbf
     let lo = 0.001, hi = 2.0
@@ -780,8 +1023,13 @@ export function sprocketScreens(pdMm: number, teeth: number, beltPitchMm: number
 export function pathSummary(cfg: BeltPullConfig): string {
     const parts: string[] = [`${cfg.infeedStraightIn}in`]
     for (const s of cfg.sections) {
+        if (isStraight(s)) {
+            parts.push(`${s.lengthIn}in`)
+            continue
+        }
         if (isIncline(s)) {
-            parts.push(`${s.riseIn >= 0 ? '↗' : '↘'}${s.lengthIn}in${s.riseIn >= 0 ? '+' : ''}${s.riseIn}in`)
+            const pocket = s.pocket && s.pocket.flightHeightIn > 0 ? ` ⌸${s.pocket.flightHeightIn}"@${s.pocket.pitchIn}"` : ''
+            parts.push(`${s.riseIn >= 0 ? '↗' : '↘'}${s.lengthIn}in${s.riseIn >= 0 ? '+' : ''}${s.riseIn}in${pocket}`)
             continue
         }
         parts.push(`${s.angleDeg}° R${s.insideRadiusIn}${s.direction}`)

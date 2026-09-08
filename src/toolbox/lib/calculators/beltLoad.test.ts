@@ -141,3 +141,56 @@ describe('plant-intake reality: lb/day rates and packager utilization', () => {
         expect(r.ppm).toBeCloseTo(40, 9)
     })
 })
+
+describe('bulk (loose product) path', () => {
+    it('lb/hr with loose density gives lb/min, lb/ft, and ft³/hr; package fields are null', () => {
+        const r = calculateBeltLoad({ productType: 'bulk', throughputLbHr: 4500, beltSpeedFpm: 60, pieceWeightLb: null, ppm: null, looseDensityLbFt3: 45 })!
+        expect(r.productType).toBe('bulk')
+        expect(r.lbPerMin).toBeCloseTo(75, 9)
+        expect(r.lbPerFt).toBeCloseTo(1.25, 9)
+        expect(r.ft3PerHr).toBeCloseTo(100, 9)
+        expect(r.ppm).toBeNull()
+        expect(r.pieceWeightLb).toBeNull()
+        expect(r.pitchIn).toBeNull()
+    })
+
+    it('a volumetric rate converts through loose density; entered lb/hr outranks it', () => {
+        const vol = calculateBeltLoad({ productType: 'bulk', throughputLbHr: null, throughputFt3Hr: 100, looseDensityLbFt3: 45, beltSpeedFpm: null, pieceWeightLb: null, ppm: null })!
+        expect(vol.throughputLbHr).toBeCloseTo(4500, 9)
+        expect(vol.throughputSource).toBe('volume')
+        const both = calculateBeltLoad({ productType: 'bulk', throughputLbHr: 3000, throughputFt3Hr: 100, looseDensityLbFt3: 45, beltSpeedFpm: null, pieceWeightLb: null, ppm: null })!
+        expect(both.throughputLbHr).toBe(3000)
+        expect(both.throughputSource).toBe('entered')
+        // no density → volume cannot convert → falls to lb/day, then null
+        expect(calculateBeltLoad({ productType: 'bulk', throughputLbHr: null, throughputFt3Hr: 100, beltSpeedFpm: null, pieceWeightLb: null, ppm: null })).toBeNull()
+    })
+
+    it('bed capacity: (width − 2·margin) × depth × density × speed; utilization and depth needed', () => {
+        // 14" belt, 1" margins → 12" usable × 2" deep = 24 in² = 1/6 ft² × 45 lb/ft³ = 7.5 lb/ft × 60 fpm × 60 = 27,000 lb/hr
+        const r = calculateBeltLoad({
+            productType: 'bulk', throughputLbHr: 13500, beltSpeedFpm: 60, pieceWeightLb: null, ppm: null,
+            looseDensityLbFt3: 45, beltWidthIn: 14, bedDepthIn: 2, edgeMarginIn: 1,
+        })!
+        expect(r.bedCapacityLbHr).toBeCloseTo(27000, 6)
+        expect(r.bedUtilizationPct).toBeCloseTo(50, 6)
+        expect(r.bedDepthNeededIn).toBeCloseTo(1, 6)   // half the rate needs half the depth
+    })
+
+    it('agrees with the belt pull bed mode on capacity at speed', () => {
+        // beltPull.ts bulk mode: bedAreaFt2 = usable × depth / 144; perFt = density × area; achieved = perFt × speed × 60
+        const r = calculateBeltLoad({
+            productType: 'bulk', throughputLbHr: 1000, beltSpeedFpm: 80, pieceWeightLb: null, ppm: null,
+            looseDensityLbFt3: 40, beltWidthIn: 24, bedDepthIn: 3, edgeMarginIn: 1.5,
+        })!
+        const usable = 24 - 3
+        const expected = 40 * (usable * 3 / 144) * 80 * 60
+        expect(r.bedCapacityLbHr).toBeCloseTo(expected, 6)
+    })
+
+    it('packages path is unchanged and reports its type', () => {
+        const r = calculateBeltLoad({ throughputLbHr: 3600, beltSpeedFpm: 60, pieceWeightLb: 2, ppm: null })!
+        expect(r.productType).toBe('packages')
+        expect(r.bedCapacityLbHr).toBeNull()
+        expect(r.ppm).toBeCloseTo(30, 9)
+    })
+})
