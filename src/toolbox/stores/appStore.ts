@@ -98,6 +98,9 @@ interface AppState {
     // Belt Pull calculator (serialized BeltPullConfig — owned by lib/calculators/beltPull)
     beltPullConfig: string | null
     setBeltPullConfig: (json: string) => void
+    /** Section a deep link asked a tool to open (charts mount after the jump event fires; not persisted) */
+    pendingSection: Record<string, string>
+    setPendingSection: (toolId: string, section: string | null) => void
     /** One-shot cross-tool message: Belt Load card -> Belt Pull calculator (not persisted) */
     beltPullInbox: Record<string, unknown> | null
     sendToBeltPull: (patch: Record<string, unknown>) => void
@@ -219,6 +222,14 @@ export const useAppStore = create<AppState>()(
             // Belt Pull calculator
             beltPullConfig: null,
             setBeltPullConfig: (json) => set({ beltPullConfig: json }),
+            pendingSection: {},
+            setPendingSection: (toolId, section) =>
+                set((state) => {
+                    const next = { ...state.pendingSection }
+                    if (section) next[toolId] = section
+                    else delete next[toolId]
+                    return { pendingSection: next }
+                }),
             beltPullInbox: null,
             sendToBeltPull: (patch) => set({ beltPullInbox: patch }),
             clearBeltPullInbox: () => set({ beltPullInbox: null }),

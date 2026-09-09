@@ -23,6 +23,10 @@ const ToolboxApp = dynamic(() => import("@/toolbox/ToolboxApp"), {
   ),
 });
 
-export function ToolboxLoader() {
-  return <ToolboxApp />;
+/**
+ * `initialTool` opens that tool on mount (the per-tool pages pass it);
+ * `initialSection` picks a sub-section for charts that have them (safety).
+ */
+export function ToolboxLoader({ initialTool, initialSection }: { initialTool?: string; initialSection?: string }) {
+  return <ToolboxApp initialTool={initialTool} initialSection={initialSection} />;
 }

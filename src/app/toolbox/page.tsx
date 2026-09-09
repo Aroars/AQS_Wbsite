@@ -5,6 +5,7 @@ import { ToolboxLoader } from "@/components/toolbox/ToolboxLoader";
 import { pageMetadata } from "@/content/seo";
 import { chartTools, calculatorTools, conveyorTools } from "@/toolbox/lib/toolRegistry";
 import { toolDescriptions } from "@/toolbox/lib/toolDescriptions";
+import { getToolPage } from "@/toolbox/lib/toolSeo";
 
 const PAGE_URL = "https://www.automatedqs.com/toolbox";
 
@@ -79,11 +80,13 @@ export default function ToolboxPage() {
               Engineering Toolbox
             </h1>
             <p className="text-text-body text-base md:text-lg max-w-3xl leading-relaxed">
-              Conveyor calculators, unit converters, and engineering reference
-              charts in one browser tab, built by the AQS engineering team for
-              packaging and material handling work. No login. Your converters,
-              calculations, and pinned tools are saved in this browser so you
-              can pick up where you left off.
+              A conveyor belt pull calculator, conveyor speed calculator, and
+              wearstrip span calculator, alongside an MDR hub motor selection
+              chart, a light curtain safety distance calculator, and the
+              reference charts a packaging engineer reaches for daily. Built by
+              the AQS engineering team, free, no login. Your inputs and pinned
+              tools are saved in this browser so you can pick up where you left
+              off.
             </p>
           </div>
         </section>
@@ -97,7 +100,9 @@ export default function ToolboxPage() {
               What&apos;s in the toolbox
             </h2>
             <p className="text-text-body max-w-3xl leading-relaxed mb-12">
-              Eighteen tools across three tabs. Press <kbd className="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-dark-800 text-text-secondary">⌘K</kbd> inside
+              Conveyor sizing and throughput calculators, machine safety and
+              electrical references, and everyday converters, each on its own
+              page and all inside one app. Press <kbd className="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-dark-800 text-text-secondary">⌘K</kbd> inside
               the app to jump to any of them by name, size, thread, or fit class.
             </p>
 
@@ -114,7 +119,7 @@ export default function ToolboxPage() {
                     {group.tools.map((tool) => (
                       <li key={tool.id} className="border-l-2 border-border pl-4">
                         <a
-                          href={`#tool-${tool.id}`}
+                          href={(() => { const p = getToolPage(tool.slug); return p && p.published ? `/toolbox/${tool.slug}` : `#tool-${tool.id}`; })()}
                           className="font-sans font-semibold text-white hover:text-accent-primary transition-colors"
                         >
                           {tool.label}

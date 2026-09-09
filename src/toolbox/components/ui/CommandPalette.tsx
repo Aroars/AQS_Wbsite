@@ -11,6 +11,8 @@ import { cn } from '@/toolbox/lib/utils'
 export interface JumpDetail {
     tab: string
     id: string
+    /** Optional sub-section inside the tool (e.g. the safety chart's 'guard' tab) */
+    section?: string
 }
 
 type PaletteItem =

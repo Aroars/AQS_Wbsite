@@ -18,9 +18,9 @@ import { useDeepLink } from '@/toolbox/hooks/useDeepLink'
  * ToolboxLoader) because all durable state lives in a zustand store persisted
  * to localStorage — the same no-login "it remembers you" model as Excalidraw.
  */
-export default function ToolboxApp() {
+export default function ToolboxApp({ initialTool, initialSection }: { initialTool?: string; initialSection?: string } = {}) {
     const activeTab = useAppStore((s) => s.activeTab)
-    useDeepLink()
+    useDeepLink(initialTool, initialSection)
 
     // Select-on-focus for every numeric input in the app, in one place —
     // tabbing or clicking into a filled field replaces the value on type

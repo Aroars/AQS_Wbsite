@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { guardOpenings, clearanceData, riskAssessment, calculateSafetyDistance, calculateNoiseTWA, safetyDistanceConstants } from '@/toolbox/data/safetyData'
 import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
@@ -9,6 +9,15 @@ export function SafetyChart() {
     const pinned = useAppStore((s) => s.pinnedCharts.includes('safety'))
     const togglePin = useAppStore((s) => s.togglePinChart)
     const [section, setSection] = useState<Section>('distance')
+    // A tool page (or the palette) can open a specific section: /toolbox/guard-opening-distance.
+    // The chart mounts after the jump event fires, so the request is parked in the store.
+    const pending = useAppStore((s) => s.pendingSection['safety'])
+    const setPendingSection = useAppStore((s) => s.setPendingSection)
+    useEffect(() => {
+        if (!pending) return
+        setSection(pending as Section)
+        setPendingSection('safety', null)
+    }, [pending, setPendingSection])
 
     // Safety Distance state (guardType keys into safetyDistanceConstants.penetrationFactors)
     const [standard, setStandard] = useState('iso')
