@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         destination: "/solutions",
         permanent: true,
       },
+      // 2026-09 conveyor families: old category pages → belt / mdr / pallet
+      { source: "/solutions/conveyors/belt-systems", destination: "/solutions/conveyors/belt", permanent: true },
+      { source: "/solutions/conveyors/roller-drive", destination: "/solutions/conveyors/mdr", permanent: true },
+      { source: "/solutions/conveyors/specialty", destination: "/solutions/conveyors/pallet", permanent: true },
       {
         source: "/conveyorsolutions/:slug*",
         destination: "/solutions/conveyors",

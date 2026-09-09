@@ -26,49 +26,6 @@ import {
 const accent = CONVEYOR_ACCENT;
 
 /* ================================================
-   Type Index Card — direct link to one conveyor type
-   ================================================ */
-
-function TypeIndexCard({
-  href,
-  title,
-  useCase,
-}: {
-  href: string;
-  title: string;
-  useCase: string;
-}) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <Link href={href} className="no-underline block h-full">
-      <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="rounded-xl p-5 h-full flex flex-col transition-all duration-300"
-        style={{
-          background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-          border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
-          transform: hovered ? "translateY(-3px)" : "translateY(0)",
-        }}
-      >
-        <div className="font-sans text-[1rem] font-bold text-white mb-1.5">
-          {title}
-        </div>
-        <p className="font-sans text-[0.78rem] text-text-body leading-[1.55] mb-3 flex-1">
-          {useCase}
-        </p>
-        <div
-          className="font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors"
-          style={{ color: hovered ? "#fff" : accent }}
-        >
-          View Details →
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-/* ================================================
    Differentiator Card
    ================================================ */
 
@@ -231,22 +188,23 @@ export function ConveyorsHubContent() {
                     className="font-mono text-[0.65rem] tracking-[0.1em] uppercase"
                     style={{ color: accent }}
                   >
-                    Custom Sanitary Conveyance
+                    Belt · MDR · Pallet
                   </span>
                 </div>
 
                 {/* Headline */}
                 <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white mb-6">
-                  Custom Sanitary Conveyors
+                  Sanitary, Washdown &amp; Food-Grade Conveyors
                   <br />
                   <span style={{ color: accent }}>Built for Your Line</span>
                 </h1>
 
                 {/* Subheadline */}
                 <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[600px]">
-                  Engineered for your line. Built for your washdown. Every frame
-                  TIG-welded, every surface mirror-polished, every system designed to
-                  move your product &mdash; not slow you down.
+                  Sanitary belt conveyors, 24V MDR conveyors, and washdown pallet
+                  conveyors, engineered for your line and built for your washdown.
+                  Every frame TIG-welded, every surface mirror-polished, every system
+                  designed to move your product &mdash; not slow you down.
                 </p>
 
                 {/* CTAs */}
@@ -292,52 +250,64 @@ export function ConveyorsHubContent() {
         </div>
       </section>
 
-      {/* Find Your Conveyor — full type index, grouped by category */}
+      {/* Find Your Conveyor — three families, each its own page, types listed under each */}
       <section id="categories" className="py-[72px] px-8">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Find Your Conveyor</SectionLabel>
-            <SectionTitle>Nine System Types. One Click Each.</SectionTitle>
+            <SectionTitle>Three Families. Nine System Types.</SectionTitle>
             <SectionDesc>
-              Every AQS conveyor shares the same sanitary construction DNA —
-              welded stainless frames, mirror polish, aggressive drainage, and
-              tool-less maintenance access. Pick the system your line needs.
+              Every sanitary conveyor we build shares the same construction DNA
+              &mdash; welded stainless frames, mirror polish, aggressive drainage,
+              and tool-less maintenance access. Start with the family that moves
+              your product: belt for trays, pouches, and cartons; MDR for cases and
+              totes with zone control; pallet for end of line.
             </SectionDesc>
           </AnimatedSection>
-          {categories.map((cat) => (
-            <div key={cat.slug} className="mt-9 first:mt-4">
-              <AnimatedSection>
-                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4 pb-2.5 border-b border-white/[0.06]">
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-sans text-[1.05rem] font-bold text-white">
-                      {cat.title}
-                    </span>
-                    <span className="font-sans text-[0.78rem] text-text-dim hidden sm:inline">
-                      {cat.subtitle}
-                    </span>
+          <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
+            {categories.map((cat) => (
+              <StaggerItem key={cat.slug}>
+                <div className="rounded-xl p-6 h-full flex flex-col bg-[rgba(17,34,64,0.5)] border border-white/[0.06]">
+                  <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2" style={{ color: accent }}>
+                    {cat.subtitle}
                   </div>
+                  <h3 className="font-sans text-[1.25rem] font-bold text-white mb-2">
+                    <Link href={`/solutions/conveyors/${cat.slug}`} className="no-underline text-white hover:text-[#cbd5e1] transition-colors">
+                      {cat.title}
+                    </Link>
+                  </h3>
+                  <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] mb-4">
+                    {cat.description}
+                  </p>
+                  <ul className="space-y-1.5 mb-5 flex-1">
+                    {cat.types.map((type) => (
+                      <li key={type.slug}>
+                        <Link
+                          href={`/solutions/conveyors/${cat.slug}#${type.slug}`}
+                          className="flex items-baseline gap-2 no-underline group"
+                        >
+                          <span className="shrink-0 text-[0.7rem]" style={{ color: accent }}>&rarr;</span>
+                          <span className="font-sans text-[0.85rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
+                            {type.shortTitle}
+                          </span>
+                          <span className="font-sans text-[0.72rem] text-text-dim hidden xl:inline">
+                            {type.useCase}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                   <Link
                     href={`/solutions/conveyors/${cat.slug}`}
-                    className="font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
+                    className="inline-flex items-center gap-1.5 font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
                     style={{ color: accent }}
                   >
-                    View Category →
+                    Explore {cat.shortTitle} conveyors &rarr;
                   </Link>
                 </div>
-              </AnimatedSection>
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {cat.types.map((type) => (
-                  <StaggerItem key={type.slug}>
-                    <TypeIndexCard
-                      href={`/solutions/conveyors/${cat.slug}#${type.slug}`}
-                      title={type.shortTitle}
-                      useCase={type.useCase}
-                    />
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </div>
-          ))}
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 

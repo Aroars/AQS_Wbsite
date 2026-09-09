@@ -19,21 +19,30 @@ export interface ConveyorType {
 
 export interface ConveyorCategory {
   slug: string;
+  /** Short name for the family switcher (Belt / MDR / Pallet) */
+  shortTitle: string;
   title: string;
   subtitle: string;
   description: string;
   heroImage?: { src: string; alt: string };
+  /** Which drive technologies apply (titles from driveTechnologies) */
+  driveTitles: string[];
   types: ConveyorType[];
 }
 
+/* Three families, nine system types. Family copy below the type level is
+   AQS marketing copy — review before publishing changes. */
+
 export const categories: ConveyorCategory[] = [
   {
-    slug: "belt-systems",
-    title: "Belt Conveyor Systems",
+    slug: "belt",
+    shortTitle: "Belt",
+    title: "Sanitary Belt Conveyors",
     subtitle: "Flat-Top, Modular, Incline & Freezer",
     description:
-      "From simple point-A-to-point-B transport to freezer-rated arctic systems and steep elevation changes — belt conveyors handle the widest range of sanitary applications.",
+      "Food grade belt conveyors for washdown environments — from point-A-to-point-B transport to freezer-rated arctic systems and steep elevation changes. The widest range of sanitary applications, on TIG-welded stainless frames with FDA belting.",
     heroImage: { src: "/images/conveyors/dairy-line-full.jpg", alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment" },
+    driveTitles: ["One Motion™ Mag-Drive", "Standard Gear Motor Drives"],
     types: [
       {
         title: "Flat-Top Belt Conveyors",
@@ -101,17 +110,19 @@ export const categories: ConveyorCategory[] = [
     ],
   },
   {
-    slug: "roller-drive",
-    title: "Roller & Drive Systems",
-    subtitle: "MDR, Accumulation & Merge/Divert",
+    slug: "mdr",
+    shortTitle: "MDR",
+    title: "MDR Conveyors — 24V Motorized Roller",
+    subtitle: "Zone Control, Zero-Pressure Accumulation & Merge/Divert",
     description:
-      "Zone-controlled roller conveyors and intelligent traffic management — from zero-pressure accumulation to multi-line merging and SKU-based sorting.",
-    heroImage: { src: "/images/conveyors/sanitary-motor-detail.jpg", alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction" },
+      "Washdown-rated motorized drive roller conveyors for cases, trays, and totes. Each zone runs its own 24V roller, so product queues without contact, only active zones draw power, and traffic control lives in the conveyor instead of a PLC rack — from zero-pressure accumulation to multi-line merging and SKU-based sorting.",
+    heroImage: { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
+    driveTitles: ["Motorized Drive Rolls (MDR)", "Standard Gear Motor Drives"],
     types: [
       {
-        title: "Motorized Drive Roll (MDR) Conveyors",
-        shortTitle: "MDR Roller",
-        slug: "mdr",
+        title: "24V Motorized Drive Roller (MDR) Zones",
+        shortTitle: "MDR Zones",
+        slug: "mdr-zones",
         useCase: "Case and pallet handling with zone-based accumulation.",
         description:
           "Each zone powered by an independent motorized roller. Zero-pressure accumulation ensures products queue without contact or back-pressure. Zone-to-zone communication enables intelligent traffic control with energy-efficient operation — only active zones draw power.",
@@ -167,27 +178,15 @@ export const categories: ConveyorCategory[] = [
     ],
   },
   {
-    slug: "specialty",
-    title: "Heavy-Duty & Pallet Systems",
-    subtitle: "Chain Conveyors & Washdown Pallet Handling",
+    slug: "pallet",
+    shortTitle: "Pallet",
+    title: "Pallet Conveyors",
+    subtitle: "Washdown Pallet Handling & Heavy-Duty Chain",
     description:
-      "Purpose-built for the heaviest loads on the line — full pallets, bulk containers, and end-of-line transport in full washdown environments.",
+      "Stainless pallet conveyors for end-of-line food and dairy lines — roller and chain-driven pallet conveyance, zero-pressure pallet accumulation, automated dispensing, and stretch-wrapper, strapper, and robotic palletizer integration, built for the heaviest loads on the line in full washdown environments.",
+    heroImage: { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in dairy production environment" },
+    driveTitles: ["Standard Gear Motor Drives", "Motorized Drive Rolls (MDR)"],
     types: [
-      {
-        title: "Chain Conveyors",
-        shortTitle: "Chain",
-        slug: "chain",
-        useCase: "Heavy-load and pallet transport in sanitary environments.",
-        description:
-          "Stainless steel chain on stainless steel frame with high load capacity for full pallets, heavy cases, or bulk containers. Available in single-strand, dual-strand, and multi-strand configurations. Compatible with pallet dispensers, stretch wrappers, and strapping systems.",
-        features: [
-          "Stainless steel chain and frame",
-          "High load capacity",
-          "Single, dual, and multi-strand options",
-          "Compatible with pallet dispensers and wrappers",
-        ],
-        idealFor: ["Pallet handling", "End-of-line transport", "Heavy product staging"],
-      },
       {
         title: "Washdown Pallet Conveyors",
         shortTitle: "Washdown Pallet",
@@ -207,6 +206,21 @@ export const categories: ConveyorCategory[] = [
           "Protein processing",
           "Full-line washdown facilities",
         ],
+      },
+      {
+        title: "Chain Conveyors",
+        shortTitle: "Chain",
+        slug: "chain",
+        useCase: "Heavy-load and pallet transport in sanitary environments.",
+        description:
+          "Stainless steel chain on stainless steel frame with high load capacity for full pallets, heavy cases, or bulk containers. Available in single-strand, dual-strand, and multi-strand configurations. Compatible with pallet dispensers, stretch wrappers, and strapping systems.",
+        features: [
+          "Stainless steel chain and frame",
+          "High load capacity",
+          "Single, dual, and multi-strand options",
+          "Compatible with pallet dispensers and wrappers",
+        ],
+        idealFor: ["Pallet handling", "End-of-line transport", "Heavy product staging"],
       },
     ],
   },
@@ -321,7 +335,7 @@ export const driveTechnologies: DriveTech[] = [
 
 export const hubStats = [
   { value: "50+", label: "Years Experience" },
-  { value: "9", label: "System Types" },
+  { value: "3", label: "Families · 9 Types" },
   { value: "IP69K", label: "Capable" },
   { value: "USDA", label: "Compliant" },
 ];
@@ -378,7 +392,7 @@ export interface FAQItem {
 export const conveyorFAQs: FAQItem[] = [
   {
     q: "What types of conveyors does AQS build?",
-    a: "AQS designs and builds flat-top belt, modular belt, MDR roller, chain, incline/decline, merge/divert, accumulation, and freezer-rated arctic conveyors. Every type is available in sanitary construction rated from IP54 through IP69K.",
+    a: "Three families: sanitary belt conveyors (flat-top, modular, incline/decline, freezer-rated arctic), MDR conveyors (24V motorized roller zones, zero-pressure accumulation, merge/divert), and pallet conveyors (washdown pallet handling and heavy-duty chain). Every type is available in sanitary construction rated from IP54 through IP69K.",
   },
   {
     q: "Are AQS conveyors catalog systems or custom-engineered?",

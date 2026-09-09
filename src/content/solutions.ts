@@ -39,8 +39,8 @@ export const solutions = [
     slug: "conveyors",
     route: "/solutions/conveyors",
     icon: "═",
-    title: "Custom Conveyors",
-    subtitle: "Sanitary Material Handling",
+    title: "Sanitary Conveyors",
+    subtitle: "Sanitary, Washdown & Food-Grade Conveyor Systems",
     accent: "#94A3B8",
     shortFeatures: [
       "Freezer, accumulation, & custom configs",
@@ -50,7 +50,7 @@ export const solutions = [
       "50+ years engineering expertise",
     ],
     description:
-      "Custom-engineered food-grade conveyor systems including freezer conveyors, accumulation systems, and modular belt configurations for washdown environments.",
+      "Sanitary washdown conveyors engineered for food production: belt, MDR (24V motorized roller), and pallet conveyor systems in TIG-welded stainless steel — flat-top, modular, incline, freezer, zero-pressure accumulation, and end-of-line pallet handling.",
   },
   {
     slug: "robotics",

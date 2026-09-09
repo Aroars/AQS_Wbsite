@@ -23,7 +23,7 @@ export function PartnersBar() {
           >
             <Image
               src={p.logo!}
-              alt={p.name}
+              alt={`${p.name} — AQS technology partner`}
               fill
               className="object-contain brightness-0 invert opacity-20 hover:opacity-50 transition-opacity duration-300"
               sizes="120px"

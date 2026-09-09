@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
-import { ConveyorTypeSwitcher } from "@/components/ui/conveyor-type-switcher";
+import { ConveyorFamilyNav } from "@/components/ui/conveyor-family-nav";
 import {
   CONVEYOR_ACCENT,
   categories,
@@ -24,7 +24,6 @@ import {
 import type { ConveyorType } from "@/data/conveyors";
 
 const accent = CONVEYOR_ACCENT;
-const category = categories.find((c) => c.slug === "belt-systems")!;
 
 /* ================================================
    Type Detail Card
@@ -104,7 +103,10 @@ function TypeDetailCard({ type }: { type: ConveyorType }) {
    Page Content
    ================================================ */
 
-export function ConveyorsBeltSystemsContent() {
+/** Family page: belt, mdr, or pallet — same layout, data from data/conveyors */
+export function ConveyorFamilyContent({ family }: { family: string }) {
+  const category = categories.find((c) => c.slug === family)!;
+  const drives = driveTechnologies.filter((d) => category.driveTitles.includes(d.title));
   return (
     <>
       {/* Hero with background image */}
@@ -125,7 +127,7 @@ export function ConveyorsBeltSystemsContent() {
         <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
-            <ConveyorBreadcrumb current="Belt Systems" />
+            <ConveyorBreadcrumb current={category.title} />
             <SectionLabel>{category.subtitle}</SectionLabel>
             <SectionTitle>{category.title}</SectionTitle>
             <SectionDesc>{category.description}</SectionDesc>
@@ -138,7 +140,7 @@ export function ConveyorsBeltSystemsContent() {
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <div className="mb-6">
-              <ConveyorTypeSwitcher currentCategory="belt-systems" />
+              <ConveyorFamilyNav currentFamily={family} />
             </div>
           </AnimatedSection>
           <StaggerContainer className="flex flex-col gap-4">
@@ -158,9 +160,10 @@ export function ConveyorsBeltSystemsContent() {
             <SectionLabel>Construction Standards</SectionLabel>
             <SectionTitle>Built Different. On Purpose.</SectionTitle>
             <SectionDesc>
-              Every belt conveyor shares the same sanitary construction DNA —
+              Every AQS conveyor shares the same sanitary construction DNA —
               continuous TIG welds, mirror-polished stainless, sloped drainage,
-              and FDA-approved belting.
+              and washdown-rated components — whether it carries a tray, a
+              case, or a full pallet.
             </SectionDesc>
           </AnimatedSection>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
@@ -195,7 +198,7 @@ export function ConveyorsBeltSystemsContent() {
             </SectionDesc>
           </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-            {driveTechnologies.slice(0, 2).map((drive) => (
+            {drives.map((drive) => (
               <StaggerItem key={drive.title}>
                 <div className="rounded-xl p-6 bg-black/20 border border-white/[0.04] h-full">
                   <div className="font-sans text-[1rem] font-semibold text-white mb-2">

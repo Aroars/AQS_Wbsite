@@ -1,25 +1,26 @@
 import type { Metadata } from "next";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
-import { ConveyorsRollerDriveContent } from "@/components/pages/conveyors-roller-drive";
+import { ConveyorFamilyContent } from "@/components/pages/conveyor-family";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { CTASection } from "@/components/sections/cta-section";
 import { pageMetadata } from "@/content/seo";
 
 export const metadata: Metadata = {
-  title: pageMetadata.conveyorsRollerDrive.title,
-  description: pageMetadata.conveyorsRollerDrive.description,
+  title: pageMetadata.conveyorsBeltFamily.title,
+  description: pageMetadata.conveyorsBeltFamily.description,
+  alternates: { canonical: "https://www.automatedqs.com/solutions/conveyors/belt" },
   openGraph: {
-    title: pageMetadata.conveyorsRollerDrive.title,
-    description: pageMetadata.conveyorsRollerDrive.description,
+    title: pageMetadata.conveyorsBeltFamily.title,
+    description: pageMetadata.conveyorsBeltFamily.description,
   },
 };
 
-export default function ConveyorsRollerDrivePage() {
+export default function ConveyorFamilyPage() {
   return (
     <>
       <Navigation />
-      <ConveyorsRollerDriveContent />
+      <ConveyorFamilyContent family="belt" />
       <SystemArchitecture currentProduct="conveyors" />
       <CTASection />
       <Footer />

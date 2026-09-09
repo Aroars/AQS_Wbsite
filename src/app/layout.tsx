@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
-import { pageMetadata, organizationSchema } from "@/content/seo";
+import { pageMetadata, organizationSchema, localBusinessSchema } from "@/content/seo";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import "./globals.css";
 
@@ -47,6 +47,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
           }}
         />
       </head>

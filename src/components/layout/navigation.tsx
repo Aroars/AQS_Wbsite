@@ -10,7 +10,7 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 const solutions = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
   { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
-  { label: "Custom Conveyors", href: "/solutions/conveyors" },
+  { label: "Sanitary Conveyors", href: "/solutions/conveyors" },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
   { label: "EvacuPak Recovery", href: "/solutions/evacupak" },
 ];

@@ -5,7 +5,7 @@ import { CookieSettingsButton } from "@/components/ui/cookie-settings-button";
 const solutionLinks = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
   { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
-  { label: "Custom Conveyors", href: "/solutions/conveyors" },
+  { label: "Sanitary Conveyors", href: "/solutions/conveyors" },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
   { label: "EvacuPak", href: "/solutions/evacupak" },
 ];
@@ -34,8 +34,9 @@ export function Footer() {
             </span>
           </div>
           <p className="font-sans text-[0.78rem] text-text-dim leading-[1.7] max-w-[320px]">
-            Standalone SCADA, intelligent feed systems, sanitary conveyors,
-            and washdown robotics — engineered in Nampa, Idaho.
+            Standalone SCADA, intelligent feed systems, sanitary washdown
+            conveyors (belt, MDR, and pallet), and food-grade robotics —
+            engineered in Nampa, Idaho.
           </p>
         </div>
 
