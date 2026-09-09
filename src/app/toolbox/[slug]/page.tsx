@@ -5,6 +5,7 @@ import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { ToolboxLoader } from "@/components/toolbox/ToolboxLoader";
 import { ToolboxHeader } from "@/components/toolbox/ToolboxHeader";
+import { ToolboxIntro } from "@/components/toolbox/ToolboxIntro";
 import { toolPages, getToolPage, publishedToolPages } from "@/toolbox/lib/toolSeo";
 import { allTools } from "@/toolbox/lib/toolRegistry";
 
@@ -77,30 +78,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
       <div className="toolbox-scope pt-[80px]">
         {/* Server-rendered intro: what the tool calculates and how */}
-        <section className="px-6 pt-10 pb-8 md:pt-14 md:pb-10">
-          <div className="mx-auto max-w-5xl">
-            <nav className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3 text-text-dim">
-              <Link href="/toolbox" className="text-accent-primary hover:underline">Engineering Toolbox</Link>
-              <span className="mx-2 text-white/20">/</span>
-              <span>{tool.label}</span>
-            </nav>
-            <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-white mb-4">{page.h1}</h1>
-            {page.intro.map((p, i) => (
-              <p key={i} className="text-text-body text-base md:text-lg max-w-3xl leading-relaxed mb-4">{p}</p>
-            ))}
-            {page.howItWorks && page.howItWorks.length > 0 && (
-              <details className="mt-2 max-w-3xl" open>
-                <summary className="font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-primary cursor-pointer select-none">How it works</summary>
-                <ul className="mt-3 space-y-2 text-text-body text-sm leading-relaxed list-disc pl-5">
-                  {page.howItWorks.map((line, i) => <li key={i}>{line}</li>)}
-                </ul>
-              </details>
-            )}
-            <p className="text-text-dim text-xs mt-4">
-              Free, no login. Your inputs are saved in this browser. Values are engineering references — verify against manufacturer data and applicable codes before a final design.
-            </p>
-          </div>
-        </section>
+        <ToolboxIntro mode="tool" page={page} toolLabel={tool.label} />
 
         <ToolboxHeader />
         <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />

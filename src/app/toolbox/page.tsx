@@ -3,6 +3,7 @@ import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { ToolboxLoader } from "@/components/toolbox/ToolboxLoader";
 import { ToolboxHeader } from "@/components/toolbox/ToolboxHeader";
+import { ToolboxIntro } from "@/components/toolbox/ToolboxIntro";
 import { pageMetadata } from "@/content/seo";
 import { chartTools, calculatorTools, conveyorTools } from "@/toolbox/lib/toolRegistry";
 import { toolDescriptions } from "@/toolbox/lib/toolDescriptions";
@@ -71,8 +72,9 @@ export default function ToolboxPage() {
       />
 
       <div className="toolbox-scope pt-[80px]">
-        {/* Title strip is the page H1; the Help chevron on it explains each tab */}
-        <ToolboxHeader titleAs="h1" />
+        {/* The page H1 and the current tab's help, styled like a tool page's header */}
+        <ToolboxIntro mode="tab" />
+        <ToolboxHeader />
 
         <ToolboxLoader />
 
@@ -87,8 +89,8 @@ export default function ToolboxPage() {
               wearstrip span calculator, an MDR hub motor selection chart, a light
               curtain safety distance calculator, and the reference charts a
               packaging engineer reaches for daily. Free, no login, saved in this
-              browser. Open the Help chevron on the title strip for a walkthrough
-              of each tab.
+              browser. The intro above the app walks through whichever tab is
+              open.
             </p>
             <div className="space-y-8">
               {groups.map((group) => (
