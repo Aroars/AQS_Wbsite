@@ -413,3 +413,14 @@ body {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Toolbox scroll snap: the title strip docks under the site nav (53px once
+   scrolled) and acts as a barrier on the way back up — see useSnapBarrier. */
+html.toolbox-snap {
+  scroll-snap-type: y proximity;
+}
+
+.toolbox-snap-target {
+  scroll-snap-align: start;
+  scroll-margin-top: 53px;
+}
