@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { ToolboxLoader } from "@/components/toolbox/ToolboxLoader";
+import { ToolboxHeader } from "@/components/toolbox/ToolboxHeader";
 import { pageMetadata } from "@/content/seo";
 import { chartTools, calculatorTools, conveyorTools } from "@/toolbox/lib/toolRegistry";
 import { toolDescriptions } from "@/toolbox/lib/toolDescriptions";
@@ -70,76 +71,61 @@ export default function ToolboxPage() {
       />
 
       <div className="toolbox-scope pt-[80px]">
-        {/* Server-rendered intro: the H1 and summary crawlers index */}
-        <section className="px-6 pt-10 pb-8 md:pt-14 md:pb-10">
-          <div className="mx-auto max-w-5xl">
-            <p className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3 text-accent-primary">
-              Free engineering tools
-            </p>
-            <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-white mb-4">
-              Engineering Toolbox
-            </h1>
-            <p className="text-text-body text-base md:text-lg max-w-3xl leading-relaxed">
-              A conveyor belt pull calculator, conveyor speed calculator, and
-              wearstrip span calculator, alongside an MDR hub motor selection
-              chart, a light curtain safety distance calculator, and the
-              reference charts a packaging engineer reaches for daily. Built by
-              the AQS engineering team, free, no login. Your inputs and pinned
-              tools are saved in this browser so you can pick up where you left
-              off.
-            </p>
-          </div>
-        </section>
+        {/* Title strip is the page H1; the Help chevron on it explains each tab */}
+        <ToolboxHeader titleAs="h1" />
 
         <ToolboxLoader />
 
-        {/* Crawlable index of every tool. Links deep-link into the app above. */}
-        <section id="tools" className="px-6 py-16 md:py-20">
+        {/* Crawlable index of every tool: one link per page, grouped, compact */}
+        <section id="tools" className="px-6 py-12 md:py-14">
           <div className="mx-auto max-w-5xl">
-            <h2 className="font-sans text-2xl md:text-3xl font-bold text-white mb-3">
+            <h2 className="font-sans text-xl md:text-2xl font-bold text-white mb-3">
               What&apos;s in the toolbox
             </h2>
-            <p className="text-text-body max-w-3xl leading-relaxed mb-12">
-              Conveyor sizing and throughput calculators, machine safety and
-              electrical references, and everyday converters, each on its own
-              page and all inside one app. Press <kbd className="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-dark-800 text-text-secondary">⌘K</kbd> inside
-              the app to jump to any of them by name, size, thread, or fit class.
+            <p className="text-text-body text-sm max-w-3xl leading-relaxed mb-8">
+              A conveyor belt pull calculator, conveyor speed calculator, and
+              wearstrip span calculator, an MDR hub motor selection chart, a light
+              curtain safety distance calculator, and the reference charts a
+              packaging engineer reaches for daily. Free, no login, saved in this
+              browser. Open the Help chevron on the title strip for a walkthrough
+              of each tab.
             </p>
-
-            <div className="space-y-14">
+            <div className="space-y-8">
               {groups.map((group) => (
                 <div key={group.heading}>
-                  <h3 className="font-sans text-lg font-semibold text-white mb-2">
+                  <h3 className="font-sans text-sm font-semibold text-white mb-1">
                     {group.heading}
                   </h3>
-                  <p className="text-text-body text-sm leading-relaxed mb-6 max-w-3xl">
+                  <p className="text-text-dim text-xs leading-relaxed mb-3 max-w-3xl">
                     {group.blurb}
                   </p>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-                    {group.tools.map((tool) => (
-                      <li key={tool.id} className="border-l-2 border-border pl-4">
-                        <a
-                          href={(() => { const p = getToolPage(tool.slug); return p && p.published ? `/toolbox/${tool.slug}` : `#tool-${tool.id}`; })()}
-                          className="font-sans font-semibold text-white hover:text-accent-primary transition-colors"
-                        >
-                          {tool.label}
-                        </a>
-                        <p className="text-text-body text-sm leading-relaxed mt-1">
-                          {toolDescriptions[tool.id]}
-                        </p>
-                      </li>
-                    ))}
+                  <ul className="flex flex-wrap gap-2">
+                    {group.tools.map((tool) => {
+                      const page = getToolPage(tool.slug);
+                      const href = page && page.published ? `/toolbox/${tool.slug}` : `#tool-${tool.id}`;
+                      return (
+                        <li key={tool.id}>
+                          <a
+                            href={href}
+                            title={toolDescriptions[tool.id]}
+                            className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-secondary hover:text-white hover:border-accent-primary transition-colors no-underline"
+                          >
+                            {tool.label}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}
             </div>
 
-            <p className="text-text-dim text-sm leading-relaxed mt-14 max-w-3xl">
+            <p className="text-text-dim text-xs leading-relaxed mt-10 max-w-3xl">
               Values are provided as engineering references and should be
               verified against manufacturer data and applicable codes before
               use in a final design. Need a conveyor sized and quoted? See our{" "}
               <a href="/solutions/conveyors" className="text-accent-primary hover:underline">
-                custom sanitary conveyors
+                sanitary conveyors
               </a>{" "}
               or{" "}
               <a href="/contact" className="text-accent-primary hover:underline">

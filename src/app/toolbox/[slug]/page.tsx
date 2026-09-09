@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { ToolboxLoader } from "@/components/toolbox/ToolboxLoader";
+import { ToolboxHeader } from "@/components/toolbox/ToolboxHeader";
 import { toolPages, getToolPage, publishedToolPages } from "@/toolbox/lib/toolSeo";
 import { allTools } from "@/toolbox/lib/toolRegistry";
 
@@ -101,6 +102,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           </div>
         </section>
 
+        <ToolboxHeader />
         <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />
 
         {/* Related and remaining tools — real links, one per page */}

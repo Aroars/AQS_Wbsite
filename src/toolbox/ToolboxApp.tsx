@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Header } from '@/toolbox/components/layout/Header'
 import { TabNav } from '@/toolbox/components/layout/TabNav'
 import { ToastContainer } from '@/toolbox/components/ui/Toast'
 import { CommandPalette } from '@/toolbox/components/ui/CommandPalette'
@@ -37,7 +36,6 @@ export default function ToolboxApp({ initialTool, initialSection }: { initialToo
 
     return (
         <div id="toolbox-app" className="min-h-[80vh] bg-dark-900 text-text-primary scroll-mt-[53px]">
-            <Header />
             <TabNav />
             <main className="px-4 md:px-6 py-6">
                 {/* Views stay mounted and toggle visibility so in-progress work
