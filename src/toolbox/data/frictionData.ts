@@ -5,6 +5,14 @@
  */
 
 export const frictionData: Record<string, any> = {
+    // Modular belt on wearstrip — the dynamic μ the belt pull and wearstrip calculators use
+    // (AQS standard acetal belt on each rail). Static values are not published; pairs by belt
+    // material (POM vs PP vs PE on each rail) are on the toolbox roadmap.
+    'Modular Belt-UHMW (virgin)': { dry: { static: null, kinetic: 0.18 } },
+    'Modular Belt-UHMW UltraLube #321': { dry: { static: null, kinetic: 0.10 } },
+    'Modular Belt-HDPE (food grade)': { dry: { static: null, kinetic: 0.25 } },
+    'Modular Belt-Acetal / POM': { dry: { static: null, kinetic: 0.20 } },
+    'Modular Belt-PET P (Ertalyte TX)': { dry: { static: null, kinetic: 0.12 } },
     // Metal on Metal combinations
     'Steel-Steel': {
         dry: { static: 0.74, kinetic: 0.57 },

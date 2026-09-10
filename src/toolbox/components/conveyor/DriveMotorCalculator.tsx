@@ -195,11 +195,11 @@ export function DriveMotorCalculator() {
 
                 {/* 4. OneMotion auto-pick (moved from Belt Pull) */}
                 {picks && (
-                    <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
-                        <div className="flex items-center justify-between flex-wrap gap-2">
-                            <span className="text-xs text-text-secondary uppercase tracking-wider">OneMotion Auto-Pick ({s.width}″ belt)</span>
+                    <details open={s.driveType === 'drum'} className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
+                        <summary className="cursor-pointer select-none flex items-center justify-between flex-wrap gap-2">
+                            <span className="text-xs text-text-secondary uppercase tracking-wider">OneMotion Auto-Pick ({s.width}″ belt){picks.recommended ? <span className="normal-case tracking-normal text-success"> — {picks.recommended.series}</span> : <span className="normal-case tracking-normal text-error"> — none passes</span>}</span>
                             <span className="text-[10px] text-text-muted font-mono">needs {picks.contN.toFixed(0)} N cont · {picks.peakN.toFixed(0)} N peak</span>
-                        </div>
+                        </summary>
                         {picks.recommended ? (
                             <div className="px-2.5 py-2 bg-success/10 border-l-2 border-success rounded text-xs text-success">
                                 Smallest passing drive: <span className="font-semibold">{picks.recommended.series}</span>
@@ -235,7 +235,7 @@ export function DriveMotorCalculator() {
                         <div className="text-[10px] text-text-muted">
                             Verdicts use the vendor belt-pull rating at this width (not torque ÷ radius) and the peak-to-continuous torque ratio for startup. Smallest passing series is recommended; the manual entry below is the sign-off path.
                         </div>
-                    </div>
+                    </details>
                 )}
 
                 {/* 5. Manual drive capability (moved from Belt Pull) */}

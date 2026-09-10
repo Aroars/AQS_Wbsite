@@ -26,7 +26,7 @@ export function ConveyorSpeed() {
     const banner = useAppStore((s) => s.infeedBanner)
     const setInfeedBanner = useAppStore((s) => s.setInfeedBanner)
     const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
-    const { head, solveFor, reading: r, patch, setCards } = useInfeed()
+    const { head, solveFor, reading: r, patch, setUnit, setCards } = useInfeed()
     if (!head) return null
 
     const targetUnit = solveFor === 'speed' ? (head.units.productSpeed ?? 'ft/min') : solveFor === 'rate' ? (head.units.productRate ?? '/min') : (head.units.productGap ?? 'in')
@@ -148,7 +148,7 @@ export function ConveyorSpeed() {
                     <div className="flex">
                         <input type="number" min="0" step="any" value={asNum(head.inputs.conveyorLength) ?? ''} placeholder="e.g. 40"
                             onChange={(e) => patch({ conveyorLength: e.target.value === '' ? null : parseFloat(e.target.value) })} className={flowInputCls} />
-                        <select value={lenUnit} onChange={(e) => patch({}, { conveyorLength: e.target.value })} className={flowUnitCls} aria-label="Conveyor length unit">
+                        <select value={lenUnit} onChange={(e) => setUnit('conveyorLength', 'length', e.target.value, 'ft')} className={flowUnitCls} aria-label="Conveyor length unit">
                             {unitTypes.length.units.map((u: string) => <option key={u} value={u}>{u}</option>)}
                         </select>
                     </div>
@@ -183,7 +183,7 @@ export function ConveyorSpeed() {
                         <div className="flex">
                             <input type="number" min="0" step="any" value={asNum(head.inputs.productWeight) ?? ''} placeholder="per package"
                                 onChange={(e) => patch({ productWeight: e.target.value === '' ? null : parseFloat(e.target.value) })} className={flowInputCls} />
-                            <select value={head.units.productWeight ?? 'lb'} onChange={(e) => patch({}, { productWeight: e.target.value })} className={flowUnitCls} aria-label="Package weight unit">
+                            <select value={head.units.productWeight ?? 'lb'} onChange={(e) => setUnit('productWeight', 'weight', e.target.value)} className={flowUnitCls} aria-label="Package weight unit">
                                 {unitTypes.weight.units.map((u: string) => <option key={u} value={u}>{u}</option>)}
                             </select>
                         </div>

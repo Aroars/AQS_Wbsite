@@ -109,9 +109,24 @@ export function BeltPullCalculator() {
         setCfg((c) => ({ ...c, sections: c.sections.map((s, j) => (j === i ? { ...s, ...patch } as PathSection : s)) }))
     const removeSection = (i: number) => setCfg((c) => ({ ...c, sections: c.sections.filter((_, j) => j !== i) }))
     const widthMm = cfg.beltWidthIn * 25.4
+    // Geometry minimums from the belt: turns start at the minimum inside radius and straights at the
+    // vendor minimum; anything typed shorter is flagged (never overwritten); an emptied box refills.
+    const minRadiusIn = cfg.collapseFactor > 0 && cfg.beltWidthIn > 0 ? cfg.collapseFactor * cfg.beltWidthIn : 0
+    const minStraightIn = cfg.minStraightIn ?? 0
+    const belowMin = (value: number, min: number) => min > 0 && value > 0 && value < min - 1e-9
+    const MinNote = ({ value, min, what }: { value: number; min: number; what: string }) =>
+        belowMin(value, min) ? <div className="mt-1 px-2 py-1 bg-warning/10 border-l-2 border-warning rounded text-[10px] text-warning">Below the {what} of {min.toFixed(1)} in</div> : null
 
     const result = useMemo(() => calculateBeltPull(cfg), [cfg])
     const scenarios = useMemo(() => calculateAllScenarios(cfg), [cfg])
+    // Result severity: red screens stay visible; yellow and informational ones collapse under Details
+    const bulkOver = result.bulkCapacityLbHr !== null && cfg.loadMode === 'rate' && cfg.throughputLbHr > result.bulkCapacityLbHr
+    const curveOver = result.curveCapacityLbf !== null && (result.curveCapacityUtilPct ?? 0) > 100
+    const cornerFail = result.cornerTier === 'beyond-envelope' || (result.cornerTier === 'dg321-required' && cfg.turnRailMaterial !== 'dg321')
+    const detailWarnings = result.warnings.length
+        + (result.curveCapacityLbf !== null && !curveOver && (result.curveCapacityUtilPct ?? 0) > 85 ? 1 : 0)
+        + (result.cornerTier === 'engineering-review' ? 1 : 0)
+        + (result.bulkCapacityLbHr !== null && cfg.loadMode === 'rate' && !bulkOver && cfg.throughputLbHr > 0.8 * result.bulkCapacityLbHr ? 1 : 0)
 
     // One-line drive verdict; the full auto-pick table and manual drive live on the Torque & Motor card
     const quickPick = useMemo(() => oneMotionPicks(result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm), [result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm])
@@ -218,14 +233,195 @@ export function BeltPullCalculator() {
                     </select>
                 </div>
 
+                {/* ── Belt & load ── */}
+                <div className="space-y-2">
+                    <div className="text-xs text-text-secondary uppercase tracking-wider">Belt & Load</div>
+                    <div className="flex flex-wrap items-end gap-2">
+                        <div className="flex-1 min-w-[240px]">
+                            <label className={labelCls}>Catalog Belt <span className="text-text-muted">({specs.source === 'live' ? 'live' : specs.source === 'cache' ? 'cached' : 'snapshot'} — fills weight, rating, build, collapse factor, pitch)</span></label>
+                            <select value={cfg.catalogBeltKey ?? ''} className={selectCls}
+                                onChange={(e) => applyCatalogBelt(catalog.find((c) => c.key === e.target.value) ?? null)}>
+                                <option value="">Custom — enter belt specs below</option>
+                                {catalog.map((c) => <option key={c.key} value={c.key}>{c.label}{c.belt.radiusCapable ? ' (radius)' : ''}</option>)}
+                            </select>
+                        </div>
+                        {catalogChoice && (
+                            <span className={`text-[10px] font-mono px-1.5 py-1 rounded border ${catalogModified ? 'border-warning/40 text-warning' : 'border-success/40 text-success'}`}>
+                                {catalogModified ? 'modified from catalog' : 'catalog values'}
+                            </span>
+                        )}
+                        {catalog.length === 0 && !specs.loading && (
+                            <span className="text-[10px] text-text-muted pb-2">No belts published yet — see the Belt Specs chart.</span>
+                        )}
+                    </div>
+                    <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">
+                        <div>
+                            <label className={labelCls}>Belt Width (in)</label>
+                            <input type="number" min="1" step="any" value={cfg.beltWidthIn || ''} className={inputCls}
+                                onChange={(e) => upd({ beltWidthIn: num(e.target.value, 12) })} />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Belt Weight (lb/ft², POM basis)</label>
+                            <div className="flex gap-1">
+                                <input type="number" min="0" step="any" value={cfg.beltWeightLbFt2 || ''} className={inputCls}
+                                    onChange={(e) => upd({ beltWeightLbFt2: num(e.target.value, 1.64) })} />
+                                <select value={cfg.beltBuild} onChange={(e) => upd({ beltBuild: e.target.value as 'pom' | 'pp' })}
+                                    className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0">
+                                    <option value="pom">POM</option>
+                                    <option value="pp">PP</option>
+                                </select>
+                            </div>
+                            {cfg.beltBuild === 'pp' && (
+                                <div className="text-[10px] text-text-muted mt-0.5">PP: weight ×0.75, straight capacity ×0.65, relaxes the curve-speed concern. Verify per NGB sheet.</div>
+                            )}
+                        </div>
+                        <div>
+                            <label className={labelCls} title="Speed sets RPM and startup acceleration — running pull is friction-driven and speed-independent">
+                                Belt Speed (ft/min) ⓘ
+                            </label>
+                            <input type="number" min="0" step="any" value={cfg.beltSpeedFpm || ''} className={inputCls}
+                                onChange={(e) => upd({ beltSpeedFpm: num(e.target.value, 60) })} />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Minimum Straight (in)</label>
+                            <input type="number" min="0" step="any" value={cfg.minStraightIn || ''} placeholder="vendor minimum" className={inputCls}
+                                onChange={(e) => upd({ minStraightIn: num(e.target.value) })} />
+                            <div className="text-[10px] text-text-muted mt-0.5">Vendor minimum straight run before and after turns and inclines. The path builder fills it in and flags anything shorter.</div>
+                        </div>
+                        <div>
+                            <label className={labelCls}>Minimum Inside Radius (in)</label>
+                            <div className="px-2 py-2 bg-dark-900/60 border border-border rounded-lg font-mono text-sm text-primary">{minRadiusIn > 0 ? minRadiusIn.toFixed(1) : '—'}</div>
+                            <div className="text-[10px] text-text-muted mt-0.5">= collapse factor {cfg.collapseFactor} × belt width. New turns start here; the builder flags a tighter radius.</div>
+                        </div>
+                    </div>
+                    {/* Product type decides the load entries and the screens (slip, pockets, bed capacity) */}
+                    <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex gap-1">
+                            {([
+                                { id: 'packages' as const, label: 'Packages', hint: 'discrete pieces — cartons, bags, trays' },
+                                { id: 'bulk' as const, label: 'Bulk', hint: 'loose product in a bed or in flight pockets' },
+                            ]).map((t) => (
+                                <button key={t.id} title={t.hint} onClick={() => setProductType(t.id)}
+                                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
+                                        productType === t.id ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
+                                    }`}>
+                                    {t.label}
+                                </button>
+                            ))}
+                        </div>
+                        <span className="text-[10px] text-text-muted">plain-belt incline limit {maxPlain}°</span>
+                        <div className="flex gap-1 ml-auto">
+                            {(productType === 'bulk' ? ['rate', 'direct', 'bulk'] as const : ['rate', 'direct'] as const).map((m) => (
+                                <button key={m} onClick={() => setLoadMode(m)} disabled={accumulated && m !== 'bulk'}
+                                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors disabled:opacity-40 ${
+                                        baseLoadMode === m ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
+                                    }`}>
+                                    {m === 'rate' ? 'Rate (lb/hr)' : m === 'direct' ? 'Direct (lbf)' : 'Bed (capacity)'}
+                                </button>
+                            ))}
+                        </div>
+                        {productType === 'packages' && (
+                            <label className="flex items-center gap-1.5 text-xs cursor-pointer text-text-secondary">
+                                <input type="checkbox" checked={accumulated}
+                                    onChange={(e) => { setAccumulated(e.target.checked); upd({ loadMode: e.target.checked ? 'accumulated' : 'rate' }) }} />
+                                Product backed up / accumulated
+                            </label>
+                        )}
+                    </div>
+                    {productType === 'bulk' && (
+                        <div className="grid grid-cols-2 @md:grid-cols-4 gap-2">
+                            <div>
+                                <label className={labelCls}>Loose Density (lb/ft³)</label>
+                                <input type="number" min="0" step="any" value={cfg.bulkDensityLbFt3 || ''} className={inputCls}
+                                    onChange={(e) => upd({ bulkDensityLbFt3: num(e.target.value) })} />
+                            </div>
+                            <div>
+                                <label className={labelCls}>Angle of Repose (°)</label>
+                                <input type="number" min="0" max="89" step="any" value={cfg.reposeDeg ?? 35} className={inputCls}
+                                    onChange={(e) => upd({ reposeDeg: num(e.target.value, 35) })} />
+                            </div>
+                            <div>
+                                <label className={labelCls}>Pocket Fill (%)</label>
+                                <input type="number" min="1" max="100" step="any" value={Math.round((cfg.pocketFillFraction ?? 0.85) * 100)} className={inputCls}
+                                    onChange={(e) => upd({ pocketFillFraction: Math.min(Math.max(num(e.target.value, 85) / 100, 0.01), 1) })} />
+                            </div>
+                            <div>
+                                <label className={labelCls}>Plain-Belt Limit (°)</label>
+                                <input type="number" min="0" max="89" step="any" value={cfg.maxPlainInclineDeg ?? ''} placeholder={String(maxPlain)} className={inputCls}
+                                    onChange={(e) => upd({ maxPlainInclineDeg: e.target.value === '' ? undefined : num(e.target.value) })} />
+                            </div>
+                        </div>
+                    )}
+                    {cfg.loadMode === 'rate' && (
+                        <div>
+                            <label className={labelCls}>Throughput (lb/hr)</label>
+                            <input type="number" min="0" step="any" value={cfg.throughputLbHr || ''} className={inputCls}
+                                onChange={(e) => upd({ throughputLbHr: num(e.target.value) })} />
+                        </div>
+                    )}
+                    {cfg.loadMode === 'direct' && (
+                        <div>
+                            <label className={labelCls}>Total Product on Belt (lbf)</label>
+                            <input type="number" min="0" step="any" value={cfg.directLoadLbf || ''} className={inputCls}
+                                onChange={(e) => upd({ directLoadLbf: num(e.target.value) })} />
+                        </div>
+                    )}
+                    {cfg.loadMode === 'bulk' && (
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label className={labelCls}>Loose Density (lb/ft³)</label>
+                                    <input type="number" min="0" step="any" value={cfg.bulkDensityLbFt3 || ''} className={inputCls}
+                                        onChange={(e) => upd({ bulkDensityLbFt3: num(e.target.value) })} />
+                                </div>
+                                <div>
+                                    <label className={labelCls}>Bed Depth (in)</label>
+                                    <input type="number" min="0" step="any" value={cfg.bedDepthIn || ''} className={inputCls}
+                                        onChange={(e) => upd({ bedDepthIn: num(e.target.value) })} />
+                                </div>
+                                <div>
+                                    <label className={labelCls}>Edge Margin (in/side)</label>
+                                    <input type="number" min="0" step="any" value={cfg.edgeMarginIn ?? ''} placeholder="1" className={inputCls}
+                                        onChange={(e) => upd({ edgeMarginIn: num(e.target.value) })} />
+                                </div>
+                            </div>
+                            {result.bulkAchievedLbHr !== null && (
+                                <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                                    This bed at {cfg.beltSpeedFpm} ft/min delivers{' '}
+                                    <span className="font-mono text-primary">{result.bulkAchievedLbHr.toFixed(0)} lb/hr</span>
+                                    {' '}(<span className="font-mono">{result.bulkAchievedFt3Hr!.toFixed(0)} ft³/hr</span>)
+                                    {' '}— check this against the plant's demanded rate. Use loose (as-conveyed) density: bulk
+                                    material fluffs up off the pile.
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    {cfg.loadMode === 'accumulated' && (
+                        <div className="grid grid-cols-2 gap-2">
+                            <div>
+                                <label className={labelCls}>Product Length (in)</label>
+                                <input type="number" min="0.1" step="any" value={cfg.productLengthIn || ''} className={inputCls}
+                                    onChange={(e) => upd({ productLengthIn: num(e.target.value, 12) })} />
+                            </div>
+                            <div>
+                                <label className={labelCls}>Weight per Piece (lb)</label>
+                                <input type="number" min="0" step="any" value={cfg.productWeightLb || ''} className={inputCls}
+                                    onChange={(e) => upd({ productWeightLb: num(e.target.value) })} />
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {/* ── Path builder ── */}
                 <div className="space-y-2">
                     <div className="text-xs text-text-secondary uppercase tracking-wider">Conveyor Path</div>
                     <div className="grid grid-cols-3 gap-2">
                         <div>
                             <label className={labelCls}>Infeed Straight (in)</label>
-                            <input type="number" min="0" step="any" value={cfg.infeedStraightIn || ''} className={inputCls}
-                                onChange={(e) => upd({ infeedStraightIn: num(e.target.value) })} />
+                            <input type="number" min="0" step="any" value={cfg.infeedStraightIn || ''} placeholder={minStraightIn > 0 ? minStraightIn.toFixed(1) : undefined} className={inputCls}
+                                onChange={(e) => upd({ infeedStraightIn: num(e.target.value) })}
+                                onBlur={(e) => { if (e.target.value === '' && minStraightIn > 0) upd({ infeedStraightIn: minStraightIn }) }} />
+                            <MinNote value={cfg.infeedStraightIn} min={minStraightIn} what="minimum straight" />
                         </div>
                         <div>
                             <label className={labelCls}>Infeed Height (in)</label>
@@ -250,8 +446,10 @@ export function BeltPullCalculator() {
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className={labelCls}>Length (in)</label>
-                                            <input type="number" min="0" step="any" value={s.lengthIn || ''} className={inputCls}
-                                                onChange={(e) => updSection(i, { lengthIn: num(e.target.value) })} />
+                                            <input type="number" min="0" step="any" value={s.lengthIn || ''} placeholder={minStraightIn > 0 ? minStraightIn.toFixed(1) : undefined} className={inputCls}
+                                                onChange={(e) => updSection(i, { lengthIn: num(e.target.value) })}
+                                                onBlur={(e) => { if (e.target.value === '' && minStraightIn > 0) updSection(i, { lengthIn: minStraightIn }) }} />
+                                            <MinNote value={s.lengthIn} min={minStraightIn} what="minimum straight" />
                                         </div>
                                     </div>
                                 </div>
@@ -405,8 +603,10 @@ export function BeltPullCalculator() {
                                     </div>
                                     <div>
                                         <label className={labelCls}>Inside R (in)</label>
-                                        <input type="number" min="0" step="any" value={s.insideRadiusIn || ''} className={inputCls}
-                                            onChange={(e) => updSection(i, { insideRadiusIn: num(e.target.value) })} />
+                                        <input type="number" min="0" step="any" value={s.insideRadiusIn || ''} placeholder={minRadiusIn > 0 ? minRadiusIn.toFixed(1) : undefined} className={inputCls}
+                                            onChange={(e) => updSection(i, { insideRadiusIn: num(e.target.value) })}
+                                            onBlur={(e) => { if (e.target.value === '' && minRadiusIn > 0) updSection(i, { insideRadiusIn: Math.round(minRadiusIn * 100) / 100 }) }} />
+                                        <MinNote value={s.insideRadiusIn} min={minRadiusIn} what="minimum inside radius" />
                                     </div>
                                     <div>
                                         <label className={labelCls}>Direction</label>
@@ -418,8 +618,10 @@ export function BeltPullCalculator() {
                                     </div>
                                     <div>
                                         <label className={labelCls}>Straight After (in)</label>
-                                        <input type="number" min="0" step="any" value={s.straightAfterIn || ''} placeholder="0" className={inputCls}
-                                            onChange={(e) => updSection(i, { straightAfterIn: num(e.target.value) })} />
+                                        <input type="number" min="0" step="any" value={s.straightAfterIn || ''} placeholder={minStraightIn > 0 ? minStraightIn.toFixed(1) : '0'} className={inputCls}
+                                            onChange={(e) => updSection(i, { straightAfterIn: num(e.target.value) })}
+                                            onBlur={(e) => { if (e.target.value === '' && minStraightIn > 0) updSection(i, { straightAfterIn: minStraightIn }) }} />
+                                        <MinNote value={s.straightAfterIn} min={minStraightIn} what="minimum straight" />
                                     </div>
                                 </div>
                             </div>
@@ -427,7 +629,7 @@ export function BeltPullCalculator() {
                     })}
                     <div className="grid grid-cols-3 gap-2">
                         <button
-                            onClick={() => setCfg((c) => ({ ...c, sections: [...c.sections, { angleDeg: 90, insideRadiusIn: 18.4, direction: c.sections.filter(isTurn).length % 2 ? 'R' : 'L', straightAfterIn: 0 }] }))}
+                            onClick={() => setCfg((c) => ({ ...c, sections: [...c.sections, { angleDeg: 90, insideRadiusIn: minRadiusIn > 0 ? Math.round(minRadiusIn * 100) / 100 : 18.4, direction: c.sections.filter(isTurn).length % 2 ? 'R' : 'L', straightAfterIn: minStraightIn }] }))}
                             className="px-3 py-2 border border-dashed border-border rounded-lg text-text-muted text-sm hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-1.5">
                             <Plus className="w-4 h-4" /> Turn + Straight
                         </button>
@@ -437,7 +639,7 @@ export function BeltPullCalculator() {
                             <Plus className="w-4 h-4" /> Incline
                         </button>
                         <button
-                            onClick={() => setCfg((c) => ({ ...c, sections: [...c.sections, { kind: 'straight', lengthIn: 36 }] }))}
+                            onClick={() => setCfg((c) => ({ ...c, sections: [...c.sections, { kind: 'straight', lengthIn: Math.max(36, minStraightIn) }] }))}
                             className="px-3 py-2 border border-dashed border-border rounded-lg text-text-muted text-sm hover:border-text-secondary hover:text-text-secondary transition-colors flex items-center justify-center gap-1.5">
                             <Plus className="w-4 h-4" /> Straight
                         </button>
@@ -448,174 +650,6 @@ export function BeltPullCalculator() {
                     <div className="px-3 py-1.5 bg-dark-900 rounded text-xs font-mono text-text-secondary overflow-x-auto whitespace-nowrap">
                         {pathSummary(cfg)}
                     </div>
-                </div>
-
-                {/* ── Belt & load ── */}
-                <div className="space-y-2">
-                    <div className="text-xs text-text-secondary uppercase tracking-wider">Belt & Load</div>
-                    <div className="flex flex-wrap items-end gap-2">
-                        <div className="flex-1 min-w-[240px]">
-                            <label className={labelCls}>Catalog Belt <span className="text-text-muted">({specs.source === 'live' ? 'live' : specs.source === 'cache' ? 'cached' : 'snapshot'} — fills weight, rating, build, collapse factor, pitch)</span></label>
-                            <select value={cfg.catalogBeltKey ?? ''} className={selectCls}
-                                onChange={(e) => applyCatalogBelt(catalog.find((c) => c.key === e.target.value) ?? null)}>
-                                <option value="">Custom — enter belt specs below</option>
-                                {catalog.map((c) => <option key={c.key} value={c.key}>{c.label}{c.belt.radiusCapable ? ' (radius)' : ''}</option>)}
-                            </select>
-                        </div>
-                        {catalogChoice && (
-                            <span className={`text-[10px] font-mono px-1.5 py-1 rounded border ${catalogModified ? 'border-warning/40 text-warning' : 'border-success/40 text-success'}`}>
-                                {catalogModified ? 'modified from catalog' : 'catalog values'}
-                            </span>
-                        )}
-                        {catalog.length === 0 && !specs.loading && (
-                            <span className="text-[10px] text-text-muted pb-2">No belts published yet — see the Belt Specs chart.</span>
-                        )}
-                    </div>
-                    <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">
-                        <div>
-                            <label className={labelCls}>Belt Width (in)</label>
-                            <input type="number" min="1" step="any" value={cfg.beltWidthIn || ''} className={inputCls}
-                                onChange={(e) => upd({ beltWidthIn: num(e.target.value, 12) })} />
-                        </div>
-                        <div>
-                            <label className={labelCls}>Belt Weight (lb/ft², POM basis)</label>
-                            <div className="flex gap-1">
-                                <input type="number" min="0" step="any" value={cfg.beltWeightLbFt2 || ''} className={inputCls}
-                                    onChange={(e) => upd({ beltWeightLbFt2: num(e.target.value, 1.64) })} />
-                                <select value={cfg.beltBuild} onChange={(e) => upd({ beltBuild: e.target.value as 'pom' | 'pp' })}
-                                    className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0">
-                                    <option value="pom">POM</option>
-                                    <option value="pp">PP</option>
-                                </select>
-                            </div>
-                            {cfg.beltBuild === 'pp' && (
-                                <div className="text-[10px] text-text-muted mt-0.5">PP: weight ×0.75, straight capacity ×0.65, relaxes the curve-speed concern. Verify per NGB sheet.</div>
-                            )}
-                        </div>
-                        <div>
-                            <label className={labelCls} title="Speed sets RPM and startup acceleration — running pull is friction-driven and speed-independent">
-                                Belt Speed (ft/min) ⓘ
-                            </label>
-                            <input type="number" min="0" step="any" value={cfg.beltSpeedFpm || ''} className={inputCls}
-                                onChange={(e) => upd({ beltSpeedFpm: num(e.target.value, 60) })} />
-                        </div>
-                    </div>
-                    {/* Product type decides the load entries and the screens (slip, pockets, bed capacity) */}
-                    <div className="flex flex-wrap items-center gap-2">
-                        <div className="flex gap-1">
-                            {([
-                                { id: 'packages' as const, label: 'Packages', hint: 'discrete pieces — cartons, bags, trays' },
-                                { id: 'bulk' as const, label: 'Bulk', hint: 'loose product in a bed or in flight pockets' },
-                            ]).map((t) => (
-                                <button key={t.id} title={t.hint} onClick={() => setProductType(t.id)}
-                                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
-                                        productType === t.id ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
-                                    }`}>
-                                    {t.label}
-                                </button>
-                            ))}
-                        </div>
-                        <span className="text-[10px] text-text-muted">plain-belt incline limit {maxPlain}°</span>
-                        <div className="flex gap-1 ml-auto">
-                            {(productType === 'bulk' ? ['rate', 'direct', 'bulk'] as const : ['rate', 'direct'] as const).map((m) => (
-                                <button key={m} onClick={() => setLoadMode(m)} disabled={accumulated && m !== 'bulk'}
-                                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors disabled:opacity-40 ${
-                                        baseLoadMode === m ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
-                                    }`}>
-                                    {m === 'rate' ? 'Rate (lb/hr)' : m === 'direct' ? 'Direct (lbf)' : 'Bed (capacity)'}
-                                </button>
-                            ))}
-                        </div>
-                        {productType === 'packages' && (
-                            <label className="flex items-center gap-1.5 text-xs cursor-pointer text-text-secondary">
-                                <input type="checkbox" checked={accumulated}
-                                    onChange={(e) => { setAccumulated(e.target.checked); upd({ loadMode: e.target.checked ? 'accumulated' : 'rate' }) }} />
-                                Product backed up / accumulated
-                            </label>
-                        )}
-                    </div>
-                    {productType === 'bulk' && (
-                        <div className="grid grid-cols-2 @md:grid-cols-4 gap-2">
-                            <div>
-                                <label className={labelCls}>Loose Density (lb/ft³)</label>
-                                <input type="number" min="0" step="any" value={cfg.bulkDensityLbFt3 || ''} className={inputCls}
-                                    onChange={(e) => upd({ bulkDensityLbFt3: num(e.target.value) })} />
-                            </div>
-                            <div>
-                                <label className={labelCls}>Angle of Repose (°)</label>
-                                <input type="number" min="0" max="89" step="any" value={cfg.reposeDeg ?? 35} className={inputCls}
-                                    onChange={(e) => upd({ reposeDeg: num(e.target.value, 35) })} />
-                            </div>
-                            <div>
-                                <label className={labelCls}>Pocket Fill (%)</label>
-                                <input type="number" min="1" max="100" step="any" value={Math.round((cfg.pocketFillFraction ?? 0.85) * 100)} className={inputCls}
-                                    onChange={(e) => upd({ pocketFillFraction: Math.min(Math.max(num(e.target.value, 85) / 100, 0.01), 1) })} />
-                            </div>
-                            <div>
-                                <label className={labelCls}>Plain-Belt Limit (°)</label>
-                                <input type="number" min="0" max="89" step="any" value={cfg.maxPlainInclineDeg ?? ''} placeholder={String(maxPlain)} className={inputCls}
-                                    onChange={(e) => upd({ maxPlainInclineDeg: e.target.value === '' ? undefined : num(e.target.value) })} />
-                            </div>
-                        </div>
-                    )}
-                    {cfg.loadMode === 'rate' && (
-                        <div>
-                            <label className={labelCls}>Throughput (lb/hr)</label>
-                            <input type="number" min="0" step="any" value={cfg.throughputLbHr || ''} className={inputCls}
-                                onChange={(e) => upd({ throughputLbHr: num(e.target.value) })} />
-                        </div>
-                    )}
-                    {cfg.loadMode === 'direct' && (
-                        <div>
-                            <label className={labelCls}>Total Product on Belt (lbf)</label>
-                            <input type="number" min="0" step="any" value={cfg.directLoadLbf || ''} className={inputCls}
-                                onChange={(e) => upd({ directLoadLbf: num(e.target.value) })} />
-                        </div>
-                    )}
-                    {cfg.loadMode === 'bulk' && (
-                        <div className="space-y-2">
-                            <div className="grid grid-cols-3 gap-2">
-                                <div>
-                                    <label className={labelCls}>Loose Density (lb/ft³)</label>
-                                    <input type="number" min="0" step="any" value={cfg.bulkDensityLbFt3 || ''} className={inputCls}
-                                        onChange={(e) => upd({ bulkDensityLbFt3: num(e.target.value) })} />
-                                </div>
-                                <div>
-                                    <label className={labelCls}>Bed Depth (in)</label>
-                                    <input type="number" min="0" step="any" value={cfg.bedDepthIn || ''} className={inputCls}
-                                        onChange={(e) => upd({ bedDepthIn: num(e.target.value) })} />
-                                </div>
-                                <div>
-                                    <label className={labelCls}>Edge Margin (in/side)</label>
-                                    <input type="number" min="0" step="any" value={cfg.edgeMarginIn ?? ''} placeholder="1" className={inputCls}
-                                        onChange={(e) => upd({ edgeMarginIn: num(e.target.value) })} />
-                                </div>
-                            </div>
-                            {result.bulkAchievedLbHr !== null && (
-                                <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
-                                    This bed at {cfg.beltSpeedFpm} ft/min delivers{' '}
-                                    <span className="font-mono text-primary">{result.bulkAchievedLbHr.toFixed(0)} lb/hr</span>
-                                    {' '}(<span className="font-mono">{result.bulkAchievedFt3Hr!.toFixed(0)} ft³/hr</span>)
-                                    {' '}— check this against the plant's demanded rate. Use loose (as-conveyed) density: bulk
-                                    material fluffs up off the pile.
-                                </div>
-                            )}
-                        </div>
-                    )}
-                    {cfg.loadMode === 'accumulated' && (
-                        <div className="grid grid-cols-2 gap-2">
-                            <div>
-                                <label className={labelCls}>Product Length (in)</label>
-                                <input type="number" min="0.1" step="any" value={cfg.productLengthIn || ''} className={inputCls}
-                                    onChange={(e) => upd({ productLengthIn: num(e.target.value, 12) })} />
-                            </div>
-                            <div>
-                                <label className={labelCls}>Weight per Piece (lb)</label>
-                                <input type="number" min="0" step="any" value={cfg.productWeightLb || ''} className={inputCls}
-                                    onChange={(e) => upd({ productWeightLb: num(e.target.value) })} />
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* ── Return path (segmented) + drive-position ordering ── */}
@@ -673,8 +707,14 @@ export function BeltPullCalculator() {
                     </div>
                 </div>
 
-                {/* ── Wear scenario presets (multipliers over the material bases) ── */}
+                {/* ── Wear scenario presets live under advanced; Clean/New is the default ── */}
                 <div className="space-y-2">
+                    <details>
+                        <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+                            Friction & Tension (advanced)
+                        </summary>
+                        <div className="mt-2 space-y-1">
+                            <div className="text-[10px] text-text-muted uppercase tracking-wider">Wear scenario for sizing (default Clean/New)</div>
                     <div className="flex flex-wrap gap-1.5">
                         {wearFactors.map((f) => {
                             const resolved = scenarioFrictions(cfg.materials, f)
@@ -691,10 +731,7 @@ export function BeltPullCalculator() {
                             <span className="px-2.5 py-1.5 rounded-lg text-xs border border-warning/40 bg-warning/10 text-warning">custom μ</span>
                         )}
                     </div>
-                    <details>
-                        <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
-                            Friction & Tension (advanced)
-                        </summary>
+                        </div>
 
                         {/* Surface materials — the design dimension, decoupled from wear */}
                         <div className="mt-2 rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
@@ -968,6 +1005,61 @@ export function BeltPullCalculator() {
                             </tbody>
                         </table>
 
+                        {/* Sanity echoes */}
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="bg-dark-800 rounded px-2.5 py-2">
+                                <span className="text-text-muted">Carryway: </span>
+                                <span className="font-mono text-text-primary">{result.carrywayFt.toFixed(2)} ft ({result.carrywayIn.toFixed(0)} in)</span>
+                            </div>
+                            <div className="bg-dark-800 rounded px-2.5 py-2">
+                                <span className="text-text-muted">Loop: </span>
+                                <span className="font-mono text-text-primary">{(result.loopIn / 12).toFixed(1)} ft</span>
+                                <span className="font-mono text-text-muted"> · return {result.returnResolved.map((r) => `${r.lengthIn.toFixed(0)}" ${r.support}`).join(' + ')}</span>
+                            </div>
+                            <div className="bg-dark-800 rounded px-2.5 py-2">
+                                <span className="text-text-muted">Turns: </span>
+                                <span className="font-mono text-text-primary">{result.turnCount}</span>
+                                {result.totalRiseIn !== 0 && (
+                                    <span className="font-mono text-text-secondary"> · rise {result.totalRiseIn > 0 ? '+' : ''}{result.totalRiseIn.toFixed(0)} in</span>
+                                )}
+                                {result.tightestTurnRatio !== null && (
+                                    <span className={`ml-1 font-mono ${
+                                        result.collapseStatus === 'violation' ? 'text-error'
+                                        : result.collapseStatus === 'at-minimum' ? 'text-warning' : 'text-success'
+                                    }`}>
+                                        · ratio {result.tightestTurnRatio.toFixed(3)} {result.collapseStatus === 'violation' ? 'VIOLATION' : result.collapseStatus === 'at-minimum' ? 'AT MIN' : '✓'} (factor {cfg.collapseFactor})
+                                    </span>
+                                )}
+                            </div>
+                            <div className="bg-dark-800 rounded px-2.5 py-2">
+                                <span className="text-text-muted">Product: </span>
+                                <span className="font-mono text-text-primary">{result.productLoadLbf.toFixed(1)} lbf ({result.productLoadPerFt.toFixed(2)}/ft avg)</span>
+                                <span className="font-mono text-text-muted"> · {result.productType}</span>
+                            </div>
+                        </div>
+
+                        {/* Red screens never hide */}
+                        {bulkOver && (
+                            <div className="px-3 py-2 border-l-2 rounded text-xs bg-error/10 border-error text-error">
+                                Bulk capacity at {cfg.beltSpeedFpm} ft/min: <span className="font-mono">{result.bulkCapacityLbHr!.toFixed(0)} lb/hr</span> vs demand <span className="font-mono">{cfg.throughputLbHr.toFixed(0)} lb/hr</span> = <span className="font-mono font-semibold">{((cfg.throughputLbHr / result.bulkCapacityLbHr!) * 100).toFixed(0)}%</span> — the belt cannot carry the rate.
+                            </div>
+                        )}
+                        {curveOver && (
+                            <div className="px-3 py-2 border-l-2 rounded text-xs bg-error/10 border-error text-error">
+                                Curve edge capacity exceeded: worst in-curve tension (High) <span className="font-mono">{result.maxInCurveHighLbf!.toFixed(1)} lbf</span> vs <span className="font-mono">{result.curveCapacityLbf!.toFixed(1)} lbf</span> = <span className="font-mono font-semibold">{result.curveCapacityUtilPct!.toFixed(0)}%</span>.
+                            </div>
+                        )}
+                        {cornerFail && (
+                            <div className="px-3 py-2 border-l-2 rounded text-xs bg-error/10 border-error text-error font-medium">
+                                {result.cornerTier === 'dg321-required' ? '✕ DG-321 rails REQUIRED in turns at this speed and corner pressure.' : '✕ Beyond the sliding-corner envelope — rolling corner hardware, vendor rating, or slower belt.'}
+                            </div>
+                        )}
+
+                        <details>
+                            <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+                                Details{detailWarnings > 0 ? ` — ${detailWarnings} warning${detailWarnings === 1 ? '' : 's'}` : ''} · turn-by-turn tension, screens, sign-off
+                            </summary>
+                            <div className="mt-2 space-y-3">
                         {/* Per-turn tension breakdown — where the tension builds */}
                         {result.perTurn.length > 0 && (
                             <div>
@@ -1004,39 +1096,6 @@ export function BeltPullCalculator() {
                             </div>
                         )}
 
-                        {/* Sanity echoes */}
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div className="bg-dark-800 rounded px-2.5 py-2">
-                                <span className="text-text-muted">Carryway: </span>
-                                <span className="font-mono text-text-primary">{result.carrywayFt.toFixed(2)} ft ({result.carrywayIn.toFixed(0)} in)</span>
-                            </div>
-                            <div className="bg-dark-800 rounded px-2.5 py-2">
-                                <span className="text-text-muted">Loop: </span>
-                                <span className="font-mono text-text-primary">{(result.loopIn / 12).toFixed(1)} ft</span>
-                                <span className="font-mono text-text-muted"> · return {result.returnResolved.map((r) => `${r.lengthIn.toFixed(0)}" ${r.support}`).join(' + ')}</span>
-                            </div>
-                            <div className="bg-dark-800 rounded px-2.5 py-2">
-                                <span className="text-text-muted">Turns: </span>
-                                <span className="font-mono text-text-primary">{result.turnCount}</span>
-                                {result.totalRiseIn !== 0 && (
-                                    <span className="font-mono text-text-secondary"> · rise {result.totalRiseIn > 0 ? '+' : ''}{result.totalRiseIn.toFixed(0)} in</span>
-                                )}
-                                {result.tightestTurnRatio !== null && (
-                                    <span className={`ml-1 font-mono ${
-                                        result.collapseStatus === 'violation' ? 'text-error'
-                                        : result.collapseStatus === 'at-minimum' ? 'text-warning' : 'text-success'
-                                    }`}>
-                                        · ratio {result.tightestTurnRatio.toFixed(3)} {result.collapseStatus === 'violation' ? 'VIOLATION' : result.collapseStatus === 'at-minimum' ? 'AT MIN' : '✓'} (factor {cfg.collapseFactor})
-                                    </span>
-                                )}
-                            </div>
-                            <div className="bg-dark-800 rounded px-2.5 py-2">
-                                <span className="text-text-muted">Product: </span>
-                                <span className="font-mono text-text-primary">{result.productLoadLbf.toFixed(1)} lbf ({result.productLoadPerFt.toFixed(2)}/ft avg)</span>
-                                <span className="font-mono text-text-muted"> · {result.productType}</span>
-                            </div>
-                        </div>
-
                         {/* Where the load sits — only interesting when a section departs from the uniform spread */}
                         {result.sectionLoads.some((r) => r.source !== 'uniform') && (
                             <div>
@@ -1063,10 +1122,9 @@ export function BeltPullCalculator() {
                                 </table>
                             </div>
                         )}
-                        {result.bulkCapacityLbHr !== null && cfg.loadMode === 'rate' && (
+                        {result.bulkCapacityLbHr !== null && cfg.loadMode === 'rate' && !bulkOver && (
                             <div className={`px-3 py-2 border-l-2 rounded text-xs ${
-                                cfg.throughputLbHr > result.bulkCapacityLbHr ? 'bg-error/10 border-error text-error'
-                                : cfg.throughputLbHr > 0.8 * result.bulkCapacityLbHr ? 'bg-warning/10 border-warning text-warning'
+                                cfg.throughputLbHr > 0.8 * result.bulkCapacityLbHr ? 'bg-warning/10 border-warning text-warning'
                                 : 'bg-dark-800 border-success text-text-secondary'
                             }`}>
                                 Bulk capacity at {cfg.beltSpeedFpm} ft/min: <span className="font-mono">{result.bulkCapacityLbHr.toFixed(0)} lb/hr</span>
@@ -1079,10 +1137,9 @@ export function BeltPullCalculator() {
                         ))}
 
                         {/* Curve edge-capacity screen (mandatory when turns exist) */}
-                        {result.curveCapacityLbf !== null && (
+                        {result.curveCapacityLbf !== null && !curveOver && (
                             <div className={`px-3 py-2 border-l-2 rounded text-xs ${
-                                result.curveCapacityUtilPct! > 100 ? 'bg-error/10 border-error text-error'
-                                : result.curveCapacityUtilPct! > 85 ? 'bg-warning/10 border-warning text-warning'
+                                result.curveCapacityUtilPct! > 85 ? 'bg-warning/10 border-warning text-warning'
                                 : 'bg-dark-800 border-primary text-text-secondary'
                             }`}>
                                 Curve edge capacity: worst in-curve tension (High) <span className="font-mono">{result.maxInCurveHighLbf!.toFixed(1)} lbf</span> vs{' '}
@@ -1093,7 +1150,7 @@ export function BeltPullCalculator() {
                         )}
 
                         {/* Corner speed ceiling — parametric thermal model (q = μ·p·V) */}
-                        {result.cornerTier !== null && (
+                        {result.cornerTier !== null && !cornerFail && (
                             <div className={`px-3 py-2 border-l-2 rounded text-xs space-y-1 ${
                                 result.cornerTier === 'ok-virgin' ? 'bg-success/10 border-success'
                                 : result.cornerTier === 'dg321-required' && cfg.turnRailMaterial === 'dg321' ? 'bg-success/10 border-success'
@@ -1145,6 +1202,8 @@ export function BeltPullCalculator() {
                             <div>Central = exact curve ODE (reconciled to the OneMotion A1 sign-off, Table 2, to 0.001 lbf). Position the drive so the last curve sees the least practical tension — a long straight between the last curve and the drive.</div>
                             <div>Sizing rule: motor verdicts run on <span className="text-text-secondary">Central × scenario × SF</span>; 3+ turns → size to Degraded, 1–2 turns → Worn. High is a sensitivity ceiling only.</div>
                         </div>
+                            </div>
+                        </details>
                     </div>
                 </div>
 

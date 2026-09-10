@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { useToolState } from '@/toolbox/hooks/useToolState'
-import { giveaway, fromLb, WEIGHT_UNITS, type WeightUnit } from '@/toolbox/lib/calculators/giveaway'
+import { giveaway, fromLb, toLb, WEIGHT_UNITS, type WeightUnit } from '@/toolbox/lib/calculators/giveaway'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { BigResult, Tile, Field, panelCls, inputCls, selectCls } from '@/toolbox/components/ui/Results'
 
@@ -35,7 +35,12 @@ export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: Giveaw
             <div className={`grid gap-2 ${compact ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2 @md:grid-cols-3'}`}>
                 <Field label="Declared / target weight"><input type="number" min="0" step="any" value={s.target} placeholder="on the label" className={inputCls} onChange={(e) => upd({ target: e.target.value })} /></Field>
                 <Field label="Average actual fill"><input type="number" min="0" step="any" value={s.actual} placeholder="from the checkweigher" className={inputCls} onChange={(e) => upd({ actual: e.target.value })} /></Field>
-                <Field label="Weight unit"><select value={s.unit} className={selectCls} onChange={(e) => upd({ unit: e.target.value as WeightUnit })}>{WEIGHT_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}</select></Field>
+                <Field label="Weight unit"><select value={s.unit} className={selectCls} onChange={(e) => {
+                    // Convert the typed weights so the quantities are unchanged
+                    const next = e.target.value as WeightUnit
+                    const conv = (v: string) => { const n = num(v); return n === null ? v : String(Number(fromLb(toLb(n, s.unit), next).toPrecision(6))) }
+                    upd({ unit: next, target: conv(s.target), actual: conv(s.actual), improved: conv(s.improved) })
+                }}>{WEIGHT_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}</select></Field>
                 <Field label="Packages per minute"><input type="number" min="0" step="any" value={s.ppm} className={inputCls} onChange={(e) => upd({ ppm: e.target.value })} /></Field>
                 <Field label="Production hours per day"><input type="number" min="0" max="24" step="any" value={s.hours} className={inputCls} onChange={(e) => upd({ hours: e.target.value })} /></Field>
                 <Field label="Production days per year"><input type="number" min="0" max="366" step="any" value={s.days} className={inputCls} onChange={(e) => upd({ days: e.target.value })} /></Field>

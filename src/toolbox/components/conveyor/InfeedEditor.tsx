@@ -3,7 +3,7 @@ import { useAppStore } from '@/toolbox/stores/appStore'
 import { unitTypes } from '@/toolbox/data/conveyorCardTypes'
 import { fmtInput } from '@/toolbox/lib/calculators/lineThroughput'
 import {
-    ensureInfeed, patchInfeed, changeSolveFor, readInfeed, SOLVE_LABEL,
+    ensureInfeed, patchInfeed, changeSolveFor, changeInfeedUnit, readInfeed, SOLVE_LABEL,
     type FlowCard, type SolveFor, type InfeedReading,
 } from '@/toolbox/lib/calculators/infeedCard'
 
@@ -26,7 +26,8 @@ export function useInfeed() {
     const patch = (inputs: Record<string, number | string | null>, units?: Record<string, string>) =>
         setCards(patchInfeed(useAppStore.getState().conveyorCards, inputs, units))
     const setSolveFor = (next: SolveFor) => setCards(changeSolveFor(useAppStore.getState().conveyorCards, next))
-    return { head, solveFor, reading, patch, setSolveFor, setCards }
+    const setUnit = (inputKey: string, unitType: string, unit: string, displayedDefault?: string) => setCards(changeInfeedUnit(useAppStore.getState().conveyorCards, inputKey, unitType, unit, displayedDefault))
+    return { head, solveFor, reading, patch, setSolveFor, setUnit, setCards }
 }
 
 interface FieldDef {
@@ -52,7 +53,7 @@ const WEIGHT: FieldDef = { key: 'weight', inputKey: 'productWeight', label: 'Pro
  * Simulator — both edit the same card.
  */
 export function InfeedEditor({ showWeight = false }: { showWeight?: boolean }) {
-    const { head, solveFor, reading, patch, setSolveFor } = useInfeed()
+    const { head, solveFor, reading, patch, setSolveFor, setUnit } = useInfeed()
     if (!head) return null
 
     const numberInput = (f: FieldDef) => {
@@ -73,7 +74,7 @@ export function InfeedEditor({ showWeight = false }: { showWeight?: boolean }) {
                         readOnly={isTarget} tabIndex={isTarget ? -1 : undefined}
                         onChange={(e) => patch({ [f.inputKey]: e.target.value === '' ? null : parseFloat(e.target.value) })}
                         className={`${flowInputCls} ${isTarget ? 'text-primary border-primary/30 bg-primary/5 cursor-default' : ''}`} />
-                    <select value={unit} onChange={(e) => patch({}, { [f.inputKey]: e.target.value })} className={flowUnitCls} aria-label={`${f.label} unit`}>
+                    <select value={unit} onChange={(e) => setUnit(f.inputKey, f.unitType, e.target.value)} className={flowUnitCls} aria-label={`${f.label} unit`}>
                         {unitTypes[f.unitType].units.map((u: string) => <option key={u} value={u}>{u}</option>)}
                     </select>
                 </div>

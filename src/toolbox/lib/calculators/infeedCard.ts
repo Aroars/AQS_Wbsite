@@ -140,6 +140,29 @@ export function changeSolveFor(cards: FlowCard[], next: SolveFor): FlowCard[] {
     return patchInfeed(cards, patch)
 }
 
+/**
+ * Change one input's unit and convert its value so the quantity is unchanged
+ * (100 ft/min becomes 1.667 ft/s, never 100 ft/s). Toolbox rule: unit toggles
+ * convert, never clear, never reinterpret.
+ */
+export function changeInfeedUnit(cards: FlowCard[], inputKey: string, unitType: string, nextUnit: string, displayedDefault?: string): FlowCard[] {
+    const head = cards[0]
+    const prevUnit = head?.units[inputKey] ?? displayedDefault ?? unitTypes[unitType].default
+    const raw = head?.inputs[inputKey]
+    const inputs: InputPatch = {}
+    if (typeof raw === 'number' && Number.isFinite(raw) && prevUnit !== nextUnit) {
+        const base = toBase(raw, prevUnit, unitType) as number
+        inputs[inputKey] = Number((fromBase(base, nextUnit, unitType) as number).toPrecision(6))
+    }
+    return patchInfeed(cards, inputs, { [inputKey]: nextUnit })
+}
+
+/** Convert a value between two units of one type, for cards that hold their own inputs */
+export function convertUnit(value: number, unitType: string, fromUnit: string, toUnit: string): number {
+    if (fromUnit === toUnit) return value
+    return Number((fromBase(toBase(value, fromUnit, unitType) as number, toUnit, unitType) as number).toPrecision(6))
+}
+
 /** Belt speed from a drive: ft/min = π × pulley diameter (in) × RPM / 12 */
 export function rpmToFpm(rpm: number, pulleyDiaIn: number): number {
     return (Math.PI * pulleyDiaIn * rpm) / 12

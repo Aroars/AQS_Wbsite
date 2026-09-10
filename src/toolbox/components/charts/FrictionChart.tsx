@@ -50,6 +50,12 @@ export function FrictionChart() {
                         {conditions.map((c: string) => <option key={c} value={c}>{c}</option>)}
                     </select>
                 </div>
+                {(matA === 'Modular Belt' || matB === 'Modular Belt') && (
+                    <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                        Belt-on-wearstrip values are the dynamic μ the Belt Pull and Wearstrip Span calculators use, for the AQS standard acetal belt on each rail.
+                        Acetal rails are never run under acetal belts (like-on-like galling). Pairs by belt material — POM, PP, and PE on each rail — are on the toolbox roadmap.
+                    </div>
+                )}
                 {result && (
                     <div className="grid grid-cols-2 gap-3 mt-4">
                         <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">

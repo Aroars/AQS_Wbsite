@@ -160,6 +160,8 @@ export interface BeltPullConfig {
     curveDerate: number
     /** Belt's minimum inside-radius ratio ("collapse factor"): r_min = factor × width */
     collapseFactor: number
+    /** Vendor minimum straight run before and after turns and inclines, in (0 = not specified; filled from the belt catalog when it carries it) */
+    minStraightIn?: number
     /** Catalog belt (belt:build key from the spec feed) that filled the belt fields; informational only */
     catalogBeltKey?: string | null
     /** Packages (default) or loose bulk. Bulk enables the repose / slip / pocket / bed-capacity screens. */

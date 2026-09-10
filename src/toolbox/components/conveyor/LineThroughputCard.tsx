@@ -257,9 +257,16 @@ export function LineThroughputCard() {
         commit(next, null)
     }
 
+    /** Unit change converts the typed throughput so the rate is unchanged (never reinterpreted) */
     const setUnit = (unit: RateUnit) => {
-        const next = { ...state, rateUnit: unit }
+        const next: CardState = { ...state, rateUnit: unit, raw: { ...state.raw } }
         if (!unitNeedsHours(state.rateUnit) || state.hours === defaultHours(state.rateUnit)) next.hours = defaultHours(unit)
+        const typed = num(state.raw.throughput)
+        if (typed !== null && unit !== state.rateUnit) {
+            const lbMin = toLbPerMin(typed, state.rateUnit, num(state.hours))
+            const shown = lbMin !== null ? fromLbPerMin(lbMin, unit, num(next.hours)) : null
+            if (shown !== null) next.raw.throughput = fmtInput(shown)
+        }
         commit(next, 'throughput')
     }
 

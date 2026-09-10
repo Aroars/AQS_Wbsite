@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import { Plus, Trash2, AlertTriangle, CheckCircle, AlertCircle } from 'lucide-react'
 import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { cardTypes, unitTypes, createCard, formatValue, fromBase } from '@/toolbox/data/conveyorCardTypes'
+import { cardTypes, unitTypes, createCard, formatValue, fromBase, toBase } from '@/toolbox/data/conveyorCardTypes'
 import { recalculateFromCard, getChainFeasibility } from '@/toolbox/lib/calculators/conveyorFlow'
 import type { FlowCard } from '@/toolbox/lib/calculators/infeedCard'
 import { InfeedEditor, useInfeed } from './InfeedEditor'
@@ -32,9 +32,19 @@ export function LineFlowSimulator() {
         setCards([...recalculateFromCard(updated, cardIndex)])
     }, [setCards])
 
+    // A unit change converts the number so the quantity is unchanged (never reinterprets it)
     const handleUnitChange = useCallback((cardIndex: number, key: string, unit: string) => {
         const updated = [...currentCards()]
-        updated[cardIndex] = { ...updated[cardIndex], units: { ...updated[cardIndex].units, [key]: unit } }
+        const card = updated[cardIndex]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const def = (cardTypes[card.type]?.inputs as any[])?.find((inp) => inp.key === key)
+        const prevUnit = card.units[key] ?? (def?.unitType ? unitTypes[def.unitType].default : undefined)
+        const raw = card.inputs[key]
+        const inputs = { ...card.inputs }
+        if (def?.unitType && typeof raw === 'number' && Number.isFinite(raw) && prevUnit && prevUnit !== unit) {
+            inputs[key] = Number((fromBase(toBase(raw, prevUnit, def.unitType), unit, def.unitType) as number).toPrecision(6))
+        }
+        updated[cardIndex] = { ...card, inputs, units: { ...card.units, [key]: unit } }
         setCards([...recalculateFromCard(updated, cardIndex)])
     }, [setCards])
 
