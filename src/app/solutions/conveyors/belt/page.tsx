@@ -22,7 +22,7 @@ export default function ConveyorFamilyPage() {
     <>
       <Navigation />
       <ConveyorFamilyContent family="belt" />
-      <ToolboxLinks tools={['belt-pull-calculator', 'wearstrip-span-calculator', 'incline-conveyor-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'friction-coefficient-chart']} title="Size a Belt Conveyor Yourself" />
+      <ToolboxLinks tools={['belt-pull-calculator', 'uhmw-wearstrip-span-calculator', 'incline-conveyor-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'friction-coefficient-table']} title="Size a Belt Conveyor Yourself" />
       <SystemArchitecture currentProduct="conveyors" />
       <CTASection />
       <Footer />

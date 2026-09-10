@@ -24,6 +24,11 @@ import { LineFlowSimulator } from '@/toolbox/components/conveyor/LineFlowSimulat
 import { ConveyorSpec } from '@/toolbox/components/conveyor/ConveyorSpec'
 import { BeltPullCalculator } from '@/toolbox/components/conveyor/BeltPullCalculator'
 import { LineThroughputCard } from '@/toolbox/components/conveyor/LineThroughputCard'
+import { AccumulationCalculator } from '@/toolbox/components/conveyor/AccumulationCalculator'
+import { DriveMotorCalculator } from '@/toolbox/components/conveyor/DriveMotorCalculator'
+import { DriveShaftCalculator } from '@/toolbox/components/conveyor/DriveShaftCalculator'
+import { GiveawayCalculator } from '@/toolbox/components/calculators/GiveawayCalculator'
+import { DowntimeCalculator } from '@/toolbox/components/calculators/DowntimeCalculator'
 import { WearstripCalculator } from '@/toolbox/components/conveyor/WearstripCalculator'
 
 const chartComponents: Record<string, React.FC> = {
@@ -48,6 +53,11 @@ const calcComponents: Record<string, React.FC> = {
     conveyorSpec: ConveyorSpec,
     beltPull: BeltPullCalculator,
     beltLoad: LineThroughputCard,
+    accumulation: AccumulationCalculator,
+    driveMotor: DriveMotorCalculator,
+    driveShaft: DriveShaftCalculator,
+    giveaway: GiveawayCalculator,
+    downtime: DowntimeCalculator,
     wearstrip: WearstripCalculator,
 }
 

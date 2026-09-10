@@ -5,12 +5,12 @@ module.exports = {
   changefreq: "weekly",
   priority: 0.7,
   sitemapSize: 5000,
-  exclude: ["/api/*", "/toolbox/modular-belt-specs"],
+  exclude: ["/api/*", "/toolbox/modular-belt-comparison-chart"],
   transform: async (config, path) => {
     // Higher priority for key pages
     const highPriority = ["/", "/solutions", "/solutions/veripak", "/solutions/intellipak"];
     // Every tool has its own page; the six the toolbox can rank for sit with the product pages
-    const toolPriority = ["/toolbox/wearstrip-span-calculator", "/toolbox/mdr-hub-motor-selection", "/toolbox/belt-pull-calculator", "/toolbox/conveyor-speed-calculator", "/toolbox/conveyor-throughput-calculator", "/toolbox/light-curtain-safety-distance-calculator"];
+    const toolPriority = ["/toolbox/uhmw-wearstrip-span-calculator", "/toolbox/mdr-motorized-roller-selection", "/toolbox/belt-pull-calculator", "/toolbox/conveyor-speed-calculator", "/toolbox/conveyor-throughput-calculator", "/toolbox/conveyor-motor-sizing-calculator", "/toolbox/product-giveaway-calculator", "/toolbox/accumulation-conveyor-calculator", "/toolbox/modular-belt-comparison-chart", "/toolbox/light-curtain-safety-distance-calculator"];
     if (toolPriority.includes(path)) return { loc: path, changefreq: "monthly", priority: 0.8, lastmod: new Date().toISOString() };
     const medPriority = [
       "/solutions/conveyors",

@@ -30,7 +30,7 @@ export default function ConveyorsPage() {
       />
       <Navigation />
       <ConveyorsHubContent />
-      <ToolboxLinks tools={['belt-pull-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'mdr-hub-motor-selection', 'incline-conveyor-calculator', 'wearstrip-span-calculator']} />
+      <ToolboxLinks tools={['belt-pull-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'mdr-motorized-roller-selection', 'incline-conveyor-calculator', 'uhmw-wearstrip-span-calculator']} />
       <SystemArchitecture currentProduct="conveyors" />
       <FAQSection items={conveyorFAQs} />
       <CTASection />

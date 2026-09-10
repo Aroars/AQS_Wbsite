@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { VeriPakHubContent } from "@/components/pages/veripak-hub";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { FAQSection } from "@/components/sections/faq-section";
+import { GiveawaySection } from "@/components/sections/giveaway-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { pageMetadata } from "@/content/seo";
 import { veripakFAQs } from "@/data/veripak";
@@ -28,6 +29,7 @@ export default function VeriPakPage() {
       />
       <Navigation />
       <VeriPakHubContent />
+      <GiveawaySection />
       <SystemArchitecture currentProduct="veripak" />
       <FAQSection items={veripakFAQs} />
       <CTASection />

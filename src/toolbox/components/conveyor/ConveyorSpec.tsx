@@ -285,7 +285,7 @@ export function ConveyorSpec() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Conveyor Spec Solver</h3>
+                <h3 className="text-sm font-semibold text-text-primary">Incline Conveyor Length &amp; Angle</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('conveyorSpec')} />
             </div>
             <div className="p-4 space-y-4">

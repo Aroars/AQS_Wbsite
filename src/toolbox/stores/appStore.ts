@@ -123,6 +123,14 @@ interface AppState {
     loadDefinition: string | null
     setLoadDefinition: (json: string | null) => void
 
+    /** Per-tool persisted state for the newer cards (serialized JSON), keyed by tool id */
+    toolStates: Record<string, string>
+    setToolState: (toolId: string, json: string) => void
+    /** One-shot cross-tool messages keyed by destination tool id (not persisted) */
+    toolInbox: Record<string, Record<string, unknown> | null>
+    sendToTool: (toolId: string, payload: Record<string, unknown>) => void
+    clearToolInbox: (toolId: string) => void
+
     // Wearstrip span calculator (serialized WearstripConfig)
     wearstripConfig: string | null
     setWearstripConfig: (json: string) => void
@@ -271,6 +279,13 @@ export const useAppStore = create<AppState>()(
             loadDefinition: null,
             setLoadDefinition: (json) => set({ loadDefinition: json }),
 
+            // Newer cards: per-tool state and one-shot inboxes
+            toolStates: {},
+            setToolState: (toolId, json) => set((state) => (state.toolStates[toolId] === json ? state : { toolStates: { ...state.toolStates, [toolId]: json } })),
+            toolInbox: {},
+            sendToTool: (toolId, payload) => set((state) => ({ toolInbox: { ...state.toolInbox, [toolId]: payload } })),
+            clearToolInbox: (toolId) => set((state) => ({ toolInbox: { ...state.toolInbox, [toolId]: null } })),
+
             // Wearstrip span calculator
             wearstripConfig: null,
             setWearstripConfig: (json) => set({ wearstripConfig: json }),
@@ -309,8 +324,13 @@ export const useAppStore = create<AppState>()(
             name: 'engineering-toolbox',
             // Versioned so future shape changes can migrate instead of silently
             // misreading (or discarding) a user's persisted work
-            version: 1,
-            migrate: (persisted) => persisted as AppState,
+            version: 2,
+            migrate: (persisted, version) => {
+                const state = persisted as AppState
+                // v2: per-tool state map for the cards added in September 2026
+                if (version < 2) return { ...state, toolStates: state.toolStates ?? {} }
+                return state
+            },
             partialize: (state) => ({
                 activeTab: state.activeTab,
                 savedConverters: state.savedConverters,
@@ -326,6 +346,7 @@ export const useAppStore = create<AppState>()(
                 beltPullConfig: state.beltPullConfig,
                 beltLoadState: state.beltLoadState,
                 loadDefinition: state.loadDefinition,
+                toolStates: state.toolStates,
                 wearstripConfig: state.wearstripConfig,
                 beltPullCalLog: state.beltPullCalLog,
                 pinnedCharts: state.pinnedCharts,

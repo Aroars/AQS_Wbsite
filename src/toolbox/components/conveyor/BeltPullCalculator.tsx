@@ -1,16 +1,16 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Plus, Trash2, Link2 } from 'lucide-react'
+import { Plus, Trash2, Link2, ArrowRight } from 'lucide-react'
 import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { hubMotorData, interpolateMotorSpecs } from '@/toolbox/data/hubMotorData'
+import { oneMotionPicks } from '@/toolbox/lib/calculators/driveMotor'
+import { jumpToTool } from '@/toolbox/lib/jump'
 import { useBeltSpecs, beltChoices, toolboxBuild, type BeltChoice } from '@/toolbox/lib/beltSpecs'
 import {
     calculateBeltPull, calculateAllScenarios, pathSummary, isIncline, isStraight, isTurn,
     inclineSlopeDeg, resolveProductType, resolveMaxPlainIncline,
     wearFactors, scenarioFrictions, wearstripMaterials,
     defaultBeltPullConfig, exampleConfigs, solveRailMu, LBF_TO_N,
-    chordalPdMm, torqueNmFromPull, thermalUpliftFactor, sprocketScreens,
     type BeltPullConfig, type TurnSection, type InclineSection, type StraightSection, type PathSection, type SurfaceMaterials,
     type ReturnSegment, type ProductType, type PocketSpec,
 } from '@/toolbox/lib/calculators/beltPull'
@@ -68,28 +68,15 @@ export function BeltPullCalculator() {
     const pinned = useAppStore((s) => s.pinnedCalculators.includes('beltPull'))
     const togglePin = useAppStore((s) => s.togglePinCalculator)
     const setBeltPullConfig = useAppStore((s) => s.setBeltPullConfig)
+    const sendToTool = useAppStore((s) => s.sendToTool)
 
     const [cfg, setCfg] = useState<BeltPullConfig>(() => loadInitialConfig(useAppStore.getState().beltPullConfig))
     const [accumulated, setAccumulated] = useState(() => cfg.loadMode === 'accumulated')
 
     // Drive selection state
-    const [driveType, setDriveType] = useState<'drum' | 'sprocket'>('sprocket')
-    const [ratedPullN, setRatedPullN] = useState('')
-    const [presetSeries, setPresetSeries] = useState('')
-    const [drumDiaMm, setDrumDiaMm] = useState('')
     // Sprocket (AMO-based entry): torque = pull × PITCH radius, not shell radius
-    const [teeth, setTeeth] = useState('11')
+    // Catalog belt pitch, carried to the Torque & Motor card with the handoff
     const [pitchMm, setPitchMm] = useState('50')
-    const [pdOverrideIn, setPdOverrideIn] = useState('')
-    const [boreMm, setBoreMm] = useState('')
-    const [shellMm, setShellMm] = useState('')
-    const [contNm, setContNm] = useState('')
-    const [peakNm, setPeakNm] = useState('')
-    const [maxRpmIn, setMaxRpmIn] = useState('')
-    const [catalogNm, setCatalogNm] = useState('')
-    const [catalogInterp, setCatalogInterp] = useState('3')
-    const [usedCatalog, setUsedCatalog] = useState(false)
-    const [ambientC, setAmbientC] = useState('')
 
     // Persist the working config (survives reloads; pinned copy shares via store on remount)
     useEffect(() => { setBeltPullConfig(JSON.stringify(cfg)) }, [cfg, setBeltPullConfig])
@@ -126,6 +113,23 @@ export function BeltPullCalculator() {
     const result = useMemo(() => calculateBeltPull(cfg), [cfg])
     const scenarios = useMemo(() => calculateAllScenarios(cfg), [cfg])
 
+    // One-line drive verdict; the full auto-pick table and manual drive live on the Torque & Motor card
+    const quickPick = useMemo(() => oneMotionPicks(result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm), [result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm])
+    const sendToDriveMotor = () => {
+        sendToTool('driveMotor', {
+            runningPullLbf: result.centralLbf, startupPullLbf: result.startupPullLbf,
+            contFloorLbf: result.continuousFloorLbf, peakFloorLbf: result.peakFloorLbf,
+            speedFpm: cfg.beltSpeedFpm, beltWidthIn: cfg.beltWidthIn,
+            serviceFactor: Number(result.serviceFactor.toFixed(2)), breakawayFactor: cfg.breakawayFactor,
+            scenarioLabel: wearFactors.find((f) => f.id === cfg.wearId)?.label ?? 'custom',
+            scenarios: scenarios.map((sc) => ({ id: sc.id, label: sc.label, cont: sc.result.continuousFloorLbf, peak: sc.result.peakFloorLbf })),
+            pitchMm: num(pitchMm) || null,
+            source: 'Loaded from Belt Pull',
+        })
+        showToast(`Sent to Torque & Motor — ${result.centralLbf.toFixed(1)} lbf @ ${cfg.beltSpeedFpm} ft/min`)
+        jumpToTool('conveyor', 'driveMotor')
+    }
+
     // Catalog belts from the quoting tool's spec feed: pick one to fill the belt fields
     const specs = useBeltSpecs()
     const catalog = useMemo(() => beltChoices(specs.feed), [specs.feed])
@@ -161,26 +165,6 @@ export function BeltPullCalculator() {
         loadMode: t === 'packages' && c.loadMode === 'bulk' ? 'rate' : c.loadMode,
     }))
 
-    // Motor auto-pick: every OneMotion series at this width against the active-scenario floors
-    const motorPicks = useMemo(() => {
-        const contN = result.continuousFloorLbf * LBF_TO_N
-        const peakN = result.peakFloorLbf * LBF_TO_N
-        const rows = hubMotorData.map((m) => {
-            const specs = interpolateMotorSpecs(m, widthMm)
-            const fits = widthMm >= m.minLength && widthMm <= m.maxLength
-            // Peak capability: vendor peak torque over continuous torque, applied to the pull rating
-            const peakRatio = specs.torque > 0 ? specs.peakTorque / specs.torque : 2
-            const contUtil = specs.beltPull > 0 ? (contN / specs.beltPull) * 100 : Infinity
-            const peakUtil = specs.beltPull > 0 ? (peakN / (specs.beltPull * peakRatio)) * 100 : Infinity
-            const rpm = (cfg.beltSpeedFpm * 304.8) / (Math.PI * m.withSprocket)
-            const rpmOk = rpm >= m.minRpm && rpm <= m.rpm60Hz
-            const passes = fits && contUtil <= 100 && peakUtil <= 100 && rpmOk
-            return { series: m.series, diameter: m.diameter, fits, pullN: specs.beltPull, contUtil, peakUtil, rpm, minRpm: m.minRpm, maxRpm: m.rpm60Hz, rpmOk, passes }
-        })
-        const recommended = rows.find((r) => r.passes) ?? null
-        return { rows, recommended, contN, peakN }
-    }, [result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm])
-
     // Materials are the base (design) dimension; wear scenarios multiply them.
     const setMaterialBase = (key: keyof SurfaceMaterials, value: number) => {
         setCfg((c) => {
@@ -189,49 +173,6 @@ export function BeltPullCalculator() {
             return { ...c, materials, frictions: scenarioFrictions(materials, factor) }
         })
     }
-
-    // Powered-pulley presets: our hub motor data interpolated at this belt width
-    const pulleyPresets = useMemo(() =>
-        hubMotorData.map((m) => {
-            const specs = interpolateMotorSpecs(m, widthMm)
-            const fits = widthMm >= m.minLength && widthMm <= m.maxLength
-            return { series: m.series, diameter: m.diameter, pullN: specs.beltPull, rpm60Hz: m.rpm60Hz, fits }
-        }), [widthMm])
-
-    // Thermal ambient uplift (engineering allowance, not a vendor rating)
-    const thermal = useMemo(() => {
-        const amb = parseFloat(ambientC)
-        return isNaN(amb) ? 1 : thermalUpliftFactor(amb)
-    }, [ambientC])
-
-    // Available pull for the selected drive
-    const drive = useMemo(() => {
-        if (driveType === 'drum') {
-            const pull = num(ratedPullN)
-            if (pull <= 0) return null
-            const dia = num(drumDiaMm)
-            const rpm = dia > 0 ? (cfg.beltSpeedFpm * 304.8) / (Math.PI * dia) : null
-            const preset = pulleyPresets.find((p) => p.series === presetSeries)
-            return { availableN: pull, peakN: pull, rpm, maxRpm: preset?.rpm60Hz ?? null, screens: [] as string[], pdMm: null as number | null }
-        }
-        const z = num(teeth)
-        const pitch = num(pitchMm)
-        const pdMm = num(pdOverrideIn) > 0 ? num(pdOverrideIn) * 25.4 : chordalPdMm(pitch, z)
-        const cont = num(contNm)
-        if (pdMm <= 0 || cont <= 0) return null
-        const radiusM = pdMm / 2000
-        const pdIn = pdMm / 25.4
-        const rpm = (cfg.beltSpeedFpm * 12) / (Math.PI * pdIn)
-        const screens = sprocketScreens(pdMm, z, pitch, num(boreMm) || null, num(shellMm) || null)
-        return {
-            availableN: cont / radiusM,
-            peakN: (num(peakNm) || cont) / radiusM,
-            rpm,
-            maxRpm: num(maxRpmIn) > 0 ? num(maxRpmIn) : null,
-            screens,
-            pdMm,
-        }
-    }, [driveType, ratedPullN, drumDiaMm, presetSeries, pulleyPresets, teeth, pitchMm, pdOverrideIn, boreMm, shellMm, contNm, peakNm, maxRpmIn, cfg.beltSpeedFpm])
 
     const applyExample = (id: string) => {
         const ex = exampleConfigs.find((e) => e.id === id)
@@ -1207,268 +1148,30 @@ export function BeltPullCalculator() {
                     </div>
                 </div>
 
-                {/* ── Drive selection (second step, never a gate) ── */}
-                <details>
-                    <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none uppercase tracking-wider">
-                        Select Drive
-                    </summary>
-                    <div className="mt-2 space-y-2">
-                        {/* Auto-pick: every OneMotion series at this width against the active-scenario floors */}
-                        <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
-                            <div className="flex items-center justify-between flex-wrap gap-2">
-                                <span className="text-xs text-text-secondary uppercase tracking-wider">OneMotion Auto-Pick ({cfg.beltWidthIn}″ belt)</span>
-                                <span className="text-[10px] text-text-muted font-mono">
-                                    needs {motorPicks.contN.toFixed(0)} N cont · {motorPicks.peakN.toFixed(0)} N peak ({wearFactors.find((f) => f.id === activeScenario)?.label ?? 'custom'} × SF {result.serviceFactor.toFixed(1)})
-                                </span>
-                            </div>
-                            {motorPicks.recommended ? (
-                                <div className="px-2.5 py-2 bg-success/10 border-l-2 border-success rounded text-xs text-success">
-                                    Smallest passing drive: <span className="font-semibold">{motorPicks.recommended.series}</span>
-                                    {' '}— {motorPicks.recommended.pullN.toFixed(0)} N rated, {motorPicks.recommended.contUtil.toFixed(0)}% continuous, {motorPicks.recommended.peakUtil.toFixed(0)}% peak, {motorPicks.recommended.rpm.toFixed(0)} rpm.
-                                    <button onClick={() => {
-                                        const p = pulleyPresets.find((x) => x.series === motorPicks.recommended!.series)
-                                        setDriveType('drum'); setPresetSeries(motorPicks.recommended!.series)
-                                        if (p) { setRatedPullN(p.pullN.toFixed(0)); setDrumDiaMm(String(p.diameter)) }
-                                    }} className="ml-2 underline hover:text-text-primary">use it</button>
-                                </div>
-                            ) : (
-                                <div className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error">
-                                    No OneMotion series passes at this width, pull, and speed — a sprocket-driven shaft, a wider belt, or a second drive.
-                                </div>
-                            )}
-                            <table className="w-full text-xs">
-                                <thead><tr className="text-text-muted border-b border-border">
-                                    <th className="py-1 text-left">Series</th>
-                                    <th className="py-1 text-right">Width</th>
-                                    <th className="py-1 text-right">Rated (N)</th>
-                                    <th className="py-1 text-right">Cont</th>
-                                    <th className="py-1 text-right">Peak</th>
-                                    <th className="py-1 text-right">RPM</th>
-                                </tr></thead>
-                                <tbody>
-                                    {motorPicks.rows.map((r) => (
-                                        <tr key={r.series} className={`border-b border-border/50 font-mono ${r.passes ? '' : 'opacity-60'}`}>
-                                            <td className={`py-1 font-sans ${r.passes ? 'text-text-primary' : 'text-text-muted'}`}>{r.passes ? '✓ ' : ''}{r.series}</td>
-                                            <td className={`py-1 text-right ${r.fits ? 'text-text-secondary' : 'text-error'}`}>{r.fits ? 'fits' : 'no'}</td>
-                                            <td className="py-1 text-right text-text-secondary">{r.pullN.toFixed(0)}</td>
-                                            <td className={`py-1 text-right ${utilizationCls(Math.min(r.contUtil, 999))}`}>{isFinite(r.contUtil) ? `${r.contUtil.toFixed(0)}%` : '—'}</td>
-                                            <td className={`py-1 text-right ${utilizationCls(Math.min(r.peakUtil, 999))}`}>{isFinite(r.peakUtil) ? `${r.peakUtil.toFixed(0)}%` : '—'}</td>
-                                            <td className={`py-1 text-right ${r.rpmOk ? 'text-text-secondary' : 'text-error'}`}>{r.rpm.toFixed(0)}<span className="text-text-muted"> / {r.minRpm}–{r.maxRpm}</span></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className="text-[10px] text-text-muted">
-                                Verdicts use the vendor belt-pull rating at this width (not torque ÷ radius) and the peak-to-continuous torque ratio for startup. Smallest passing series is recommended; the manual entry below is the sign-off path.
-                            </div>
-                        </div>
-
-                        <div className="flex gap-1.5">
-                            {(['drum', 'sprocket'] as const).map((d) => (
-                                <button key={d} onClick={() => setDriveType(d)}
-                                    className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
-                                        driveType === d ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
-                                    }`}>
-                                    {d === 'drum' ? 'Powered Pulley / Drum' : 'Sprocket-Driven Shaft'}
-                                </button>
-                            ))}
-                        </div>
-                        {driveType === 'drum' ? (
-                            <>
-                                <div className="text-[10px] text-warning">
-                                    Use the vendor's belt pull rating, NOT torque — drum motors are derated below torque ÷ radius.
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label className={labelCls}>Rated Continuous Pull (N)</label>
-                                        <input type="number" min="0" step="any" value={ratedPullN} className={inputCls}
-                                            onChange={(e) => { setRatedPullN(e.target.value); setPresetSeries('') }} />
-                                        {num(ratedPullN) > 0 && <div className="text-[10px] text-text-muted mt-0.5 font-mono">= {(num(ratedPullN) / LBF_TO_N).toFixed(1)} lbf</div>}
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>OneMotion Preset (at {cfg.beltWidthIn}″ width)</label>
-                                        <select value={presetSeries} className={selectCls}
-                                            onChange={(e) => {
-                                                const p = pulleyPresets.find((x) => x.series === e.target.value)
-                                                setPresetSeries(e.target.value)
-                                                if (p) { setRatedPullN(p.pullN.toFixed(0)); setDrumDiaMm(String(p.diameter)) }
-                                            }}>
-                                            <option value="">Manual entry…</option>
-                                            {pulleyPresets.map((p) => (
-                                                <option key={p.series} value={p.series}>
-                                                    {p.series} — {p.pullN.toFixed(0)} N{p.fits ? '' : ' (width out of range)'}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Drum Ø (mm) — for RPM</label>
-                                        <input type="number" min="0" step="any" value={drumDiaMm} className={inputCls}
-                                            onChange={(e) => setDrumDiaMm(e.target.value)} />
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="space-y-2">
-                                <div className="grid grid-cols-3 @md:grid-cols-5 gap-2">
-                                    <div>
-                                        <label className={labelCls}>Teeth</label>
-                                        <input type="number" min="3" step="1" value={teeth} className={inputCls}
-                                            onChange={(e) => setTeeth(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Belt Pitch (mm)</label>
-                                        <input type="number" min="0" step="any" value={pitchMm} className={inputCls}
-                                            onChange={(e) => setPitchMm(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>PD Override (in)</label>
-                                        <input type="number" min="0" step="any" value={pdOverrideIn} className={inputCls}
-                                            placeholder={(chordalPdMm(num(pitchMm), num(teeth)) / 25.4).toFixed(3)}
-                                            onChange={(e) => setPdOverrideIn(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Sprocket Bore (mm)</label>
-                                        <input type="number" min="0" step="any" value={boreMm} className={inputCls}
-                                            onChange={(e) => setBoreMm(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Motor Shell (mm)</label>
-                                        <input type="number" min="0" step="any" value={shellMm} className={inputCls}
-                                            onChange={(e) => setShellMm(e.target.value)} />
-                                    </div>
-                                </div>
-                                <div className="text-[10px] text-text-muted">
-                                    Chordal PD = pitch ÷ sin(180°/z) = <span className="font-mono text-text-secondary">{(chordalPdMm(num(pitchMm), num(teeth)) / 25.4).toFixed(3)}"</span>.
-                                    Vendors may dimension non-chordally — override from the sprocket drawing. Fewer teeth = smaller radius = less torque needed
-                                    (10T vs 11T on S-200 ≈ −9% torque).
-                                </div>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <div>
-                                        <label className={labelCls}>Continuous (N·m) — AMO</label>
-                                        <input type="number" min="0" step="any" value={contNm} className={inputCls}
-                                            onChange={(e) => { setContNm(e.target.value); setUsedCatalog(false) }} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Peak (N·m) — AMO</label>
-                                        <input type="number" min="0" step="any" value={peakNm} className={inputCls}
-                                            onChange={(e) => { setPeakNm(e.target.value); setUsedCatalog(false) }} />
-                                    </div>
-                                    <div>
-                                        <label className={labelCls}>Max RPM</label>
-                                        <input type="number" min="0" step="any" value={maxRpmIn} className={inputCls}
-                                            onChange={(e) => setMaxRpmIn(e.target.value)} />
-                                    </div>
-                                </div>
-                                <div className="flex items-end gap-2">
-                                    <div className="flex-1">
-                                        <label className={labelCls}>From Catalog Nm (ambiguous rating)</label>
-                                        <input type="number" min="0" step="any" value={catalogNm} className={inputCls}
-                                            onChange={(e) => setCatalogNm(e.target.value)} />
-                                    </div>
-                                    <select value={catalogInterp} onChange={(e) => setCatalogInterp(e.target.value)}
-                                        className="px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none">
-                                        <option value="1">catalog = continuous (÷1)</option>
-                                        <option value="2">catalog = peak, 2× (÷2)</option>
-                                        <option value="3">catalog = peak, 3× (÷3)</option>
-                                    </select>
-                                    <button onClick={() => {
-                                        const c = num(catalogNm)
-                                        if (c > 0) {
-                                            setPeakNm(String(c))
-                                            setContNm((c / num(catalogInterp, 3)).toFixed(2))
-                                            setUsedCatalog(true)
-                                        }
-                                    }}
-                                        className="px-2.5 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-                                        Fill
-                                    </button>
-                                </div>
-                                {usedCatalog && (
-                                    <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-warning">
-                                        Catalog Nm values are UNVERIFIED as continuous vs peak (AMO rows show motors named by peak;
-                                        the catalog footnote says 2× FLA, the AMO shows 3× — unresolved vendor contradiction).
-                                        Confirm the AMO row (continuous / peak / FLA) with the vendor before ordering.
-                                    </div>
-                                )}
-                                <div>
-                                    <label className={labelCls}>Plant Ambient (°C) — optional thermal allowance</label>
-                                    <input type="number" step="any" value={ambientC} className={inputCls} placeholder="rated at 40°C"
-                                        onChange={(e) => setAmbientC(e.target.value)} />
-                                    {thermal !== 1 && (
-                                        <div className="text-[10px] text-text-muted mt-0.5">
-                                            Cool-ambient uplift ×{thermal.toFixed(3)} (√((80+40−T)/80), capped 1.25) — an engineering allowance,
-                                            NOT a vendor rating. Heat ∝ torque², so typical-duty utilization sets winding temperature.
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {drive && (
-                            <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
-                                {drive.screens.map((sc, i) => (
-                                    <div key={i} className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error font-medium">{sc}</div>
-                                ))}
-                                <div className="text-xs text-text-secondary">
-                                    Available pull: <span className="font-mono text-text-primary">{drive.availableN.toFixed(0)} N cont ({(drive.availableN / LBF_TO_N).toFixed(1)} lbf)</span>
-                                    <span className="font-mono text-text-muted"> · {drive.peakN.toFixed(0)} N peak</span>
-                                    {drive.pdMm !== null && <span className="font-mono text-text-muted"> · PD {(drive.pdMm / 25.4).toFixed(2)}"</span>}
-                                    {thermal !== 1 && <span className="font-mono text-text-muted"> · cool-adj ×{thermal.toFixed(2)}</span>}
-                                    {drive.rpm !== null && (
-                                        <span className="ml-2">
-                                            · RPM: <span className={`font-mono ${drive.maxRpm !== null && drive.rpm > drive.maxRpm ? 'text-error' : 'text-text-primary'}`}>
-                                                {drive.rpm.toFixed(0)}
-                                            </span>
-                                            {drive.maxRpm !== null && <span className="text-text-muted font-mono"> / {drive.maxRpm} max</span>}
-                                        </span>
-                                    )}
-                                </div>
-                                {drive.maxRpm !== null && drive.rpm !== null && drive.rpm > drive.maxRpm && (
-                                    <div className="text-xs text-error">Required RPM exceeds the motor's rating — belt speed unreachable with this drive.</div>
-                                )}
-                                {drive.pdMm !== null && (
-                                    <div className="text-xs font-mono text-text-secondary">
-                                        Torque floors @ PD radius: continuous ≥ {torqueNmFromPull(result.continuousFloorLbf, drive.pdMm / 25.4 / 2).toFixed(2)} Nm
-                                        <span className="text-text-muted"> · </span>peak ≥ {torqueNmFromPull(result.peakFloorLbf, drive.pdMm / 25.4 / 2).toFixed(2)} Nm
-                                    </div>
-                                )}
-                                <table className="w-full text-xs">
-                                    <thead><tr className="text-text-muted border-b border-border">
-                                        <th className="py-1 text-left">Scenario</th>
-                                        <th className="py-1 text-right">Cont floor (lbf)</th>
-                                        <th className="py-1 text-right">Cont util</th>
-                                        {thermal !== 1 && <th className="py-1 text-right">Cool-adj</th>}
-                                        <th className="py-1 text-right">Peak util</th>
-                                    </tr></thead>
-                                    <tbody>
-                                        {scenarios.map((s) => {
-                                            const contFloorN = s.result.continuousFloorLbf * LBF_TO_N
-                                            const peakFloorN = s.result.peakFloorLbf * LBF_TO_N
-                                            const util = (contFloorN / drive.availableN) * 100
-                                            const utilAdj = (contFloorN / (drive.availableN * thermal)) * 100
-                                            const peakUtil = (peakFloorN / drive.peakN) * 100
-                                            return (
-                                                <tr key={s.id} className="border-b border-border/50 font-mono">
-                                                    <td className="py-1 text-text-primary font-sans">{s.label}</td>
-                                                    <td className="py-1 text-right text-text-secondary">{s.result.continuousFloorLbf.toFixed(1)}</td>
-                                                    <td className={`py-1 text-right font-semibold ${utilizationCls(util)}`}>{util.toFixed(0)}%</td>
-                                                    {thermal !== 1 && <td className={`py-1 text-right ${utilizationCls(utilAdj)}`}>{utilAdj.toFixed(0)}%</td>}
-                                                    <td className={`py-1 text-right ${utilizationCls(peakUtil)}`}>{peakUtil.toFixed(0)}%</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
-                                <div className="text-[10px] text-text-muted">
-                                    Verdicts run on <span className="text-text-secondary">Central × scenario × SF {result.serviceFactor.toFixed(1)}</span>;
-                                    peak floor = {cfg.breakawayFactor}× continuous. Green &lt;60% · yellow 60–85% · red &gt;85%.
-                                    Size 3+ turns to Degraded, 1–2 turns to Worn.
-                                </div>
-                            </div>
-                        )}
+                {/* ── Drive: sized on its own card ── */}
+                <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                        <span className="text-xs text-text-secondary uppercase tracking-wider">Drive</span>
+                        <span className="text-[10px] text-text-muted font-mono">
+                            sizing floors {result.continuousFloorLbf.toFixed(1)} lbf cont · {result.peakFloorLbf.toFixed(1)} lbf peak ({wearFactors.find((f) => f.id === activeScenario)?.label ?? 'custom'} × SF {result.serviceFactor.toFixed(1)})
+                        </span>
                     </div>
-                </details>
+                    {quickPick.recommended ? (
+                        <div className="text-xs text-text-secondary">
+                            Smallest passing OneMotion drive at {cfg.beltWidthIn}″: <span className="font-semibold text-success">{quickPick.recommended.series}</span>
+                            <span className="font-mono text-text-muted"> — {quickPick.recommended.contUtil.toFixed(0)}% cont · {quickPick.recommended.peakUtil.toFixed(0)}% peak · {quickPick.recommended.rpm.toFixed(0)} rpm</span>
+                        </div>
+                    ) : (
+                        <div className="text-xs text-warning">No OneMotion series passes at this width, pull, and speed — size a sprocket-driven shaft on the Torque &amp; Motor card.</div>
+                    )}
+                    <button onClick={sendToDriveMotor}
+                        className="w-full px-3 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center justify-center gap-1.5">
+                        Send to Torque &amp; Motor <ArrowRight className="w-3.5 h-3.5" />
+                        <span className="font-mono">{result.centralLbf.toFixed(1)} lbf @ {cfg.beltSpeedFpm} ft/min</span>
+                    </button>
+                    <div className="text-[10px] text-text-muted">Torque at the sprocket or drum, shaft rpm, power, motor size, gear ratio, the OneMotion auto-pick table and manual drive utilisation live on the Torque &amp; Motor card, which then sends to Drive Shaft.</div>
+                </div>
+
 
                 {/* ── Calibration log: hand-calc vs vendor vs measured, per conveyor ── */}
                 <CalibrationLog currentCentral={result.centralLbf} />

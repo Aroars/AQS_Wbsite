@@ -47,9 +47,27 @@ export const tabHelp: Record<TabId, TabHelp> = {
     },
     calculators: {
         title: 'Calculators',
-        description: 'General-purpose engineering arithmetic: an expression calculator with variables, an area calculator with a running memory, and an electrical power and panel-load calculator.',
+        description: 'Plant economics and general engineering arithmetic: product giveaway and line downtime cost, an expression calculator with variables, an area calculator with a running memory, and a panel-load calculator.',
         tips: ['The expression calculator keeps a history; "ans" is always the previous result.'],
         tools: [
+            {
+                id: 'giveaway',
+                label: 'Product Giveaway Calculator',
+                summary: 'What overfill costs per package, per hour, and per year, and what a checkweigher feedback loop saves.',
+                steps: [
+                    'Enter the declared weight and the average actual fill in the same unit, the packages per minute, and the hours and days the line runs.',
+                    'Add the product cost per lb or kg for dollars. Enter the overfill a checkweigher-to-filler loop holds (1–2 g is typical) and the installed cost to see savings and payback.',
+                ],
+            },
+            {
+                id: 'downtime',
+                label: 'Line Downtime Cost Calculator',
+                summary: 'Dollars per minute, per shift, and per year when the line stops, and what a reduction is worth.',
+                steps: [
+                    'Enter the line output and the contribution margin per unit, the crew and loaded labor rate, and any line overhead per hour.',
+                    'Enter the downtime minutes per shift with the shifts and days; the card reports cost per minute, shift, day, and year, the value of the reduction you enter, and what one point of availability is worth.',
+                ],
+            },
             {
                 id: 'expression',
                 label: 'Expression Calculator',
@@ -82,7 +100,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
         description:
             'The conveyor sizing chain, in the order a quote gets built: what the plant said (Line Throughput), what the conveyor has to do (Conveyor Speed), and what the belt and drive need to be (Belt Pull). Each card sends its result to the next, so the product is entered once.',
         tips: [
-            'Work left to right: Line Throughput → Conveyor Speed → Belt Pull. The Spec Solver sits between speed and pull when the path has an incline; Belt Pull also works alone for radius and S-conveyors.',
+            'Work left to right: Line Throughput → Conveyor Speed → Belt Pull → Torque & Motor → Drive Shaft. The Incline solver sits between speed and pull when the path has a slope; Belt Pull also works alone for radius and S-conveyors.',
             'Cyan values with an auto tag are solved from what you entered. Type over one and the oldest value it depends on is re-derived and flashes — nothing is ever cleared.',
             'Every card keeps its own state. Sending from one card overwrites only the fields it carries.',
             'Load example configuration at the top of Belt Pull gives you a known-good starting point to edit.',
@@ -113,6 +131,16 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 ],
             },
             {
+                id: 'accumulation',
+                label: 'Accumulation Buffer',
+                summary: 'Feet of zero-pressure accumulation for seconds of downstream stoppage, or the seconds a given length absorbs.',
+                steps: [
+                    'Enter the incoming rate, the product length, and the gap products settle to when they close up (0 for touching). Use Conveyor Speed infeed pulls the rate and length from the infeed card.',
+                    'Length from time gives the conveyor length for the stoppage you must absorb; Time from length gives the seconds a conveyor you already have will buffer. Products round up for length and down for time.',
+                    'Add a zone length for the MDR zero-pressure zone count, and a belt speed for the time to fill the buffer from empty.',
+                ],
+            },
+            {
                 id: 'conveyorSpec',
                 label: 'Incline Conveyor Calculator (Spec Solver)',
                 summary: 'Solves straight, incline, L, and Z conveyor geometry from any two known values and hands the path to Belt Pull.',
@@ -135,13 +163,36 @@ export const tabHelp: Record<TabId, TabHelp> = {
                     'Wear scenario: Clean, Vendor-Rec, Worn, and Degraded scale the wearstrip friction. Size on Central × scenario × service factor — Worn for one or two turns, Degraded for three or more. Friction & Tension (advanced) exposes materials, back tension, and the corner drag model.',
                     'Service factors: bearinged nose bars carry no adder; static noses, speed over 30 m/min, start-stop duty, bi-directional drive, and elevation add to the factor.',
                     'Results: running and startup pull with the Low / Central / High band, the scenario table, tension through each turn, load by section when pockets or overrides are in play, the curve edge-capacity screen, the corner speed ceiling with the DG-321 rule, and the sign-off list of assumptions.',
-                    'Select Drive: the OneMotion auto-pick names the smallest series that passes on continuous pull, peak pull, and RPM at your belt width. Use it fills the drum entry; the manual drum or sprocket-driven shaft entry is the sign-off path and shows utilisation per scenario.',
+                    'Drive: the card shows the sizing floors and the smallest passing OneMotion series, then Send to Torque & Motor carries the pulls, speed, width, and every scenario\'s floors to the drive card for torque, power, motor size, gear ratio, the auto-pick table, and the manual sign-off entry.',
                 ],
                 notes: [
                     'Central is the exact curve solution reconciled to the OneMotion A1 sign-off. Low is the vendor hand method; High is a sensitivity ceiling with no manufacturer basis.',
                     'The share link button copies a URL that reloads this exact configuration.',
                     'Calibration log: enter a measured pull and the solver back-solves the rail friction it implies.',
                 ],
+            },
+            {
+                id: 'driveMotor',
+                label: 'Torque & Motor',
+                summary: 'Belt pull in, drive out: torque at the sprocket or drum, shaft rpm, power, a standard motor size, gear ratio, and the OneMotion pick.',
+                steps: [
+                    'Send from Belt Pull, or type the running pull, startup pull, sizing floors, speed, and belt width. The floors are Central × scenario × service factor; blank floors fall back to the running pull and 1.25× for peak.',
+                    'Pick the drive: sprocket teeth and belt pitch give the chordal pitch diameter (override from the drawing), or a drum diameter. Torque, shaft rpm, power at the belt, the motor size at your drive efficiency, and the gear ratio for the motor speed update live.',
+                    'The OneMotion auto-pick lists every series at this width against the floors; the manual entry under it is the sign-off path with utilisation per wear scenario and the optional cool-ambient allowance.',
+                    'Send to Drive Shaft carries the pull, torque, belt width, and pitch diameter to the shaft check.',
+                ],
+                notes: ['Drum motors are verdicted on the vendor belt-pull rating at the belt width, not torque ÷ radius. Catalog N·m values are ambiguous between continuous and peak — confirm the AMO row with the vendor.'],
+            },
+            {
+                id: 'driveShaft',
+                label: 'Drive Shaft Deflection & Twist',
+                summary: 'Checks a square or round drive shaft between its bearings for deflection under belt pull and twist under drive torque.',
+                steps: [
+                    'Send from Torque & Motor, or enter the shaft size and material, bearing span, belt width, belt pull, and drive torque (or a pitch diameter to derive it).',
+                    'Deflection uses the pull spread across the belt width on a simply supported span; twist uses the torque over the driven-to-far-sprocket length. Both show against editable limits, with bending and torsional stress against half the yield.',
+                    'Exceeded limits say what to change: a larger shaft, a shorter bearing span, or an intermediate support.',
+                ],
+                notes: ['The 0.10 in deflection and 1° twist defaults are common belt-maker guidance; the belt manufacturer\'s design guide governs the numbers you sign off.'],
             },
             {
                 id: 'wearstrip',

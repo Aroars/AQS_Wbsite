@@ -22,7 +22,7 @@ export default function ConveyorFamilyPage() {
     <>
       <Navigation />
       <ConveyorFamilyContent family="mdr" />
-      <ToolboxLinks tools={['mdr-hub-motor-selection', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'line-flow-simulator', 'belt-pull-calculator', 'light-curtain-safety-distance-calculator']} title="Size an MDR Line Yourself" />
+      <ToolboxLinks tools={['mdr-motorized-roller-selection', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'line-flow-simulator', 'belt-pull-calculator', 'light-curtain-safety-distance-calculator']} title="Size an MDR Line Yourself" />
       <SystemArchitecture currentProduct="conveyors" />
       <CTASection />
       <Footer />

@@ -22,7 +22,7 @@ export default function ConveyorFamilyPage() {
     <>
       <Navigation />
       <ConveyorFamilyContent family="pallet" />
-      <ToolboxLinks tools={['conveyor-throughput-calculator', 'conveyor-speed-calculator', 'mdr-hub-motor-selection', 'belt-pull-calculator', 'light-curtain-safety-distance-calculator', 'guard-opening-distance']} title="Size a Pallet Line Yourself" />
+      <ToolboxLinks tools={['conveyor-throughput-calculator', 'conveyor-speed-calculator', 'mdr-motorized-roller-selection', 'belt-pull-calculator', 'light-curtain-safety-distance-calculator', 'machine-guard-opening-distance']} title="Size a Pallet Line Yourself" />
       <SystemArchitecture currentProduct="conveyors" />
       <CTASection />
       <Footer />

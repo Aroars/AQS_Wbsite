@@ -23,7 +23,14 @@ export const toolDescriptions: Record<string, string> = {
     area: 'Area calculator for rectangles, circles, triangles, ellipses, trapezoids, and half circles, with running memory for totals and square footage.',
     power: 'Electrical power calculator: watts, amps, volts, and kW across single- and three-phase AC and DC, with per-equipment panel load totals.',
 
+    // Plant economics
+    giveaway: 'Product giveaway calculator: what overfill costs per package, per hour, and per year, and what a checkweigher feedback loop saves, with payback.',
+    downtime: 'Packaging line downtime cost calculator: dollars per minute, per shift, and per year from lost margin, crew labor, and overhead, and the value of a reduction.',
+
     // Conveyor
+    accumulation: 'Accumulation conveyor calculator: buffer length in feet for seconds of downstream stoppage, or the time a length absorbs, with zero-pressure zone counts.',
+    driveMotor: 'Conveyor motor sizing calculator: torque at the sprocket or drum, shaft RPM, horsepower and kW, a standard motor size, gear ratio, and the OneMotion drum motor pick.',
+    driveShaft: 'Modular belt drive shaft calculator: deflection between bearings and torsional twist for square or round shafts against editable limits.',
     conveyorFlow: 'Conveyor speed calculator: belt speed in ft/min from packages per minute and product pitch, or solve for the rate or the gap; products per foot, gap time, transit time, and belt speed from drive RPM.',
     conveyorSpec: 'Conveyor geometry solver for incline and decline sections: solve length, rise, and angle for straight, L, and Z conveyors.',
     beltLoad: 'Conveyor throughput calculator: lb/hr, lb/day, or kg/hr to packages per minute, belt speed, and belt load in lb/ft, with bulk bed sizing and a packager headroom check.',

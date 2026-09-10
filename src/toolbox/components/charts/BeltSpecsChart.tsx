@@ -3,6 +3,7 @@ import { RefreshCw } from 'lucide-react'
 import { PinButton } from '@/toolbox/components/ui/PinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { useBeltSpecs, beltChoices, minInsideRadiusIn, BELT_SPECS_URL, type BeltChoice } from '@/toolbox/lib/beltSpecs'
+import { chordalPdMm } from '@/toolbox/lib/calculators/beltPull'
 
 const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
 const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary'
@@ -34,6 +35,13 @@ export function BeltSpecsChart() {
     const [metricRating, setMetricRating] = useState(false)
     const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'brand', dir: 1 })
     const [selected, setSelected] = useState<string | null>(null)
+    // Sprocket sub-calc: pitch × teeth → chordal pitch diameter and shaft rpm
+    const [spPitchMm, setSpPitchMm] = useState('50')
+    const [spTeeth, setSpTeeth] = useState('11')
+    const [spSpeed, setSpSpeed] = useState('100')
+    const spPdMm = chordalPdMm(parseFloat(spPitchMm) || 0, parseFloat(spTeeth) || 0)
+    const spPdIn = spPdMm / 25.4
+    const spRpm = spPdIn > 0 ? ((parseFloat(spSpeed) || 0) * 12) / (Math.PI * spPdIn) : 0
 
     const widthIn = Math.max(parseFloat(width) || 0, 0)
     const choices = useMemo(() => beltChoices(feed), [feed])
@@ -79,7 +87,7 @@ export function BeltSpecsChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Belt Specs</h3>
+                <h3 className="text-sm font-semibold text-text-primary">Belt Comparison Chart</h3>
                 <div className="flex items-center gap-2">
                     <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
                         source === 'live' ? 'border-success/40 text-success' : source === 'cache' ? 'border-primary/40 text-primary' : 'border-warning/40 text-warning'
@@ -199,6 +207,30 @@ export function BeltSpecsChart() {
 
                 <div className="text-[10px] text-text-muted">
                     Source: AQS catalog spec feed (engineering data only; edited in the quoting tool Database tab). Snapshot fallback bundled with the site.
+                </div>
+
+                {/* Sprocket pitch diameter: PD = pitch ÷ sin(180°/z) */}
+                <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
+                    <div className="text-xs text-text-secondary uppercase tracking-wider">Sprocket pitch diameter</div>
+                    <div className="grid grid-cols-3 gap-2">
+                        <div>
+                            <label className={labelCls}>Belt pitch (mm)</label>
+                            <input type="number" min="0" step="any" value={spPitchMm} className={inputCls} onChange={(e) => setSpPitchMm(e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Teeth</label>
+                            <input type="number" min="3" step="1" value={spTeeth} className={inputCls} onChange={(e) => setSpTeeth(e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={labelCls}>Belt speed (ft/min) — for rpm</label>
+                            <input type="number" min="0" step="any" value={spSpeed} className={inputCls} onChange={(e) => setSpSpeed(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="text-xs text-text-secondary">
+                        PD = pitch ÷ sin(180°/z) = <span className="font-mono text-primary">{spPdMm > 0 ? `${spPdMm.toFixed(1)} mm · ${spPdIn.toFixed(3)} in` : '—'}</span>
+                        {spRpm > 0 && <span className="font-mono text-text-muted"> · shaft {spRpm.toFixed(1)} rpm at {spSpeed} ft/min</span>}
+                    </div>
+                    <div className="text-[10px] text-text-muted">Chordal PD is what the drive math uses; vendors may dimension non-chordally, so take the drawing figure when you have one. Fewer teeth = smaller radius = less torque for the same pull.</div>
                 </div>
             </div>
         </div>

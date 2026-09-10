@@ -19,8 +19,9 @@ const toolLinks = [
   { label: "Belt Pull Calculator", href: "/toolbox/belt-pull-calculator" },
   { label: "Conveyor Speed Calculator", href: "/toolbox/conveyor-speed-calculator" },
   { label: "Throughput Calculator", href: "/toolbox/conveyor-throughput-calculator" },
-  { label: "MDR Hub Motor Selection", href: "/toolbox/mdr-hub-motor-selection" },
-  { label: "Safety Distance Calculator", href: "/toolbox/light-curtain-safety-distance-calculator" },
+  { label: "MDR Motorized Roller Selection", href: "/toolbox/mdr-motorized-roller-selection" },
+  { label: "Motor Sizing Calculator", href: "/toolbox/conveyor-motor-sizing-calculator" },
+  { label: "Product Giveaway Calculator", href: "/toolbox/product-giveaway-calculator" },
   { label: "All engineering tools →", href: "/toolbox" },
 ];
 

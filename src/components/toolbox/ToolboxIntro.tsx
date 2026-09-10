@@ -26,7 +26,7 @@ export function ToolboxIntro(props: Props) {
   return props.mode === "tool" ? <ToolIntro page={props.page} toolLabel={props.toolLabel} /> : <TabIntro />;
 }
 
-function Shell({ crumb, heading, children }: { crumb: React.ReactNode; heading: string; children: React.ReactNode }) {
+function Shell({ crumb, heading, children, product }: { crumb: React.ReactNode; heading: string; children: React.ReactNode; product?: { href: string; label: string } }) {
   return (
     <section className="px-6 pt-10 pb-8 md:pt-14 md:pb-10">
       <div className="mx-auto max-w-5xl">
@@ -34,6 +34,12 @@ function Shell({ crumb, heading, children }: { crumb: React.ReactNode; heading: 
         <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-white mb-4">{heading}</h1>
         {children}
         <p className="text-text-dim text-xs mt-4">{NOTE}</p>
+        {product && (
+          <p className="text-text-body text-sm mt-3">
+            Built by the engineers behind{" "}
+            <Link href={product.href} className="text-accent-primary hover:underline">{product.label}</Link>.
+          </p>
+        )}
       </div>
     </section>
   );
@@ -55,7 +61,7 @@ function Crumb({ trail, linkHome }: { trail: string; linkHome: boolean }) {
 
 function ToolIntro({ page, toolLabel }: { page: ToolPage; toolLabel: string }) {
   return (
-    <Shell crumb={<Crumb trail={toolLabel} linkHome />} heading={page.h1}>
+    <Shell crumb={<Crumb trail={toolLabel} linkHome />} heading={page.h1} product={page.product}>
       {page.intro.map((p, i) => (
         <p key={i} className="text-text-body text-base md:text-lg max-w-3xl leading-relaxed mb-4">{p}</p>
       ))}

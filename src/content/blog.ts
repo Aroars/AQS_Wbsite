@@ -34,7 +34,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min",
     date: "March 2026",
     content: "mag-drive-vs-conventional-gearbox",
-    tools: ["mdr-hub-motor-selection", "belt-pull-calculator", "conveyor-speed-calculator", "conveyor-throughput-calculator"],
+    tools: ["mdr-motorized-roller-selection", "belt-pull-calculator", "conveyor-speed-calculator", "conveyor-throughput-calculator"],
   },
   {
     slug: "mechanical-vs-vision-leak-detection",
