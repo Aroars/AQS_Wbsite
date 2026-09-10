@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function VeriPakPage() {
-  const schema = {"@context":"https://schema.org","@type":"Product","name":"VeriPak Standalone SCADA Platform","description":"Packaging quality control SCADA system with real-time dashboards, sub-second alerts, auto line stop, and audit-ready records. Allen-Bradley CompactLogix, no middleware required.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"SCADA Systems","url":"https://www.automatedqs.com/solutions/veripak"};
+  const schema = {"@context":"https://schema.org","@type":"Product","name":"VeriPak Standalone SCADA Platform","description":"Packaging quality control SCADA system with real-time dashboards, sub-second alerts, auto line stop, and audit-ready records. Allen-Bradley CompactLogix, no middleware required.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"SCADA Systems","url":"https://automatedqs.com/solutions/veripak"};
 
   return (
     <>

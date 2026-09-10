@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: "Blog | Packaging Automation Insights | AQS",
     description:
       "Technical articles on packaging SCADA, sanitary conveyor design, leak detection, and ROI optimization from the AQS engineering team.",
-    url: "https://www.automatedqs.com/blog",
+    url: "https://automatedqs.com/blog",
     siteName: "Automated Quality Solutions",
     type: "website",
   },

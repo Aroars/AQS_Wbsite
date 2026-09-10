@@ -7,6 +7,8 @@ export interface BlogPost {
   readTime: string;
   date: string;
   content: string;
+  /** Toolbox slugs worth linking from this post ("Size it yourself" callout) */
+  tools?: string[];
 }
 
 export const blogPosts: BlogPost[] = [
@@ -32,6 +34,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min",
     date: "March 2026",
     content: "mag-drive-vs-conventional-gearbox",
+    tools: ["mdr-hub-motor-selection", "belt-pull-calculator", "conveyor-speed-calculator", "conveyor-throughput-calculator"],
   },
   {
     slug: "mechanical-vs-vision-leak-detection",

@@ -9,7 +9,7 @@ import { chartTools, calculatorTools, conveyorTools } from "@/toolbox/lib/toolRe
 import { toolDescriptions } from "@/toolbox/lib/toolDescriptions";
 import { getToolPage } from "@/toolbox/lib/toolSeo";
 
-const PAGE_URL = "https://www.automatedqs.com/toolbox";
+const PAGE_URL = "https://automatedqs.com/toolbox";
 
 export const metadata: Metadata = {
   title: pageMetadata.toolbox.title,
@@ -58,7 +58,7 @@ const softwareSchema = {
   author: {
     "@type": "Organization",
     name: "Automated Quality Solutions (AQS)",
-    url: "https://www.automatedqs.com",
+    url: "https://automatedqs.com",
   },
 };
 

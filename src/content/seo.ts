@@ -3,7 +3,7 @@
 export const siteConfig = {
   name: "Automated Quality Solutions",
   shortName: "AQS",
-  url: "https://www.automatedqs.com",
+  url: "https://automatedqs.com",
   email: "sales@automatedqs.com",
   phone: "(208) 297-4420",
   location: "Nampa, Idaho",
@@ -109,9 +109,9 @@ export const pageMetadata = {
       "AQS builds purpose-built digital tools for packaging automation sales — including a conveyor quote builder with 3D preview and an ROI projection calculator for capital equipment decisions.",
   },
   toolbox: {
-    title: "Engineering Toolbox | Free Conveyor Calculators & Reference Charts | AQS",
+    title: "Free Engineering Toolbox — Conveyor Calculators | AQS",
     description:
-      "Free browser-based engineering toolbox: belt pull, conveyor flow, belt load, and wearstrip span calculators, unit converters, and reference charts for bolts, wire gauge, ISO fits, pneumatics, and machine safety. No login — your work is saved locally.",
+      "Free browser-based engineering toolbox: belt pull, conveyor speed and throughput calculators, unit converters, and reference charts. No login, saved locally.",
   },
   blog: {
     title: "Blog | Packaging Automation Insights | AQS",
@@ -125,7 +125,7 @@ export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Automated Quality Solutions (AQS)",
-  url: "https://www.automatedqs.com",
+  url: "https://automatedqs.com",
   description:
     "AQS designs and manufactures standalone SCADA platforms, liquid recovery systems, leak detection technology, sanitary robotics, and conveyor systems for food production facilities.",
   address: {
@@ -152,10 +152,10 @@ export const organizationSchema = {
 export const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://www.automatedqs.com/#localbusiness",
+  "@id": "https://automatedqs.com/#localbusiness",
   name: "Automated Quality Solutions (AQS)",
-  url: "https://www.automatedqs.com",
-  image: "https://www.automatedqs.com/images/logos/aqs-favicon.png",
+  url: "https://automatedqs.com",
+  image: "https://automatedqs.com/images/logos/aqs-favicon.png",
   description:
     "Packaging automation integrator and conveyor manufacturer in Nampa, Idaho (Boise metro): packaging line SCADA, sanitary washdown conveyors, and hygienic robotics for food and dairy plants.",
   telephone: "(208) 297-4420",

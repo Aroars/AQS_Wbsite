@@ -15,10 +15,19 @@ const companyLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+const toolLinks = [
+  { label: "Belt Pull Calculator", href: "/toolbox/belt-pull-calculator" },
+  { label: "Conveyor Speed Calculator", href: "/toolbox/conveyor-speed-calculator" },
+  { label: "Throughput Calculator", href: "/toolbox/conveyor-throughput-calculator" },
+  { label: "MDR Hub Motor Selection", href: "/toolbox/mdr-hub-motor-selection" },
+  { label: "Safety Distance Calculator", href: "/toolbox/light-curtain-safety-distance-calculator" },
+  { label: "All engineering tools →", href: "/toolbox" },
+];
+
 export function Footer() {
   return (
     <footer className="border-t border-border-default pt-11 pb-8 px-8">
-      <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-7">
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1.1fr_1fr_1fr] gap-7">
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -46,6 +55,22 @@ export function Footer() {
             Solutions
           </div>
           {solutionLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors mb-1.5"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Engineering Tools */}
+        <div>
+          <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-3">
+            Engineering Tools
+          </div>
+          {toolLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

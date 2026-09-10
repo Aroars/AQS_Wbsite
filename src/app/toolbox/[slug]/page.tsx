@@ -9,7 +9,7 @@ import { ToolboxIntro } from "@/components/toolbox/ToolboxIntro";
 import { toolPages, getToolPage, publishedToolPages } from "@/toolbox/lib/toolSeo";
 import { allTools } from "@/toolbox/lib/toolRegistry";
 
-const SITE = "https://www.automatedqs.com";
+const SITE = "https://automatedqs.com";
 
 export const dynamicParams = false;
 
@@ -60,6 +60,13 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
     isPartOf: { "@type": "SoftwareApplication", name: "AQS Engineering Toolbox", url: `${SITE}/toolbox` },
     author: { "@type": "Organization", name: "Automated Quality Solutions (AQS)", url: SITE },
   };
+  const faqSchema = page.faq && page.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: page.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      }
+    : null;
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -75,6 +82,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
       <div className="toolbox-scope pt-[80px]">
         {/* Server-rendered intro: what the tool calculates and how */}
@@ -82,6 +90,23 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
         <ToolboxHeader />
         <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />
+
+        {/* Questions engineers ask — visible copy backing the FAQPage schema */}
+        {page.faq && page.faq.length > 0 && (
+          <section className="px-6 pt-14 md:pt-16">
+            <div className="mx-auto max-w-5xl">
+              <h2 className="font-sans text-xl md:text-2xl font-bold text-white mb-6">Questions engineers ask</h2>
+              <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+                {page.faq.map((f) => (
+                  <div key={f.q} className="border-l-2 border-border pl-4">
+                    <dt className="font-sans font-semibold text-white mb-1">{f.q}</dt>
+                    <dd className="text-text-body text-sm leading-relaxed">{f.a}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </section>
+        )}
 
         {/* Related and remaining tools — real links, one per page */}
         <section className="px-6 py-14 md:py-16">

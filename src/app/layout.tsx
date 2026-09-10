@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: pageMetadata.home.title,
   description: pageMetadata.home.description,
-  metadataBase: new URL("https://www.automatedqs.com"),
+  metadataBase: new URL("https://automatedqs.com"),
   icons: {
     icon: "/images/logos/aqs-favicon.png",
     apple: "/images/logos/aqs-favicon.png",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageMetadata.home.title,
     description: pageMetadata.home.description,
-    url: "https://www.automatedqs.com",
+    url: "https://automatedqs.com",
     siteName: "Automated Quality Solutions",
     type: "website",
   },

@@ -1,12 +1,12 @@
 # Automated Quality Solutions — robots.txt
-# https://www.automatedqs.com
+# https://automatedqs.com
 
 User-agent: *
 Allow: /
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://www.automatedqs.com/sitemap.xml
+Sitemap: https://automatedqs.com/sitemap.xml
 
 # AI Crawlers — allowed for maximum visibility
 User-agent: GPTBot

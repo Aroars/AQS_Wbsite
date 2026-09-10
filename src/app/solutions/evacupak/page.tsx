@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function EvacuPakPage() {
-  const schema = {"@context":"https://schema.org","@type":"Product","name":"EvacuPak Liquid Recovery System","description":"Patented fluid recovery with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Liquid Recovery Systems","url":"https://www.automatedqs.com/solutions/evacupak"};
+  const schema = {"@context":"https://schema.org","@type":"Product","name":"EvacuPak Liquid Recovery System","description":"Patented fluid recovery with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Liquid Recovery Systems","url":"https://automatedqs.com/solutions/evacupak"};
 
   return (
     <>

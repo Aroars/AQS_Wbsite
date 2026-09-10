@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function RoboticsPage() {
-  const schema = {"@context":"https://schema.org","@type":"Service","name":"Sanitary Robotics Integration","description":"Fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, and end-of-line automation. 316L stainless, IP69K, USDA/FDA compliant.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Industrial Automation","areaServed":"US","url":"https://www.automatedqs.com/solutions/robotics"};
+  const schema = {"@context":"https://schema.org","@type":"Service","name":"Sanitary Robotics Integration","description":"Fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, and end-of-line automation. 316L stainless, IP69K, USDA/FDA compliant.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Industrial Automation","areaServed":"US","url":"https://automatedqs.com/solutions/robotics"};
 
   return (
     <>

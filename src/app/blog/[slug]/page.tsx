@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { blogPosts, getBlogPost, getRelatedPosts } from "@/content/blog";
+import { toolBySlug } from "@/toolbox/lib/toolRegistry";
+import { getToolPage } from "@/toolbox/lib/toolSeo";
 
 import PostWhatIsPackagingScada from "@/components/blog/post-what-is-packaging-scada";
 import PostMagDriveVsConventionalGearbox from "@/components/blog/post-mag-drive-vs-conventional-gearbox";
@@ -36,7 +38,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${post.title} | AQS Blog`,
       description: post.description,
-      url: `https://www.automatedqs.com/blog/${post.slug}`,
+      url: `https://automatedqs.com/blog/${post.slug}`,
       siteName: "Automated Quality Solutions",
       type: "article",
     },
@@ -56,6 +58,9 @@ export default async function BlogPostPage({
   if (!ContentComponent) notFound();
 
   const relatedPosts = getRelatedPosts(post.slug);
+  const relatedTools = (post.tools ?? [])
+    .map((slug) => ({ slug, label: toolBySlug(slug)?.label, page: getToolPage(slug) }))
+    .filter((c): c is { slug: string; label: string | undefined; page: NonNullable<ReturnType<typeof getToolPage>> } => !!c.page && c.page.published);
 
   return (
     <>
@@ -129,6 +134,30 @@ export default async function BlogPostPage({
       <section className="px-6 pt-10 pb-16">
         <ContentComponent />
       </section>
+
+      {/* Size it yourself — free tools that apply what the post describes */}
+      {relatedTools.length > 0 && (
+        <section className="px-6 pb-16">
+          <div className="max-w-[720px] mx-auto rounded-[16px] border border-[rgba(0,194,255,0.15)] bg-[rgba(0,0,0,0.28)] p-6 sm:p-8">
+            <h2 className="font-mono text-[0.62rem] uppercase tracking-[0.15em] text-accent-primary mb-2">Size it yourself</h2>
+            <p className="text-[rgba(255,255,255,0.45)] text-[0.85rem] leading-[1.6] mb-5">
+              Free engineering tools from the AQS toolbox — no login, and your inputs stay in your browser.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {relatedTools.map(({ slug, label, page }) => (
+                <Link
+                  key={slug}
+                  href={`/toolbox/${slug}`}
+                  className="group block rounded-[12px] border border-[rgba(255,255,255,0.06)] bg-[rgba(0,0,0,0.25)] p-4 transition-colors hover:border-[rgba(0,194,255,0.3)]"
+                >
+                  <div className="text-white font-semibold text-[0.9rem] mb-1 group-hover:text-accent-primary transition-colors">{label ?? page.h1}</div>
+                  <p className="text-[rgba(255,255,255,0.45)] text-[0.78rem] leading-[1.5]">{page.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="px-6 pb-16">
