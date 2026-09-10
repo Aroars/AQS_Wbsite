@@ -424,3 +424,12 @@ html.toolbox-snap {
   scroll-snap-align: start;
   scroll-margin-top: 53px;
 }
+
+/* Toolbox solver fields: a solved value that just changed flashes once */
+@keyframes tb-flash {
+  0% { box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.9); background-color: rgba(0, 180, 216, 0.22); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 180, 216, 0); background-color: var(--color-dark-900); }
+}
+.tb-flash {
+  animation: tb-flash 1.5s ease-out;
+}

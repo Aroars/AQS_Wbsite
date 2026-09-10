@@ -62,8 +62,8 @@ export function calculateInfeed(inputs: any, units: any, _inputFlowState: any) {
         return state
     }
 
-    // Calculate pitch
-    const pitch = length + gap
+    // Calculate pitch (re-derived below when speed and rate together fix the gap)
+    let pitch = length + gap
 
     // Solve for missing variables
     if (speed && !rate) {
@@ -84,6 +84,7 @@ export function calculateInfeed(inputs: any, units: any, _inputFlowState: any) {
         // Given speed and rate, calculate actual gap
         const actualPitch = (speed * 60) / rate
         gap = actualPitch - length
+        pitch = actualPitch
         if (gap < 0) {
             state.issues.push('Speed too slow for target rate (negative gap)')
             state.feasibility = 'error'

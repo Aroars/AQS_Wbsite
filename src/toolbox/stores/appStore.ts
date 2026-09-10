@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { SavedConverter, TabId } from '@/toolbox/lib/types'
 import { generateId } from '@/toolbox/lib/utils'
 import { unitCategories } from '@/toolbox/data/unitCategories'
+import { patchInfeed, type FlowCard, type SolveFor } from '@/toolbox/lib/calculators/infeedCard'
 
 interface AreaMemoryEntry {
     id: string
@@ -37,13 +38,13 @@ interface PowerEquipment {
     phase?: number
 }
 
-// Matches the runtime shape produced by createCard() in data/conveyorCardTypes.ts
-interface ConveyorFlowCard {
-    id: string
-    type: string
-    inputs: Record<string, number | string | null>
-    units: Record<string, string>
-    outputs?: Record<string, unknown>
+
+export interface InfeedPayload {
+    ppm: number
+    weightLb: number | null
+    lengthIn: number | null
+    gapIn: number | null
+    speedFpm: number | null
 }
 
 interface AppState {
@@ -90,10 +91,16 @@ interface AppState {
     updatePowerEquipment: (id: string, updates: Partial<PowerEquipment>) => void
     clearPowerEquipment: () => void
 
-    // Conveyor Flow (cards are always written as a whole recalculated chain)
-    conveyorCards: ConveyorFlowCard[]
-    setConveyorCards: (cards: ConveyorFlowCard[]) => void
+    // Conveyor flow chain: card 0 is the infeed shared by Conveyor Speed and the Line Flow
+    // Simulator (cards are always written as a whole recalculated chain)
+    conveyorCards: FlowCard[]
+    setConveyorCards: (cards: FlowCard[]) => void
     clearConveyorCards: () => void
+    /** Context line shown on the Conveyor Speed card after a handoff (not persisted) */
+    infeedBanner: string | null
+    setInfeedBanner: (msg: string | null) => void
+    /** Line Throughput → Conveyor Speed: fill the infeed from the throughput card's numbers */
+    receiveInfeed: (payload: InfeedPayload) => void
 
     // Belt Pull calculator (serialized BeltPullConfig — owned by lib/calculators/beltPull)
     beltPullConfig: string | null
@@ -214,10 +221,34 @@ export const useAppStore = create<AppState>()(
                 set((state) => ({ powerEquipment: state.powerEquipment.map((e) => e.id === id ? { ...e, ...updates } : e) })),
             clearPowerEquipment: () => set({ powerEquipment: [] }),
 
-            // Conveyor Flow
+            // Conveyor flow chain
             conveyorCards: [],
             setConveyorCards: (cards) => set({ conveyorCards: cards }),
             clearConveyorCards: () => set({ conveyorCards: [] }),
+            infeedBanner: null,
+            setInfeedBanner: (msg) => set({ infeedBanner: msg }),
+            receiveInfeed: (p) =>
+                set((state) => {
+                    // Belt speed becomes the solved target unless it was sent without the geometry
+                    // that would re-derive it — then keep the speed and solve the gap instead.
+                    const geometry = p.lengthIn !== null && p.gapIn !== null
+                    const solveFor: SolveFor = p.speedFpm !== null && !geometry ? 'gap' : 'speed'
+                    const inputs: Record<string, number | string | null> = { solveFor, productRate: p.ppm }
+                    if (p.weightLb !== null) inputs.productWeight = p.weightLb
+                    if (p.lengthIn !== null) inputs.productLength = p.lengthIn
+                    if (solveFor === 'gap') {
+                        inputs.productGap = null
+                        inputs.productSpeed = p.speedFpm
+                    } else {
+                        inputs.productSpeed = null
+                        if (p.gapIn !== null) inputs.productGap = p.gapIn
+                    }
+                    const units = { productRate: '/min', productLength: 'in', productGap: 'in', productWeight: 'lb', productSpeed: 'ft/min' }
+                    return {
+                        conveyorCards: patchInfeed(state.conveyorCards, inputs, units),
+                        infeedBanner: 'Loaded from Line Throughput — adjust speed or spacing, then send to Belt Pull.',
+                    }
+                }),
 
             // Belt Pull calculator
             beltPullConfig: null,

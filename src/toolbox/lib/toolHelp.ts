@@ -80,24 +80,37 @@ export const tabHelp: Record<TabId, TabHelp> = {
     conveyor: {
         title: 'Conveyor',
         description:
-            'The conveyor sizing chain. Define the product on Belt Load, solve the geometry on the Spec Solver, then size the belt and the motor on Belt Pull. Each card can send its result to the next, so the product and the path are entered once.',
+            'The conveyor sizing chain, in the order a quote gets built: what the plant said (Line Throughput), what the conveyor has to do (Conveyor Speed), and what the belt and drive need to be (Belt Pull). Each card sends its result to the next, so the product is entered once.',
         tips: [
-            'Work left to right: Belt Load → Conveyor Spec Solver → Belt Pull. Belt Pull also works alone for radius and S-conveyors.',
+            'Work left to right: Line Throughput → Conveyor Speed → Belt Pull. The Spec Solver sits between speed and pull when the path has an incline; Belt Pull also works alone for radius and S-conveyors.',
+            'Cyan values with an auto tag are solved from what you entered. Type over one and the oldest value it depends on is re-derived and flashes — nothing is ever cleared.',
             'Every card keeps its own state. Sending from one card overwrites only the fields it carries.',
             'Load example configuration at the top of Belt Pull gives you a known-good starting point to edit.',
         ],
         tools: [
             {
                 id: 'beltLoad',
-                label: 'Belt Load Calculator',
-                summary: 'Turns what the plant quotes into the numbers the conveyor needs, and decides the first question for everything downstream: packages or bulk.',
+                label: 'Line Throughput → Belt Load',
+                summary: 'Turns what the plant quotes into the numbers the conveyor needs — packages per minute, belt speed, and lb/ft — solving every field from the others as you type.',
                 steps: [
-                    'Choose Packages (cartons, bags, trays) or Bulk (loose product such as curds, nuts, or granules).',
-                    'Packages: enter the process rate as lb/hr or lb/day with real operating hours, or enter package weight and packages per minute and let the card derive the rate. Belt speed gives lb/ft and package pitch. A rated packager speed shows how hard the bagger has to run.',
-                    'Bulk: enter the rate by weight, by volume with loose density, or per day. Add repose angle (the pile angle) — it shapes flight pockets later. The bed capacity check tells you what a belt width and bed depth can carry at speed.',
-                    'The definition is published automatically to the Spec Solver and Belt Pull. Send to Belt Pull also sets Belt Pull\'s load mode and speed.',
+                    'Line throughput is optional: enter it in the unit the plant quoted (lb/hr, lb/day, lb/shift, kg/hr, kg/day) and, for per-day or per-shift rates, the hours the line actually runs.',
+                    'Choose Packages or Bulk. Packages: enter any two of throughput, package weight, and packages per minute and the third fills in. Add product length and gap to estimate belt speed, or enter belt speed directly. lb/ft appears as soon as the speed is known.',
+                    'Amber fields are the ones that would unlock a result; cyan auto fields are solved. Type over a solved field and the oldest entry it depends on is re-derived and flashes so you can see what moved.',
+                    'Bulk: density, bed depth, belt width, and belt speed give lb/ft and throughput either way round — enter the demand and the bed to check utilization, or leave depth blank to get the depth the demand needs.',
+                    'Send to Belt Pull hands over lb/ft and belt speed. Send to Conveyor Speed hands over packages per minute, weight, length, and gap to adjust spacing first. The packager headroom check appears once a line throughput is entered.',
                 ],
-                notes: ['Use loose, as-conveyed density for bulk — product bulks up off the pile. The settled density in a box is a different number and belongs to the package fill section.'],
+                notes: ['Use loose, as-conveyed density for bulk — product bulks up off the pile. The settled density in a box is a different number and belongs to the Package Fill section, which derives the package weight from the box.'],
+            },
+            {
+                id: 'conveyorFlow',
+                label: 'Conveyor Speed & Throughput',
+                summary: 'Belt speed from rate and product pitch — or the rate a speed delivers, or the gap it leaves — with the answer big and live.',
+                steps: [
+                    'Pick what to solve for: belt speed (default), rate, or gap. The chosen field becomes the result; the other three are the inputs.',
+                    'Enter packages per minute, product length, and gap. Belt speed, pitch, products per foot, packages per hour, and gap time update on every keystroke. A conveyor length adds transit time.',
+                    'Belt speed from drive RPM: enter RPM and pulley pitch diameter and use the result as the belt speed.',
+                    'Enter a package weight and Send to Belt Pull carries lb/ft and speed into the belt pull calculator. For splits, merges, rejects, dwell stations, and accumulation, open the Line Flow Simulator — it starts from this same infeed.',
+                ],
             },
             {
                 id: 'conveyorSpec',
@@ -106,7 +119,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 steps: [
                     'Pick the layout. For incline, L, and Z enter any two of floor length, height change, angle, and belt length; the rest is solved and drawn.',
                     'Read the angle advice. For packages it suggests cleats or a textured belt as the slope grows. For bulk it tells you when the slope is past the plain-belt limit and flights are required.',
-                    'If a product is defined on Belt Load it shows here; otherwise enter piece length, spacing, and weight for a simple loading estimate.',
+                    'If a product is defined on Line Throughput it shows here; otherwise enter piece length, spacing, and weight for a simple loading estimate.',
                     'Send path to Belt Pull builds the section chain (infeed straight, incline, discharge straight) with the product attached.',
                 ],
             },
@@ -142,14 +155,13 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 ],
             },
             {
-                id: 'conveyorFlow',
-                label: 'Conveyor Speed & Throughput',
-                summary: 'A chain of cards that follows product through a line: infeed, splits, merges, dwell stations, rejects, and accumulation.',
+                id: 'lineFlow',
+                label: 'Line Flow Simulator',
+                summary: 'A chain of cards that follows product through a line: the infeed, then splits, merges, dwell stations, rejects, stacking, batching, and accumulation.',
                 steps: [
-                    'Start with an Infeed card: packages per minute, product length, gap, and speed — enter any two of rate, spacing, and speed and the third is solved.',
-                    'Add cards downstream. Split and Reject remove a percentage; Merge adds another line\'s flow; Process applies a dwell time that consumes gap.',
+                    'The infeed is the Conveyor Speed card — edit it in either place. Add cards downstream: Split and Reject remove a percentage; Merge adds another line\'s flow; Process applies a dwell time that consumes gap; Stacking and Batching combine products.',
                     'Accumulation converts seconds of downstream stoppage into feet of zero-pressure buffer at the incoming rate, or a fixed length into the seconds it absorbs.',
-                    'Every card recalculates the whole chain when an upstream value changes.',
+                    'Every card recalculates the whole chain when an upstream value changes; the badge in the header shows the worst feasibility in the chain.',
                 ],
             },
         ],

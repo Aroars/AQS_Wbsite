@@ -19,10 +19,11 @@ import { SafetyChart } from '@/toolbox/components/charts/SafetyChart'
 import { ExpressionCalculator } from '@/toolbox/components/calculators/ExpressionCalculator'
 import { AreaCalculator } from '@/toolbox/components/calculators/AreaCalculator'
 import { PowerCalculator } from '@/toolbox/components/calculators/PowerCalculator'
-import { ConveyorFlow } from '@/toolbox/components/conveyor/ConveyorFlow'
+import { ConveyorSpeed } from '@/toolbox/components/conveyor/ConveyorSpeed'
+import { LineFlowSimulator } from '@/toolbox/components/conveyor/LineFlowSimulator'
 import { ConveyorSpec } from '@/toolbox/components/conveyor/ConveyorSpec'
 import { BeltPullCalculator } from '@/toolbox/components/conveyor/BeltPullCalculator'
-import { BeltLoadCalculator } from '@/toolbox/components/conveyor/BeltLoadCalculator'
+import { LineThroughputCard } from '@/toolbox/components/conveyor/LineThroughputCard'
 import { WearstripCalculator } from '@/toolbox/components/conveyor/WearstripCalculator'
 
 const chartComponents: Record<string, React.FC> = {
@@ -42,10 +43,11 @@ const calcComponents: Record<string, React.FC> = {
     expression: ExpressionCalculator,
     area: AreaCalculator,
     power: PowerCalculator,
-    conveyorFlow: ConveyorFlow,
+    conveyorFlow: ConveyorSpeed,
+    lineFlow: LineFlowSimulator,
     conveyorSpec: ConveyorSpec,
     beltPull: BeltPullCalculator,
-    beltLoad: BeltLoadCalculator,
+    beltLoad: LineThroughputCard,
     wearstrip: WearstripCalculator,
 }
 

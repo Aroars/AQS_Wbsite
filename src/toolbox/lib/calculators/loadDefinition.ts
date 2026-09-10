@@ -7,7 +7,8 @@
  * need. Kept deliberately flat so it serializes into the store and a share link.
  */
 
-import type { LoadProductType } from './beltLoad'
+/** Discrete packages (default) or loose bulk product */
+export type LoadProductType = 'packages' | 'bulk'
 
 export interface LoadDefinition {
     productType: LoadProductType

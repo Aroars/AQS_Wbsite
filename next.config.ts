@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Toolbox: the belt load page became the throughput calculator
+      {
+        source: "/toolbox/belt-load-calculator",
+        destination: "/toolbox/conveyor-throughput-calculator",
+        permanent: true,
+      },
       // Old Wix site URLs → new Next.js routes
       {
         source: "/palletizingwithrobotics",

@@ -36,11 +36,12 @@ export const calculatorTools: ToolEntry[] = [
 ]
 
 export const conveyorTools: ToolEntry[] = [
-    { id: 'conveyorFlow', slug: 'conveyor-speed-calculator', label: 'Conveyor Speed & Throughput', keywords: 'conveyor flow rate spacing product speed accumulation buffer merge split throughput ppm', tab: 'conveyor' },
+    { id: 'beltLoad', slug: 'conveyor-throughput-calculator', label: 'Conveyor Throughput Calculator', keywords: 'line throughput belt load lb/hr lb/day kg/hr packages per minute package weight pitch belt speed lb/ft bulk density bed depth belt width packager nameplate headroom intake', tab: 'conveyor' },
+    { id: 'conveyorFlow', slug: 'conveyor-speed-calculator', label: 'Conveyor Speed & Throughput', keywords: 'conveyor speed calculator belt speed fpm ft/min packages per minute ppm pitch spacing gap products per foot gap time transit time rpm pulley diameter solve for', tab: 'conveyor' },
     { id: 'conveyorSpec', slug: 'incline-conveyor-calculator', label: 'Incline Conveyor Calculator', keywords: 'conveyor spec geometry incline decline length height angle belt loading l z straight', tab: 'conveyor' },
-    { id: 'beltLoad', slug: 'belt-load-calculator', label: 'Belt Load Calculator', keywords: 'belt load throughput packages bulk lb/hr lb/day loose density bed capacity packager bagger rate', tab: 'conveyor' },
     { id: 'beltPull', slug: 'belt-pull-calculator', label: 'Belt Pull & Drive Calculator', keywords: 'belt pull radius s-conveyor incline l z straight turn capstan tension drive hp torque motor onemotion flights pockets bulk wear mu friction calibration corner', tab: 'conveyor' },
     { id: 'wearstrip', slug: 'wearstrip-span-calculator', label: 'Wearstrip Span Calculator', keywords: 'wearstrip span beam deflection uhmw ultralube hdpe overhang cantilever creep support', tab: 'conveyor' },
+    { id: 'lineFlow', slug: 'line-flow-simulator', label: 'Line Flow Simulator', keywords: 'line flow simulator packaging line chain split merge reject process dwell accumulation buffer seconds feet stacking batching feasibility', tab: 'conveyor' },
 ]
 
 export const allTools: ToolEntry[] = [...chartTools, ...calculatorTools, ...conveyorTools]
