@@ -20,11 +20,13 @@ export function useInfeed(chainId: string = MAIN) {
     const setChain = useAppStore((s) => s.setChain)
     const setCards = useCallback((next: FlowCard[]) => setChain(chainId, next), [setChain, chainId])
     const current = useCallback(() => useAppStore.getState().chains[chainId] ?? EMPTY_CHAIN, [chainId])
+    // Seed the infeed card whenever the chain lacks one — on mount, and again after
+    // Clear card / Clear all / a snapshot empties it (ensureInfeed returns the same
+    // array when nothing is needed, so this never loops).
     useEffect(() => {
-        const cur = current()
-        const next = ensureInfeed(cur)
-        if (next !== cur) setCards(next)
-    }, [setCards, current])
+        const next = ensureInfeed(cards)
+        if (next !== cards) setCards(next)
+    }, [cards, setCards])
     const head: FlowCard | null = cards.length > 0 && cards[0].type === 'infeed' ? cards[0] : null
     const solveFor = ((head?.inputs.solveFor as SolveFor) || 'speed')
     const reading: InfeedReading = useMemo(() => readInfeed(head), [head])
