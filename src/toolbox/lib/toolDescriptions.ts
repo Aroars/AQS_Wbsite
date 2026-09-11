@@ -33,7 +33,7 @@ export const toolDescriptions: Record<string, string> = {
     driveShaft: 'Modular belt drive shaft calculator: deflection between bearings and torsional twist for square or round shafts against editable limits.',
     conveyorFlow: 'Conveyor speed calculator: belt speed in ft/min from packages per minute and product pitch, or solve for the rate or the gap; products per foot, gap time, transit time, and belt speed from drive RPM.',
     conveyorSpec: 'Conveyor geometry solver for incline and decline sections: solve length, rise, and angle for straight, L, and Z conveyors.',
-    beltLoad: 'Conveyor throughput calculator: lb/hr, lb/day, or kg/hr to packages per minute, belt speed, and belt load in lb/ft, with bulk bed sizing and a packager headroom check.',
+    beltLoad: 'Conveyor throughput calculator: lb/hr, lb/day, or kg/hr to packages per minute, belt speed, and belt load in lb/ft, solving in either direction, with bulk bed sizing, bagger back-solving, and a packager headroom check.',
     lineFlow: 'Packaging line flow simulator: infeed through splits, merges, rejects, dwell stations, stacking, and batching, with accumulation buffers sized in feet or seconds.',
     beltPull: 'Belt pull and drive calculator for straight, incline, L, Z, radius, and S-conveyors: chained path sections, flight pockets for bulk inclines, turn tension and capstan effect, OneMotion drive pick, torque, and wearstrip friction with calibration log.',
     wearstrip: 'Wearstrip span calculator for UHMW, UltraLube, and HDPE support beams: deflection, overhang, cantilever, and creep limits.',

@@ -30,4 +30,7 @@ Torque & Motor. It must call the existing engine functions (`pocketWedge`, `pock
 the bulk capacity checks in `src/toolbox/lib/calculators/beltPull.ts`) rather than fork the physics.
 Sequence agreed with the user: (1) instance-scoped card state with independent Home pins, (2) snapshot
 format with save / load / history / clear, (3) in-app clipboard with pull and link between cards,
-then refine the Throughput → Belt Load card, and only then build this solver.
+(4) the Belt Load (lb/ft) card solving in every direction (belt load as a field, bulk-to-bagger
+back-solve, max bed depth check) — all done 2026-09-10 — and only then build this solver. The Belt Load
+card's bulk section already carries density, bed depth, belt width, edge margin, repose, and max bed
+depth, so this solver should pull from it rather than re-ask.

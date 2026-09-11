@@ -108,14 +108,14 @@ export const tabHelp: Record<TabId, TabHelp> = {
         tools: [
             {
                 id: 'beltLoad',
-                label: 'Line Throughput → Belt Load',
-                summary: 'Turns what the plant quotes into the numbers the conveyor needs — packages per minute, belt speed, and lb/ft — solving every field from the others as you type.',
+                label: 'Belt Load (lb/ft)',
+                summary: 'Turns what the plant quotes into the numbers the conveyor needs — packages per minute, belt speed, and belt load in lb/ft — solving every field from the others as you type, in either direction.',
                 steps: [
-                    'Line throughput is optional: enter it in the unit the plant quoted (lb/hr, lb/day, lb/shift, kg/hr, kg/day) and, for per-day or per-shift rates, the hours the line actually runs.',
-                    'Choose Packages or Bulk. Packages: enter any two of throughput, package weight, and packages per minute and the third fills in. Add product length and gap to estimate belt speed, or enter belt speed directly. lb/ft appears as soon as the speed is known.',
+                    'Pick Packages or Bulk first, then enter what you know. Line throughput is optional: enter it in the unit the plant quoted (lb/hr, lb/day, lb/shift, kg/hr, kg/day) and, for per-day or per-shift rates, the hours the line actually runs.',
+                    'Packages: any two of throughput, package weight, and packages per minute give the third. Product length and gap give the belt speed for that rate, or enter belt speed directly. Belt load (lb/ft) is a field of its own: it solves from throughput ÷ speed or from package weight ÷ pitch, and you can type it to back out the speed or the gap instead.',
                     'Amber fields are the ones that would unlock a result; cyan auto fields are solved. Type over a solved field and the oldest entry it depends on is re-derived and flashes so you can see what moved.',
-                    'Bulk: density, bed depth, belt width, and belt speed give lb/ft and throughput either way round — enter the demand and the bed to check utilization, or leave depth blank to get the depth the demand needs.',
-                    'Conveyor Speed and Belt Pull pull from this card: open their From bar and choose Pull for a one-time copy or Link to follow this card live. The packager headroom check appears once a line throughput is entered.',
+                    'Bulk: density, bed depth (average product height), and belt width give lb/ft; with belt speed that is the throughput, or enter throughput and speed to get the depth the demand needs. A downstream packager section backs lb/hr out of bags per minute × bag weight — or the fill box (settled density × bag volume) — when that is all you have. Enter a maximum bed depth to check the bed against a side guard or flight height.',
+                    'Conveyor Speed and Belt Pull pull from this card: open their From bar and choose Pull for a one-time copy or Link to follow this card live. The packager headroom check appears once a line throughput and a packages-per-minute rate exist.',
                 ],
                 notes: ['Use loose, as-conveyed density for bulk — product bulks up off the pile. The settled density in a box is a different number and belongs to the Package Fill section, which derives the package weight from the box.'],
             },

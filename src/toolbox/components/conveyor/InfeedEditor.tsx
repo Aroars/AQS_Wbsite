@@ -44,10 +44,10 @@ interface FieldDef {
 }
 
 const FIELDS: FieldDef[] = [
-    { key: 'rate', inputKey: 'productRate', label: 'Rate', unitType: 'rate', placeholder: '20' },
-    { key: 'length', inputKey: 'productLength', label: 'Product length', unitType: 'length', placeholder: '12' },
-    { key: 'gap', inputKey: 'productGap', label: 'Gap', unitType: 'length', placeholder: '0' },
-    { key: 'speed', inputKey: 'productSpeed', label: 'Belt speed', unitType: 'speed', placeholder: '100' },
+    { key: 'rate', inputKey: 'productRate', label: 'Rate', unitType: 'rate', placeholder: 'e.g. 20' },
+    { key: 'length', inputKey: 'productLength', label: 'Product length', unitType: 'length', placeholder: 'e.g. 12' },
+    { key: 'gap', inputKey: 'productGap', label: 'Gap', unitType: 'length', placeholder: 'e.g. 0' },
+    { key: 'speed', inputKey: 'productSpeed', label: 'Belt speed', unitType: 'speed', placeholder: 'e.g. 100' },
 ]
 const WEIGHT: FieldDef = { key: 'weight', inputKey: 'productWeight', label: 'Product weight', unitType: 'weight', placeholder: 'for stacking, batching, Belt Pull' }
 

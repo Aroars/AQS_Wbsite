@@ -32,11 +32,13 @@ export interface CardState {
     /** Bulk extras that ride along to Belt Pull */
     repose: string
     edgeMargin: string
+    /** Bulk: deepest bed the belt can carry (side guard / flight height), in — optional utilization check */
+    maxDepth: string
 }
 
 export const emptyState: CardState = {
     mode: 'packages', raw: {}, seq: {}, nextSeq: 1, rateUnit: 'lb/hr', hours: '16', nameplate: '',
-    fill: { density: '', l: '', w: '', h: '', fillPct: '100' }, weightFromBox: false, throughputEntered: false, repose: '35', edgeMargin: '1',
+    fill: { density: '', l: '', w: '', h: '', fillPct: '100' }, weightFromBox: false, throughputEntered: false, repose: '35', edgeMargin: '1', maxDepth: '',
 }
 
 export const num = (s: string | number | null | undefined): number | null => {
@@ -103,7 +105,7 @@ export function buildEntries(s: CardState): { entries: Entries; hoursMissing: bo
 }
 
 export function runSolve(s: CardState, justEdited: Field | null): SolveOutput {
-    return solveThroughput(s.mode, buildEntries(s).entries, { edgeMarginIn: num(s.edgeMargin) ?? 1, justEdited })
+    return solveThroughput(s.mode, buildEntries(s).entries, { edgeMarginIn: num(s.edgeMargin) ?? 1, justEdited, maxBedDepthIn: num(s.maxDepth) })
 }
 
 export function dropEntered(s: CardState, fields: Field[]): CardState {

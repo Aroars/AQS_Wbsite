@@ -14,7 +14,7 @@ export function ConveyorView() {
         // Chain order: what the plant said → what the conveyor must do → what the belt and drive need.
         // tool-* ids are command-palette / deep-link scroll anchors
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-            <div id="tool-beltLoad" className="scroll-mt-28"><ToolBoundary label="Line Throughput → Belt Load"><LineThroughputCard /></ToolBoundary></div>
+            <div id="tool-beltLoad" className="scroll-mt-28"><ToolBoundary label="Belt Load (lb/ft)"><LineThroughputCard /></ToolBoundary></div>
             <div id="tool-conveyorFlow" className="scroll-mt-28"><ToolBoundary label="Conveyor Speed & Throughput"><ConveyorSpeed /></ToolBoundary></div>
             <div id="tool-accumulation" className="scroll-mt-28"><ToolBoundary label="Accumulation Buffer"><AccumulationCalculator /></ToolBoundary></div>
             <div id="tool-conveyorSpec" className="scroll-mt-28"><ToolBoundary label="Incline Conveyor Length & Angle"><ConveyorSpec /></ToolBoundary></div>

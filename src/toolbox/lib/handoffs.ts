@@ -75,10 +75,11 @@ const beltLoadToInfeed: HandoffSource = {
     build: (state) => {
         if (!state) return null
         const st = restoreThroughput(state)
-        if (st.mode === 'bulk') return null
         const r = runSolve(st, null)
         const ppm = r.values.ppm?.value ?? null
         if (ppm === null) return null
+        // Bulk: the rate is the downstream bagger's — its belt is a package conveyor, so speed and pitch are not the bulk belt's
+        if (st.mode === 'bulk') return { ppm: tidy(ppm, 4), weightLb: tidy(r.values.weight?.value ?? null, 4), lengthIn: null, gapIn: null, speedFpm: null }
         return { ppm: tidy(ppm, 4), weightLb: tidy(r.values.weight?.value ?? null, 4), lengthIn: tidy(r.values.length?.value ?? null, 3), gapIn: tidy(r.values.gap?.value ?? null, 3), speedFpm: tidy(r.values.speed?.value ?? null, 2) }
     },
 }
