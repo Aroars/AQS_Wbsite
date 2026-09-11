@@ -106,6 +106,26 @@ describe('release rule: the oldest entered field in an over-determined relation 
         expect(r.values.weight).toMatchObject({ value: 2, source: 'solved' })
     })
 
+    it('a locked field is never released — the next-oldest unlocked entry gives way instead', () => {
+        const r = solveThroughput('packages', { throughput: { value: 60, seq: 1, locked: true }, weight: e(2, 2), ppm: e(40, 3) }, { justEdited: 'ppm' })
+        expect(r.released).toEqual(['weight'])
+        expect(r.values.weight?.value).toBeCloseTo(1.5, 9)
+        expect(r.values.throughput?.source).toBe('entered')
+    })
+
+    it('locks reach through solved values: a locked throughput survives a geometry edit', () => {
+        const entries: Entries = { throughput: { value: 60, seq: 1, locked: true }, weight: e(2, 2), speed: e(30, 3), length: e(12, 4), gap: e(6, 5) }
+        const r = solveThroughput('packages', entries, { justEdited: 'gap' })
+        expect(r.released).toEqual(['weight'])
+        expect(r.values.throughput?.value).toBe(60)
+    })
+
+    it('everything locked and disagreeing is a conflict that names the locks', () => {
+        const r = solveThroughput('packages', { throughput: { value: 60, seq: 1, locked: true }, weight: { value: 2, seq: 2, locked: true }, ppm: e(40, 3) }, { justEdited: 'ppm' })
+        expect(r.conflict).toBe('rate')
+        expect(r.warnings.some((w) => /Unlock/.test(w))).toBe(true)
+    })
+
     it('never clears: a released field is re-derived, not dropped', () => {
         const r = solveThroughput('packages', { throughput: e(60, 1), weight: e(2, 2), ppm: e(40, 3) }, { justEdited: 'ppm' })
         expect(Object.keys(r.values).sort()).toEqual(['ppm', 'throughput', 'weight'])

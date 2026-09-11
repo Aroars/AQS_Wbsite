@@ -49,15 +49,27 @@ interface NumFieldProps {
     trailing?: React.ReactNode
     /** Result-sized input (the belt load field) */
     big?: boolean
+    locked?: boolean
+    onToggleLock?: () => void
+}
+
+function LockIcon({ locked }: { locked: boolean }) {
+    return (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            {locked ? <path d="M8 11V7a4 4 0 0 1 8 0v4" /> : <path d="M8 11V7a4 4 0 0 1 7.5-2" />}
+        </svg>
+    )
 }
 
 /** One solver field: entered (white), solved (cyan + auto), needed (amber edge + hint), or empty */
-function NumField({ label, unit, value, status, hint, flashKey, placeholder, min, onChange, onBlur, trailing, big }: NumFieldProps) {
+function NumField({ label, unit, value, status, hint, flashKey, placeholder, min, onChange, onBlur, trailing, big, locked, onToggleLock }: NumFieldProps) {
     const solved = status === 'solved' || status === 'fill'
     const cls = [
         inputCls,
         big ? 'text-2xl font-semibold py-1.5' : '',
         solved ? 'text-primary border-primary/30 pr-14' : '',
+        locked ? 'border-warning/60 pr-8' : onToggleLock ? 'pr-8' : '',
         status === 'needed' ? 'border-l-2 border-l-warning' : '',
         flashKey ? 'tb-flash' : '',
     ].join(' ')
@@ -70,9 +82,17 @@ function NumField({ label, unit, value, status, hint, flashKey, placeholder, min
                         onChange={(e) => onChange(e.target.value)} onBlur={onBlur} className={cls}
                         aria-description={solved ? 'solved automatically; type to override' : undefined} />
                     {solved && (
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-mono uppercase tracking-wider text-primary/70 pointer-events-none">
+                        <span className={`absolute ${onToggleLock ? 'right-7' : 'right-2'} top-1/2 -translate-y-1/2 text-[9px] font-mono uppercase tracking-wider text-primary/70 pointer-events-none`}>
                             {status === 'fill' ? 'auto · box' : 'auto'}
                         </span>
+                    )}
+                    {onToggleLock && (
+                        <button type="button" onClick={onToggleLock} tabIndex={-1}
+                            title={locked ? 'Locked — the solver never changes this. Click to unlock.' : 'Lock this value so the solver never re-derives it'}
+                            aria-label={locked ? 'Unlock' : 'Lock'} aria-pressed={locked}
+                            className={`absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded transition-colors ${locked ? 'text-warning' : 'text-text-muted/40 hover:text-text-secondary'}`}>
+                            <LockIcon locked={!!locked} />
+                        </button>
                     )}
                 </div>
                 {trailing}
@@ -136,14 +156,39 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
         commit(next, f)
     }
 
-    /** A field left empty on blur goes back to the solver */
+    /** A field left empty on blur goes back to the solver (and drops its lock) */
     const finishEdit = (f: Field) => {
         if (state.raw[f] !== '') return
-        const next: CardState = { ...state, raw: { ...state.raw }, seq: { ...state.seq } }
+        const next: CardState = { ...state, raw: { ...state.raw }, seq: { ...state.seq }, locked: { ...state.locked } }
         delete next.raw[f]
         delete next.seq[f]
+        delete next.locked[f]
         if (f === 'throughput') next.throughputEntered = false
         commit(next, null)
+    }
+
+    /** Lock: the solver never releases this field. Locking a solved value pins it as an entry at its current value. */
+    const toggleLock = (f: Field) => {
+        const next: CardState = { ...state, raw: { ...state.raw }, seq: { ...state.seq }, locked: { ...state.locked } }
+        if (state.locked[f]) {
+            delete next.locked[f]
+            commit(next, null)
+            return
+        }
+        const entered = state.raw[f] !== undefined && state.raw[f] !== ''
+        if (!entered) {
+            const v = solved.values[f]
+            if (!v) return
+            const shown = f === 'throughput' ? fromLbPerMin(v.value, state.rateUnit, num(state.hours)) : v.value
+            if (shown === null) return
+            next.raw[f] = fmtInput(shown)
+            next.seq[f] = state.nextSeq
+            next.nextSeq = state.nextSeq + 1
+            if (f === 'weight') next.weightFromBox = false
+            if (f === 'throughput') next.throughputEntered = true
+        }
+        next.locked[f] = true
+        commit(next, f)
     }
 
     /** Unit change converts the typed throughput so the rate is unchanged (never reinterpreted) */
@@ -203,14 +248,15 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                 display = shown !== null ? fmtInput(shown) : ''
             } else display = fmtInput(v.value)
         }
-        return { status, display, hint, flashKey: flash[f] ?? 0 }
+        return { status, display, hint, flashKey: flash[f] ?? 0, locked: !!state.locked[f] }
     }
 
     interface Meta { label: string; unit: string; placeholder: string; min?: string }
     const field = (f: Field, m: Meta) => {
         const fv = fieldView(f)
         return <NumField key={f} label={m.label} unit={m.unit} value={fv.display} status={fv.status} hint={fv.hint}
-            flashKey={fv.flashKey} placeholder={m.placeholder} min={m.min} onChange={(v) => edit(f, v)} onBlur={() => finishEdit(f)} />
+            flashKey={fv.flashKey} placeholder={m.placeholder} min={m.min} onChange={(v) => edit(f, v)} onBlur={() => finishEdit(f)}
+            locked={fv.locked} onToggleLock={() => toggleLock(f)} />
     }
 
     // Publish the product definition for the Conveyor Spec and Belt Pull cards (tab card only)
@@ -301,6 +347,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         <NumField label="Line throughput" value={throughputField.display} status={throughputField.status}
                             hint={throughputField.hint} flashKey={throughputField.flashKey} placeholder="what the plant quoted"
                             onChange={(v) => edit('throughput', v)} onBlur={() => finishEdit('throughput')}
+                            locked={throughputField.locked} onToggleLock={() => toggleLock('throughput')}
                             trailing={
                                 <select value={state.rateUnit} onChange={(e) => setUnit(e.target.value as RateUnit)} className={unitSelectCls} aria-label="Throughput unit">
                                     {RATE_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
@@ -372,7 +419,8 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                     <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
                         <NumField big label="Belt load" unit="lb/ft" value={loadField.display} status={loadField.status}
                             hint={loadField.hint ?? (loadField.status === 'empty' ? (isBulk ? 'Solves from throughput ÷ belt speed, or from density × bed depth × bed width' : 'Solves from throughput ÷ belt speed, or from package weight ÷ pitch') : undefined)}
-                            flashKey={loadField.flashKey} placeholder="—" onChange={(v) => edit('lbft', v)} onBlur={() => finishEdit('lbft')} />
+                            flashKey={loadField.flashKey} placeholder="—" onChange={(v) => edit('lbft', v)} onBlur={() => finishEdit('lbft')}
+                            locked={loadField.locked} onToggleLock={() => toggleLock('lbft')} />
                         {speed !== null && (
                             <div className="text-right pb-1">
                                 <div className={tileLabelCls}>Belt speed</div>
@@ -458,7 +506,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                 )}
 
                 <div className="text-[10px] text-text-muted">
-                    Amber fields would unlock a result; cyan fields are solved and can be typed over. Conveyor Speed and Belt Pull pull from this card through their From bar, or link to follow it live.
+                    Amber fields would unlock a result; cyan fields are solved and can be typed over. Lock the two or three knowns a job starts from (the padlock in each box) and the solver only ever moves the rest. Conveyor Speed and Belt Pull pull from this card through their From bar, or link to follow it live.
                     {instanceId === MAIN ? ' This product definition is also live on the Conveyor Spec card.' : ''}
                 </div>
             </div>

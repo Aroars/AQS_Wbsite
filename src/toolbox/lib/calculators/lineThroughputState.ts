@@ -17,6 +17,8 @@ export interface CardState {
     raw: Partial<Record<Field, string>>
     /** Entry order per entered field: higher = more recent */
     seq: Partial<Record<Field, number>>
+    /** Fields the user locked: the solver never releases them */
+    locked: Partial<Record<Field, boolean>>
     nextSeq: number
     rateUnit: RateUnit
     /** Production hours per day (or per shift) for per-day / per-shift rates */
@@ -37,7 +39,7 @@ export interface CardState {
 }
 
 export const emptyState: CardState = {
-    mode: 'packages', raw: {}, seq: {}, nextSeq: 1, rateUnit: 'lb/hr', hours: '16', nameplate: '',
+    mode: 'packages', raw: {}, seq: {}, locked: {}, nextSeq: 1, rateUnit: 'lb/hr', hours: '16', nameplate: '',
     fill: { density: '', l: '', w: '', h: '', fillPct: '100' }, weightFromBox: false, throughputEntered: false, repose: '35', edgeMargin: '1', maxDepth: '',
 }
 
@@ -59,12 +61,12 @@ export function restore(json: string | null): CardState {
         if (v.raw && typeof v.raw === 'object') {
             return {
                 ...emptyState, ...v,
-                raw: { ...v.raw }, seq: { ...v.seq },
+                raw: { ...v.raw }, seq: { ...v.seq }, locked: { ...(v.locked ?? {}) },
                 fill: { ...emptyState.fill, ...(v.fill ?? {}) },
                 rateUnit: (RATE_UNITS as readonly string[]).includes(v.rateUnit) ? v.rateUnit : 'lb/hr',
             }
         }
-        const s: CardState = { ...emptyState, raw: {}, seq: {}, fill: { ...emptyState.fill } }
+        const s: CardState = { ...emptyState, raw: {}, seq: {}, locked: {}, fill: { ...emptyState.fill } }
         s.mode = v.productType === 'bulk' ? 'bulk' : 'packages'
         s.rateUnit = v.rateUnit === 'day' ? 'lb/day' : 'lb/hr'
         s.hours = String(v.hrsPerDay || '16')
@@ -96,9 +98,9 @@ export function buildEntries(s: CardState): { entries: Entries; hoursMissing: bo
         if (f === 'throughput') {
             const lbMin = toLbPerMin(v, s.rateUnit, hours)
             if (lbMin === null) { hoursMissing = true; continue }
-            entries.throughput = { value: lbMin, seq: s.seq.throughput ?? 0 }
+            entries.throughput = { value: lbMin, seq: s.seq.throughput ?? 0, locked: !!s.locked.throughput }
         } else {
-            entries[f] = { value: v, seq: s.seq[f] ?? 0, source: f === 'weight' && s.weightFromBox ? 'fill' : 'entered' }
+            entries[f] = { value: v, seq: s.seq[f] ?? 0, source: f === 'weight' && s.weightFromBox ? 'fill' : 'entered', locked: !!s.locked[f] }
         }
     }
     return { entries, hoursMissing }
@@ -111,12 +113,14 @@ export function runSolve(s: CardState, justEdited: Field | null): SolveOutput {
 export function dropEntered(s: CardState, fields: Field[]): CardState {
     const raw = { ...s.raw }
     const seq = { ...s.seq }
+    const locked = { ...s.locked }
     let weightFromBox = s.weightFromBox
     for (const f of fields) {
         delete raw[f]
         delete seq[f]
+        delete locked[f]
         if (f === 'weight') weightFromBox = false
     }
-    return { ...s, raw, seq, weightFromBox }
+    return { ...s, raw, seq, locked, weightFromBox }
 }
 

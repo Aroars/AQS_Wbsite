@@ -12,7 +12,8 @@
  * relation rests on — its entered values and the entries behind its solved
  * ones — is released and re-derived from the others. One entry per
  * disagreement. The field being edited is never released, and nothing is ever
- * cleared.
+ * cleared. A field the user has locked is never released either — locks are
+ * for the two or three knowns a job starts from.
  *
  * Relations (belt load lb/ft is a field of its own, so it can be typed or solved)
  *   rate   throughput (lb/min) = packages/min × package weight (lb)        both modes
@@ -57,6 +58,8 @@ export interface Entry {
     /** Entry order: higher = more recent. The fill-derived weight uses -1 so it is released first. */
     seq: number
     source?: EntrySource
+    /** The user locked this value: the solver never releases it, whatever its age */
+    locked?: boolean
 }
 export type Entries = Partial<Record<Field, Entry>>
 
@@ -242,7 +245,7 @@ export function solveThroughput(mode: LoadProductType, entries: Entries, opts: S
                     // behind its solved values — so exactly one entry, the oldest, gives way.
                     const pool = new Set<Field>()
                     for (const v of rel.vars) for (const x of deps[v] ?? []) pool.add(x)
-                    const candidates = [...pool].filter((v) => entered[v] && v !== opts.justEdited)
+                    const candidates = [...pool].filter((v) => entered[v] && !entered[v]!.locked && v !== opts.justEdited)
                     if (candidates.length === 0) {
                         conflict = rel.id
                     } else {
@@ -278,7 +281,12 @@ export function solveThroughput(mode: LoadProductType, entries: Entries, opts: S
             warnings.push(`The bed needs ${fmtNum(depth.value)} in of depth but the belt can carry ${fmtNum(maxDepth)} in — widen the belt, run faster, or cut the rate.`)
         }
     }
-    if (conflict) warnings.push('The entered values disagree and none of them can be released. Clear one to let the solver re-derive it.')
+    if (conflict) {
+        const anyLocked = Object.values(entered).some((e) => e.locked)
+        warnings.push(anyLocked
+            ? 'The entered values disagree and every one involved is locked or being edited. Unlock or clear one to let the solver re-derive it.'
+            : 'The entered values disagree and none of them can be released. Clear one to let the solver re-derive it.')
+    }
 
     return { mode, values, released, conflict, hints, warnings, derived }
 }
