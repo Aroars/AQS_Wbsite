@@ -1,16 +1,13 @@
 import { useState, useMemo, useEffect } from 'react'
-import { ArrowRight } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
-import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { jumpToTool } from '@/toolbox/lib/jump'
 import {
-    solveThroughput, toLbPerMin, fromLbPerMin, unitNeedsHours, packageFillWeightLb, packagerHeadroom, fmtNum, fmtInput, tidy,
-    RATE_UNITS, PACKAGE_FIELDS, BULK_FIELDS,
-    type Field, type Entries, type RateUnit, type SolveOutput,
+    toLbPerMin, fromLbPerMin, unitNeedsHours, packageFillWeightLb, packagerHeadroom, fmtNum, fmtInput,
+    RATE_UNITS, type Field, type RateUnit,
 } from '@/toolbox/lib/calculators/lineThroughput'
 import type { LoadDefinition, LoadProductType } from '@/toolbox/lib/calculators/loadDefinition'
+import { emptyState, num, defaultHours, modeFields, restore, buildEntries, runSolve, dropEntered, type CardState } from '@/toolbox/lib/calculators/lineThroughputState'
 
 /*
  * Line Throughput → Belt Load
@@ -28,113 +25,6 @@ const labelCls = 'block text-xs text-text-muted mb-1'
 const unitSelectCls = 'px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0'
 const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
 const tileLabelCls = 'text-text-muted uppercase text-[10px]'
-
-interface CardState {
-    mode: LoadProductType
-    /** What the user typed, per entered field (throughput in rateUnit) */
-    raw: Partial<Record<Field, string>>
-    /** Entry order per entered field: higher = more recent */
-    seq: Partial<Record<Field, number>>
-    nextSeq: number
-    rateUnit: RateUnit
-    /** Production hours per day (or per shift) for per-day / per-shift rates */
-    hours: string
-    /** Packager nameplate rate, pkg/min (headroom check) */
-    nameplate: string
-    /** Package Fill: bulk product settled into a fixed box → package weight */
-    fill: { density: string; l: string; w: string; h: string; fillPct: string }
-    /** raw.weight was written by the Package Fill box, not typed */
-    weightFromBox: boolean
-    /** The user has entered a line throughput at some point (survives a release) — shows the headroom check */
-    throughputEntered: boolean
-    /** Bulk extras that ride along to Belt Pull */
-    repose: string
-    edgeMargin: string
-}
-
-const emptyState: CardState = {
-    mode: 'packages', raw: {}, seq: {}, nextSeq: 1, rateUnit: 'lb/hr', hours: '16', nameplate: '',
-    fill: { density: '', l: '', w: '', h: '', fillPct: '100' }, weightFromBox: false, throughputEntered: false, repose: '35', edgeMargin: '1',
-}
-
-const num = (s: string | number | null | undefined): number | null => {
-    if (s === null || s === undefined) return null
-    const n = typeof s === 'number' ? s : parseFloat(s)
-    return Number.isFinite(n) ? n : null
-}
-
-const defaultHours = (unit: RateUnit) => (unit === 'lb/shift' ? '8' : '16')
-const modeFields = (mode: LoadProductType): readonly Field[] => (mode === 'bulk' ? BULK_FIELDS : PACKAGE_FIELDS)
-
-/** Restore the persisted card, including the pre-rebuild "Belt Load / Throughput" shape */
-function restore(json: string | null): CardState {
-    if (!json) return emptyState
-    try {
-        const v = JSON.parse(json)
-        if (!v || typeof v !== 'object') return emptyState
-        if (v.raw && typeof v.raw === 'object') {
-            return {
-                ...emptyState, ...v,
-                raw: { ...v.raw }, seq: { ...v.seq },
-                fill: { ...emptyState.fill, ...(v.fill ?? {}) },
-                rateUnit: (RATE_UNITS as readonly string[]).includes(v.rateUnit) ? v.rateUnit : 'lb/hr',
-            }
-        }
-        const s: CardState = { ...emptyState, raw: {}, seq: {}, fill: { ...emptyState.fill } }
-        s.mode = v.productType === 'bulk' ? 'bulk' : 'packages'
-        s.rateUnit = v.rateUnit === 'day' ? 'lb/day' : 'lb/hr'
-        s.hours = String(v.hrsPerDay || '16')
-        s.nameplate = String(v.ratedPpm ?? '')
-        s.fill = { density: String(v.density ?? ''), l: String(v.pkgL ?? ''), w: String(v.pkgW ?? ''), h: String(v.pkgH ?? ''), fillPct: String(v.fillPct ?? '100') }
-        s.repose = String(v.repose ?? '35')
-        s.edgeMargin = String(v.edgeMargin ?? '1')
-        const legacy: [Field, unknown][] = [
-            ['throughput', v.rateUnit === 'ft3hr' ? '' : v.throughput], ['weight', v.pieceWeight], ['ppm', v.ppm],
-            ['speed', v.speed], ['density', v.looseDensity], ['width', v.beltWidth], ['depth', v.bedDepth],
-        ]
-        let seq = 1
-        for (const [f, val] of legacy) if (val !== undefined && val !== null && String(val).trim() !== '') { s.raw[f] = String(val); s.seq[f] = seq++ }
-        s.nextSeq = seq
-        s.throughputEntered = s.raw.throughput !== undefined
-        return s
-    } catch {
-        return emptyState
-    }
-}
-
-function buildEntries(s: CardState): { entries: Entries; hoursMissing: boolean } {
-    const entries: Entries = {}
-    const hours = num(s.hours)
-    let hoursMissing = false
-    for (const f of modeFields(s.mode)) {
-        const v = num(s.raw[f])
-        if (v === null) continue
-        if (f === 'throughput') {
-            const lbMin = toLbPerMin(v, s.rateUnit, hours)
-            if (lbMin === null) { hoursMissing = true; continue }
-            entries.throughput = { value: lbMin, seq: s.seq.throughput ?? 0 }
-        } else {
-            entries[f] = { value: v, seq: s.seq[f] ?? 0, source: f === 'weight' && s.weightFromBox ? 'fill' : 'entered' }
-        }
-    }
-    return { entries, hoursMissing }
-}
-
-function runSolve(s: CardState, justEdited: Field | null): SolveOutput {
-    return solveThroughput(s.mode, buildEntries(s).entries, { edgeMarginIn: num(s.edgeMargin) ?? 1, justEdited })
-}
-
-function dropEntered(s: CardState, fields: Field[]): CardState {
-    const raw = { ...s.raw }
-    const seq = { ...s.seq }
-    let weightFromBox = s.weightFromBox
-    for (const f of fields) {
-        delete raw[f]
-        delete seq[f]
-        if (f === 'weight') weightFromBox = false
-    }
-    return { ...s, raw, seq, weightFromBox }
-}
 
 type FieldStatus = 'entered' | 'solved' | 'fill' | 'needed' | 'empty'
 
@@ -190,8 +80,6 @@ function NumField({ label, unit, value, status, hint, flashKey, placeholder, min
 
 export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const setLoadDefinition = useAppStore((s) => s.setLoadDefinition)
-    const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
-    const receiveInfeed = useAppStore((s) => s.receiveInfeed)
 
     const [state, setState] = useInstanceState<CardState>('beltLoad', instanceId, emptyState, restore)
     const [flash, setFlash] = useState<Partial<Record<Field, number>>>({})
@@ -335,39 +223,8 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [solved, state.repose, state.edgeMargin, setLoadDefinition, instanceId])
 
-    // ── Handoffs ──
     const speed = val('speed')
-    const canSendPull = derived.lbPerFt !== null && speed !== null && derived.lbPerHr !== null
-    const sendPull = () => {
-        if (!canSendPull) return
-        const patch: Record<string, unknown> = { productType: state.mode, loadMode: 'rate', throughputLbHr: tidy(derived.lbPerHr, 1), beltSpeedFpm: tidy(speed, 2) }
-        if (isBulk) {
-            const dens = tidy(val('density'), 3); const repose = num(state.repose); const width = tidy(val('width'), 3); const depth = tidy(val('depth'), 3)
-            if (dens) patch.bulkDensityLbFt3 = dens
-            if (repose) patch.reposeDeg = repose
-            if (width) patch.beltWidthIn = width
-            if (depth) patch.bedDepthIn = depth
-            patch.edgeMarginIn = num(state.edgeMargin) ?? 1
-        } else {
-            const w = tidy(val('weight'), 4); const len = tidy(val('length'), 3)
-            if (w) patch.productWeightLb = w
-            if (len) patch.productLengthIn = len
-        }
-        sendToBeltPull(patch)
-        showToast(`Sent to Belt Pull — ${fmtNum(derived.lbPerFt!)} lb/ft @ ${fmtNum(speed!)} ft/min`)
-        jumpToTool('conveyor', 'beltPull')
-    }
-
     const ppm = val('ppm')
-    const canSendSpeed = !isBulk && ppm !== null
-    const sendSpeed = () => {
-        if (!canSendSpeed) return
-        receiveInfeed({ ppm: tidy(ppm, 4)!, weightLb: tidy(val('weight'), 4), lengthIn: tidy(val('length'), 3), gapIn: tidy(val('gap'), 3), speedFpm: tidy(speed, 2) })
-        showToast('Sent to Conveyor Speed — adjust speed or spacing there')
-        jumpToTool('conveyor', 'conveyorFlow')
-    }
-    const pitchLabel = derived.pitchIn !== null && val('length') !== null && val('gap') !== null
-        ? `, ${fmtNum(val('length')!)}″ + ${fmtNum(val('gap')!)}″ pitch` : ''
 
     // Headroom: only once the user has entered a line throughput (kept if the solver later re-derives it)
     const showHeadroom = !isBulk && state.throughputEntered
@@ -561,20 +418,8 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                     ))}
                 </div>
 
-                {/* 6. Handoffs — always visible, enabled when the payload exists */}
-                <div className="grid grid-cols-1 gap-2">
-                    <button onClick={sendPull} disabled={!canSendPull}
-                        className="w-full px-3 py-2 rounded-lg text-xs border transition-colors flex items-center justify-center gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10">
-                        Send to Belt Pull <ArrowRight className="w-3.5 h-3.5" />
-                        {canSendPull && <span className="font-mono">{fmtNum(derived.lbPerFt!)} lb/ft @ {fmtNum(speed!)} ft/min</span>}
-                    </button>
-                    {!isBulk && (
-                        <button onClick={sendSpeed} disabled={!canSendSpeed}
-                            className="w-full px-3 py-2 rounded-lg text-xs border transition-colors flex items-center justify-center gap-1.5 border-border bg-dark-900 text-text-secondary hover:border-primary/40 hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed">
-                            Send to Conveyor Speed <ArrowRight className="w-3.5 h-3.5" />
-                            {canSendSpeed && <span className="font-mono">{fmtNum(ppm!)} pkg/min{pitchLabel}</span>}
-                        </button>
-                    )}
+                <div className="text-[10px] text-text-muted">
+                    Conveyor Speed and Belt Pull pull from this card: open their From bar and choose Pull for a one-time copy or Link to follow this card live.
                 </div>
 
                 {/* 7. Packager headroom — once a line throughput has been entered */}

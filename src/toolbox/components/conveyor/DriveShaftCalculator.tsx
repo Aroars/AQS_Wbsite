@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { X } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
-import { useAppStore } from '@/toolbox/stores/appStore'
-import { useInstanceState, useInstanceInbox, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
+import { useInstanceState, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
+import { useHandoff } from '@/toolbox/hooks/useHandoff'
+import { SourceBar } from '@/toolbox/components/ui/SourceBar'
 import { shaftCheck, shaftMaterials, SQUARE_SHAFT_SIZES_IN, type ShaftShape } from '@/toolbox/lib/calculators/driveShaft'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { BigResult, Tile, Field, UtilBar, panelCls, inputCls, selectCls } from '@/toolbox/components/ui/Results'
@@ -14,12 +15,12 @@ const num = (v: string): number => { const n = parseFloat(v); return Number.isFi
 /** Modular belt drive shaft: deflection between bearings and twist along the width against limits */
 export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const [s, setS] = useInstanceState<S>('driveShaft', instanceId, initial)
-    const upd = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
-
-    useInstanceInbox('driveShaft', instanceId, (p) => {
+    const applyPatch = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
+    const handoff = useHandoff('driveShaft', instanceId, (p) => {
         const str = (v: unknown) => (asNumber(v) !== null ? String(Number(asNumber(v)!.toPrecision(5))) : '')
-        upd({ load: str(p.loadLbf) || s.load, torque: str(p.torqueLbIn) || s.torque, width: str(p.beltWidthIn) || s.width, pd: str(p.pdIn) || s.pd, source: typeof p.source === 'string' ? p.source : 'Loaded from Torque & Motor' })
+        applyPatch({ load: str(p.loadLbf) || s.load, torque: str(p.torqueLbIn) || s.torque, width: str(p.beltWidthIn) || s.width, pd: str(p.pdIn) || s.pd, source: typeof p.source === 'string' ? p.source : 'From Torque & Motor' })
     })
+    const upd = (patch: Partial<S>) => { handoff.touch(Object.keys(patch)); applyPatch(patch) }
 
     // Torque from pull × PD/2 when a pitch diameter is given and no torque typed
     const torque = num(s.torque) > 0 ? num(s.torque) : (num(s.pd) > 0 ? num(s.load) * num(s.pd) / 2 : 0)
@@ -40,6 +41,7 @@ export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: strin
                 </div>
             </div>
             <div className="p-4 space-y-4">
+                <SourceBar handoff={handoff} />
                 {s.source && (
                     <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-primary/30 bg-primary/10 text-xs text-primary">
                         <span className="flex-1">{s.source} — check the shaft, then go up a size or shorten the bearing span if a limit is exceeded.</span>

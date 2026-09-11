@@ -52,7 +52,7 @@ export const toolPages: ToolPage[] = [
         faq: [
             { q: 'How is belt pull calculated for a radius or S-conveyor?', a: 'Each turn uses the exact curve solution, T_out = T_in × e^(μθ) plus a rail-drag term (μ × w × r_c / μ_rail)(e^(μθ) − 1), so tension compounds through every turn in sequence. Straight and incline runs add friction (μ × weight per foot × length) and lift (weight × rise). The result is the running pull at the drive, bracketed by a hand-method floor and a width-ratio ceiling.' },
             { q: 'What is startup pull and why is it higher than running pull?', a: 'Startup pull is the running pull multiplied by the static-to-kinetic friction ratio, plus the force to accelerate the moving belt and product mass over the ramp time. Drives are checked on both: continuous torque for running and peak torque for startup, with a peak floor of 1.25 times continuous.' },
-            { q: 'How do I pick a drum motor from the belt pull?', a: 'Send to Torque & Motor carries the pulls, speed, and belt width to the drive card, where the OneMotion auto-pick names the smallest series whose belt-pull rating at your belt width passes the continuous pull, the peak pull, and the RPM at your belt speed, and a manual drum or sprocket-driven shaft entry shows utilisation for each wear scenario.' },
+            { q: 'How do I pick a drum motor from the belt pull?', a: 'The Torque & Motor card pulls the pulls, speed, and belt width from Belt Pull (or links to it), and its OneMotion auto-pick names the smallest series whose belt-pull rating at your belt width passes the continuous pull, the peak pull, and the RPM at your belt speed, and a manual drum or sprocket-driven shaft entry shows utilisation for each wear scenario.' },
         ],
         product: { href: '/solutions/conveyors/belt', label: 'Sanitary belt conveyors' },
         related: ['conveyor-motor-sizing-calculator', 'modular-belt-drive-shaft-calculator', 'conveyor-throughput-calculator', 'incline-conveyor-calculator', 'mdr-motorized-roller-selection', 'uhmw-wearstrip-span-calculator'],
@@ -142,7 +142,7 @@ export const toolPages: ToolPage[] = [
         h1: 'Conveyor Speed & Throughput Calculator — FPM, Packages per Minute, Pitch',
         intro: [
             'How fast does the belt need to run? Enter the rate in packages per minute, the product length, and the gap you want between products, and the calculator gives the belt speed in feet per minute as you type. Pick a different solve-for and it answers the other questions instead: the rate a belt at a known speed delivers, or the gap that speed leaves between products.',
-            'Alongside the main result you get pitch, products per foot of belt, packages per hour, and the gap time a downstream device has between products. Add a conveyor length for transit time, or start from the drive: RPM and pulley diameter give the belt speed directly. Send to Belt Pull carries the speed and package weight into the belt pull calculator. For a whole line with splits, merges, dwell stations, rejects, and accumulation, open the Line Flow Simulator — it starts from this same infeed.',
+            'Alongside the main result you get pitch, products per foot of belt, packages per hour, and the gap time a downstream device has between products. Add a conveyor length for transit time, or start from the drive: RPM and pulley diameter give the belt speed directly. The belt pull calculator pulls the speed and package weight from this card, or links to it. For a whole line with splits, merges, dwell stations, rejects, and accumulation, open the Line Flow Simulator — it starts from this same infeed.',
         ],
         howItWorks: [
             'Belt speed (ft/min) = packages per minute × pitch (in) / 12, where pitch = product length + gap.',
@@ -199,7 +199,7 @@ export const toolPages: ToolPage[] = [
             'Belt load (lb/ft) = throughput (lb/min) ÷ belt speed (ft/min), which is the same as 12 × package weight ÷ pitch.',
             'Worked example: 15,000 lb/hr at 70 lb per package is 250 lb/min, so 250 ÷ 70 = 3.6 packages/min. At a 24 in product with a 12 in gap (36 in pitch) the belt runs 3.6 × 36 ÷ 12 = 10.7 ft/min and carries 250 ÷ 10.7 = 23.3 lb/ft.',
             'Bulk: lb/ft = density × (bed depth ÷ 12) × ((belt width − 2 × edge margin) ÷ 12); throughput = lb/ft × belt speed.',
-            'Send to Belt Pull hands lb/ft and belt speed to the belt pull calculator. Send to Conveyor Speed hands packages per minute, weight, length, and gap to the speed calculator to adjust spacing first.',
+            'The belt pull calculator pulls lb/ft and belt speed from this card, and the speed calculator pulls packages per minute, weight, length, and gap to adjust spacing first — or either can link to it and follow it live.',
         ],
         faq: [
             { q: 'How do I convert lb/hr to packages per minute?', a: 'Divide by 60 to get lb/min, then divide by the package weight. 15,000 lb/hr is 250 lb/min; at 70 lb per package that is 3.6 packages per minute.' },
@@ -248,7 +248,7 @@ export const toolPages: ToolPage[] = [
         intro: [
             'A conveyor drive is sized from the belt pull, not guessed from the belt width. Enter the running pull, the startup pull, and the belt speed — or send them straight from the belt pull calculator — and this card turns them into what the drive has to deliver: torque at the sprocket or drum, shaft speed, power at the belt, the motor size at your drive efficiency, and the gear ratio for the motor speed you plan to use. Give it the sprocket teeth and belt pitch, or a drum diameter, and it does the geometry.',
             'Worked example: 500 lbf of sizing pull at 100 ft/min is 500 × 100 / 33,000 = 1.52 hp at the belt. At 85% drive efficiency the motor needs 1.78 hp, so the next standard size is 2 hp. On a 6 in pitch diameter the shaft turns 100 × 12 / (π × 6) = 63.7 rpm and carries 500 × 3 = 1,500 lb·in (169 N·m); a 1750 rpm motor needs a 27.5:1 reduction. The OneMotion auto-pick then lists every drum motor series at your belt width against the continuous and peak floors, and the manual entry checks a sprocket-driven shaft motor or a drum you already own, scenario by scenario, with an optional cool-ambient allowance.',
-            'Send to Drive Shaft carries the pull, torque, belt width, and pitch diameter into the shaft deflection and twist check.',
+            'The drive shaft calculator pulls the pull, torque, belt width, and pitch diameter from this card into its deflection and twist check, or links to it.',
         ],
         howItWorks: [
             'Power at the belt (hp) = belt pull (lbf) × belt speed (ft/min) / 33,000; kW = hp × 0.746. The motor requirement is that power divided by the drive efficiency, rounded up to a catalog size.',
@@ -276,7 +276,7 @@ export const toolPages: ToolPage[] = [
         intro: [
             'The drive shaft on a modular belt conveyor is a beam between its bearings and a torsion bar from the driven end to the far sprocket. Belt pull bends it; drive torque twists it. Too much of either and the sprockets walk, the belt tracks off, and the far side of a wide belt loads late. This calculator solves both for a square or round shaft in stainless or carbon steel from the bearing span, belt width, belt pull, and torque, and shows each against a limit you can edit.',
             'Worked example: a 1.5 in square 304 stainless shaft on a 40 in bearing span carrying 500 lbf of belt pull spread across a 30 in belt deflects 500 × (8 × 40³ − 4 × 40 × 30² + 30³) / (384 × 28,000,000 × 0.422) = 0.044 in, under the 0.10 in guidance. With 1,500 lb·in of torque over the 30 in width it twists 1500 × 30 / (11,200,000 × 0.712) = 0.0056 rad, or 0.32°. The stresses are checked against half the yield strength of the material.',
-            'Send from the Torque & Motor card and the pull, torque, belt width, and pitch diameter arrive filled in; change the shaft size or the span and the result updates live.',
+            'Pull from the Torque & Motor card and the pull, torque, belt width, and pitch diameter arrive filled in, or link to follow it live; change the shaft size or the span and the result updates live.',
         ],
         howItWorks: [
             'Deflection for a load W spread over the belt width w on a bearing span L: δ = W (8L³ − 4L·w² + w³) / (384·E·I). With w = L this is the familiar 5WL³ / 384EI.',
@@ -304,7 +304,7 @@ export const toolPages: ToolPage[] = [
         intro: [
             'How long does an accumulation conveyor have to be? Long enough to hold every package that arrives while the machine downstream is stopped. Enter the incoming rate, the product length, and the gap products settle to when they close up, then either the seconds of stoppage you must absorb or the conveyor length you already have. The calculator returns the length in feet or the seconds of buffer, the number of products it holds, the count of zero-pressure zones for an MDR accumulation conveyor, and the time to fill the buffer from empty.',
             'Worked example: 40 packages per minute of a 12 in product that closes up to no gap needs 40 × 30 / 60 = 20 products to cover a 30 second stoppage, so 20 × 12 in = 20 ft of accumulation. If the packages settle with a 2 in gap the pitch is 14 in and the length is 23.3 ft. Products round up for length and down for time so the buffer is never short. A 24 in zone length gives ten zero-pressure zones, and at 60 ft/min the belt fills the 20 ft from empty in 20 seconds.',
-            'The same math runs the Accumulation card in the Line Flow Simulator, where it uses the rate that survives the splits, merges, and rejects upstream; here it stands alone, and the Use Conveyor Speed infeed button pulls the rate and product length from the infeed card.',
+            'The same math runs the Accumulation card in the Line Flow Simulator, where it uses the rate that survives the splits, merges, and rejects upstream; here it stands alone, and its From bar pulls the rate, product length, and belt speed from the Conveyor Speed infeed, or links to it.',
         ],
         howItWorks: [
             'Accumulated pitch = product length + the gap products settle to when closed up.',

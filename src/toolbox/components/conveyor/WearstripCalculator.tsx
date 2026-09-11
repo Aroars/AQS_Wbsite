@@ -1,9 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { showToast } from '@/toolbox/components/ui/Toast'
-import { useAppStore } from '@/toolbox/stores/appStore'
 import {
     calculateWearstrip, optimizeWearstrip, solveSupportLayout,
     stripMaterials, tempFactors, stiffnessClasses, wearstripStandards, wearstripExamples,
@@ -44,7 +43,6 @@ function loadInitial(stored: string | null): WearstripConfig {
 }
 
 export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
-    const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
 
     const [cfg, setCfg] = useInstanceState<WearstripConfig>('wearstrip', instanceId, { ...defaultWearstripConfig }, loadInitial)
     const [mode, setMode] = useState<'check' | 'optimize'>('check')
@@ -84,10 +82,6 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
         return best
     }, [optimized])
 
-    const sendMu = () => {
-        sendToBeltPull({ carrywayBaseMu: mat.muDynamic })
-        showToast(`Sent μ=${mat.muDynamic} to Belt Pull carryway/return`)
-    }
 
     const inMm = (v: number) => `${v.toFixed(3)}" (${(v * 25.4).toFixed(2)} mm)`
 
@@ -162,10 +156,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                 {stripMaterials.map((m) => <option key={m.id} value={m.id}>{m.name} — μ {m.muDynamic}, ${m.costPerIn3}/in³</option>)}
                             </select>
                         </div>
-                        <button onClick={sendMu} title="The strip is the carryway — its friction drives belt pull and motor sizing"
-                            className="px-2.5 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center gap-1 whitespace-nowrap">
-                            μ {mat.muDynamic} → Belt Pull <ArrowRight className="w-3 h-3" />
-                        </button>
+                        <span className="text-[10px] text-text-muted self-center">μ {mat.muDynamic} — Belt Pull pulls this from its From bar</span>
                     </div>
                     <div className="text-[10px] text-text-muted">
                         {mat.note ? `${mat.note}. ` : ''}Handbook values — verify E and creep with the supplier before locking a standard.

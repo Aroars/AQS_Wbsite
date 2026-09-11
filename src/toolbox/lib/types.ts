@@ -71,3 +71,9 @@ export interface SavedSnapshot {
     /** Encoded snapshot string (lib/snapshot) */
     code: string
 }
+
+/** A live link from one card instance to a source card instance */
+export interface CardLink {
+    tool: string
+    instanceId: string
+}

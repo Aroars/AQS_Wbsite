@@ -1,12 +1,11 @@
 import { useMemo } from 'react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
-import { showToast } from '@/toolbox/components/ui/Toast'
-import { useAppStore } from '@/toolbox/stores/appStore'
 import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
-import { readInfeed } from '@/toolbox/lib/calculators/infeedCard'
 import { accumulatedPitchIn, lengthForTime, timeForLength, zonesForLength, fillTimeSeconds } from '@/toolbox/lib/calculators/accumulation'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
-import { BigResult, Tile, Field, panelCls, inputCls, ghostBtnCls } from '@/toolbox/components/ui/Results'
+import { BigResult, Tile, Field, panelCls, inputCls } from '@/toolbox/components/ui/Results'
+import { useHandoff } from '@/toolbox/hooks/useHandoff'
+import { SourceBar } from '@/toolbox/components/ui/SourceBar'
 
 interface S { rate: string; length: string; gap: string; mode: 'length' | 'time'; seconds: string; conveyorFt: string; zoneIn: string; speed: string }
 const initial: S = { rate: '', length: '', gap: '0', mode: 'length', seconds: '30', conveyorFt: '', zoneIn: '', speed: '' }
@@ -15,14 +14,10 @@ const num = (v: string) => { const n = parseFloat(v); return Number.isFinite(n) 
 /** Accumulation buffer: length for a stoppage time, or time for a length — the simulator's accumulation card on its own */
 export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const [s, setS] = useInstanceState<S>('accumulation', instanceId, initial)
-    const upd = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
-
-    const useInfeed = () => {
-        const r = readInfeed((useAppStore.getState().chains[MAIN] ?? [])[0])
-        if (r.ppm === null) { showToast('The Conveyor Speed infeed has no rate yet'); return }
-        upd({ rate: String(Number(r.ppm.toPrecision(5))), length: r.lengthIn !== null ? String(Number(r.lengthIn.toPrecision(5))) : s.length, speed: r.speedFpm !== null ? String(Number(r.speedFpm.toPrecision(5))) : s.speed })
-        showToast('Loaded the Conveyor Speed infeed')
-    }
+    const applyPatch = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
+    const upd = (patch: Partial<S>) => { handoff.touch(Object.keys(patch)); applyPatch(patch) }
+    // Pull or link the Conveyor Speed infeed (rate, product length, belt speed)
+    const handoff = useHandoff('accumulation', instanceId, (p) => applyPatch({ rate: String(p.rate ?? ''), ...(p.length ? { length: String(p.length) } : {}), ...(p.speed ? { speed: String(p.speed) } : {}) }))
 
     const pitch = accumulatedPitchIn(num(s.length), num(s.gap))
     const r = useMemo(() => {
@@ -40,12 +35,10 @@ export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: str
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Accumulation Buffer</h3>
-                <div className="flex items-center gap-2">
-                    <button onClick={useInfeed} className={ghostBtnCls}>Use Conveyor Speed infeed</button>
-                    <CalcPinButton toolId="accumulation" instanceId={instanceId} />
-                </div>
+                <CalcPinButton toolId="accumulation" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
+                <SourceBar handoff={handoff} />
                 <div className="grid grid-cols-3 gap-2">
                     <Field label="Rate" unit="pkg/min"><input type="number" min="0" step="any" value={s.rate} placeholder="incoming" className={inputCls} onChange={(e) => upd({ rate: e.target.value })} /></Field>
                     <Field label="Product length" unit="in"><input type="number" min="0" step="any" value={s.length} className={inputCls} onChange={(e) => upd({ length: e.target.value })} /></Field>

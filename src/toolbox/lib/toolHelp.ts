@@ -102,7 +102,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
         tips: [
             'Work left to right: Line Throughput → Conveyor Speed → Belt Pull → Torque & Motor → Drive Shaft. The Incline solver sits between speed and pull when the path has a slope; Belt Pull also works alone for radius and S-conveyors.',
             'Cyan values with an auto tag are solved from what you entered. Type over one and the oldest value it depends on is re-derived and flashes — nothing is ever cleared.',
-            'Every card keeps its own state. Sending from one card overwrites only the fields it carries.',
+            'Every card starts independent. A card that needs another card\'s numbers has a From bar: Pull copies them once, Link follows the source live until you edit a pulled value. Pin a copy to Home to compare configurations side by side.',
             'Load example configuration at the top of Belt Pull gives you a known-good starting point to edit.',
         ],
         tools: [
@@ -115,7 +115,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                     'Choose Packages or Bulk. Packages: enter any two of throughput, package weight, and packages per minute and the third fills in. Add product length and gap to estimate belt speed, or enter belt speed directly. lb/ft appears as soon as the speed is known.',
                     'Amber fields are the ones that would unlock a result; cyan auto fields are solved. Type over a solved field and the oldest entry it depends on is re-derived and flashes so you can see what moved.',
                     'Bulk: density, bed depth, belt width, and belt speed give lb/ft and throughput either way round — enter the demand and the bed to check utilization, or leave depth blank to get the depth the demand needs.',
-                    'Send to Belt Pull hands over lb/ft and belt speed. Send to Conveyor Speed hands over packages per minute, weight, length, and gap to adjust spacing first. The packager headroom check appears once a line throughput is entered.',
+                    'Conveyor Speed and Belt Pull pull from this card: open their From bar and choose Pull for a one-time copy or Link to follow this card live. The packager headroom check appears once a line throughput is entered.',
                 ],
                 notes: ['Use loose, as-conveyed density for bulk — product bulks up off the pile. The settled density in a box is a different number and belongs to the Package Fill section, which derives the package weight from the box.'],
             },
@@ -127,7 +127,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                     'Pick what to solve for: belt speed (default), rate, or gap. The chosen field becomes the result; the other three are the inputs.',
                     'Enter packages per minute, product length, and gap. Belt speed, pitch, products per foot, packages per hour, and gap time update on every keystroke. A conveyor length adds transit time.',
                     'Belt speed from drive RPM: enter RPM and pulley pitch diameter and use the result as the belt speed.',
-                    'Enter a package weight and Send to Belt Pull carries lb/ft and speed into the belt pull calculator. For splits, merges, rejects, dwell stations, and accumulation, open the Line Flow Simulator — it starts from this same infeed.',
+                    'Enter a package weight and Belt Pull can pull lb/ft and speed from this card through its From bar. For splits, merges, rejects, dwell stations, and accumulation, open the Line Flow Simulator — it starts from this same infeed.',
                 ],
             },
             {
@@ -135,7 +135,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 label: 'Accumulation Buffer',
                 summary: 'Feet of zero-pressure accumulation for seconds of downstream stoppage, or the seconds a given length absorbs.',
                 steps: [
-                    'Enter the incoming rate, the product length, and the gap products settle to when they close up (0 for touching). Use Conveyor Speed infeed pulls the rate and length from the infeed card.',
+                    'Enter the incoming rate, the product length, and the gap products settle to when they close up (0 for touching). The From bar pulls the rate, length, and belt speed from the Conveyor Speed infeed, or links to it.',
                     'Length from time gives the conveyor length for the stoppage you must absorb; Time from length gives the seconds a conveyor you already have will buffer. Products round up for length and down for time.',
                     'Add a zone length for the MDR zero-pressure zone count, and a belt speed for the time to fill the buffer from empty.',
                 ],
@@ -163,7 +163,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                     'Wear scenario: Clean, Vendor-Rec, Worn, and Degraded scale the wearstrip friction. Size on Central × scenario × service factor — Worn for one or two turns, Degraded for three or more. Friction & Tension (advanced) exposes materials, back tension, and the corner drag model.',
                     'Service factors: bearinged nose bars carry no adder; static noses, speed over 30 m/min, start-stop duty, bi-directional drive, and elevation add to the factor.',
                     'Results: running and startup pull with the Low / Central / High band, the scenario table, tension through each turn, load by section when pockets or overrides are in play, the curve edge-capacity screen, the corner speed ceiling with the DG-321 rule, and the sign-off list of assumptions.',
-                    'Drive: the card shows the sizing floors and the smallest passing OneMotion series, then Send to Torque & Motor carries the pulls, speed, width, and every scenario\'s floors to the drive card for torque, power, motor size, gear ratio, the auto-pick table, and the manual sign-off entry.',
+                    'Drive: the card shows the sizing floors and the smallest passing OneMotion series. The Torque & Motor card pulls the pulls, speed, width, and every scenario\'s floors from here — or links to follow this card live — for torque, power, motor size, gear ratio, the auto-pick table, and the manual sign-off entry.',
                 ],
                 notes: [
                     'Central is the exact curve solution reconciled to the OneMotion A1 sign-off. Low is the vendor hand method; High is a sensitivity ceiling with no manufacturer basis.',
@@ -176,10 +176,10 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 label: 'Torque & Motor',
                 summary: 'Belt pull in, drive out: torque at the sprocket or drum, shaft rpm, power, a standard motor size, gear ratio, and the OneMotion pick.',
                 steps: [
-                    'Send from Belt Pull, or type the running pull, startup pull, sizing floors, speed, and belt width. The floors are Central × scenario × service factor; blank floors fall back to the running pull and 1.25× for peak.',
+                    'Pull or link from Belt Pull in the From bar, or type the running pull, startup pull, sizing floors, speed, and belt width. The floors are Central × scenario × service factor; blank floors fall back to the running pull and 1.25× for peak.',
                     'Pick the drive: sprocket teeth and belt pitch give the chordal pitch diameter (override from the drawing), or a drum diameter. Torque, shaft rpm, power at the belt, the motor size at your drive efficiency, and the gear ratio for the motor speed update live.',
                     'The OneMotion auto-pick lists every series at this width against the floors; the manual entry under it is the sign-off path with utilisation per wear scenario and the optional cool-ambient allowance.',
-                    'Send to Drive Shaft carries the pull, torque, belt width, and pitch diameter to the shaft check.',
+                    'Drive Shaft pulls the pull, torque, belt width, and pitch diameter from this card through its From bar, or links to it.',
                 ],
                 notes: ['Drum motors are verdicted on the vendor belt-pull rating at the belt width, not torque ÷ radius. Catalog N·m values are ambiguous between continuous and peak — confirm the AMO row with the vendor.'],
             },
@@ -188,7 +188,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 label: 'Drive Shaft Deflection & Twist',
                 summary: 'Checks a square or round drive shaft between its bearings for deflection under belt pull and twist under drive torque.',
                 steps: [
-                    'Send from Torque & Motor, or enter the shaft size and material, bearing span, belt width, belt pull, and drive torque (or a pitch diameter to derive it).',
+                    'Pull or link from Torque & Motor in the From bar, or enter the shaft size and material, bearing span, belt width, belt pull, and drive torque (or a pitch diameter to derive it).',
                     'Deflection uses the pull spread across the belt width on a simply supported span; twist uses the torque over the driven-to-far-sprocket length. Both show against editable limits, with bending and torsional stress against half the yield.',
                     'Exceeded limits say what to change: a larger shaft, a shorter bearing span, or an intermediate support.',
                 ],

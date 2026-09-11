@@ -1,13 +1,14 @@
-import { ArrowRight, CheckCircle, AlertTriangle, AlertCircle, X } from 'lucide-react'
+import { CheckCircle, AlertTriangle, AlertCircle, X } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { MAIN } from '@/toolbox/stores/migrate'
-import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { unitTypes } from '@/toolbox/data/conveyorCardTypes'
 import { fmtNum, tidy } from '@/toolbox/lib/calculators/lineThroughput'
 import { changeSolveFor, patchInfeed, rpmToFpm, SOLVE_LABEL } from '@/toolbox/lib/calculators/infeedCard'
-import { jumpToTool } from '@/toolbox/lib/jump'
 import { InfeedEditor, useInfeed, flowInputCls, flowUnitCls } from './InfeedEditor'
+import { useHandoff } from '@/toolbox/hooks/useHandoff'
+import { SourceBar } from '@/toolbox/components/ui/SourceBar'
+import type { InfeedPayload } from '@/toolbox/stores/appStore'
 
 const labelCls = 'block text-xs text-text-muted mb-1'
 const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
@@ -25,8 +26,12 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
     const bannerMain = useAppStore((s) => s.infeedBanner)
     const banner = instanceId === MAIN ? bannerMain : null
     const setInfeedBanner = useAppStore((s) => s.setInfeedBanner)
-    const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
-    const { head, solveFor, reading: r, patch, setUnit, setCards, current } = useInfeed(instanceId)
+    const receiveInfeed = useAppStore((s) => s.receiveInfeed)
+    const { head, solveFor, reading: r, patch: rawPatch, setUnit: rawSetUnit, setCards, current } = useInfeed(instanceId)
+    // Pull or link from Line Throughput: the payload fills this instance's chain
+    const handoff = useHandoff('conveyorFlow', instanceId, (p) => receiveInfeed(p as unknown as InfeedPayload, instanceId))
+    const patch: typeof rawPatch = (inputs, units) => { handoff.touch(Object.keys(inputs)); rawPatch(inputs, units) }
+    const setUnit: typeof rawSetUnit = (k, t, u, d) => { handoff.touch([k]); rawSetUnit(k, t, u, d) }
     if (!head) return null
 
     const targetUnit = solveFor === 'speed' ? (head.units.productSpeed ?? 'ft/min') : solveFor === 'rate' ? (head.units.productRate ?? '/min') : (head.units.productGap ?? 'in')
@@ -41,19 +46,6 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
         let cards = current()
         if (solveFor === 'speed') cards = changeSolveFor(cards, 'rate')
         setCards(patchInfeed(cards, { productSpeed: Number(rpmFpm.toFixed(2)) }, { productSpeed: 'ft/min' }))
-    }
-
-    // Send to Belt Pull needs a package weight for lb/ft
-    const canSendPull = r.speedFpm !== null && r.ppm !== null && r.weightLb !== null && r.lbPerFt !== null && r.throughputLbHr !== null
-    const sendPull = () => {
-        if (!canSendPull) return
-        sendToBeltPull({
-            productType: 'packages', loadMode: 'rate',
-            throughputLbHr: tidy(r.throughputLbHr, 1), beltSpeedFpm: tidy(r.speedFpm, 2),
-            productLengthIn: tidy(r.lengthIn, 3), productWeightLb: tidy(r.weightLb, 3),
-        })
-        showToast(`Sent to Belt Pull — ${fmtNum(r.lbPerFt!)} lb/ft @ ${fmtNum(r.speedFpm!)} ft/min`)
-        jumpToTool('conveyor', 'beltPull')
     }
 
     const feas = r.feasibility
@@ -83,7 +75,8 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
                     </div>
                 )}
 
-                <InfeedEditor chainId={instanceId} />
+                <SourceBar handoff={handoff} />
+                <InfeedEditor chainId={instanceId} onEdit={handoff.touch} />
 
                 {/* The answer, big and live */}
                 <div className="rounded-lg border border-primary/20 bg-dark-700 px-3 py-3 space-y-2">
@@ -176,23 +169,17 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
                     <div className="text-[10px] text-text-muted mt-1">ft/min = π × pitch diameter × RPM ÷ 12. Using it makes belt speed an input and solves the rate.</div>
                 </details>
 
-                {/* Handoff: Belt Pull needs a package weight for lb/ft */}
-                <div className="grid grid-cols-[1fr_auto] gap-2 items-end">
-                    <div>
-                        <label className={labelCls}>Package weight <span className="text-text-muted">(lb — for Belt Pull)</span></label>
-                        <div className="flex">
-                            <input type="number" min="0" step="any" value={asNum(head.inputs.productWeight) ?? ''} placeholder="per package"
-                                onChange={(e) => patch({ productWeight: e.target.value === '' ? null : parseFloat(e.target.value) })} className={flowInputCls} />
-                            <select value={head.units.productWeight ?? 'lb'} onChange={(e) => setUnit('productWeight', 'weight', e.target.value)} className={flowUnitCls} aria-label="Package weight unit">
-                                {unitTypes.weight.units.map((u: string) => <option key={u} value={u}>{u}</option>)}
-                            </select>
-                        </div>
+                {/* Package weight rides along when Belt Pull pulls from this card */}
+                <div>
+                    <label className={labelCls}>Package weight <span className="text-text-muted">(lb — Belt Pull pulls lb/ft from this)</span></label>
+                    <div className="flex">
+                        <input type="number" min="0" step="any" value={asNum(head.inputs.productWeight) ?? ''} placeholder="per package"
+                            onChange={(e) => patch({ productWeight: e.target.value === '' ? null : parseFloat(e.target.value) })} className={flowInputCls} />
+                        <select value={head.units.productWeight ?? 'lb'} onChange={(e) => setUnit('productWeight', 'weight', e.target.value)} className={flowUnitCls} aria-label="Package weight unit">
+                            {unitTypes.weight.units.map((u: string) => <option key={u} value={u}>{u}</option>)}
+                        </select>
                     </div>
-                    <button onClick={sendPull} disabled={!canSendPull}
-                        className="px-3 py-2 rounded-lg text-xs border transition-colors flex items-center justify-center gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10 whitespace-nowrap">
-                        Send to Belt Pull <ArrowRight className="w-3.5 h-3.5" />
-                        {canSendPull && <span className="font-mono">{fmtNum(r.lbPerFt!)} lb/ft @ {fmtNum(r.speedFpm!)} ft/min</span>}
-                    </button>
+                    <div className="text-[10px] text-text-muted mt-0.5">{r.lbPerFt !== null ? `${fmtNum(r.lbPerFt)} lb/ft ready for Belt Pull — open its From bar and pull or link.` : 'Belt Pull needs a package weight to size the belt; pull or link from its From bar.'}</div>
                 </div>
 
                 <a href="#tool-lineFlow" className="block text-xs text-text-secondary hover:text-primary transition-colors">

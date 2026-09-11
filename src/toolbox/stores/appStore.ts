@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { SavedConverter, TabId, PinnedCalc, SavedSnapshot } from '@/toolbox/lib/types'
+import type { SavedConverter, TabId, PinnedCalc, SavedSnapshot, CardLink } from '@/toolbox/lib/types'
 import { instanceKey, MAIN, migrateToInstances } from './migrate'
 import { cardSnapshot, encodeSnapshot, type CardSnapshot, type PageSnapshot, type Snapshot } from '@/toolbox/lib/snapshot'
 import { generateId } from '@/toolbox/lib/utils'
@@ -59,8 +59,12 @@ interface AppState {
     /** Context line shown on the Conveyor Speed card after a handoff (not persisted) */
     infeedBanner: string | null
     setInfeedBanner: (msg: string | null) => void
-    /** Line Throughput → Conveyor Speed: fill the infeed from the throughput card's numbers */
-    receiveInfeed: (payload: InfeedPayload) => void
+    /** Fill an infeed chain from the throughput card's numbers (Conveyor Speed pull / link) */
+    receiveInfeed: (payload: InfeedPayload, chainId?: string) => void
+    /** Live links: target instance key → the source card it mirrors (persisted) */
+    links: Record<string, CardLink>
+    setLink: (toolId: string, instanceId: string, link: CardLink) => void
+    clearLink: (toolId: string, instanceId: string) => void
 
     // Belt Pull calculator
     /** Section a deep link asked a tool to open (charts mount after the jump event fires; not persisted) */
@@ -176,7 +180,7 @@ export const useAppStore = create<AppState>()(
                     return { instanceStates, chains, epochs: { ...state.epochs, [key]: (state.epochs[key] ?? 0) + 1 } }
                 }),
             resetAllCards: () =>
-                set((state) => ({ instanceStates: {}, chains: { [MAIN]: [] }, loadDefinition: null, toolInbox: {}, beltPullInbox: null, infeedBanner: null, pageEpoch: state.pageEpoch + 1 })),
+                set((state) => ({ instanceStates: {}, chains: { [MAIN]: [] }, loadDefinition: null, toolInbox: {}, beltPullInbox: null, infeedBanner: null, links: {}, pageEpoch: state.pageEpoch + 1 })),
             snapshots: [],
             saveSnapshot: (name, snap) =>
                 set((state) => ({ snapshots: [{ id: generateId(), name: name.trim() || (snap.kind === 'page' ? 'Page' : snap.tool), kind: snap.kind, tool: snap.kind === 'card' ? snap.tool : undefined, at: snap.at, code: encodeSnapshot(snap) }, ...state.snapshots].slice(0, 50) })),
@@ -218,7 +222,15 @@ export const useAppStore = create<AppState>()(
                 })),
             infeedBanner: null,
             setInfeedBanner: (msg) => set({ infeedBanner: msg }),
-            receiveInfeed: (p) =>
+            links: {},
+            setLink: (toolId, instanceId, link) => set((state) => ({ links: { ...state.links, [instanceKey(toolId, instanceId)]: link } })),
+            clearLink: (toolId, instanceId) =>
+                set((state) => {
+                    const links = { ...state.links }
+                    delete links[instanceKey(toolId, instanceId)]
+                    return { links }
+                }),
+            receiveInfeed: (p, chainId = MAIN) =>
                 set((state) => {
                     // Belt speed becomes the solved target unless it was sent without the geometry
                     // that would re-derive it — then keep the speed and solve the gap instead.
@@ -236,8 +248,8 @@ export const useAppStore = create<AppState>()(
                     }
                     const units = { productRate: '/min', productLength: 'in', productGap: 'in', productWeight: 'lb', productSpeed: 'ft/min' }
                     return {
-                        chains: { ...state.chains, [MAIN]: patchInfeed(state.chains[MAIN] ?? [], inputs, units) },
-                        infeedBanner: 'Loaded from Line Throughput — adjust speed or spacing, then send to Belt Pull.',
+                        chains: { ...state.chains, [chainId]: patchInfeed(state.chains[chainId] ?? [], inputs, units) },
+                        ...(chainId === MAIN ? { infeedBanner: 'Loaded from Line Throughput — adjust speed or spacing here; Belt Pull pulls from this card.' } : {}),
                     }
                 }),
 
@@ -334,6 +346,7 @@ export const useAppStore = create<AppState>()(
                 pinnedCharts: state.pinnedCharts,
                 pinnedCalculators: state.pinnedCalculators,
                 snapshots: state.snapshots,
+                links: state.links,
             }),
         }
     )

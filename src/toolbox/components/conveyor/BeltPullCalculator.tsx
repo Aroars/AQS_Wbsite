@@ -1,18 +1,19 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { Plus, Trash2, Link2, ArrowRight } from 'lucide-react'
+import { Plus, Trash2, Link2 } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { instanceKey, MAIN } from '@/toolbox/stores/migrate'
 import { useInstanceReload } from '@/toolbox/hooks/useToolState'
+import { useHandoff } from '@/toolbox/hooks/useHandoff'
+import { SourceBar } from '@/toolbox/components/ui/SourceBar'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { oneMotionPicks } from '@/toolbox/lib/calculators/driveMotor'
-import { jumpToTool } from '@/toolbox/lib/jump'
 import { useBeltSpecs, beltChoices, toolboxBuild, type BeltChoice } from '@/toolbox/lib/beltSpecs'
 import {
     calculateBeltPull, calculateAllScenarios, pathSummary, isIncline, isStraight, isTurn,
     inclineSlopeDeg, resolveProductType, resolveMaxPlainIncline,
     wearFactors, scenarioFrictions, wearstripMaterials,
-    defaultBeltPullConfig, exampleConfigs, solveRailMu, LBF_TO_N,
+    defaultBeltPullConfig, exampleConfigs, solveRailMu, LBF_TO_N, mergeBeltPullConfig,
     type BeltPullConfig, type TurnSection, type InclineSection, type StraightSection, type PathSection, type SurfaceMaterials,
     type ReturnSegment, type ProductType, type PocketSpec,
 } from '@/toolbox/lib/calculators/beltPull'
@@ -32,21 +33,16 @@ function num(v: string, fallback = 0): number {
     return isNaN(n) ? fallback : n
 }
 
+/** For onChange: an emptied box is 0 (renders blank) so the next keystroke replaces rather than appends; junk falls back */
+function numEdit(v: string, fallback = 0): number {
+    return v.trim() === '' ? 0 : num(v, fallback)
+}
+
 /** Utilization color: green < 60%, yellow 60–85%, red > 85% */
 function utilizationCls(pct: number): string {
     if (pct < 60) return 'text-success'
     if (pct <= 85) return 'text-warning'
     return 'text-error'
-}
-
-function mergeConfig(parsed: Partial<BeltPullConfig>): BeltPullConfig {
-    const merged = { ...defaultBeltPullConfig, ...parsed }
-    // Configs saved before the materials/wear split carry resolved frictions only —
-    // label them custom rather than falsely claiming a clean wear state
-    if (!parsed.wearId && parsed.frictions) merged.wearId = 'custom'
-    // Configs saved before the product-type split: bed mode means bulk
-    if (!parsed.productType) merged.productType = resolveProductType(merged)
-    return merged
 }
 
 /** Incline geometry helpers for the section solver (belt length + rise are canonical) */
@@ -58,17 +54,16 @@ function loadInitialConfig(stored: string | null, allowShareLink: boolean): Belt
     // Shared link takes priority (tab card only), then the persisted config, then the S-path example
     try {
         const p = allowShareLink ? new URLSearchParams(window.location.search).get('beltpull') : null
-        if (p) return mergeConfig(JSON.parse(atob(p)))
+        if (p) return mergeBeltPullConfig(JSON.parse(atob(p)))
     } catch { /* fall through */ }
     try {
-        if (stored) return mergeConfig(JSON.parse(stored))
+        if (stored) return mergeBeltPullConfig(JSON.parse(stored))
     } catch { /* fall through */ }
     return exampleConfigs[0].config
 }
 
 export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const setInstanceState = useAppStore((s) => s.setInstanceState)
-    const sendToTool = useAppStore((s) => s.sendToTool)
 
     const [cfg, setCfg] = useState<BeltPullConfig>(() => loadInitialConfig(useAppStore.getState().instanceStates[instanceKey('beltPull', instanceId)] ?? null, instanceId === MAIN))
     const [accumulated, setAccumulated] = useState(() => cfg.loadMode === 'accumulated')
@@ -92,11 +87,8 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
         setCfg(next); setAccumulated(next.loadMode === 'accumulated')
     })
 
-    // Cross-tool inbox (tab card only): one-shot messages from the Belt Load and Wearstrip cards.
-    // (All views stay mounted, so the subscription is always live before a send.)
-    useEffect(() => instanceId !== MAIN ? undefined : useAppStore.subscribe((state, prev) => {
-        const patch = state.beltPullInbox
-        if (patch && patch !== prev.beltPullInbox) {
+    // Apply a load / friction patch from another card (pull, link, or the Spec Solver's send)
+    const applyPatch = (patch: Record<string, unknown>) => {
             setCfg((c) => {
                 const { carrywayBaseMu, ...rest } = patch as Partial<BeltPullConfig> & { carrywayBaseMu?: number }
                 let next = { ...c, ...rest }
@@ -111,11 +103,16 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                 }
                 return next
             })
-            useAppStore.getState().clearBeltPullInbox()
-        }
+    }
+    const handoff = useHandoff('beltPull', instanceId, applyPatch)
+    // The Spec Solver still pushes a solved path here (its state is not persisted, so it cannot be pulled)
+    useEffect(() => instanceId !== MAIN ? undefined : useAppStore.subscribe((state, prev) => {
+        const patch = state.beltPullInbox
+        if (patch && patch !== prev.beltPullInbox) { applyPatch(patch); useAppStore.getState().clearBeltPullInbox() }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }), [instanceId])
 
-    const upd = (patch: Partial<BeltPullConfig>) => setCfg((c) => ({ ...c, ...patch }))
+    const upd = (patch: Partial<BeltPullConfig>) => { handoff.touch(Object.keys(patch)); setCfg((c) => ({ ...c, ...patch })) }
     const updSection = (i: number, patch: SectionPatch) =>
         setCfg((c) => ({ ...c, sections: c.sections.map((s, j) => (j === i ? { ...s, ...patch } as PathSection : s)) }))
     const removeSection = (i: number) => setCfg((c) => ({ ...c, sections: c.sections.filter((_, j) => j !== i) }))
@@ -141,20 +138,6 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
 
     // One-line drive verdict; the full auto-pick table and manual drive live on the Torque & Motor card
     const quickPick = useMemo(() => oneMotionPicks(result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm), [result.continuousFloorLbf, result.peakFloorLbf, widthMm, cfg.beltSpeedFpm])
-    const sendToDriveMotor = () => {
-        sendToTool('driveMotor', {
-            runningPullLbf: result.centralLbf, startupPullLbf: result.startupPullLbf,
-            contFloorLbf: result.continuousFloorLbf, peakFloorLbf: result.peakFloorLbf,
-            speedFpm: cfg.beltSpeedFpm, beltWidthIn: cfg.beltWidthIn,
-            serviceFactor: Number(result.serviceFactor.toFixed(2)), breakawayFactor: cfg.breakawayFactor,
-            scenarioLabel: wearFactors.find((f) => f.id === cfg.wearId)?.label ?? 'custom',
-            scenarios: scenarios.map((sc) => ({ id: sc.id, label: sc.label, cont: sc.result.continuousFloorLbf, peak: sc.result.peakFloorLbf })),
-            pitchMm: num(pitchMm) || null,
-            source: 'Loaded from Belt Pull',
-        })
-        showToast(`Sent to Torque & Motor — ${result.centralLbf.toFixed(1)} lbf @ ${cfg.beltSpeedFpm} ft/min`)
-        jumpToTool('conveyor', 'driveMotor')
-    }
 
     // Catalog belts from the quoting tool's spec feed: pick one to fill the belt fields
     const specs = useBeltSpecs()
@@ -244,6 +227,8 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                     </select>
                 </div>
 
+                <SourceBar handoff={handoff} note="Line Throughput and Conveyor Speed bring the load and speed; Wearstrip brings the rail μ." />
+
                 {/* ── Belt & load ── */}
                 <div className="space-y-2">
                     <div className="text-xs text-text-secondary uppercase tracking-wider">Belt & Load</div>
@@ -269,13 +254,13 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                         <div>
                             <label className={labelCls}>Belt Width (in)</label>
                             <input type="number" min="1" step="any" value={cfg.beltWidthIn || ''} className={inputCls}
-                                onChange={(e) => upd({ beltWidthIn: num(e.target.value, 12) })} />
+                                onChange={(e) => upd({ beltWidthIn: numEdit(e.target.value, 12) })} />
                         </div>
                         <div>
                             <label className={labelCls}>Belt Weight (lb/ft², POM basis)</label>
                             <div className="flex gap-1">
                                 <input type="number" min="0" step="any" value={cfg.beltWeightLbFt2 || ''} className={inputCls}
-                                    onChange={(e) => upd({ beltWeightLbFt2: num(e.target.value, 1.64) })} />
+                                    onChange={(e) => upd({ beltWeightLbFt2: numEdit(e.target.value, 1.64) })} />
                                 <select value={cfg.beltBuild} onChange={(e) => upd({ beltBuild: e.target.value as 'pom' | 'pp' })}
                                     className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0">
                                     <option value="pom">POM</option>
@@ -291,7 +276,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                 Belt Speed (ft/min) ⓘ
                             </label>
                             <input type="number" min="0" step="any" value={cfg.beltSpeedFpm || ''} className={inputCls}
-                                onChange={(e) => upd({ beltSpeedFpm: num(e.target.value, 60) })} />
+                                onChange={(e) => upd({ beltSpeedFpm: numEdit(e.target.value, 60) })} />
                         </div>
                         <div>
                             <label className={labelCls}>Minimum Straight (in)</label>
@@ -349,12 +334,12 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <div>
                                 <label className={labelCls}>Angle of Repose (°)</label>
                                 <input type="number" min="0" max="89" step="any" value={cfg.reposeDeg ?? 35} className={inputCls}
-                                    onChange={(e) => upd({ reposeDeg: num(e.target.value, 35) })} />
+                                    onChange={(e) => upd({ reposeDeg: numEdit(e.target.value, 35) })} />
                             </div>
                             <div>
                                 <label className={labelCls}>Pocket Fill (%)</label>
                                 <input type="number" min="1" max="100" step="any" value={Math.round((cfg.pocketFillFraction ?? 0.85) * 100)} className={inputCls}
-                                    onChange={(e) => upd({ pocketFillFraction: Math.min(Math.max(num(e.target.value, 85) / 100, 0.01), 1) })} />
+                                    onChange={(e) => upd({ pocketFillFraction: Math.min(Math.max(numEdit(e.target.value, 85) / 100, 0.01), 1) })} />
                             </div>
                             <div>
                                 <label className={labelCls}>Plain-Belt Limit (°)</label>
@@ -412,7 +397,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <div>
                                 <label className={labelCls}>Product Length (in)</label>
                                 <input type="number" min="0.1" step="any" value={cfg.productLengthIn || ''} className={inputCls}
-                                    onChange={(e) => upd({ productLengthIn: num(e.target.value, 12) })} />
+                                    onChange={(e) => upd({ productLengthIn: numEdit(e.target.value, 12) })} />
                             </div>
                             <div>
                                 <label className={labelCls}>Weight per Piece (lb)</label>
@@ -610,7 +595,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                     <div>
                                         <label className={labelCls}>Angle (°, custom)</label>
                                         <input type="number" min="1" max="180" step="any" value={s.angleDeg || ''} className={inputCls}
-                                            onChange={(e) => updSection(i, { angleDeg: num(e.target.value, 90) })} />
+                                            onChange={(e) => updSection(i, { angleDeg: numEdit(e.target.value, 90) })} />
                                     </div>
                                     <div>
                                         <label className={labelCls}>Inside R (in)</label>
@@ -781,7 +766,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                 <div key={row.key} className="flex items-center gap-2">
                                     <span className="text-xs text-text-muted w-40 shrink-0">{row.label}</span>
                                     <input type="number" min="0" step="0.01" value={cfg.materials[row.key]}
-                                        onChange={(e) => setMaterialBase(row.key, num(e.target.value, 0.18))}
+                                        onChange={(e) => setMaterialBase(row.key, numEdit(e.target.value, 0.18))}
                                         className="w-20 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
                                     <select value={wearstripMaterials.find((m) => m.mu === cfg.materials[row.key])?.id ?? ''}
                                         onChange={(e) => {
@@ -805,22 +790,22 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <div>
                                 <label className={labelCls}>μ Carryway (active)</label>
                                 <input type="number" min="0" step="0.01" value={cfg.frictions.carryway} className={inputCls}
-                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, carryway: num(e.target.value, 0.18) } })} />
+                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, carryway: numEdit(e.target.value, 0.18) } })} />
                             </div>
                             <div>
                                 <label className={labelCls}>μ Turn Rail (active)</label>
                                 <input type="number" min="0" step="0.01" value={cfg.frictions.rail} className={inputCls}
-                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, rail: num(e.target.value, 0.18) } })} />
+                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, rail: numEdit(e.target.value, 0.18) } })} />
                             </div>
                             <div>
                                 <label className={labelCls}>μ Return (active)</label>
                                 <input type="number" min="0" step="0.01" value={cfg.frictions.return} className={inputCls}
-                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, return: num(e.target.value, 0.18) } })} />
+                                    onChange={(e) => upd({ wearId: 'custom', frictions: { ...cfg.frictions, return: numEdit(e.target.value, 0.18) } })} />
                             </div>
                             <div>
                                 <label className={labelCls}>Back Tension (lbf/ft width)</label>
                                 <input type="number" min="0" step="any" value={cfg.backTensionLbfPerFtWidth} className={inputCls}
-                                    onChange={(e) => upd({ backTensionLbfPerFtWidth: num(e.target.value, 0) })} />
+                                    onChange={(e) => upd({ backTensionLbfPerFtWidth: numEdit(e.target.value, 0) })} />
                                 <div className="text-[10px] text-text-muted mt-0.5">
                                     Modular belts with catenary take-up run near-zero slack tension. Enter a value only
                                     if a mechanical tensioner or known slack-side load exists.{result.backTensionLbf > 0 ? ` (= ${result.backTensionLbf.toFixed(1)} lbf)` : ''}
@@ -829,29 +814,29 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <div>
                                 <label className={labelCls}>μ Return Rollers (assumed)</label>
                                 <input type="number" min="0" step="0.005" value={cfg.muRoller} className={inputCls}
-                                    onChange={(e) => upd({ muRoller: num(e.target.value, 0.04) })} />
+                                    onChange={(e) => upd({ muRoller: numEdit(e.target.value, 0.04) })} />
                                 <div className="text-[10px] text-text-muted mt-0.5">Bearinged rollers, 0.03–0.05 plausible.</div>
                             </div>
                             <div>
                                 <label className={labelCls}>Static Ratio / Ramp (s) / Breakaway</label>
                                 <div className="flex gap-1">
                                     <input type="number" min="1" step="0.01" value={cfg.staticRatio} className={inputCls}
-                                        onChange={(e) => upd({ staticRatio: num(e.target.value, 1.11) })} />
+                                        onChange={(e) => upd({ staticRatio: numEdit(e.target.value, 1.11) })} />
                                     <input type="number" min="0.1" step="0.1" value={cfg.rampTimeS} className={inputCls}
-                                        onChange={(e) => upd({ rampTimeS: num(e.target.value, 1.0) })} />
+                                        onChange={(e) => upd({ rampTimeS: numEdit(e.target.value, 1.0) })} />
                                     <input type="number" min="1" step="0.05" value={cfg.breakawayFactor} className={inputCls}
-                                        onChange={(e) => upd({ breakawayFactor: num(e.target.value, 1.25) })} />
+                                        onChange={(e) => upd({ breakawayFactor: numEdit(e.target.value, 1.25) })} />
                                 </div>
                             </div>
                             <div>
                                 <label className={labelCls}>Belt Straight Rating (kgf/m) / Curve Derate / Collapse Factor</label>
                                 <div className="flex gap-1">
                                     <input type="number" min="0" step="any" value={cfg.straightRatingKgfM} className={inputCls}
-                                        onChange={(e) => upd({ straightRatingKgfM: num(e.target.value, 205) })} />
+                                        onChange={(e) => upd({ straightRatingKgfM: numEdit(e.target.value, 205) })} />
                                     <input type="number" min="0.05" max="1" step="0.01" value={cfg.curveDerate} className={inputCls}
-                                        onChange={(e) => upd({ curveDerate: num(e.target.value, 0.23) })} />
+                                        onChange={(e) => upd({ curveDerate: numEdit(e.target.value, 0.23) })} />
                                     <input type="number" min="1" step="0.1" value={cfg.collapseFactor} className={inputCls}
-                                        onChange={(e) => upd({ collapseFactor: num(e.target.value, 1.5) })} />
+                                        onChange={(e) => upd({ collapseFactor: numEdit(e.target.value, 1.5) })} />
                                 </div>
                                 <div className="text-[10px] text-text-muted mt-0.5">
                                     Curve capacity ≈ 20–26% of straight rating industry-wide (bounded screen until the vendor
@@ -861,7 +846,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <div>
                                 <label className={labelCls}>Corner Contact Band (in)</label>
                                 <input type="number" min="0.05" step="0.05" value={cfg.contactBandIn} className={inputCls}
-                                    onChange={(e) => upd({ contactBandIn: num(e.target.value, 0.5) })} />
+                                    onChange={(e) => upd({ contactBandIn: numEdit(e.target.value, 0.5) })} />
                                 <div className="text-[10px] text-text-muted mt-0.5">
                                     Belt-edge/rail contact width for corner pressure. Model anchors (V_ref 98 @ μ 0.18 / 2.44 psi,
                                     ×0.75 confidence, 200 ft/min cap) are flagged constants pending the coupon test.
@@ -892,12 +877,12 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                     <div className="flex items-center gap-3">
                                         <label className="text-xs text-text-muted whitespace-nowrap">Scaling n</label>
                                         <input type="range" min="0" max="1.5" step="0.05" value={cfg.turnDragModel.exponent}
-                                            onChange={(e) => upd({ turnDragModel: { ...cfg.turnDragModel, exponent: num(e.target.value, 0.5) } })}
+                                            onChange={(e) => upd({ turnDragModel: { ...cfg.turnDragModel, exponent: numEdit(e.target.value, 0.5) } })}
                                             className="flex-1 accent-[var(--color-primary,#22d3ee)]" />
                                         <span className="font-mono text-xs text-primary w-10 text-right">{cfg.turnDragModel.exponent.toFixed(2)}</span>
                                         <label className="text-xs text-text-muted whitespace-nowrap ml-2">Ref ratio</label>
                                         <input type="number" min="1" step="0.1" value={cfg.turnDragModel.refRatio}
-                                            onChange={(e) => upd({ turnDragModel: { ...cfg.turnDragModel, refRatio: num(e.target.value, 2.2) } })}
+                                            onChange={(e) => upd({ turnDragModel: { ...cfg.turnDragModel, refRatio: numEdit(e.target.value, 2.2) } })}
                                             className="w-16 px-2 py-1 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
                                     </div>
                                     <div className="text-[10px] text-text-muted">
@@ -1234,12 +1219,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                     ) : (
                         <div className="text-xs text-warning">No OneMotion series passes at this width, pull, and speed — size a sprocket-driven shaft on the Torque &amp; Motor card.</div>
                     )}
-                    <button onClick={sendToDriveMotor}
-                        className="w-full px-3 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center justify-center gap-1.5">
-                        Send to Torque &amp; Motor <ArrowRight className="w-3.5 h-3.5" />
-                        <span className="font-mono">{result.centralLbf.toFixed(1)} lbf @ {cfg.beltSpeedFpm} ft/min</span>
-                    </button>
-                    <div className="text-[10px] text-text-muted">Torque at the sprocket or drum, shaft rpm, power, motor size, gear ratio, the OneMotion auto-pick table and manual drive utilisation live on the Torque &amp; Motor card, which then sends to Drive Shaft.</div>
+                    <div className="text-[10px] text-text-muted">Torque at the sprocket or drum, shaft rpm, power, motor size, gear ratio, the OneMotion auto-pick table and manual drive utilisation live on the Torque &amp; Motor card — open its From bar and pull or link this card. Drive Shaft then pulls from Torque &amp; Motor.</div>
                 </div>
 
 

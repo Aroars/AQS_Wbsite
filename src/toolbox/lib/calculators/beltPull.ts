@@ -1099,3 +1099,14 @@ export const exampleConfigs: { id: string; label: string; config: BeltPullConfig
         },
     },
 ]
+
+/** A stored or shared config over the defaults, with the pre-split fields interpreted the way the card does */
+export function mergeBeltPullConfig(parsed: Partial<BeltPullConfig>): BeltPullConfig {
+    const merged = { ...defaultBeltPullConfig, ...parsed }
+    // Configs saved before the materials/wear split carry resolved frictions only —
+    // label them custom rather than falsely claiming a clean wear state
+    if (!parsed.wearId && parsed.frictions) merged.wearId = 'custom'
+    // Configs saved before the product-type split: bed mode means bulk
+    if (!parsed.productType) merged.productType = resolveProductType(merged)
+    return merged
+}

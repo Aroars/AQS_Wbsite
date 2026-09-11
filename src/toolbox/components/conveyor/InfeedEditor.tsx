@@ -57,8 +57,11 @@ const WEIGHT: FieldDef = { key: 'weight', inputKey: 'productWeight', label: 'Pro
  * the Conveyor Speed calculator and, with the weight field, by the Line Flow
  * Simulator — both edit the same card.
  */
-export function InfeedEditor({ showWeight = false, chainId = MAIN }: { showWeight?: boolean; chainId?: string }) {
-    const { head, solveFor, reading, patch, setSolveFor, setUnit } = useInfeed(chainId)
+export function InfeedEditor({ showWeight = false, chainId = MAIN, onEdit }: { showWeight?: boolean; chainId?: string; onEdit?: (keys: string[]) => void }) {
+    const { head, solveFor, reading, patch: rawPatch, setSolveFor: rawSolveFor, setUnit: rawSetUnit } = useInfeed(chainId)
+    const patch: typeof rawPatch = (inputs, units) => { onEdit?.(Object.keys(inputs)); rawPatch(inputs, units) }
+    const setSolveFor: typeof rawSolveFor = (next) => { onEdit?.(['productSpeed', 'productRate', 'productGap']); rawSolveFor(next) }
+    const setUnit: typeof rawSetUnit = (k, t, u, d) => { onEdit?.([k]); rawSetUnit(k, t, u, d) }
     if (!head) return null
 
     const numberInput = (f: FieldDef) => {

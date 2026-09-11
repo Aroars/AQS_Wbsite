@@ -1,14 +1,13 @@
 import { useMemo, useCallback } from 'react'
-import { ArrowRight, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
-import { showToast } from '@/toolbox/components/ui/Toast'
-import { useAppStore } from '@/toolbox/stores/appStore'
-import { useInstanceState, useInstanceInbox, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
-import { jumpToTool } from '@/toolbox/lib/jump'
+import { useInstanceState, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
+import { useHandoff } from '@/toolbox/hooks/useHandoff'
+import { SourceBar } from '@/toolbox/components/ui/SourceBar'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { LBF_TO_N, chordalPdMm, thermalUpliftFactor } from '@/toolbox/lib/calculators/beltPull'
 import { motorSizing, oneMotionPicks, pulleyPresetsAt, drumCapability, sprocketCapability, LB_IN_TO_NM } from '@/toolbox/lib/calculators/driveMotor'
-import { BigResult, Tile, Field, panelCls, inputCls, selectCls, labelCls, sendBtnCls } from '@/toolbox/components/ui/Results'
+import { BigResult, Tile, Field, panelCls, inputCls, selectCls, labelCls } from '@/toolbox/components/ui/Results'
 
 /*
  * Torque & Motor — the drive step of the conveyor chain, on its own card.
@@ -52,15 +51,14 @@ function utilizationCls(pct: number): string {
 }
 
 export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
-    const sendToTool = useAppStore((s) => s.sendToTool)
     const [s, setS] = useInstanceState<S>('driveMotor', instanceId, initial)
-    const upd = useCallback((patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch })), [setS])
+    const applyPatch = useCallback((patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch })), [setS])
 
-    // Belt Pull → here: pulls, floors, speed, width and the scenario floors for the utilisation table
-    useInstanceInbox('driveMotor', instanceId, (p) => {
+    // Belt Pull → here (pull or link): pulls, floors, speed, width and the scenario floors for the utilisation table
+    const handoff = useHandoff('driveMotor', instanceId, (p) => {
         const str = (v: unknown) => (asNumber(v) !== null ? String(Number(asNumber(v)!.toPrecision(5))) : '')
         const rows = Array.isArray(p.scenarios) ? (p.scenarios as ScenarioRow[]).filter((r) => r && typeof r.label === 'string') : []
-        upd({
+        applyPatch({
             runningPull: str(p.runningPullLbf), startupPull: str(p.startupPullLbf), contFloor: str(p.contFloorLbf), peakFloor: str(p.peakFloorLbf),
             speed: str(p.speedFpm) || s.speed, width: str(p.beltWidthIn) || s.width,
             serviceFactor: str(p.serviceFactor), scenarioLabel: typeof p.scenarioLabel === 'string' ? p.scenarioLabel : '',
@@ -69,6 +67,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
             source: typeof p.source === 'string' ? p.source : 'Loaded from Belt Pull',
         })
     })
+    const upd = useCallback((patch: Partial<S>) => { handoff.touch(Object.keys(patch)); applyPatch(patch) }, [handoff, applyPatch])
 
     const speedFpm = num(s.speed)
     const widthMm = num(s.width) * 25.4
@@ -100,14 +99,6 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
 
     const scenarioRows: ScenarioRow[] = s.scenarios.length > 0 ? s.scenarios : (hasPull ? [{ id: 'entered', label: 'Entered floors', cont: contFloor, peak: peakFloor }] : [])
 
-    const canSendShaft = hasPull && pdIn !== null
-    const sendShaft = () => {
-        if (!canSendShaft) return
-        sendToTool('driveShaft', { loadLbf: runningPull, torqueLbIn: contFloor * (pdIn! / 2), beltWidthIn: num(s.width), pdIn, source: 'Loaded from Torque & Motor' })
-        showToast(`Sent to Drive Shaft — ${fmtNum(runningPull)} lbf, ${fmtNum(contFloor * (pdIn! / 2))} lb·in`)
-        jumpToTool('conveyor', 'driveShaft')
-    }
-
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
@@ -121,6 +112,8 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                         <button type="button" onClick={() => upd({ source: null })} className="text-primary/70 hover:text-primary" aria-label="Dismiss"><X className="w-3.5 h-3.5" /></button>
                     </div>
                 )}
+
+                <SourceBar handoff={handoff} />
 
                 {/* 1. Belt pull in */}
                 <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">
@@ -330,10 +323,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                     </div>
                 </details>
 
-                <button onClick={sendShaft} disabled={!canSendShaft} className={sendBtnCls}>
-                    Send to Drive Shaft <ArrowRight className="w-3.5 h-3.5" />
-                    {canSendShaft && <span className="font-mono">{fmtNum(runningPull)} lbf · {fmtNum(contFloor * (pdIn! / 2))} lb·in · {s.width}″</span>}
-                </button>
+                <div className="text-[10px] text-text-muted">Drive Shaft pulls the pull, torque, width and pitch diameter from this card — open its From bar.</div>
             </div>
         </div>
     )
