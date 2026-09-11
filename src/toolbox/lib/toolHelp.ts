@@ -103,7 +103,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
             'Work left to right: Line Throughput → Conveyor Speed → Belt Pull → Torque & Motor → Drive Shaft. The Incline solver sits between speed and pull when the path has a slope; Belt Pull also works alone for radius and S-conveyors.',
             'Cyan values with an auto tag are solved from what you entered. Type over one and the oldest value it depends on is re-derived and flashes — nothing is ever cleared.',
             'Every card starts independent. A card that needs another card\'s numbers has a From bar: Pull copies them once, Link follows the source live until you edit a pulled value. Pin a copy to Home to compare configurations side by side.',
-            'Load example configuration at the top of Belt Pull gives you a known-good starting point to edit.',
+            'Belt Pull\'s card menu (the three dots) has Load example configuration — a known-good starting point to edit. The same menu on every card saves, loads, copies, and clears it, and the letter tag next to it (A, B, C…) names a card so two Home copies are easy to tell apart — From bars list them as Belt Load A, Belt Load B.',
         ],
         tools: [
             {
@@ -167,7 +167,7 @@ export const tabHelp: Record<TabId, TabHelp> = {
                 ],
                 notes: [
                     'Central is the exact curve solution reconciled to the OneMotion A1 sign-off. Low is the vendor hand method; High is a sensitivity ceiling with no manufacturer basis.',
-                    'The share link button copies a URL that reloads this exact configuration.',
+                    'Copy card code in the card menu gives a string that reloads this exact configuration on any Belt Pull card.',
                     'Calibration log: enter a measured pull and the solver back-solves the rail friction it implies.',
                 ],
             },

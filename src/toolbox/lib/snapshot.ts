@@ -32,6 +32,8 @@ export interface PageSnapshot {
     chains: Record<string, FlowCard[]>
     pinnedCalculators: PinnedCalc[]
     pinnedCharts: string[]
+    /** User tags per card instance key (added after v1 pages; optional) */
+    cardTags?: Record<string, string>
     savedConverters: SavedConverter[]
     converterStates: Record<string, { fromUnit: string; toUnit: string }>
     loadDefinition: string | null

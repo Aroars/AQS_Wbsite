@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { Plus, Trash2, Link2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { instanceKey, MAIN } from '@/toolbox/stores/migrate'
 import { useInstanceReload } from '@/toolbox/hooks/useToolState'
@@ -191,11 +191,6 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
         }
     }
 
-    const shareLink = () => {
-        const url = `${window.location.origin}${window.location.pathname}?beltpull=${encodeURIComponent(btoa(JSON.stringify(cfg)))}`
-        navigator.clipboard.writeText(url).then(() => showToast('Share link copied'))
-    }
-
     const setLoadMode = (mode: 'rate' | 'direct' | 'bulk') => {
         if (mode === 'bulk') {
             setAccumulated(false)
@@ -210,23 +205,10 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Radius/S-Conveyor Belt Pull</h3>
-                <div className="flex items-center gap-1.5">
-                    <button onClick={shareLink} title="Copy shareable link"
-                        className="p-1.5 rounded-md text-text-muted hover:text-primary hover:bg-dark-700 transition-colors">
-                        <Link2 className="w-3.5 h-3.5" />
-                    </button>
-                    <CalcPinButton toolId="beltPull" instanceId={instanceId} />
-                </div>
+                <CalcPinButton toolId="beltPull" instanceId={instanceId}
+                    examples={exampleConfigs.map((e) => ({ label: e.label, onSelect: () => applyExample(e.id) }))} />
             </div>
             <div className="p-4 space-y-4">
-                {/* Examples */}
-                <div className="flex items-center gap-2">
-                    <select value="" onChange={(e) => e.target.value && applyExample(e.target.value)} className={selectCls}>
-                        <option value="">Load example configuration…</option>
-                        {exampleConfigs.map((e) => <option key={e.id} value={e.id}>{e.label}</option>)}
-                    </select>
-                </div>
-
                 <SourceBar handoff={handoff} note="Line Throughput and Conveyor Speed bring the load and speed; Wearstrip brings the rail μ." />
 
                 {/* ── Belt & load ── */}

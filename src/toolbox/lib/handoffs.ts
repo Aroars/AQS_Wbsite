@@ -155,6 +155,16 @@ export const handoffs: Record<string, HandoffSource[]> = {
     beltPull: [beltLoadToBeltPull, infeedToBeltPull, wearstripToBeltPull],
 }
 
+/** Short, differentiating names for the From bar (the registry labels are the SEO page names) */
+const SHORT_LABEL: Record<string, string> = {
+    beltLoad: 'Belt Load',
+    conveyorFlow: 'Conveyor Speed',
+    beltPull: 'Belt Pull',
+    driveMotor: 'Torque & Motor',
+    driveShaft: 'Drive Shaft',
+    wearstrip: 'Wearstrip',
+}
+
 export function sourceLabel(tool: string): string {
-    return allTools.find((t) => t.id === tool)?.label ?? tool
+    return SHORT_LABEL[tool] ?? allTools.find((t) => t.id === tool)?.label ?? tool
 }

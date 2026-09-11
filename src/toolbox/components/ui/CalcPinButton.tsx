@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Pin, PinOff, MoreHorizontal, Save, Upload, Copy, Eraser, Trash2 } from 'lucide-react'
+import { Pin, PinOff, MoreHorizontal, Save, Upload, Copy, Eraser, Trash2, Tag, BookOpen } from 'lucide-react'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { MAIN } from '@/toolbox/stores/migrate'
+import { MAIN, instanceKey } from '@/toolbox/stores/migrate'
 import { decodeSnapshot, encodeSnapshot, describeSnapshot } from '@/toolbox/lib/snapshot'
 import { showToast } from '@/toolbox/components/ui/Toast'
 
@@ -10,13 +10,19 @@ import { showToast } from '@/toolbox/components/ui/Toast'
  * and the pin. On the tab card the pin adds an independent Home copy seeded
  * with the current values; on a Home copy it unpins that copy.
  */
-export function CalcPinButton({ toolId, instanceId }: { toolId: string; instanceId: string }) {
+export interface CardExample {
+    label: string
+    onSelect: () => void
+}
+
+export function CalcPinButton({ toolId, instanceId, examples }: { toolId: string; instanceId: string; examples?: CardExample[] }) {
     const pinCount = useAppStore((s) => s.pinnedCalculators.filter((p) => p.toolId === toolId).length)
     const pinCalculator = useAppStore((s) => s.pinCalculator)
     const unpinCalculator = useAppStore((s) => s.unpinCalculator)
     return (
         <div className="flex items-center gap-0.5">
-            <CardActions toolId={toolId} instanceId={instanceId} />
+            <CardTag toolId={toolId} instanceId={instanceId} />
+            <CardActions toolId={toolId} instanceId={instanceId} examples={examples} />
             {instanceId === MAIN ? (
                 <button onClick={() => pinCalculator(toolId, MAIN)} title="Pin a copy of this card to Home"
                     className="relative p-1 rounded transition-colors text-text-muted hover:text-text-secondary">
@@ -33,10 +39,38 @@ export function CalcPinButton({ toolId, instanceId }: { toolId: string; instance
     )
 }
 
-/** Save / load / copy / clear for one card instance */
-function CardActions({ toolId, instanceId }: { toolId: string; instanceId: string }) {
+/**
+ * A letter tag for this card (A, B, C…), like the variable tag on the formula
+ * calculator. Shown here and in every From bar that lists this card ("Belt
+ * Load A"), so two Home copies of the same calculator are easy to tell apart.
+ */
+function CardTag({ toolId, instanceId }: { toolId: string; instanceId: string }) {
+    const tag = useAppStore((s) => s.cardTags[instanceKey(toolId, instanceId)] ?? '')
+    const setCardTag = useAppStore((s) => s.setCardTag)
+    const [editing, setEditing] = useState(false)
+    const [draft, setDraft] = useState('')
+    const start = () => { setDraft(tag); setEditing(true) }
+    const save = () => { setCardTag(toolId, instanceId, draft); setEditing(false) }
+    if (editing) {
+        return (
+            <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))} onBlur={save}
+                onKeyDown={(e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') setEditing(false) }}
+                maxLength={2} placeholder="A" aria-label="Card tag"
+                className="w-8 px-1 py-0.5 bg-dark-700 border border-primary rounded text-center text-xs font-mono text-primary focus:outline-none" />
+        )
+    }
+    return (
+        <button onClick={start} title={tag ? `Tag ${tag} — click to change or clear` : 'Tag this card with a letter (A, B, C…) to tell copies apart in From bars'}
+            className={`flex items-center justify-center min-w-[1.5rem] px-1 py-0.5 rounded text-xs font-mono transition-colors ${tag ? 'bg-primary/20 text-primary border border-primary/30' : 'text-text-muted/50 hover:text-primary'}`}>
+            {tag || <Tag className="w-3 h-3" />}
+        </button>
+    )
+}
+
+/** Save / load / copy / clear (and examples, when the card has them) for one card instance */
+function CardActions({ toolId, instanceId, examples }: { toolId: string; instanceId: string; examples?: CardExample[] }) {
     const [open, setOpen] = useState(false)
-    const [mode, setMode] = useState<'menu' | 'save' | 'load'>('menu')
+    const [mode, setMode] = useState<'menu' | 'save' | 'load' | 'examples'>('menu')
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
     const [armed, setArmed] = useState(false)
@@ -85,12 +119,27 @@ function CardActions({ toolId, instanceId }: { toolId: string; instanceId: strin
                 <div className="absolute right-0 top-full mt-1 z-30 w-72 rounded-lg border border-border bg-dark-700 shadow-lg p-1.5 text-xs" role="menu">
                     {mode === 'menu' && (
                         <div className="space-y-0.5">
+                            {examples && examples.length > 0 && (
+                                <button onClick={() => setMode('examples')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-primary"><BookOpen className="w-3.5 h-3.5 text-text-muted" /> Load example configuration…</button>
+                            )}
                             <button onClick={() => setMode('save')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-primary"><Save className="w-3.5 h-3.5 text-text-muted" /> Save snapshot…</button>
                             <button onClick={() => setMode('load')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-primary"><Upload className="w-3.5 h-3.5 text-text-muted" /> Load…{mine.length > 0 ? <span className="ml-auto text-text-muted font-mono">{mine.length} saved</span> : null}</button>
                             <button onClick={copyCode} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-primary"><Copy className="w-3.5 h-3.5 text-text-muted" /> Copy card code</button>
                             <button onClick={clear} className={`w-full flex items-center gap-2 px-2 py-1.5 rounded transition-colors ${armed ? 'bg-error/15 text-error' : 'hover:bg-dark-600 text-text-primary'}`}>
                                 <Eraser className="w-3.5 h-3.5 text-text-muted" /> {armed ? 'Click again to clear this card' : 'Clear card'}
                             </button>
+                        </div>
+                    )}
+                    {mode === 'examples' && examples && (
+                        <div className="space-y-1.5 p-1">
+                            <div className="text-text-muted uppercase tracking-wider text-[10px]">Known-good starting points</div>
+                            <div className="max-h-48 overflow-y-auto space-y-0.5">
+                                {examples.map((ex) => (
+                                    <button key={ex.label} onClick={() => { ex.onSelect(); showToast(`Loaded ${ex.label}`); close() }}
+                                        className="w-full text-left px-2 py-1 rounded hover:bg-dark-600 text-text-primary">{ex.label}</button>
+                                ))}
+                            </div>
+                            <div className="flex justify-end"><button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-muted hover:text-text-secondary">Back</button></div>
                         </div>
                     )}
                     {mode === 'save' && (

@@ -94,6 +94,9 @@ interface AppState {
     // Pinning. Charts pin by id; calculators pin as independent instances (a copy of the source card).
     pinnedCharts: string[]
     pinnedCalculators: PinnedCalc[]
+    /** User-given name per card instance key ('beltLoad#pin-…' → 'Line 3'), shown in the header and the From bar */
+    cardTags: Record<string, string>
+    setCardTag: (toolId: string, instanceId: string, tag: string) => void
     togglePinChart: (chartId: string) => void
     pinCalculator: (toolId: string, fromInstanceId?: string) => void
     unpinCalculator: (instanceId: string) => void
@@ -180,7 +183,7 @@ export const useAppStore = create<AppState>()(
                     return { instanceStates, chains, epochs: { ...state.epochs, [key]: (state.epochs[key] ?? 0) + 1 } }
                 }),
             resetAllCards: () =>
-                set((state) => ({ instanceStates: {}, chains: { [MAIN]: [] }, loadDefinition: null, toolInbox: {}, beltPullInbox: null, infeedBanner: null, links: {}, pageEpoch: state.pageEpoch + 1 })),
+                set((state) => ({ instanceStates: {}, chains: { [MAIN]: [] }, loadDefinition: null, toolInbox: {}, beltPullInbox: null, infeedBanner: null, links: {}, cardTags: {}, pageEpoch: state.pageEpoch + 1 })),
             snapshots: [],
             saveSnapshot: (name, snap) =>
                 set((state) => ({ snapshots: [{ id: generateId(), name: name.trim() || (snap.kind === 'page' ? 'Page' : snap.tool), kind: snap.kind, tool: snap.kind === 'card' ? snap.tool : undefined, at: snap.at, code: encodeSnapshot(snap) }, ...state.snapshots].slice(0, 50) })),
@@ -195,7 +198,7 @@ export const useAppStore = create<AppState>()(
                 return {
                     v: 1, kind: 'page', at: new Date().toISOString(),
                     instanceStates: state.instanceStates, chains: state.chains,
-                    pinnedCalculators: state.pinnedCalculators, pinnedCharts: state.pinnedCharts,
+                    pinnedCalculators: state.pinnedCalculators, pinnedCharts: state.pinnedCharts, cardTags: state.cardTags,
                     savedConverters: state.savedConverters, converterStates: state.converterStates, loadDefinition: state.loadDefinition,
                 }
             },
@@ -215,7 +218,7 @@ export const useAppStore = create<AppState>()(
             applyPageSnapshot: (snap) =>
                 set((state) => ({
                     instanceStates: { ...snap.instanceStates }, chains: { [MAIN]: [], ...snap.chains },
-                    pinnedCalculators: snap.pinnedCalculators ?? [], pinnedCharts: snap.pinnedCharts ?? state.pinnedCharts,
+                    pinnedCalculators: snap.pinnedCalculators ?? [], pinnedCharts: snap.pinnedCharts ?? state.pinnedCharts, cardTags: snap.cardTags ?? {},
                     savedConverters: snap.savedConverters ?? state.savedConverters, converterStates: snap.converterStates ?? state.converterStates,
                     loadDefinition: snap.loadDefinition ?? null, toolInbox: {}, beltPullInbox: null, infeedBanner: null,
                     pageEpoch: state.pageEpoch + 1,
@@ -282,6 +285,16 @@ export const useAppStore = create<AppState>()(
             // Pinning
             pinnedCharts: [],
             pinnedCalculators: [],
+            cardTags: {},
+            setCardTag: (toolId, instanceId, tag) =>
+                set((state) => {
+                    const cardTags = { ...state.cardTags }
+                    const key = instanceKey(toolId, instanceId)
+                    const t = tag.trim()
+                    if (t) cardTags[key] = t
+                    else delete cardTags[key]
+                    return { cardTags }
+                }),
             togglePinChart: (chartId) =>
                 set((state) => ({
                     pinnedCharts: state.pinnedCharts.includes(chartId)
@@ -306,7 +319,9 @@ export const useAppStore = create<AppState>()(
                     delete instanceStates[instanceKey(pin.toolId, instanceId)]
                     const chains = { ...state.chains }
                     delete chains[instanceId]
-                    return { instanceStates, chains, pinnedCalculators: state.pinnedCalculators.filter((p) => p.instanceId !== instanceId) }
+                    const cardTags = { ...state.cardTags }
+                    delete cardTags[instanceKey(pin.toolId, instanceId)]
+                    return { instanceStates, chains, cardTags, pinnedCalculators: state.pinnedCalculators.filter((p) => p.instanceId !== instanceId) }
                 }),
             movePinned: (kind, id, dir) =>
                 set((state) => {
@@ -344,6 +359,7 @@ export const useAppStore = create<AppState>()(
                 loadDefinition: state.loadDefinition,
                 beltPullCalLog: state.beltPullCalLog,
                 pinnedCharts: state.pinnedCharts,
+                cardTags: state.cardTags,
                 pinnedCalculators: state.pinnedCalculators,
                 snapshots: state.snapshots,
                 links: state.links,

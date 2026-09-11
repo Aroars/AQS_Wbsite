@@ -38,15 +38,21 @@ export function useHandoff(toolId: string, instanceId: string, apply: (payload: 
     const key = instanceKey(toolId, instanceId)
     const link = useAppStore((s) => s.links[key] ?? null)
     const pins = useAppStore((s) => s.pinnedCalculators)
+    const cardTags = useAppStore((s) => s.cardTags)
     const setLinkStore = useAppStore((s) => s.setLink)
     const clearLink = useAppStore((s) => s.clearLink)
     const sources = handoffs[toolId] ?? []
 
     const instances: SourceInstance[] = sources.flatMap((src) => {
         const copies = pins.filter((p) => p.toolId === src.tool)
+        const name = sourceLabel(src.tool)
+        const tagged = (instanceId: string, fallback: string) => {
+            const tag = cardTags[instanceKey(src.tool, instanceId)]
+            return tag ? `${name} ${tag}` : fallback
+        }
         return [
-            { tool: src.tool, instanceId: MAIN, label: copies.length ? `${sourceLabel(src.tool)} (tab)` : sourceLabel(src.tool) },
-            ...copies.map((p, i) => ({ tool: src.tool, instanceId: p.instanceId, label: `${sourceLabel(src.tool)} (Home copy ${i + 1})` })),
+            { tool: src.tool, instanceId: MAIN, label: tagged(MAIN, copies.length ? `${name} (tab)` : name) },
+            ...copies.map((p, i) => ({ tool: src.tool, instanceId: p.instanceId, label: tagged(p.instanceId, `${name} (Home copy ${i + 1})`) })),
         ]
     })
 
