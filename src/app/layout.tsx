@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { pageMetadata, organizationSchema, localBusinessSchema } from "@/content/seo";
+import { Analytics } from "@vercel/analytics/next";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { GoogleAnalytics } from "@/components/ui/google-analytics";
 import "./globals.css";
+
+// Set in Vercel → Project → Settings → Environment Variables (see .env.example)
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const GOOGLE_SITE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -33,6 +39,7 @@ export const metadata: Metadata = {
     siteName: "Automated Quality Solutions",
     type: "website",
   },
+  ...(GOOGLE_SITE_VERIFICATION ? { verification: { google: GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
 export default function RootLayout({
@@ -59,6 +66,8 @@ export default function RootLayout({
       <body>
           <main className="relative z-10">{children}</main>
           <CookieConsent />
+          <Analytics />
+          {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   );

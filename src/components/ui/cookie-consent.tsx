@@ -2,7 +2,24 @@
 
 import { useState, useEffect } from "react";
 
-const CONSENT_KEY = "aqs_cookie_consent";
+export const CONSENT_KEY = "aqs_cookie_consent";
+export const CONSENT_EVENT = "aqs:consent";
+export type ConsentValue = "accepted" | "declined";
+
+/** The stored choice, or null before the visitor has answered (safe during SSR) */
+export function readConsent(): ConsentValue | null {
+  try {
+    const v = localStorage.getItem(CONSENT_KEY);
+    return v === "accepted" || v === "declined" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeConsent(value: ConsentValue) {
+  localStorage.setItem(CONSENT_KEY, value);
+  window.dispatchEvent(new CustomEvent<ConsentValue>(CONSENT_EVENT, { detail: value }));
+}
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -16,12 +33,12 @@ export function CookieConsent() {
   }, []);
 
   function accept() {
-    localStorage.setItem(CONSENT_KEY, "accepted");
+    writeConsent("accepted");
     setVisible(false);
   }
 
   function decline() {
-    localStorage.setItem(CONSENT_KEY, "declined");
+    writeConsent("declined");
     setVisible(false);
   }
 
