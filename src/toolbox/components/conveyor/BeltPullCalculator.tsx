@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Plus, Trash2, Link2, ArrowRight } from 'lucide-react'
 import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { instanceKey, MAIN } from '@/toolbox/stores/migrate'
+import { useInstanceReload } from '@/toolbox/hooks/useToolState'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { oneMotionPicks } from '@/toolbox/lib/calculators/driveMotor'
@@ -78,7 +79,18 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
     const [pitchMm, setPitchMm] = useState('50')
 
     // Persist this instance's working config (a Home pin is its own instance)
-    useEffect(() => { setInstanceState('beltPull', instanceId, JSON.stringify(cfg)) }, [cfg, instanceId, setInstanceState])
+    const skipPersist = useRef(false)
+    useEffect(() => {
+        if (skipPersist.current) { skipPersist.current = false; return }
+        setInstanceState('beltPull', instanceId, JSON.stringify(cfg))
+    }, [cfg, instanceId, setInstanceState])
+    // Cleared or loaded from the card menu: re-read the stored config (defaults when cleared)
+    useInstanceReload('beltPull', instanceId, () => {
+        skipPersist.current = true
+        const stored = useAppStore.getState().instanceStates[instanceKey('beltPull', instanceId)] ?? null
+        const next = stored ? loadInitialConfig(stored, false) : structuredClone(defaultBeltPullConfig)
+        setCfg(next); setAccumulated(next.loadMode === 'accumulated')
+    })
 
     // Cross-tool inbox (tab card only): one-shot messages from the Belt Load and Wearstrip cards.
     // (All views stay mounted, so the subscription is always live before a send.)

@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { SavedConverter, TabId, PinnedCalc } from '@/toolbox/lib/types'
+import type { SavedConverter, TabId, PinnedCalc, SavedSnapshot } from '@/toolbox/lib/types'
 import { instanceKey, MAIN, migrateToInstances } from './migrate'
+import { cardSnapshot, encodeSnapshot, type CardSnapshot, type PageSnapshot, type Snapshot } from '@/toolbox/lib/snapshot'
 import { generateId } from '@/toolbox/lib/utils'
 import { unitCategories } from '@/toolbox/data/unitCategories'
 import { patchInfeed, type FlowCard, type SolveFor } from '@/toolbox/lib/calculators/infeedCard'
@@ -35,6 +36,22 @@ interface AppState {
     instanceStates: Record<string, string>
     setInstanceState: (toolId: string, instanceId: string, json: string) => void
     clearInstanceState: (toolId: string, instanceId: string) => void
+    /** Bumped when an instance's stored state was replaced from outside the card (clear, load, pull): the card re-reads it */
+    epochs: Record<string, number>
+    /** Bumped when the whole page was replaced (page snapshot load, clear all) */
+    pageEpoch: number
+    /** Clear one card back to its defaults (Home pins keep their slot) */
+    resetInstance: (toolId: string, instanceId: string) => void
+    /** Clear every card on the page (pins, converters and charts stay) */
+    resetAllCards: () => void
+    /** Snapshots: the saved list, and building / applying codes */
+    snapshots: SavedSnapshot[]
+    saveSnapshot: (name: string, snap: Snapshot) => void
+    deleteSnapshot: (id: string) => void
+    cardSnapshotOf: (toolId: string, instanceId: string) => CardSnapshot
+    pageSnapshot: () => PageSnapshot
+    applyCardSnapshot: (toolId: string, instanceId: string, snap: CardSnapshot) => boolean
+    applyPageSnapshot: (snap: PageSnapshot) => void
     // Conveyor flow chains: card 0 is the infeed shared by Conveyor Speed and the Line Flow
     // Simulator; keyed by chain instance ('main' on the tab, a pin id on Home)
     chains: Record<string, FlowCard[]>
@@ -88,7 +105,7 @@ const defaultConverters: SavedConverter[] = [
 
 export const useAppStore = create<AppState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             // Navigation
             activeTab: 'home',
             setActiveTab: (tab) => set({ activeTab: tab }),
@@ -147,6 +164,58 @@ export const useAppStore = create<AppState>()(
                 }),
             chains: { [MAIN]: [] },
             setChain: (chainId, cards) => set((state) => ({ chains: { ...state.chains, [chainId]: cards } })),
+            epochs: {},
+            pageEpoch: 0,
+            resetInstance: (toolId, instanceId) =>
+                set((state) => {
+                    const key = instanceKey(toolId, instanceId)
+                    const instanceStates = { ...state.instanceStates }
+                    delete instanceStates[key]
+                    const chains = { ...state.chains }
+                    if (toolId === 'conveyorFlow' || toolId === 'lineFlow') chains[instanceId] = []
+                    return { instanceStates, chains, epochs: { ...state.epochs, [key]: (state.epochs[key] ?? 0) + 1 } }
+                }),
+            resetAllCards: () =>
+                set((state) => ({ instanceStates: {}, chains: { [MAIN]: [] }, loadDefinition: null, toolInbox: {}, beltPullInbox: null, infeedBanner: null, pageEpoch: state.pageEpoch + 1 })),
+            snapshots: [],
+            saveSnapshot: (name, snap) =>
+                set((state) => ({ snapshots: [{ id: generateId(), name: name.trim() || (snap.kind === 'page' ? 'Page' : snap.tool), kind: snap.kind, tool: snap.kind === 'card' ? snap.tool : undefined, at: snap.at, code: encodeSnapshot(snap) }, ...state.snapshots].slice(0, 50) })),
+            deleteSnapshot: (id) => set((state) => ({ snapshots: state.snapshots.filter((x) => x.id !== id) })),
+            cardSnapshotOf: (toolId, instanceId) => {
+                const state = get()
+                const chain = toolId === 'conveyorFlow' || toolId === 'lineFlow' ? state.chains[instanceId] : undefined
+                return cardSnapshot(toolId, state.instanceStates[instanceKey(toolId, instanceId)] ?? null, chain)
+            },
+            pageSnapshot: () => {
+                const state = get()
+                return {
+                    v: 1, kind: 'page', at: new Date().toISOString(),
+                    instanceStates: state.instanceStates, chains: state.chains,
+                    pinnedCalculators: state.pinnedCalculators, pinnedCharts: state.pinnedCharts,
+                    savedConverters: state.savedConverters, converterStates: state.converterStates, loadDefinition: state.loadDefinition,
+                }
+            },
+            applyCardSnapshot: (toolId, instanceId, snap) => {
+                if (snap.tool !== toolId) return false
+                set((state) => {
+                    const key = instanceKey(toolId, instanceId)
+                    const instanceStates = { ...state.instanceStates }
+                    if (snap.state) instanceStates[key] = snap.state
+                    else delete instanceStates[key]
+                    const chains = { ...state.chains }
+                    if (snap.chain) chains[instanceId] = JSON.parse(JSON.stringify(snap.chain))
+                    return { instanceStates, chains, epochs: { ...state.epochs, [key]: (state.epochs[key] ?? 0) + 1 } }
+                })
+                return true
+            },
+            applyPageSnapshot: (snap) =>
+                set((state) => ({
+                    instanceStates: { ...snap.instanceStates }, chains: { [MAIN]: [], ...snap.chains },
+                    pinnedCalculators: snap.pinnedCalculators ?? [], pinnedCharts: snap.pinnedCharts ?? state.pinnedCharts,
+                    savedConverters: snap.savedConverters ?? state.savedConverters, converterStates: snap.converterStates ?? state.converterStates,
+                    loadDefinition: snap.loadDefinition ?? null, toolInbox: {}, beltPullInbox: null, infeedBanner: null,
+                    pageEpoch: state.pageEpoch + 1,
+                })),
             infeedBanner: null,
             setInfeedBanner: (msg) => set({ infeedBanner: msg }),
             receiveInfeed: (p) =>
@@ -264,6 +333,7 @@ export const useAppStore = create<AppState>()(
                 beltPullCalLog: state.beltPullCalLog,
                 pinnedCharts: state.pinnedCharts,
                 pinnedCalculators: state.pinnedCalculators,
+                snapshots: state.snapshots,
             }),
         }
     )

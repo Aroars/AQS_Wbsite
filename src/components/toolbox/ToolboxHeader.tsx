@@ -3,6 +3,9 @@
 import { useRef } from "react";
 import { Wrench, Search, ChevronUp } from "lucide-react";
 import { useSnapBarrier } from "./useSnapBarrier";
+import dynamic from "next/dynamic";
+
+const SnapshotsPanel = dynamic(() => import("@/toolbox/components/ui/SnapshotsPanel").then((m) => m.SnapshotsPanel), { ssr: false });
 
 const isMac = typeof navigator !== "undefined" && /Mac|iP/.test(navigator.platform);
 
@@ -43,6 +46,7 @@ export function ToolboxHeader() {
               Keep scrolling to bring the intro back
             </span>
           </div>
+          <SnapshotsPanel />
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("toolbox:open-palette"))}

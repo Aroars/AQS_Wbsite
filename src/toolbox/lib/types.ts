@@ -60,3 +60,14 @@ export interface PinnedCalc {
     toolId: string
     instanceId: string
 }
+
+/** A saved card or page snapshot (store.snapshots) */
+export interface SavedSnapshot {
+    id: string
+    name: string
+    kind: 'card' | 'page'
+    tool?: string
+    at: string
+    /** Encoded snapshot string (lib/snapshot) */
+    code: string
+}
