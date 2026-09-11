@@ -1,4 +1,7 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
+import { MAIN } from '@/toolbox/stores/migrate'
+
+const EMPTY_CHAIN: FlowCard[] = []
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { unitTypes } from '@/toolbox/data/conveyorCardTypes'
 import { fmtInput } from '@/toolbox/lib/calculators/lineThroughput'
@@ -12,22 +15,24 @@ export const flowUnitCls = 'px-1.5 bg-dark-700 border border-l-0 border-border r
 const labelCls = 'block text-xs text-text-muted mb-1'
 
 /** The shared infeed card (conveyorCards[0]) with a patch/solve-for API */
-export function useInfeed() {
-    const cards = useAppStore((s) => s.conveyorCards)
-    const setCards = useAppStore((s) => s.setConveyorCards)
+export function useInfeed(chainId: string = MAIN) {
+    const cards = useAppStore((s) => s.chains[chainId] ?? EMPTY_CHAIN)
+    const setChain = useAppStore((s) => s.setChain)
+    const setCards = useCallback((next: FlowCard[]) => setChain(chainId, next), [setChain, chainId])
+    const current = useCallback(() => useAppStore.getState().chains[chainId] ?? EMPTY_CHAIN, [chainId])
     useEffect(() => {
-        const cur = useAppStore.getState().conveyorCards
+        const cur = current()
         const next = ensureInfeed(cur)
         if (next !== cur) setCards(next)
-    }, [setCards])
+    }, [setCards, current])
     const head: FlowCard | null = cards.length > 0 && cards[0].type === 'infeed' ? cards[0] : null
     const solveFor = ((head?.inputs.solveFor as SolveFor) || 'speed')
     const reading: InfeedReading = useMemo(() => readInfeed(head), [head])
     const patch = (inputs: Record<string, number | string | null>, units?: Record<string, string>) =>
-        setCards(patchInfeed(useAppStore.getState().conveyorCards, inputs, units))
-    const setSolveFor = (next: SolveFor) => setCards(changeSolveFor(useAppStore.getState().conveyorCards, next))
-    const setUnit = (inputKey: string, unitType: string, unit: string, displayedDefault?: string) => setCards(changeInfeedUnit(useAppStore.getState().conveyorCards, inputKey, unitType, unit, displayedDefault))
-    return { head, solveFor, reading, patch, setSolveFor, setUnit, setCards }
+        setCards(patchInfeed(current(), inputs, units))
+    const setSolveFor = (next: SolveFor) => setCards(changeSolveFor(current(), next))
+    const setUnit = (inputKey: string, unitType: string, unit: string, displayedDefault?: string) => setCards(changeInfeedUnit(current(), inputKey, unitType, unit, displayedDefault))
+    return { head, solveFor, reading, patch, setSolveFor, setUnit, setCards, current }
 }
 
 interface FieldDef {
@@ -52,8 +57,8 @@ const WEIGHT: FieldDef = { key: 'weight', inputKey: 'productWeight', label: 'Pro
  * the Conveyor Speed calculator and, with the weight field, by the Line Flow
  * Simulator — both edit the same card.
  */
-export function InfeedEditor({ showWeight = false }: { showWeight?: boolean }) {
-    const { head, solveFor, reading, patch, setSolveFor, setUnit } = useInfeed()
+export function InfeedEditor({ showWeight = false, chainId = MAIN }: { showWeight?: boolean; chainId?: string }) {
+    const { head, solveFor, reading, patch, setSolveFor, setUnit } = useInfeed(chainId)
     if (!head) return null
 
     const numberInput = (f: FieldDef) => {

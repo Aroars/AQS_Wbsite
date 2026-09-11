@@ -1,17 +1,32 @@
 import { useState, useCallback, useRef } from 'react'
 import { Trash2, RotateCcw, ChevronUp, ChevronDown, Tag } from 'lucide-react'
-import { useAppStore } from '@/toolbox/stores/appStore'
 import { ExpressionParser } from '@/toolbox/lib/calculators/expressionParser'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
+import { generateId } from '@/toolbox/lib/utils'
+import type { FlowHistoryEntry, FormulaHistoryEntry } from '@/toolbox/lib/types'
 
-export function ExpressionCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('expression'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const {
-        calculatorMode, setCalculatorMode,
-        flowHistory, flowLastAnswer, addFlowEntry, removeFlowEntry, clearFlowHistory, setFlowLastAnswer,
-        formulaHistory, formulaLastAnswer, addFormulaEntry, removeFormulaEntry, clearFormulaHistory, setFormulaLastAnswer,
-    } = useAppStore()
+interface ExprState {
+    mode: 'flow' | 'formula'
+    flowHistory: FlowHistoryEntry[]
+    flowLastAnswer: number
+    formulaHistory: FormulaHistoryEntry[]
+    formulaLastAnswer: number
+}
+const exprInitial: ExprState = { mode: 'flow', flowHistory: [], flowLastAnswer: 0, formulaHistory: [], formulaLastAnswer: 0 }
+
+export function ExpressionCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [es, setEs] = useInstanceState<ExprState>('expression', instanceId, exprInitial)
+    const { mode: calculatorMode, flowHistory, flowLastAnswer, formulaHistory, formulaLastAnswer } = es
+    const setCalculatorMode = (mode: 'flow' | 'formula') => setEs((c) => ({ ...c, mode }))
+    const addFlowEntry = (entry: Omit<FlowHistoryEntry, 'id'>) => setEs((c) => ({ ...c, flowHistory: [...c.flowHistory, { ...entry, id: generateId() }] }))
+    const removeFlowEntry = (id: string) => setEs((c) => ({ ...c, flowHistory: c.flowHistory.filter((e) => e.id !== id) }))
+    const clearFlowHistory = () => setEs((c) => ({ ...c, flowHistory: [], flowLastAnswer: 0 }))
+    const setFlowLastAnswer = (val: number) => setEs((c) => ({ ...c, flowLastAnswer: val }))
+    const addFormulaEntry = (entry: Omit<FormulaHistoryEntry, 'id'>) => setEs((c) => ({ ...c, formulaHistory: [...c.formulaHistory, { ...entry, id: generateId() }] }))
+    const removeFormulaEntry = (id: string) => setEs((c) => ({ ...c, formulaHistory: c.formulaHistory.filter((e) => e.id !== id) }))
+    const clearFormulaHistory = () => setEs((c) => ({ ...c, formulaHistory: [], formulaLastAnswer: 0 }))
+    const setFormulaLastAnswer = (val: number) => setEs((c) => ({ ...c, formulaLastAnswer: val }))
 
     const [expression, setExpression] = useState('')
     const [liveResult, setLiveResult] = useState<string | null>(null)
@@ -152,9 +167,8 @@ export function ExpressionCalculator() {
         if (calculatorMode !== 'flow') return
         const newIndex = direction === 'up' ? index - 1 : index + 1
         if (newIndex < 0 || newIndex >= history.length) return
-        // Reorder via store - swap IDs in the array
-        const store = useAppStore.getState()
-        const newHistory = [...store.flowHistory]
+        // Reorder and recompute the chain
+        const newHistory = flowHistory.map((e) => ({ ...e }))
         const temp = newHistory[index]
         newHistory[index] = newHistory[newIndex]
         newHistory[newIndex] = temp
@@ -167,7 +181,7 @@ export function ExpressionCalculator() {
                 runningAns = result.value ?? 0
             }
         })
-        useAppStore.setState({ flowHistory: newHistory, flowLastAnswer: runningAns })
+        setEs((c) => ({ ...c, flowHistory: newHistory, flowLastAnswer: runningAns }))
     }
 
     const handleAssignVariable = (index: number) => {
@@ -190,10 +204,9 @@ export function ExpressionCalculator() {
         }
         const entry = formulaHistory[editingVarIndex]
         if (entry) {
-            const store = useAppStore.getState()
-            const newHistory = [...store.formulaHistory]
-            newHistory[editingVarIndex] = { ...newHistory[editingVarIndex], variable: newVar } as any
-            useAppStore.setState({ formulaHistory: newHistory })
+            const newHistory = [...formulaHistory]
+            newHistory[editingVarIndex] = { ...newHistory[editingVarIndex], variable: newVar }
+            setEs((c) => ({ ...c, formulaHistory: newHistory }))
         }
         setEditingVarIndex(null)
     }
@@ -209,15 +222,14 @@ export function ExpressionCalculator() {
         const newLabel = labelInput.trim() || undefined
         const entry = history[editingLabelIndex]
         if (entry) {
-            const store = useAppStore.getState()
             if (calculatorMode === 'flow') {
-                const newHistory = [...store.flowHistory]
-                newHistory[editingLabelIndex] = { ...newHistory[editingLabelIndex], label: newLabel } as any
-                useAppStore.setState({ flowHistory: newHistory })
+                const newHistory = [...flowHistory]
+                newHistory[editingLabelIndex] = { ...newHistory[editingLabelIndex], label: newLabel }
+                setEs((c) => ({ ...c, flowHistory: newHistory }))
             } else {
-                const newHistory = [...store.formulaHistory]
-                newHistory[editingLabelIndex] = { ...newHistory[editingLabelIndex], label: newLabel } as any
-                useAppStore.setState({ formulaHistory: newHistory })
+                const newHistory = [...formulaHistory]
+                newHistory[editingLabelIndex] = { ...newHistory[editingLabelIndex], label: newLabel }
+                setEs((c) => ({ ...c, formulaHistory: newHistory }))
             }
         }
         setEditingLabelIndex(null)
@@ -241,7 +253,7 @@ export function ExpressionCalculator() {
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Calculator</h3>
                 <div className="flex items-center gap-2">
-                    <PinButton pinned={pinned} onToggle={() => togglePin('expression')} />
+                    <CalcPinButton toolId="expression" instanceId={instanceId} />
                     {editingIndex !== null && (
                         <button onClick={() => { setEditingIndex(null); setExpression(''); setLiveResult(null); setLiveError(null) }}
                             className="text-xs text-warning">CE</button>

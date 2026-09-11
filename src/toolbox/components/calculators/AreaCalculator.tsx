@@ -2,18 +2,22 @@ import { useState, useMemo } from 'react'
 import { Trash2, Plus } from 'lucide-react'
 import { shapeCalculations } from '@/toolbox/data/shapeCalculations'
 import { unitCategories } from '@/toolbox/data/unitCategories'
-import { useAppStore } from '@/toolbox/stores/appStore'
 import { convertUnits, formatNumber } from '@/toolbox/lib/converter'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
+import { generateId } from '@/toolbox/lib/utils'
+import type { AreaMemoryEntry } from '@/toolbox/lib/types'
 
 const shapes = Object.keys(shapeCalculations)
 const lengthUnits = Object.keys(unitCategories['Length'].units)
 const areaUnits = Object.keys(unitCategories['Area'].units)
 
-export function AreaCalculator() {
-    const { areaMemory, addAreaMemory, removeAreaMemory, clearAreaMemory } = useAppStore()
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('area'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
+export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [mem, setMem] = useInstanceState<{ memory: AreaMemoryEntry[] }>('area', instanceId, { memory: [] })
+    const areaMemory = mem.memory
+    const addAreaMemory = (entry: Omit<AreaMemoryEntry, 'id'>) => setMem((c) => ({ memory: [...c.memory, { ...entry, id: generateId() }] }))
+    const removeAreaMemory = (id: string) => setMem((c) => ({ memory: c.memory.filter((e) => e.id !== id) }))
+    const clearAreaMemory = () => setMem({ memory: [] })
     const [shape, setShape] = useState(shapes[0])
     const [dimensions, setDimensions] = useState<number[]>([])
     const [inputUnit, setInputUnit] = useState('Inch')
@@ -57,7 +61,7 @@ export function AreaCalculator() {
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Area Calculator</h3>
                 <div className="flex items-center gap-2">
-                    <PinButton pinned={pinned} onToggle={() => togglePin('area')} />
+                    <CalcPinButton toolId="area" instanceId={instanceId} />
                     {areaMemory.length > 0 && (
                         <button onClick={clearAreaMemory} className="text-xs text-text-muted hover:text-error transition-colors">
                             Clear Memory

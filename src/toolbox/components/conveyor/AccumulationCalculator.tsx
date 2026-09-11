@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { useToolState } from '@/toolbox/hooks/useToolState'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { readInfeed } from '@/toolbox/lib/calculators/infeedCard'
 import { accumulatedPitchIn, lengthForTime, timeForLength, zonesForLength, fillTimeSeconds } from '@/toolbox/lib/calculators/accumulation'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
@@ -13,14 +13,12 @@ const initial: S = { rate: '', length: '', gap: '0', mode: 'length', seconds: '3
 const num = (v: string) => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0 }
 
 /** Accumulation buffer: length for a stoppage time, or time for a length — the simulator's accumulation card on its own */
-export function AccumulationCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('accumulation'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const [s, setS] = useToolState<S>('accumulation', initial)
+export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [s, setS] = useInstanceState<S>('accumulation', instanceId, initial)
     const upd = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
 
     const useInfeed = () => {
-        const r = readInfeed(useAppStore.getState().conveyorCards[0])
+        const r = readInfeed((useAppStore.getState().chains[MAIN] ?? [])[0])
         if (r.ppm === null) { showToast('The Conveyor Speed infeed has no rate yet'); return }
         upd({ rate: String(Number(r.ppm.toPrecision(5))), length: r.lengthIn !== null ? String(Number(r.lengthIn.toPrecision(5))) : s.length, speed: r.speedFpm !== null ? String(Number(r.speedFpm.toPrecision(5))) : s.speed })
         showToast('Loaded the Conveyor Speed infeed')
@@ -44,7 +42,7 @@ export function AccumulationCalculator() {
                 <h3 className="text-sm font-semibold text-text-primary">Accumulation Buffer</h3>
                 <div className="flex items-center gap-2">
                     <button onClick={useInfeed} className={ghostBtnCls}>Use Conveyor Speed infeed</button>
-                    <PinButton pinned={pinned} onToggle={() => togglePin('accumulation')} />
+                    <CalcPinButton toolId="accumulation" instanceId={instanceId} />
                 </div>
             </div>
             <div className="p-4 space-y-4">

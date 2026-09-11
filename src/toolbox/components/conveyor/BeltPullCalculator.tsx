@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Plus, Trash2, Link2, ArrowRight } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { instanceKey, MAIN } from '@/toolbox/stores/migrate'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { oneMotionPicks } from '@/toolbox/lib/calculators/driveMotor'
@@ -52,10 +53,10 @@ function inclineFloorIn(s: InclineSection): number {
     return Math.sqrt(Math.max(s.lengthIn * s.lengthIn - s.riseIn * s.riseIn, 0))
 }
 
-function loadInitialConfig(stored: string | null): BeltPullConfig {
-    // Shared link takes priority, then the persisted config, then the S-path example
+function loadInitialConfig(stored: string | null, allowShareLink: boolean): BeltPullConfig {
+    // Shared link takes priority (tab card only), then the persisted config, then the S-path example
     try {
-        const p = new URLSearchParams(window.location.search).get('beltpull')
+        const p = allowShareLink ? new URLSearchParams(window.location.search).get('beltpull') : null
         if (p) return mergeConfig(JSON.parse(atob(p)))
     } catch { /* fall through */ }
     try {
@@ -64,13 +65,11 @@ function loadInitialConfig(stored: string | null): BeltPullConfig {
     return exampleConfigs[0].config
 }
 
-export function BeltPullCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('beltPull'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const setBeltPullConfig = useAppStore((s) => s.setBeltPullConfig)
+export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const setInstanceState = useAppStore((s) => s.setInstanceState)
     const sendToTool = useAppStore((s) => s.sendToTool)
 
-    const [cfg, setCfg] = useState<BeltPullConfig>(() => loadInitialConfig(useAppStore.getState().beltPullConfig))
+    const [cfg, setCfg] = useState<BeltPullConfig>(() => loadInitialConfig(useAppStore.getState().instanceStates[instanceKey('beltPull', instanceId)] ?? null, instanceId === MAIN))
     const [accumulated, setAccumulated] = useState(() => cfg.loadMode === 'accumulated')
 
     // Drive selection state
@@ -78,12 +77,12 @@ export function BeltPullCalculator() {
     // Catalog belt pitch, carried to the Torque & Motor card with the handoff
     const [pitchMm, setPitchMm] = useState('50')
 
-    // Persist the working config (survives reloads; pinned copy shares via store on remount)
-    useEffect(() => { setBeltPullConfig(JSON.stringify(cfg)) }, [cfg, setBeltPullConfig])
+    // Persist this instance's working config (a Home pin is its own instance)
+    useEffect(() => { setInstanceState('beltPull', instanceId, JSON.stringify(cfg)) }, [cfg, instanceId, setInstanceState])
 
-    // Cross-tool inbox: subscribe for one-shot messages from the Belt Load card.
+    // Cross-tool inbox (tab card only): one-shot messages from the Belt Load and Wearstrip cards.
     // (All views stay mounted, so the subscription is always live before a send.)
-    useEffect(() => useAppStore.subscribe((state, prev) => {
+    useEffect(() => instanceId !== MAIN ? undefined : useAppStore.subscribe((state, prev) => {
         const patch = state.beltPullInbox
         if (patch && patch !== prev.beltPullInbox) {
             setCfg((c) => {
@@ -102,7 +101,7 @@ export function BeltPullCalculator() {
             })
             useAppStore.getState().clearBeltPullInbox()
         }
-    }), [])
+    }), [instanceId])
 
     const upd = (patch: Partial<BeltPullConfig>) => setCfg((c) => ({ ...c, ...patch }))
     const updSection = (i: number, patch: SectionPatch) =>
@@ -221,7 +220,7 @@ export function BeltPullCalculator() {
                         className="p-1.5 rounded-md text-text-muted hover:text-primary hover:bg-dark-700 transition-colors">
                         <Link2 className="w-3.5 h-3.5" />
                     </button>
-                    <PinButton pinned={pinned} onToggle={() => togglePin('beltPull')} />
+                    <CalcPinButton toolId="beltPull" instanceId={instanceId} />
                 </div>
             </div>
             <div className="p-4 space-y-4">

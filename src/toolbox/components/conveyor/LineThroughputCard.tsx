@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { jumpToTool } from '@/toolbox/lib/jump'
@@ -187,17 +188,13 @@ function NumField({ label, unit, value, status, hint, flashKey, placeholder, min
     )
 }
 
-export function LineThroughputCard() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('beltLoad'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const setBeltLoadState = useAppStore((s) => s.setBeltLoadState)
+export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const setLoadDefinition = useAppStore((s) => s.setLoadDefinition)
     const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
     const receiveInfeed = useAppStore((s) => s.receiveInfeed)
 
-    const [state, setState] = useState<CardState>(() => restore(useAppStore.getState().beltLoadState))
+    const [state, setState] = useInstanceState<CardState>('beltLoad', instanceId, emptyState, restore)
     const [flash, setFlash] = useState<Partial<Record<Field, number>>>({})
-    useEffect(() => { setBeltLoadState(JSON.stringify(state)) }, [state, setBeltLoadState])
 
     const solved = useMemo(() => runSolve(state, null), [state])
     const { hoursMissing } = useMemo(() => buildEntries(state), [state])
@@ -317,8 +314,9 @@ export function LineThroughputCard() {
         return { status, display, hint, flashKey: flash[f] ?? 0 }
     }
 
-    // Publish the product definition for the Conveyor Spec and Belt Pull cards
+    // Publish the product definition for the Conveyor Spec and Belt Pull cards (tab card only)
     useEffect(() => {
+        if (instanceId !== MAIN) return
         if (derived.lbPerHr === null) { setLoadDefinition(null); return }
         const def: LoadDefinition = {
             productType: state.mode,
@@ -335,7 +333,7 @@ export function LineThroughputCard() {
         }
         setLoadDefinition(JSON.stringify(def))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [solved, state.repose, state.edgeMargin, setLoadDefinition])
+    }, [solved, state.repose, state.edgeMargin, setLoadDefinition, instanceId])
 
     // ── Handoffs ──
     const speed = val('speed')
@@ -383,7 +381,7 @@ export function LineThroughputCard() {
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Line Throughput <span className="text-text-muted font-normal">→</span> Belt Load</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('beltLoad')} />
+                <CalcPinButton toolId="beltLoad" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 {/* 1. What the plant said */}

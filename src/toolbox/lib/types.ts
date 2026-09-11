@@ -19,3 +19,44 @@ export interface SavedConverter {
 }
 
 export type TabId = 'home' | 'convert' | 'calculators' | 'conveyor' | 'charts'
+
+/** Area calculator memory row (per card instance) */
+export interface AreaMemoryEntry {
+    id: string
+    shape: string
+    dimensions: number[]
+    area: number
+    unit: string
+}
+
+/** Expression calculator history rows (per card instance) */
+export interface FlowHistoryEntry {
+    id: string
+    expression: string
+    result: number
+    label?: string
+}
+export interface FormulaHistoryEntry {
+    id: string
+    expression: string
+    result: number
+    variable?: string
+    label?: string
+}
+
+/** Power calculator equipment row (per card instance) */
+export interface PowerEquipment {
+    id: string
+    label: string
+    watts: number
+    quantity: number
+    type: 'ac' | 'dc'
+    voltage?: number
+    phase?: number
+}
+
+/** A calculator pinned to Home is its own instance, not a mirror of the tab card */
+export interface PinnedCalc {
+    toolId: string
+    instanceId: string
+}

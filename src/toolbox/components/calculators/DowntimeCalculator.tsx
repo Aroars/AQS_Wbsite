@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { useToolState } from '@/toolbox/hooks/useToolState'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { downtimeCost } from '@/toolbox/lib/calculators/downtime'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { BigResult, Tile, Field, panelCls, inputCls } from '@/toolbox/components/ui/Results'
@@ -12,10 +12,8 @@ const num = (v: string): number | null => { const n = parseFloat(v); return Numb
 const money = (v: number, digits = 0) => v.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: digits })
 
 /** What a stopped packaging line costs per minute, shift and year, and what a reduction is worth */
-export function DowntimeCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('downtime'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const [s, setS] = useToolState<S>('downtime', initial)
+export function DowntimeCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [s, setS] = useInstanceState<S>('downtime', instanceId, initial)
     const upd = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
     const r = useMemo(() => downtimeCost({
         unitsPerMinute: num(s.units) ?? 0, marginPerUnit: num(s.margin) ?? 0, crewSize: num(s.crew) ?? 0, laborRatePerHour: num(s.rate) ?? 0,
@@ -28,7 +26,7 @@ export function DowntimeCalculator() {
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Line Downtime Cost</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('downtime')} />
+                <CalcPinButton toolId="downtime" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">

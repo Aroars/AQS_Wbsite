@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import {
@@ -42,16 +43,11 @@ function loadInitial(stored: string | null): WearstripConfig {
     return { ...defaultWearstripConfig }
 }
 
-export function WearstripCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('wearstrip'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const setWearstripConfig = useAppStore((s) => s.setWearstripConfig)
+export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
 
-    const [cfg, setCfg] = useState<WearstripConfig>(() => loadInitial(useAppStore.getState().wearstripConfig))
+    const [cfg, setCfg] = useInstanceState<WearstripConfig>('wearstrip', instanceId, { ...defaultWearstripConfig }, loadInitial)
     const [mode, setMode] = useState<'check' | 'optimize'>('check')
-
-    useEffect(() => { setWearstripConfig(JSON.stringify(cfg)) }, [cfg, setWearstripConfig])
 
     const upd = (patch: Partial<WearstripConfig>) => setCfg((c) => ({ ...c, ...patch }))
 
@@ -99,7 +95,7 @@ export function WearstripCalculator() {
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Wearstrip Span Calculator</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('wearstrip')} />
+                <CalcPinButton toolId="wearstrip" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 <div className="flex items-center gap-2">

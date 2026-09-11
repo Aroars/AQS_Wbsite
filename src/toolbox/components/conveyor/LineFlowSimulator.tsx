@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Plus, Trash2, AlertTriangle, CheckCircle, AlertCircle } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { MAIN } from '@/toolbox/stores/migrate'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { cardTypes, unitTypes, createCard, formatValue, fromBase, toBase } from '@/toolbox/data/conveyorCardTypes'
 import { recalculateFromCard, getChainFeasibility } from '@/toolbox/lib/calculators/conveyorFlow'
@@ -12,16 +13,14 @@ import { InfeedEditor, useInfeed } from './InfeedEditor'
  * any chain of split, merge, process, accumulation, reject, stacking, and
  * batching cards. Every card recalculates the whole chain downstream.
  */
-export function LineFlowSimulator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('lineFlow'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    // The chain lives in the persisted store; card objects are the untyped legacy shape
-    // from createCard/recalculateFromCard, so downstream cards are read loosely.
-    const cards = useAppStore((s) => s.conveyorCards) as FlowCard[]
-    const setCards = useAppStore((s) => s.setConveyorCards)
-    const currentCards = (): FlowCard[] => useAppStore.getState().conveyorCards
+export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    // The chain lives in the persisted store, keyed by this instance; card objects are the
+    // untyped legacy shape from createCard/recalculateFromCard, so downstream cards are read loosely.
     const [showAddMenu, setShowAddMenu] = useState(false)
-    useInfeed() // seeds and normalizes the infeed at index 0
+    const infeed = useInfeed(instanceId) // seeds and normalizes the infeed at index 0
+    const cards = useAppStore((s) => s.chains[instanceId]) ?? []
+    const setCards = infeed.setCards
+    const currentCards = infeed.current
 
     const handleInputChange = useCallback((cardIndex: number, key: string, value: string) => {
         const updated = [...currentCards()]
@@ -80,7 +79,7 @@ export function LineFlowSimulator() {
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Line Flow Simulator</h3>
                 <div className="flex items-center gap-2">
-                    <PinButton pinned={pinned} onToggle={() => togglePin('lineFlow')} />
+                    <CalcPinButton toolId="lineFlow" instanceId={instanceId} />
                     {cards.length > 0 && (
                         <span className={`flex items-center gap-1 text-xs ${
                             chainFeasibility === 'ok' ? 'text-success' : chainFeasibility === 'warning' ? 'text-warning' : 'text-error'
@@ -122,7 +121,7 @@ export function LineFlowSimulator() {
 
                             <div className="px-3 py-2 space-y-2">
                                 {card.type === 'infeed' ? (
-                                    <InfeedEditor showWeight />
+                                    <InfeedEditor showWeight chainId={instanceId} />
                                 ) : (
                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     typeDef.inputs.map((input: any) => {

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
-import { useAppStore } from '@/toolbox/stores/appStore'
-import { useToolState } from '@/toolbox/hooks/useToolState'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
 import { giveaway, fromLb, toLb, WEIGHT_UNITS, type WeightUnit } from '@/toolbox/lib/calculators/giveaway'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { BigResult, Tile, Field, panelCls, inputCls, selectCls } from '@/toolbox/components/ui/Results'
@@ -80,15 +79,13 @@ export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: Giveaw
 }
 
 /** Toolbox card: persisted state and a pin around the core */
-export function GiveawayCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('giveaway'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const [s, setS] = useToolState<GiveawayState>('giveaway', giveawayInitial)
+export function GiveawayCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [s, setS] = useInstanceState<GiveawayState>('giveaway', instanceId, giveawayInitial)
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Product Giveaway</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('giveaway')} />
+                <CalcPinButton toolId="giveaway" instanceId={instanceId} />
             </div>
             <div className="p-4"><GiveawayCalculatorCore s={s} setS={setS} /></div>
         </div>

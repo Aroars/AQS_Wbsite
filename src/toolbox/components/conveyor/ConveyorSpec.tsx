@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { conveyorTypes, solveIncline, solveLType, solveZType, calculateLoading, formatNumber } from '@/toolbox/data/conveyorSpecData'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { MAIN } from '@/toolbox/stores/migrate'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { parseLoadDefinition, describeLoad } from '@/toolbox/lib/calculators/loadDefinition'
@@ -155,9 +156,7 @@ function StepHeader({ step, label, status }: { step: number; label: string; stat
 const inputClass = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 
-export function ConveyorSpec() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('conveyorSpec'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
+export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const loadJson = useAppStore((s) => s.loadDefinition)
     const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
     const load = useMemo(() => parseLoadDefinition(loadJson), [loadJson])
@@ -286,7 +285,7 @@ export function ConveyorSpec() {
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Incline Conveyor Length &amp; Angle</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('conveyorSpec')} />
+                <CalcPinButton toolId="conveyorSpec" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 {/* Unit toggle — converts entered values instead of silently reinterpreting them */}

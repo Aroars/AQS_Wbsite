@@ -1,9 +1,9 @@
 import { useMemo, useCallback } from 'react'
 import { ArrowRight, X } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { useToolState, useToolInbox, asNumber } from '@/toolbox/hooks/useToolState'
+import { useInstanceState, useInstanceInbox, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
 import { jumpToTool } from '@/toolbox/lib/jump'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { LBF_TO_N, chordalPdMm, thermalUpliftFactor } from '@/toolbox/lib/calculators/beltPull'
@@ -51,15 +51,13 @@ function utilizationCls(pct: number): string {
     return 'text-success'
 }
 
-export function DriveMotorCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('driveMotor'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
+export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const sendToTool = useAppStore((s) => s.sendToTool)
-    const [s, setS] = useToolState<S>('driveMotor', initial)
+    const [s, setS] = useInstanceState<S>('driveMotor', instanceId, initial)
     const upd = useCallback((patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch })), [setS])
 
     // Belt Pull → here: pulls, floors, speed, width and the scenario floors for the utilisation table
-    useToolInbox('driveMotor', (p) => {
+    useInstanceInbox('driveMotor', instanceId, (p) => {
         const str = (v: unknown) => (asNumber(v) !== null ? String(Number(asNumber(v)!.toPrecision(5))) : '')
         const rows = Array.isArray(p.scenarios) ? (p.scenarios as ScenarioRow[]).filter((r) => r && typeof r.label === 'string') : []
         upd({
@@ -114,7 +112,7 @@ export function DriveMotorCalculator() {
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Torque &amp; Motor</h3>
-                <PinButton pinned={pinned} onToggle={() => togglePin('driveMotor')} />
+                <CalcPinButton toolId="driveMotor" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 {s.source && (

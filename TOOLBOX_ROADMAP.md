@@ -22,3 +22,12 @@ friction factor tables), Röchling / Duro-Glide data sheets. When the numbers ex
 Belt Pull has a manual "Minimum Straight (in)" field. Once the belt feed carries a vendor minimum
 straight per belt, `applyCatalogBelt` in `BeltPullCalculator.tsx` should fill it the way it fills
 the collapse factor.
+
+## Bulk incline belt & motor solver (2026-09-10)
+A separate card from Belt Pull for flighted bulk inclines: straight / incline (L, Z) geometry, flight
+height and pitch, pocket fill at the angle of repose, bed-versus-pocket capacity, then a pull into
+Torque & Motor. It must call the existing engine functions (`pocketWedge`, `pocketCapacityLb`, and
+the bulk capacity checks in `src/toolbox/lib/calculators/beltPull.ts`) rather than fork the physics.
+Sequence agreed with the user: (1) instance-scoped card state with independent Home pins, (2) snapshot
+format with save / load / history / clear, (3) in-app clipboard with pull and link between cards,
+then refine the Throughput → Belt Load card, and only then build this solver.

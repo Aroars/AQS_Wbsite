@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle, AlertTriangle, AlertCircle, X } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { MAIN } from '@/toolbox/stores/migrate'
 import { showToast } from '@/toolbox/components/ui/Toast'
 import { useAppStore } from '@/toolbox/stores/appStore'
 import { unitTypes } from '@/toolbox/data/conveyorCardTypes'
@@ -20,13 +21,12 @@ const asNum = (v: unknown): number | null => (typeof v === 'number' && Number.is
  * the shared infeed with a solve-for, the answer big and live, and the
  * handoffs. The downstream chain lives in the Line Flow Simulator.
  */
-export function ConveyorSpeed() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('conveyorFlow'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const banner = useAppStore((s) => s.infeedBanner)
+export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const bannerMain = useAppStore((s) => s.infeedBanner)
+    const banner = instanceId === MAIN ? bannerMain : null
     const setInfeedBanner = useAppStore((s) => s.setInfeedBanner)
     const sendToBeltPull = useAppStore((s) => s.sendToBeltPull)
-    const { head, solveFor, reading: r, patch, setUnit, setCards } = useInfeed()
+    const { head, solveFor, reading: r, patch, setUnit, setCards, current } = useInfeed(instanceId)
     if (!head) return null
 
     const targetUnit = solveFor === 'speed' ? (head.units.productSpeed ?? 'ft/min') : solveFor === 'rate' ? (head.units.productRate ?? '/min') : (head.units.productGap ?? 'in')
@@ -38,7 +38,7 @@ export function ConveyorSpeed() {
     const rpmFpm = rpm !== null && dia !== null && rpm > 0 && dia > 0 ? rpmToFpm(rpm, dia) : null
     const useRpmSpeed = () => {
         if (rpmFpm === null) return
-        let cards = useAppStore.getState().conveyorCards
+        let cards = current()
         if (solveFor === 'speed') cards = changeSolveFor(cards, 'rate')
         setCards(patchInfeed(cards, { productSpeed: Number(rpmFpm.toFixed(2)) }, { productSpeed: 'ft/min' }))
     }
@@ -64,7 +64,7 @@ export function ConveyorSpeed() {
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Conveyor Speed &amp; Throughput</h3>
                 <div className="flex items-center gap-2">
-                    <PinButton pinned={pinned} onToggle={() => togglePin('conveyorFlow')} />
+                    <CalcPinButton toolId="conveyorFlow" instanceId={instanceId} />
                     {!r.pristine && (
                         <span className={`flex items-center gap-1 text-xs ${feas === 'ok' ? 'text-success' : feas === 'warning' ? 'text-warning' : 'text-error'}`}>
                             {feas === 'ok' ? <CheckCircle className="w-3.5 h-3.5" /> : feas === 'warning' ? <AlertTriangle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
@@ -83,7 +83,7 @@ export function ConveyorSpeed() {
                     </div>
                 )}
 
-                <InfeedEditor />
+                <InfeedEditor chainId={instanceId} />
 
                 {/* The answer, big and live */}
                 <div className="rounded-lg border border-primary/20 bg-dark-700 px-3 py-3 space-y-2">

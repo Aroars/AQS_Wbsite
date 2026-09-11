@@ -1,17 +1,22 @@
 import { useState, useMemo } from 'react'
 import { Trash2, Plus, Pencil, X } from 'lucide-react'
-import { useAppStore } from '@/toolbox/stores/appStore'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
+import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
+import { generateId } from '@/toolbox/lib/utils'
+import type { PowerEquipment } from '@/toolbox/lib/types'
 import {
     acVoltages, dcVoltages, supplyVoltages, converterEfficiency, continuousLoadFactor,
     defaultPowerFactor, getNextBreakerSize, getWireRecommendation, calculateSupplyAmps,
     calculateDcConverterPower
 } from '@/toolbox/data/powerCalcData'
 
-export function PowerCalculator() {
-    const { powerEquipment, addPowerEquipment, removePowerEquipment, updatePowerEquipment, clearPowerEquipment } = useAppStore()
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('power'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
+export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [ps, setPs] = useInstanceState<{ equipment: PowerEquipment[] }>('power', instanceId, { equipment: [] })
+    const powerEquipment = ps.equipment
+    const addPowerEquipment = (eq: Omit<PowerEquipment, 'id'>) => setPs((c) => ({ equipment: [...c.equipment, { ...eq, id: generateId() }] }))
+    const removePowerEquipment = (id: string) => setPs((c) => ({ equipment: c.equipment.filter((e) => e.id !== id) }))
+    const updatePowerEquipment = (id: string, updates: Partial<PowerEquipment>) => setPs((c) => ({ equipment: c.equipment.map((e) => (e.id === id ? { ...e, ...updates } : e)) }))
+    const clearPowerEquipment = () => setPs({ equipment: [] })
 
     // Form state
     const [label, setLabel] = useState('')
@@ -102,7 +107,7 @@ export function PowerCalculator() {
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-primary">Power Requirements</h3>
                 <div className="flex items-center gap-2">
-                    <PinButton pinned={pinned} onToggle={() => togglePin('power')} />
+                    <CalcPinButton toolId="power" instanceId={instanceId} />
                     {powerEquipment.length > 0 && (
                         <button onClick={clearPowerEquipment} className="text-xs text-text-muted hover:text-error transition-colors">Clear All</button>
                     )}

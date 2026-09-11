@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { X } from 'lucide-react'
-import { PinButton } from '@/toolbox/components/ui/PinButton'
+import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
 import { useAppStore } from '@/toolbox/stores/appStore'
-import { useToolState, useToolInbox, asNumber } from '@/toolbox/hooks/useToolState'
+import { useInstanceState, useInstanceInbox, asNumber, MAIN } from '@/toolbox/hooks/useToolState'
 import { shaftCheck, shaftMaterials, SQUARE_SHAFT_SIZES_IN, type ShaftShape } from '@/toolbox/lib/calculators/driveShaft'
 import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
 import { BigResult, Tile, Field, UtilBar, panelCls, inputCls, selectCls } from '@/toolbox/components/ui/Results'
@@ -12,13 +12,11 @@ const initial: S = { shape: 'square', size: '1.5', material: 'ss304', span: '', 
 const num = (v: string): number => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0 }
 
 /** Modular belt drive shaft: deflection between bearings and twist along the width against limits */
-export function DriveShaftCalculator() {
-    const pinned = useAppStore((s) => s.pinnedCalculators.includes('driveShaft'))
-    const togglePin = useAppStore((s) => s.togglePinCalculator)
-    const [s, setS] = useToolState<S>('driveShaft', initial)
+export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
+    const [s, setS] = useInstanceState<S>('driveShaft', instanceId, initial)
     const upd = (patch: Partial<S>) => setS((prev) => ({ ...prev, ...patch }))
 
-    useToolInbox('driveShaft', (p) => {
+    useInstanceInbox('driveShaft', instanceId, (p) => {
         const str = (v: unknown) => (asNumber(v) !== null ? String(Number(asNumber(v)!.toPrecision(5))) : '')
         upd({ load: str(p.loadLbf) || s.load, torque: str(p.torqueLbIn) || s.torque, width: str(p.beltWidthIn) || s.width, pd: str(p.pdIn) || s.pd, source: typeof p.source === 'string' ? p.source : 'Loaded from Torque & Motor' })
     })
@@ -38,7 +36,7 @@ export function DriveShaftCalculator() {
                 <h3 className="text-sm font-semibold text-text-primary">Drive Shaft Deflection &amp; Twist</h3>
                 <div className="flex items-center gap-2">
                     {r && <span className={`text-xs font-medium ${ok ? 'text-success' : 'text-error'}`}>{ok ? 'Within limits' : `${r.warnings.length} limit${r.warnings.length > 1 ? 's' : ''} exceeded`}</span>}
-                    <PinButton pinned={pinned} onToggle={() => togglePin('driveShaft')} />
+                    <CalcPinButton toolId="driveShaft" instanceId={instanceId} />
                 </div>
             </div>
             <div className="p-4 space-y-4">

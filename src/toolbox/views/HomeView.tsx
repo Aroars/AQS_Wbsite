@@ -44,7 +44,7 @@ const chartComponents: Record<string, React.FC> = {
     safety: SafetyChart,
 }
 
-const calcComponents: Record<string, React.FC> = {
+const calcComponents: Record<string, React.FC<{ instanceId?: string }>> = {
     expression: ExpressionCalculator,
     area: AreaCalculator,
     power: PowerCalculator,
@@ -157,11 +157,11 @@ export function HomeView() {
                         </h2>
                     </div>
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-                        {pinnedCalculators.map((id, i) => {
-                            const Comp = calcComponents[id]
+                        {pinnedCalculators.map((pin, i) => {
+                            const Comp = calcComponents[pin.toolId]
                             return Comp ? (
-                                <PinnedSlot key={id} kind="calculator" id={id} index={i} count={pinnedCalculators.length}>
-                                    <ToolBoundary label={id}><Comp /></ToolBoundary>
+                                <PinnedSlot key={pin.instanceId} kind="calculator" id={pin.instanceId} index={i} count={pinnedCalculators.length}>
+                                    <ToolBoundary label={pin.toolId}><Comp instanceId={pin.instanceId} /></ToolBoundary>
                                 </PinnedSlot>
                             ) : null
                         })}
