@@ -5,6 +5,8 @@ import { ConveyorsProjectsContent } from "@/components/pages/conveyors-projects"
 import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { pageMetadata } from "@/content/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbList } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: pageMetadata.conveyorsProjects.title,
@@ -19,6 +21,15 @@ export const metadata: Metadata = {
 export default function ConveyorsProjectsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbList([
+            { name: "Home", path: "/" },
+            { name: "Sanitary Conveyors", path: "/solutions/conveyors" },
+            { name: "Projects", path: "/solutions/conveyors/projects" },
+          ]),
+        ]}
+      />
       <Navigation />
       <ConveyorsProjectsContent />
       <SystemArchitecture currentProduct="conveyors" />

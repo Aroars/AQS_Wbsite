@@ -8,6 +8,8 @@ import { FAQSection } from "@/components/sections/faq-section";
 import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { pageMetadata } from "@/content/seo";
 import { conveyorFAQs } from "@/data/conveyors";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbList, faqPage } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: pageMetadata.conveyors.title,
@@ -24,9 +26,15 @@ export default function ConveyorsPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      <JsonLd
+        data={[
+          schema,
+          breadcrumbList([
+            { name: "Home", path: "/" },
+            { name: "Sanitary Conveyors", path: "/solutions/conveyors" },
+          ]),
+          faqPage(conveyorFAQs),
+        ]}
       />
       <Navigation />
       <ConveyorsHubContent />

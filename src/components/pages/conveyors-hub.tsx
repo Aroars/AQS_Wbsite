@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -13,15 +12,18 @@ import {
   SectionTitle,
   SectionDesc,
 } from "@/components/ui/section-header";
+import { ProjectCard } from "@/components/ui/project-card";
+import { ConveyorGallery } from "@/components/ui/conveyor-gallery";
+import { ConstructionStandards } from "@/components/ui/construction-standards";
 import {
   CONVEYOR_ACCENT,
   categories,
   differentiators,
-  constructionStats,
   hubClaims,
   conveyorProjects,
   galleryImages,
 } from "@/data/conveyors";
+import { getTypePage } from "@/data/conveyor-type-pages";
 
 const accent = CONVEYOR_ACCENT;
 const typeCount = categories.reduce((n, c) => n + c.types.length, 0);
@@ -51,79 +53,6 @@ function DifferentiatorCard({
       <p className="font-sans text-[0.8rem] text-text-body leading-[1.6] m-0">
         {description}
       </p>
-    </div>
-  );
-}
-
-/* ================================================
-   Project Preview Card
-   ================================================ */
-
-function ProjectPreviewCard({
-  title,
-  subtitle,
-  description,
-  tags,
-  image,
-}: {
-  title: string;
-  subtitle: string;
-  description: string;
-  tags: string[];
-  image?: { src: string; alt: string };
-}) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="rounded-xl p-8 h-full transition-all duration-300"
-      style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-      }}
-    >
-      {image && (
-        <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-4 -mx-2 -mt-2">
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-      )}
-      <div
-        className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-1.5"
-        style={{ color: accent }}
-      >
-        Case Study
-      </div>
-      <div className="font-sans text-[1.15rem] font-bold text-white mb-1">
-        {title}
-      </div>
-      <div className="font-sans text-[0.78rem] mb-3" style={{ color: accent }}>
-        {subtitle}
-      </div>
-      <p className="font-sans text-[0.85rem] text-text-body leading-[1.6] mb-3.5">
-        {description}
-      </p>
-      <div className="flex flex-wrap gap-1.5">
-        {tags.map((t) => (
-          <span
-            key={t}
-            className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
-            style={{
-              color: `${accent}BF`,
-              borderColor: `${accent}2E`,
-            }}
-          >
-            {t}
-          </span>
-        ))}
-      </div>
     </div>
   );
 }
@@ -285,7 +214,7 @@ export function ConveyorsHubContent() {
                     {cat.types.map((type) => (
                       <li key={type.slug}>
                         <Link
-                          href={`/solutions/conveyors/${cat.slug}#${type.slug}`}
+                          href={getTypePage(cat.slug, type.slug)?.href ?? `/solutions/conveyors/${cat.slug}#${type.slug}`}
                           className="flex items-baseline gap-2 no-underline group"
                         >
                           <span className="shrink-0 text-[0.7rem]" style={{ color: accent }}>&rarr;</span>
@@ -361,62 +290,10 @@ export function ConveyorsHubContent() {
       </section>
 
       {/* Construction Standards */}
-      <section id="construction" className="py-[72px] px-8 scroll-mt-24">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection>
-            <SectionLabel>Construction Standards</SectionLabel>
-            <SectionTitle>Built Different. On Purpose.</SectionTitle>
-            <SectionDesc>
-              Continuous TIG welds instead of bolted joints. Mirror-polished
-              stainless instead of painted steel. Sloped geometry that drains water
-              in seconds — not minutes. Sanitary is the baseline.
-            </SectionDesc>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-            {constructionStats.map((stat) => (
-              <AnimatedSection key={stat.label} delay={0.05}>
-                <div className="text-center p-6 rounded-xl bg-black/20 border border-white/[0.04]">
-                  <div
-                    className="font-mono text-[1.3rem] font-bold mb-1"
-                    style={{ color: accent }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div className="font-sans text-[0.78rem] text-text-body">
-                    {stat.label}
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ConstructionStandards variant="full" />
 
       {/* Photo Gallery */}
-      <section className="py-[72px] px-8 bg-black/[0.06]">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection>
-            <SectionLabel>In the Field</SectionLabel>
-            <SectionTitle>Conveyor Gallery</SectionTitle>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6">
-            {galleryImages.map((img) => (
-              <div
-                key={img.src}
-                className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border-default group"
-              >
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ConveyorGallery images={galleryImages} />
 
       {/* Case Studies Preview */}
       <section className="py-[72px] px-8">
@@ -430,15 +307,9 @@ export function ConveyorsHubContent() {
             </SectionDesc>
           </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {conveyorProjects.map((p, i) => (
-              <StaggerItem key={i}>
-                <ProjectPreviewCard
-                  title={p.title}
-                  subtitle={p.subtitle}
-                  description={p.description}
-                  tags={p.tags}
-                  image={p.image}
-                />
+            {conveyorProjects.map((p) => (
+              <StaggerItem key={p.slug}>
+                <ProjectCard project={p} size="preview" />
               </StaggerItem>
             ))}
           </StaggerContainer>

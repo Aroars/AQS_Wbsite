@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   AnimatedSection,
   StaggerContainer,
@@ -15,13 +16,15 @@ import {
 import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
 import { ConveyorFamilyNav } from "@/components/ui/conveyor-family-nav";
+import { ConstructionStandards } from "@/components/ui/construction-standards";
+import { FAQSection } from "@/components/sections/faq-section";
 import {
   CONVEYOR_ACCENT,
   categories,
-  constructionStats,
   driveTechnologies,
 } from "@/data/conveyors";
 import type { ConveyorType } from "@/data/conveyors";
+import { getTypePage } from "@/data/conveyor-type-pages";
 
 const accent = CONVEYOR_ACCENT;
 
@@ -29,8 +32,9 @@ const accent = CONVEYOR_ACCENT;
    Type Detail Card
    ================================================ */
 
-function TypeDetailCard({ type }: { type: ConveyorType }) {
+function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }) {
   const [hovered, setHovered] = useState(false);
+  const page = getTypePage(family, type.slug);
   return (
     <div
       id={type.slug}
@@ -81,6 +85,15 @@ function TypeDetailCard({ type }: { type: ConveyorType }) {
               </span>
             ))}
           </div>
+          {page && (
+            <Link
+              href={page.href}
+              className="inline-flex items-center gap-1.5 mt-5 font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
+              style={{ color: accent }}
+            >
+              Read more about {type.shortTitle} conveyors &rarr;
+            </Link>
+          )}
         </div>
         {/* Inline image on right */}
         {type.image && (
@@ -146,45 +159,15 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
           <StaggerContainer className="flex flex-col gap-4">
             {category.types.map((type) => (
               <StaggerItem key={type.slug}>
-                <TypeDetailCard type={type} />
+                <TypeDetailCard type={type} family={family} />
               </StaggerItem>
             ))}
           </StaggerContainer>
         </div>
       </section>
 
-      {/* Construction Standards */}
-      <section className="py-[72px] px-8 bg-black/[0.06]">
-        <div className="max-w-[1280px] mx-auto">
-          <AnimatedSection>
-            <SectionLabel>Construction Standards</SectionLabel>
-            <SectionTitle>Built Different. On Purpose.</SectionTitle>
-            <SectionDesc>
-              Every AQS conveyor shares the same sanitary construction DNA —
-              continuous TIG welds, mirror-polished stainless, sloped drainage,
-              and washdown-rated components — whether it carries a tray, a
-              case, or a full pallet.
-            </SectionDesc>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-            {constructionStats.map((stat) => (
-              <AnimatedSection key={stat.label} delay={0.05}>
-                <div className="text-center p-6 rounded-xl bg-black/20 border border-white/[0.04]">
-                  <div
-                    className="font-mono text-[1.3rem] font-bold mb-1"
-                    style={{ color: accent }}
-                  >
-                    {stat.value}
-                  </div>
-                  <div className="font-sans text-[0.78rem] text-text-body">
-                    {stat.label}
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Construction Standards — the full block lives on the hub */}
+      <ConstructionStandards variant="compact" />
 
       {/* Drive Technology */}
       <section className="py-[72px] px-8">
@@ -224,6 +207,8 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
           </StaggerContainer>
         </div>
       </section>
+
+      {category.faq && category.faq.length > 0 && <FAQSection items={category.faq} />}
     </>
   );
 }

@@ -3,6 +3,38 @@
 export const CONVEYOR_ACCENT = "#94A3B8";
 
 /* ================================================
+   Shared shapes
+   ================================================ */
+
+/**
+ * Sentinel for copy AQS has not supplied yet (a belt width, a publish date).
+ * Anything carrying this value is hidden by the components, never rendered
+ * blank — so a page can ship with the rows it can stand behind.
+ */
+export const TODO = "__TODO__";
+export const isFilled = (v: string | null | undefined): v is string =>
+  typeof v === "string" && v !== TODO && v.trim().length > 0;
+
+export interface SpecRow {
+  label: string;
+  value: string;
+  note?: string;
+}
+
+export interface ImageRef {
+  src: string;
+  alt: string;
+  caption?: string;
+  /** Renders get a light tile and object-contain; photos fill their frame */
+  kind?: "photo" | "render";
+}
+
+export interface FAQItem {
+  q: string;
+  a: string;
+}
+
+/* ================================================
    Category Definitions
    ================================================ */
 
@@ -14,7 +46,7 @@ export interface ConveyorType {
   description: string;
   features: string[];
   idealFor: string[];
-  image?: { src: string; alt: string };
+  image?: ImageRef;
 }
 
 export interface ConveyorCategory {
@@ -24,9 +56,11 @@ export interface ConveyorCategory {
   title: string;
   subtitle: string;
   description: string;
-  heroImage?: { src: string; alt: string };
+  heroImage?: ImageRef;
   /** Which drive technologies apply (titles from driveTechnologies) */
   driveTitles: string[];
+  /** Family-page questions (rendered and emitted as FAQPage schema) */
+  faq?: FAQItem[];
   types: ConveyorType[];
 }
 
@@ -43,6 +77,20 @@ export const categories: ConveyorCategory[] = [
       "Food grade belt conveyors for washdown environments — from point-A-to-point-B transport to freezer-rated arctic systems and steep elevation changes. The widest range of sanitary applications, on TIG-welded stainless frames with FDA belting.",
     heroImage: { src: "/images/conveyors/dairy-line-full.jpg", alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment" },
     driveTitles: ["One Motion™ Mag-Drive", "Standard Gear Motor Drives"],
+    faq: [
+      {
+        q: "Which belt should I use for wet product?",
+        a: "Modular belt with perforated or raised-rib modules drains and grips; flat-top urethane belt is easier to wipe down and inspect. Both use FDA-approved belting from Intralox, Habasit, or equivalent — the choice comes down to drainage, product grip, and whether the path has to curve.",
+      },
+      {
+        q: "Can a belt conveyor turn a corner without a transfer?",
+        a: "Yes. Side-flexing modular belt and radius flat belts carry product through 45°, 90°, 180°, and S-curve turns on one continuous belt, so there is no dead plate or gap for product to catch on. The inside radius is set by the belt's collapse factor.",
+      },
+      {
+        q: "How steep can an incline conveyor run?",
+        a: "Without cleats the limit is the product's friction on the belt. Cleated or sidewall belts carry product up much steeper angles, and Z-frame designs keep the infeed and discharge horizontal. The incline calculator in the toolbox works the geometry for a given rise and floor space.",
+      },
+    ],
     types: [
       {
         title: "Flat-Top Belt Conveyors",
@@ -75,6 +123,22 @@ export const categories: ConveyorCategory[] = [
         ],
         idealFor: ["Wet environments", "Products requiring drainage", "Curved conveyor paths"],
         image: { src: "/images/conveyors/modular-belt-sanitary.jpg", alt: "Sanitary modular belt conveyor showing interlocking plastic belt modules on stainless steel frame" },
+      },
+      {
+        title: "Radius, S-Curve & 180° Belt Conveyors",
+        shortTitle: "Radius & S-Curve",
+        slug: "radius",
+        useCase: "Direction changes without transfers — 45°, 90°, 180°, and S-curve paths.",
+        description:
+          "Side-flexing modular belt (Intralox or Habasit) or a radius flat belt on a TIG-welded stainless frame carries product around the corner on one continuous belt — no dead plates, no transfer gaps, no product tumble. The inside radius is set by the belt's collapse factor.",
+        features: [
+          "45°, 90°, 180°, and S-curve layouts",
+          "One belt through the turn — no transfer points",
+          "Side-flexing FDA-approved belting",
+          "Curved UHMW wearstrips and sanitary guide rails",
+        ],
+        idealFor: ["Tight footprints", "Line reversals", "Wrapping around equipment"],
+        image: { src: "/images/conveyors/curved-conveyor.jpg", alt: "Curved modular belt conveyor on a stainless steel frame rounding a turn in a food plant" },
       },
       {
         title: "Incline & Decline Conveyors",
@@ -118,6 +182,20 @@ export const categories: ConveyorCategory[] = [
       "Washdown-rated motorized drive roller conveyors for cases, trays, and totes. Each zone runs its own 24V roller, so product queues without contact, only active zones draw power, and traffic control lives in the conveyor instead of a PLC rack — from zero-pressure accumulation to multi-line merging and SKU-based sorting.",
     heroImage: { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
     driveTitles: ["Motorized Drive Rolls (MDR)", "Standard Gear Motor Drives"],
+    faq: [
+      {
+        q: "What is a 24V MDR conveyor?",
+        a: "A motorized roller conveyor in which each zone is driven by its own low-voltage roller with a local drive card. Zones talk to their neighbours, so product accumulates without contact and only occupied zones run. The traffic logic lives in the conveyor; the PLC handles the line.",
+      },
+      {
+        q: "Is MDR conveyor washdown-rated?",
+        a: "Yes. AQS builds MDR on stainless frames with washdown-rated PulseRoller options, IP67 drive cards, and sealed quick-disconnects, with frames engineered to IP69K where the room demands it.",
+      },
+      {
+        q: "Can an MDR conveyor carry pallets?",
+        a: "Yes. Heavier hub-motor rollers move loaded pallets; AQS has built 24V pallet loops carrying 1,800 lb loads with one drive card per zone and zero-pressure accumulation between the forklift drop and the fill station.",
+      },
+    ],
     types: [
       {
         title: "24V Motorized Drive Roller (MDR) Zones",
@@ -186,6 +264,20 @@ export const categories: ConveyorCategory[] = [
       "Stainless pallet conveyors for end-of-line food and dairy lines — roller and chain-driven pallet conveyance, zero-pressure pallet accumulation, automated dispensing, and stretch-wrapper, strapper, and robotic palletizer integration, built for the heaviest loads on the line in full washdown environments.",
     heroImage: { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in dairy production environment" },
     driveTitles: ["Standard Gear Motor Drives", "Motorized Drive Rolls (MDR)"],
+    faq: [
+      {
+        q: "Chain or roller for a washdown pallet line?",
+        a: "Chain conveyors take the heaviest loads and tolerate rough pallets; stainless roller and 24V MDR pallet conveyors add zone control and zero-pressure accumulation. Many end-of-line layouts use chain at the palletizer and MDR or roller through accumulation and wrapping.",
+      },
+      {
+        q: "What protection rating do pallet conveyors carry?",
+        a: "IP65 through IP69K depending on the room, with stainless frames, sealed drives, and NEMA 4X enclosures. Freezer-rated builds cover cold-storage staging.",
+      },
+      {
+        q: "Do pallet conveyors integrate with palletizers and wrappers?",
+        a: "Yes — KUKA robotic palletizing cells, stretch wrappers, strappers, labelers, and pallet dispensers, on Allen-Bradley controls with VeriPak reporting when the line needs it.",
+      },
+    ],
     types: [
       {
         title: "Washdown Pallet Conveyors",
@@ -345,16 +437,47 @@ export const hubClaims = [
    Case Studies
    ================================================ */
 
+/** A full project page. Present on a project = it has its own route under /solutions/conveyors/projects/ */
+export interface ConveyorSpotlight {
+  h1: string;
+  /** <title> (≤ 60 chars) and meta description (≤ 155) */
+  title: string;
+  description: string;
+  /** Long approved title, used for Open Graph when it differs from `title` */
+  ogTitle?: string;
+  industry: string;
+  region: string;
+  /** ISO dates; TODO until AQS supplies them (Article schema omits them) */
+  datePublished: string;
+  dateModified?: string;
+  hero: ImageRef;
+  atAGlance: SpecRow[];
+  sections: { id: string; heading: string; paragraphs: string[] }[];
+  result: { body: string; numbers: { value: string; label: string }[] };
+  gallery: ImageRef[];
+  faq: FAQItem[];
+  related: { label: string; href: string }[];
+  /** Schema `about` entities */
+  about?: string[];
+}
+
 export interface ConveyorProject {
+  slug: string;
   title: string;
   subtitle: string;
   description: string;
   tags: string[];
-  image?: { src: string; alt: string };
+  image?: ImageRef;
+  spotlight?: ConveyorSpotlight;
 }
+
+export const spotlightHref = (p: ConveyorProject) => `/solutions/conveyors/projects/${p.slug}`;
+export const spotlightProjects = () => conveyorProjects.filter((p) => p.spotlight);
+export const getSpotlight = (slug: string) => conveyorProjects.find((p) => p.slug === slug && p.spotlight);
 
 export const conveyorProjects: ConveyorProject[] = [
   {
+    slug: "freezer-conveyor-marshmallow-line",
     title: "Freezer Conveyors",
     subtitle: "Marshmallow Production — Utah",
     description:
@@ -363,6 +486,7 @@ export const conveyorProjects: ConveyorProject[] = [
     image: { src: "/images/conveyors/elevated-conveyor.jpg", alt: "Elevated freezer conveyor system installed at a marshmallow production facility" },
   },
   {
+    slug: "eq70-accumulation-dairy-line",
     title: "EQ70 Accumulation Conveyor",
     subtitle: "Major Dairy Facility — Philadelphia",
     description:
@@ -372,7 +496,7 @@ export const conveyorProjects: ConveyorProject[] = [
   },
 ];
 
-export const galleryImages = [
+export const galleryImages: ImageRef[] = [
   { src: "/images/conveyors/flat-top-belt-sanitary.jpg", alt: "Sanitary flat-top belt conveyor with FDA-approved blue urethane belting and TIG-welded stainless steel frame" },
   { src: "/images/conveyors/modular-belt-sanitary.jpg", alt: "Sanitary modular belt conveyor showing interlocking plastic belt modules on stainless steel frame" },
   { src: "/images/conveyors/incline-conveyor.jpg", alt: "Stainless steel incline conveyor with cleated belt for positive product control at elevation changes" },
@@ -384,11 +508,6 @@ export const galleryImages = [
 /* ================================================
    FAQ Items
    ================================================ */
-
-export interface FAQItem {
-  q: string;
-  a: string;
-}
 
 export const conveyorFAQs: FAQItem[] = [
   {
