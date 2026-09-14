@@ -575,7 +575,7 @@ export const conveyorProjects: ConveyorProject[] = [
     description:
       "State-of-the-art sanitary conveyor systems for transporting hot extruded marshmallow through a freezer tunnel. Full washdown construction rated for extreme temperature cycling.",
     tags: ["Freezer Rated", "Sanitary", "Temp Cycling"],
-    image: { src: "/images/conveyors/elevated-conveyor.jpg", alt: "Elevated freezer conveyor system installed at a marshmallow production facility" },
+    image: { src: "/images/conveyors/freezer-conveyor-marshmallow.jpg", alt: "Frosted blue cleated modular belt at the discharge of a freezer conveyor inside a marshmallow production freezer" },
   },
   {
     slug: "eq70-accumulation-dairy-line",
@@ -584,7 +584,7 @@ export const conveyorProjects: ConveyorProject[] = [
     description:
       "Advanced EQ70 accumulation conveyor installed at a major dairy production facility. Designed for active product accumulation with enhanced operational efficiency and stringent sanitation standards.",
     tags: ["Active Accumulation", "Dairy Grade", "High Sanitation"],
-    image: { src: "/images/conveyors/eq70-line.jpg", alt: "EQ70 accumulation conveyor system at a major dairy facility" },
+    image: { src: "/images/conveyors/eq70-accumulation-dairy.jpg", alt: "EQ70 accumulation conveyor with blue modular belt and stainless guide rails on a washdown dairy production floor" },
   },
 ];
 
