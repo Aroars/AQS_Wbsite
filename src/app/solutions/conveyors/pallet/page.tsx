@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { ToolboxLinks } from "@/components/sections/toolbox-links";
 import { ConveyorFamilyContent } from "@/components/pages/conveyor-family";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
-import { CTASection } from "@/components/sections/cta-section";
+import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { pageMetadata } from "@/content/seo";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function ConveyorFamilyPage() {
       <ConveyorFamilyContent family="pallet" />
       <ToolboxLinks tools={['conveyor-throughput-calculator', 'conveyor-speed-calculator', 'mdr-motorized-roller-selection', 'belt-pull-calculator', 'light-curtain-safety-distance-calculator', 'machine-guard-opening-distance']} title="Size a Pallet Line Yourself" />
       <SystemArchitecture currentProduct="conveyors" />
-      <CTASection />
+      <ConveyorCTA />
       <Footer />
     </>
   );

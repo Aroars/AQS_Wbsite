@@ -5,7 +5,7 @@ import { ToolboxLinks } from "@/components/sections/toolbox-links";
 import { ConveyorsHubContent } from "@/components/pages/conveyors-hub";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { FAQSection } from "@/components/sections/faq-section";
-import { CTASection } from "@/components/sections/cta-section";
+import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { pageMetadata } from "@/content/seo";
 import { conveyorFAQs } from "@/data/conveyors";
 
@@ -33,7 +33,7 @@ export default function ConveyorsPage() {
       <ToolboxLinks tools={['belt-pull-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'mdr-motorized-roller-selection', 'incline-conveyor-calculator', 'uhmw-wearstrip-span-calculator']} />
       <SystemArchitecture currentProduct="conveyors" />
       <FAQSection items={conveyorFAQs} />
-      <CTASection />
+      <ConveyorCTA />
       <Footer />
     </>
   );

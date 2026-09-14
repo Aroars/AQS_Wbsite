@@ -283,7 +283,7 @@ export const constructionStats = [
   { value: "304/316", label: "Stainless Steel" },
   { value: "IP69K", label: "Washdown Capable" },
   { value: "50%", label: "Faster Sanitation" },
-  { value: "3-A", label: "Sanitary Compliant" },
+  { value: "3-A", label: "Designed to Sanitary Standards" },
 ];
 
 export const protectionRatings = [
@@ -333,11 +333,12 @@ export const driveTechnologies: DriveTech[] = [
    Hub Stats
    ================================================ */
 
-export const hubStats = [
-  { value: "50+", label: "Years Experience" },
-  { value: "3", label: "Families · 9 Types" },
-  { value: "IP69K", label: "Capable" },
-  { value: "USDA", label: "Compliant" },
+/** The four construction claims on the hub strip — every one is true of what AQS builds today */
+export const hubClaims = [
+  { value: "IP69K", label: "Washdown-rated construction" },
+  { value: "−40 °F", label: "Freezer-rated systems" },
+  { value: "24V", label: "MDR zone drives" },
+  { value: "TIG", label: "Continuous-welded frames" },
 ];
 
 /* ================================================
@@ -404,7 +405,7 @@ export const conveyorFAQs: FAQItem[] = [
   },
   {
     q: "What materials do you use?",
-    a: "304 or 316 stainless steel frames with mirror polish, FDA-approved belting, and USDA/3-A compliant components throughout. 316 stainless is available for caustic or high-chloride environments.",
+    a: "304 or 316 stainless steel frames with mirror polish, FDA-approved belting, USDA-accepted designs, and components designed to 3-A Sanitary Standards throughout. 316 stainless is available for caustic or high-chloride environments.",
   },
   {
     q: "Can AQS conveyors operate in freezer environments?",

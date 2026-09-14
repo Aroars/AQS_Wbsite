@@ -528,7 +528,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
       id: "eol-palletizing",
       name: "End-of-Line Palletizing (Dairy/Protein)",
       description:
-        "The primary robotics story. MDR accumulation stages cases for the robot with zero back-pressure so cases don't collide. Chain conveyor handles full pallet weight. All conveyors are washdown-rated for dairy and protein environments.",
+        "MDR accumulation stages cases for the robot with zero back-pressure, so nothing collides or jams ahead of the pick. A stainless chain conveyor takes the full pallet weight from the palletizer onward. Every conveyor in the cell is washdown-rated for dairy and protein rooms.",
       stages: [
         {
           label: "Case Packer",
@@ -582,7 +582,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
       id: "full-production",
       name: "Full Production Line with Robotic End-of-Line",
       description:
-        "Zoomed-out view showing robotics as the final stage of a complete AQS-equipped line. The robotic palletizing cell isn't a standalone purchase — it's the anchor at the end of an integrated system where VeriPak monitors everything, IntelliPak handles batching, and Conveyors connect all stages.",
+        "The palletizing cell is the last stage of an integrated line, not a standalone purchase: VeriPak records every package, IntelliPak batches and gaps product for the case packer, and AQS conveyors connect each stage on one Allen-Bradley controls platform.",
       stages: [
         {
           label: "Thermoformer",
@@ -712,7 +712,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
       id: "full-line-positions",
       name: "Full Production Line — Conveyor Positions",
       description:
-        "AQS doesn't just build one conveyor — they build the full conveyance infrastructure that connects every stage. Each segment is labeled by type so visitors understand the range: belt for transport, MDR for zero-pressure accumulation, chain for full pallet weight.",
+        "One line, several conveyor jobs: belt conveyors for transport between process stages, 24V MDR for zero-pressure case accumulation, stainless chain for full pallet weight. AQS builds the whole path, so every segment shares the same welded, washdown construction and the same controls.",
       stages: [
         {
           label: "Production",
@@ -782,7 +782,7 @@ const PRODUCT_CONFIGS: Record<ProductSlug, LineConfig[]> = {
       id: "freezer-transition",
       name: "Specialty — Freezer Transition",
       description:
-        "A differentiator story most sanitary conveyor companies can't match. AQS builds arctic-rated conveyors for sustained −40°F operation with condensation management at freezer-to-ambient transitions. Speaks directly to protein and ice cream producers.",
+        "Arctic-rated conveyors run at sustained −40°F with low-temperature seals and lubricants, and manage condensation where the belt crosses from the freezer into ambient air — built for protein and ice cream lines that move product straight out of the tunnel.",
       stages: [
         {
           label: "Packaging",

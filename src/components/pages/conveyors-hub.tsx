@@ -18,12 +18,14 @@ import {
   categories,
   differentiators,
   constructionStats,
-  hubStats,
+  hubClaims,
   conveyorProjects,
   galleryImages,
 } from "@/data/conveyors";
 
 const accent = CONVEYOR_ACCENT;
+const typeCount = categories.reduce((n, c) => n + c.types.length, 0);
+const TYPE_COUNT_WORDS: Record<number, string> = { 9: "Nine", 10: "Ten", 11: "Eleven", 12: "Twelve" };
 
 /* ================================================
    Differentiator Card
@@ -229,11 +231,11 @@ export function ConveyorsHubContent() {
         </div>
       </section>
 
-      {/* Stats Bar */}
+      {/* Claims strip — four construction facts, not marketing counts */}
       <section className="py-10 px-8 border-y border-border-default bg-black/20">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {hubStats.map((stat) => (
+            {hubClaims.map((stat) => (
               <div key={stat.label}>
                 <div
                   className="font-mono text-[1.5rem] font-bold mb-1"
@@ -255,7 +257,7 @@ export function ConveyorsHubContent() {
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Find Your Conveyor</SectionLabel>
-            <SectionTitle>Three Families. Nine System Types.</SectionTitle>
+            <SectionTitle>Three Families. {TYPE_COUNT_WORDS[typeCount] ?? typeCount} System Types.</SectionTitle>
             <SectionDesc>
               Every sanitary conveyor we build shares the same construction DNA
               &mdash; welded stainless frames, mirror polish, aggressive drainage,
@@ -359,7 +361,7 @@ export function ConveyorsHubContent() {
       </section>
 
       {/* Construction Standards */}
-      <section className="py-[72px] px-8">
+      <section id="construction" className="py-[72px] px-8 scroll-mt-24">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Construction Standards</SectionLabel>

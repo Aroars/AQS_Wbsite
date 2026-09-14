@@ -1,11 +1,12 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
 
 interface MagneticButtonProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   as?: "button" | "a";
   href?: string;
   onClick?: () => void;
@@ -16,6 +17,7 @@ interface MagneticButtonProps {
 export function MagneticButton({
   children,
   className = "",
+  style,
   as = "button",
   href,
   onClick,
@@ -31,6 +33,7 @@ export function MagneticButton({
       target={target}
       rel={rel}
       className={className}
+      style={style}
       data-cursor-hover
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}

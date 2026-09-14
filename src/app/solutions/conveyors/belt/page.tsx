@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { ToolboxLinks } from "@/components/sections/toolbox-links";
 import { ConveyorFamilyContent } from "@/components/pages/conveyor-family";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
-import { CTASection } from "@/components/sections/cta-section";
+import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { pageMetadata } from "@/content/seo";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function ConveyorFamilyPage() {
       <ConveyorFamilyContent family="belt" />
       <ToolboxLinks tools={['belt-pull-calculator', 'uhmw-wearstrip-span-calculator', 'incline-conveyor-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'friction-coefficient-table']} title="Size a Belt Conveyor Yourself" />
       <SystemArchitecture currentProduct="conveyors" />
-      <CTASection />
+      <ConveyorCTA />
       <Footer />
     </>
   );

@@ -1,26 +1,4 @@
-export const caseStudies = [
-  {
-    title: "Freezer Conveyors",
-    subtitle: "Marshmallow Production — Utah",
-    description:
-      "State-of-the-art sanitary conveyor systems for transporting hot extruded marshmallow through a freezer tunnel. Full washdown construction rated for extreme temperature cycling.",
-    tags: ["Freezer Rated", "Sanitary", "Temp Cycling"],
-  },
-  {
-    title: "EQ70 Accumulation Conveyor",
-    subtitle: "Major Dairy Facility — Philadelphia",
-    description:
-      "Advanced EQ70 accumulation conveyor installed at a major dairy production facility. Designed for active product accumulation with enhanced operational efficiency and stringent sanitation standards.",
-    tags: ["Active Accumulation", "Dairy Grade", "High Sanitation"],
-  },
-];
-
-export const conveyorTypes = [
-  { title: "Modular Belt", description: "Quick-disconnect for fast sanitation" },
-  { title: "Flat-Top Chain", description: "Heavy products & high-speed lines" },
-  { title: "Roller Conveyor", description: "Gravity & powered accumulation" },
-  { title: "Custom Configs", description: "Inclines, curves, merges, specialty" },
-];
+// Conveyor case studies live in src/data/conveyors.ts (conveyorProjects)
 
 export const roboticsApplications = [
   { title: "Palletizing", description: "Full-layer and column palletizing in cold, wet, or caustic washdown zones" },
