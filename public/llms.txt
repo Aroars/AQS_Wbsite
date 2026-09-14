@@ -37,15 +37,19 @@
 - Ships with full automation onboard, not just conveyance hardware
 
 ### Custom Conveyors — Engineered Sanitary Material Handling
-- URL: https://www.automatedqs.com/solutions/conveyors
+- URL: https://automatedqs.com/solutions/conveyors
 - Purpose-built sanitary conveyor systems engineered for each customer's product, layout, and sanitary requirements
-- Types: flat-top belt, modular belt, motorized drive roll (MDR), chain, accumulation, incline/decline, merge/divert, freezer/arctic (-40F/-40C), washdown pallet
+- Three families, each with its own page: Belt (https://automatedqs.com/solutions/conveyors/belt), MDR 24V motorized roller (https://automatedqs.com/solutions/conveyors/mdr), Pallet (https://automatedqs.com/solutions/conveyors/pallet)
+- Types: flat-top belt, modular belt, radius / S-curve / 180° belt, incline/decline, freezer/arctic (-40F/-40C), 24V MDR zones, zero-pressure accumulation, merge/divert, washdown pallet, chain
+- Type pages: Radius, S-Curve & 180° Belt Conveyors (https://automatedqs.com/solutions/conveyors/belt/radius); Sanitary Incline & Decline Conveyors (https://automatedqs.com/solutions/conveyors/belt/incline); 24V MDR Zone Conveyors (https://automatedqs.com/solutions/conveyors/mdr/zones)
+- Project spotlights: https://automatedqs.com/solutions/conveyors/projects — e.g. a stainless 24V MDR pallet tote filling line with live weighing and vibratory densification in a 0–20 °F freezer area (https://automatedqs.com/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system)
 - 304/316 stainless steel, continuous TIG-welded frames (no bolted joints, no bacterial harborage)
 - Mirror-polished surfaces, sloped and curved design for aggressive water shedding
 - Reduces sanitation time by up to 50%
 - Tool-less disassembly with quick-release belt lifters
 - FDA-approved belting; USDA accepted; designed to 3-A Sanitary Standards
 - IP54 through IP69K protection ratings
+- Free sizing calculators (no login): belt pull (https://automatedqs.com/toolbox/belt-pull-calculator), conveyor speed (https://automatedqs.com/toolbox/conveyor-speed-calculator), throughput and belt load (https://automatedqs.com/toolbox/conveyor-throughput-calculator), motor sizing (https://automatedqs.com/toolbox/conveyor-motor-sizing-calculator), MDR roller selection (https://automatedqs.com/toolbox/mdr-motorized-roller-selection), incline geometry (https://automatedqs.com/toolbox/incline-conveyor-calculator); full toolbox at https://automatedqs.com/toolbox
 
 ### EvacuPak — Liquid Recovery System
 - URL: https://www.automatedqs.com/solutions/evacupak

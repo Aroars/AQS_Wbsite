@@ -475,7 +475,99 @@ export const spotlightHref = (p: ConveyorProject) => `/solutions/conveyors/proje
 export const spotlightProjects = () => conveyorProjects.filter((p) => p.spotlight);
 export const getSpotlight = (slug: string) => conveyorProjects.find((p) => p.slug === slug && p.spotlight);
 
+const toteFillingRender: ImageRef = {
+  src: "/images/conveyors/renders/24v-mdr-pallet-conveyor-tapered-curve-stainless.png",
+  alt: "Engineering render of a stainless 24V MDR pallet conveyor loop with two tapered-roller 90° curves and a stainless control enclosure",
+  caption: "Seven-zone 24V MDR pallet loop with dual-direction radius sections, control enclosure, and bollards.",
+  kind: "render",
+};
+
 export const conveyorProjects: ConveyorProject[] = [
+  {
+    slug: "stainless-24v-pallet-tote-filling-system",
+    title: "Automated Pallet Tote Filling Line",
+    subtitle: "Frozen Vegetable Processor — Upper Midwest",
+    description:
+      "A seven-zone stainless 24V MDR pallet loop with live in-zone weighing and vibratory densification, running hands-off in a 0–20 °F freezer area from forklift drop to forklift pickup.",
+    tags: ["24V MDR", "Pallet Handling", "Freezer 0–20 °F", "Live Weighing"],
+    image: toteFillingRender,
+    spotlight: {
+      h1: "Automated Pallet Tote Filling Line — Stainless 24V MDR Conveyor with Live Weighing and Vibratory Densification",
+      title: "24V MDR Pallet Tote Filling Line with Live Weighing | AQS",
+      ogTitle: "Stainless 24V MDR Pallet Conveyor with Integrated Scale & Densification — Freezer Tote Filling Line | AQS",
+      description:
+        "Seven-zone stainless 24V MDR pallet loop with in-zone scale and vibratory densification fills 1,800 lb totes to 1% in a 0–20 °F freezer area — an AQS conveyor project spotlight.",
+      industry: "Frozen vegetable processing",
+      region: "Upper Midwest",
+      datePublished: TODO,
+      hero: toteFillingRender,
+      atAGlance: [
+        { label: "Customer", value: "Frozen vegetable processor, Upper Midwest" },
+        { label: "Application", value: "Filling lined bulk totes on pallets with diced raw and frozen vegetables to a target weight" },
+        { label: "Conveyor", value: "7-zone 24V MDR pallet circuit, U-shaped, two 90° dual-direction radius sections" },
+        { label: "Capacity", value: "Up to 10 totes/hr · 1,800 lb max fill · 7 pallets in zero-pressure accumulation" },
+        { label: "Weighing", value: "Live in-zone scale, 1% accuracy to 2,500 lb" },
+        { label: "Environment", value: "Indoor freezer area, 0–20 °F · 304 stainless frames and NEMA 4X panels · IP65+ components" },
+        { label: "Controls", value: "Allen-Bradley CompactLogix, touchscreen HMI, 100-recipe SKU library, VPN remote support" },
+        { label: "Footprint", value: "About 23 ft × 19 ft" },
+      ],
+      sections: [
+        {
+          id: "the-problem",
+          heading: "The problem",
+          paragraphs: [
+            "The plant filled bulk totes under an existing auger by hand: a forklift set a pallet, an operator watched a scale, and product had to be shaken down to fill the tote fully. Throughput depended on the operator, weights drifted, and the whole process lives in a room near 0 °F.",
+          ],
+        },
+        {
+          id: "what-we-built",
+          heading: "What we built",
+          paragraphs: [
+            "A seven-zone 24V motorized-roller pallet loop in T304 stainless. Forklifts load empty pallets on the infeed leg and pull full ones from the discharge leg; everything between is automatic. Three staging zones index pallets forward, a scale conveyor at the fill station stops the pallet on four weigh modules, and three discharge zones accumulate finished pallets without contact.",
+            "Two swept-radius corner conveyors with tapered idlers carry pallets around the 90° bends with no pneumatics, and accept pallets fed either 40\" or 48\" side leading.",
+          ],
+        },
+        {
+          id: "the-control-story",
+          heading: "The control story",
+          paragraphs: [
+            "The PLC tares the empty tote, closes a dry contact to call the plant's existing auger filler, and watches live weight during the fill. At recipe-set intervals a densification deck under the fill zone lifts the pallet off the rollers on air bags and runs two electric rotary vibrators to settle the product, then filling resumes. Near target the auger is stopped, weight stabilizes, and the final weight is recorded before release.",
+            "Settling frequency, duration, and intensity are per-SKU recipe values the operator tunes at the HMI — dozens of SKUs loaded at commissioning. Every zone runs on its own IP67 drive card, so accumulation logic lives in the conveyor and the PLC handles the fill.",
+          ],
+        },
+        {
+          id: "built-for-the-cold",
+          heading: "Built for the cold",
+          paragraphs: [
+            "Freezer-rated motors, instrumentation, and photo eyes; zinc-coated rollers to hold off surface rust; stainless slope-top NEMA 4X enclosures with panel climate control; leveling feet with ±4\" adjustment on a floor that isn't flat.",
+          ],
+        },
+      ],
+      result: {
+        body: "Hands-off filling from forklift drop to forklift pickup. Target weight held within 1% on every tote. Up to seven pallets buffered so the auger never waits on a forklift.",
+        numbers: [
+          { value: "1%", label: "of target weight, held on every tote" },
+          { value: "7", label: "pallets buffered in zero-pressure accumulation" },
+        ],
+      },
+      gallery: [toteFillingRender],
+      faq: [
+        { q: "Can a 24V MDR conveyor carry pallets?", a: "Yes. This system moves 1,800 lb loaded pallets on 2.5\" hub-motor rollers with one drive card per zone." },
+        { q: "Can you weigh a pallet on a conveyor during filling?", a: "Yes. The fill zone rides on weigh modules and reads live to 1% of 2,500 lb, so the PLC can stop the filler at target and record the final weight before release." },
+        { q: "Does MDR work in a freezer?", a: "This line runs at 0–20 °F with freezer-rated rollers, drive cards, and sensors, and climate-controlled NEMA 4X enclosures." },
+        { q: "Do pallets have to enter a specific way?", a: "No. The dual-direction radius sections accept pallets fed either 40\" or 48\" side leading." },
+      ],
+      related: [
+        { label: "24V MDR Zone Conveyors", href: "/solutions/conveyors/mdr/zones" },
+        { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet" },
+        { label: "Zero-Pressure Accumulation", href: "/solutions/conveyors/mdr#accumulation" },
+        { label: "Freezer & Arctic Conveyors", href: "/solutions/conveyors/belt#freezer-arctic" },
+        { label: "MDR Roller Selection Chart", href: "/toolbox/mdr-motorized-roller-selection" },
+        { label: "VeriPak SCADA", href: "/solutions/veripak" },
+      ],
+      about: ["24V MDR conveyor", "Pallet conveyor", "Zero-pressure accumulation", "Freezer conveyor", "Tote filling"],
+    },
+  },
   {
     slug: "freezer-conveyor-marshmallow-line",
     title: "Freezer Conveyors",

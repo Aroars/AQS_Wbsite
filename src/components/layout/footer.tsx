@@ -2,10 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { CookieSettingsButton } from "@/components/ui/cookie-settings-button";
 
-const solutionLinks = [
+const solutionLinks: { label: string; href: string; sub?: boolean }[] = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
   { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
   { label: "Sanitary Conveyors", href: "/solutions/conveyors" },
+  { label: "Belt Conveyors", href: "/solutions/conveyors/belt", sub: true },
+  { label: "MDR Conveyors", href: "/solutions/conveyors/mdr", sub: true },
+  { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet", sub: true },
+  { label: "Conveyor Projects", href: "/solutions/conveyors/projects", sub: true },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
   { label: "EvacuPak", href: "/solutions/evacupak" },
 ];
@@ -59,7 +63,9 @@ export function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors mb-1.5"
+              className={`block font-sans text-text-dim hover:text-white transition-colors mb-1.5 ${
+                link.sub ? "pl-3 text-[0.72rem]" : "text-[0.78rem]"
+              }`}
             >
               {link.label}
             </Link>

@@ -11,16 +11,19 @@ export function SectionLabel({ children }: { children: ReactNode }) {
 export function SectionTitle({
   children,
   className = "",
+  as: Tag = "h2",
 }: {
   children: ReactNode;
   className?: string;
+  /** Use "h1" for the page's hero title so every page has exactly one h1 */
+  as?: "h1" | "h2";
 }) {
   return (
-    <h2
+    <Tag
       className={`font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1] ${className}`}
     >
       {children}
-    </h2>
+    </Tag>
   );
 }
 

@@ -30,7 +30,7 @@ export function ConveyorsProjectsContent() {
           <AnimatedSection>
             <ConveyorBreadcrumb current="Projects" />
             <SectionLabel>Project Portfolio</SectionLabel>
-            <SectionTitle>Conveyor Projects & Case Studies</SectionTitle>
+            <SectionTitle as="h1">Conveyor Projects & Case Studies</SectionTitle>
             <SectionDesc>
               Real-world sanitary conveyor systems designed, built, and installed
               by AQS — from freezer-rated marshmallow lines to high-capacity dairy

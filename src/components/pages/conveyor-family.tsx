@@ -142,7 +142,7 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
           <AnimatedSection>
             <ConveyorBreadcrumb current={category.title} />
             <SectionLabel>{category.subtitle}</SectionLabel>
-            <SectionTitle>{category.title}</SectionTitle>
+            <SectionTitle as="h1">{category.title}</SectionTitle>
             <SectionDesc>{category.description}</SectionDesc>
           </AnimatedSection>
         </div>

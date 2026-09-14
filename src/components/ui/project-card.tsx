@@ -12,9 +12,18 @@ const accent = CONVEYOR_ACCENT;
  * with a spotlight body links to its page; a legacy card without one is a
  * plain card, so nothing ever links to a page that does not exist.
  */
-export function ProjectCard({ project, size = "full" }: { project: ConveyorProject; size?: "preview" | "full" }) {
+export function ProjectCard({
+  project,
+  size = "full",
+  href: hrefProp,
+}: {
+  project: ConveyorProject;
+  size?: "preview" | "full";
+  /** Server callers pass the link and a project stripped of its spotlight body, so the body is not serialized into the page */
+  href?: string;
+}) {
   const [hovered, setHovered] = useState(false);
-  const href = project.spotlight ? spotlightHref(project) : null;
+  const href = hrefProp ?? (project.spotlight ? spotlightHref(project) : null);
   const preview = size === "preview";
 
   const body = (

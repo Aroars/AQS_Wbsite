@@ -23,12 +23,17 @@ module.exports = {
     ];
 
     let priority = config.priority;
+    let changefreq = config.changefreq;
     if (highPriority.includes(path)) priority = 1.0;
     else if (medPriority.includes(path)) priority = 0.8;
+    // Conveyor section: hub, families, and type pages carry the product weight;
+    // project spotlights are long-lived articles
+    else if (path.startsWith("/solutions/conveyors/projects/")) { priority = 0.7; changefreq = "monthly"; }
+    else if (path.startsWith("/solutions/conveyors/")) priority = 0.8;
 
     return {
       loc: path,
-      changefreq: config.changefreq,
+      changefreq,
       priority,
       lastmod: new Date().toISOString(),
     };
