@@ -46,20 +46,24 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
           <AnimatedSection>
             <ConveyorBreadcrumb trail={[{ label: category.shortTitle, href: `/solutions/conveyors/${category.slug}` }]} current={page.h1} />
           </AnimatedSection>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-center">
+          <div className={`grid grid-cols-1 gap-10 items-center ${page.hero ? "lg:grid-cols-[1.1fr_1fr]" : ""}`}>
             <AnimatedSection>
               <SectionLabel>{category.title}</SectionLabel>
               <h1 className="font-sans font-extrabold text-[clamp(1.9rem,3.6vw,2.8rem)] leading-[1.1] text-white mb-5">{page.h1}</h1>
               <p className="font-sans text-[1.05rem] text-white/85 leading-[1.65] mb-4">{page.definition}</p>
-              {page.intro.map((p) => (
-                <p key={p} className="font-sans text-[0.95rem] text-text-body leading-[1.7] mb-3">
-                  {p}
-                </p>
-              ))}
+              <div className={page.hero ? "" : "max-w-[820px]"}>
+                {page.intro.map((p) => (
+                  <p key={p} className="font-sans text-[0.95rem] text-text-body leading-[1.7] mb-3">
+                    {p}
+                  </p>
+                ))}
+              </div>
             </AnimatedSection>
-            <AnimatedSection delay={0.1}>
-              <Figure image={page.hero} priority />
-            </AnimatedSection>
+            {page.hero && (
+              <AnimatedSection delay={0.1}>
+                <Figure image={page.hero} priority />
+              </AnimatedSection>
+            )}
           </div>
           <AnimatedSection delay={0.15}>
             <div className="mt-10">

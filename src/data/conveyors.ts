@@ -189,6 +189,7 @@ export const categories: ConveyorCategory[] = [
           "Insulated frame options",
         ],
         idealFor: ["Ice cream", "Frozen protein", "Frozen bakery", "Cold storage facilities"],
+        image: { src: "/images/conveyors/freezer-conveyor-marshmallow.jpg", alt: "Frosted blue cleated modular belt at the discharge of a freezer conveyor inside a marshmallow production freezer" },
       },
     ],
   },
@@ -258,6 +259,7 @@ export const categories: ConveyorCategory[] = [
           "Shift changes",
           "Downstream recovery time",
         ],
+        image: { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in a dairy production environment" },
       },
       {
         title: "Merge & Divert Systems",
@@ -277,6 +279,7 @@ export const categories: ConveyorCategory[] = [
           "SKU-based sorting",
           "Multi-destination routing",
         ],
+        image: { src: "/images/conveyors/dairy-facility.jpg", alt: "Multi-lane sanitary modular belt conveyors with stainless guide rails merging product in a dairy plant" },
       },
     ],
   },
@@ -630,6 +633,46 @@ export const galleryImages: ImageRef[] = [
   { src: "/images/conveyors/modular-belt-conveyor-shop.jpg", alt: "Blue modular belt conveyor on a TIG-welded stainless frame ready to ship from the AQS shop" },
   { src: "/images/conveyors/mdr-tapered-curve-rollers.jpg", alt: "White tapered rollers of a stainless 24V MDR conveyor curve" },
   { src: "/images/conveyors/mdr-pallet-section-outdoor.jpg", alt: "Stainless 24V MDR pallet conveyor section with leveling feet and a drive card cable" },
+];
+
+/* ================================================
+   Family comparison (hub strip)
+   ================================================ */
+
+export interface FamilyCompareRow {
+  family: "belt" | "mdr" | "pallet";
+  moves: string;
+  drive: string;
+  load: string;
+  environments: string;
+  controls: string;
+}
+
+export const familyCompare: FamilyCompareRow[] = [
+  {
+    family: "belt",
+    moves: "Trays, pouches, cartons, bottles, loose bulk product",
+    drive: "Gear motor + VFD or One Motion Mag-Drive; one drive per conveyor",
+    load: "Light to medium — product on a continuous belt",
+    environments: "Dry, washdown to IP69K, freezer to −40 °F",
+    controls: "VFD speed; Allen-Bradley on request",
+  },
+  {
+    family: "mdr",
+    moves: "Cases, trays, totes, and pallets on rollers",
+    drive: "24V motorized roller and drive card in every zone",
+    load: "Medium to heavy — cases through loaded pallets",
+    environments: "Dry, washdown (PulseRoller, IP67 cards), freezer-rated",
+    controls: "Zone logic in the conveyor; PLC says go / stop",
+  },
+  {
+    family: "pallet",
+    moves: "Full pallets, bulk containers, heavy cases",
+    drive: "Stainless chain or 24V MDR pallet rollers",
+    load: "Heaviest on the line — 1,800 lb loaded pallets and up",
+    environments: "Washdown IP65 to IP69K, freezer-rated",
+    controls: "Allen-Bradley with wrapper, strapper, and palletizer handshakes",
+  },
 ];
 
 /** Construction detail shown beside the construction standards on the hub */

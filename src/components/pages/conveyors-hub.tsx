@@ -15,6 +15,8 @@ import {
 import { ProjectCard } from "@/components/ui/project-card";
 import { ConveyorGallery } from "@/components/ui/conveyor-gallery";
 import { ConstructionStandards } from "@/components/ui/construction-standards";
+import { ConveyorChooser } from "@/components/ui/conveyor-chooser";
+import { FamilyCompare } from "@/components/ui/family-compare";
 import {
   CONVEYOR_ACCENT,
   categories,
@@ -195,6 +197,12 @@ export function ConveyorsHubContent() {
               totes with zone control; pallet for end of line.
             </SectionDesc>
           </AnimatedSection>
+          {/* Second way in: what are you moving, and where */}
+          <AnimatedSection delay={0.05}>
+            <div className="mb-8">
+              <ConveyorChooser />
+            </div>
+          </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
             {categories.map((cat) => (
               <StaggerItem key={cat.slug}>
@@ -258,6 +266,9 @@ export function ConveyorsHubContent() {
           </StaggerContainer>
         </div>
       </section>
+
+      {/* Compare the families */}
+      <FamilyCompare />
 
       {/* Showcase Video */}
       <section className="pb-[50px] pt-[20px] px-6">

@@ -7,10 +7,19 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
-const solutions = [
+const solutions: { label: string; href: string; children?: { label: string; href: string }[] }[] = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
   { label: "IntelliPak Feed Systems", href: "/solutions/intellipak" },
-  { label: "Sanitary Conveyors", href: "/solutions/conveyors" },
+  {
+    label: "Sanitary Conveyors",
+    href: "/solutions/conveyors",
+    children: [
+      { label: "Belt Conveyors", href: "/solutions/conveyors/belt" },
+      { label: "MDR Conveyors", href: "/solutions/conveyors/mdr" },
+      { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet" },
+      { label: "Projects", href: "/solutions/conveyors/projects" },
+    ],
+  },
   { label: "Sanitary Robotics", href: "/solutions/robotics" },
   { label: "EvacuPak Recovery", href: "/solutions/evacupak" },
 ];
@@ -146,17 +155,31 @@ export function Navigation() {
                     }}
                   >
                     {solutions.map((s) => (
-                      <Link
-                        key={s.href}
-                        href={s.href}
-                        className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
-                          pathname?.startsWith(s.href)
-                            ? "text-accent-primary"
-                            : "text-text-body hover:text-white"
-                        }`}
-                      >
-                        {s.label}
-                      </Link>
+                      <div key={s.href}>
+                        <Link
+                          href={s.href}
+                          className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
+                            pathname === s.href || (pathname?.startsWith(s.href) && !s.children)
+                              ? "text-accent-primary"
+                              : "text-text-body hover:text-white"
+                          }`}
+                        >
+                          {s.label}
+                        </Link>
+                        {s.children?.map((c) => (
+                          <Link
+                            key={c.href}
+                            href={c.href}
+                            className={`block w-full text-left font-sans text-[0.78rem] pl-[30px] pr-[18px] py-[6px] transition-colors ${
+                              pathname?.startsWith(c.href)
+                                ? "text-accent-primary"
+                                : "text-text-dim hover:text-white"
+                            }`}
+                          >
+                            {c.label}
+                          </Link>
+                        ))}
+                      </div>
                     ))}
                   </motion.div>
                 )}
@@ -317,14 +340,25 @@ export function Navigation() {
                   Solutions
                 </Link>
                 {solutions.map((s) => (
-                  <Link
-                    key={s.href}
-                    href={s.href}
-                    className="block font-sans text-sm text-text-body py-1.5"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {s.label}
-                  </Link>
+                  <div key={s.href}>
+                    <Link
+                      href={s.href}
+                      className="block font-sans text-sm text-text-body py-1.5"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {s.label}
+                    </Link>
+                    {s.children?.map((c) => (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        className="block font-sans text-xs text-text-dim py-1"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
               <div className="text-center">

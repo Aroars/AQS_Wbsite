@@ -26,7 +26,8 @@ export interface ConveyorTypePage {
   specs: SpecRow[];
   /** Tier to highlight in the protection table */
   ipTier?: string;
-  hero: ImageRef;
+  /** Omitted when AQS has no photo of the type yet; the page runs single-column */
+  hero?: ImageRef;
   secondary?: ImageRef[];
   /** A short loop shown with the secondary images */
   video?: VideoRef;
@@ -220,6 +221,222 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "How much power does an MDR conveyor use?", a: "Only occupied zones run, so a long accumulation conveyor draws power in proportion to the product on it rather than its length. Each zone is a low-voltage 24 VDC drive, so the conveyor needs no motor starters or VFDs." },
     ],
     tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "line-flow-simulator", "conveyor-throughput-calculator"],
+  },
+  {
+    family: "belt",
+    slug: "freezer",
+    typeSlug: "freezer-arctic",
+    h1: "Freezer & Arctic Conveyors (−40 °F)",
+    title: "Freezer Conveyors — Arctic-Rated to −40 °F | AQS",
+    description:
+      "Freezer-rated sanitary conveyors for blast freezers, tunnels, and cold storage: −40 °F seals and lubricants, condensation control at the transition, TIG-welded stainless.",
+    primaryTerm: "freezer conveyor",
+    alias: "arctic conveyor",
+    definition:
+      "A freezer conveyor (or arctic conveyor) moves product through and out of sub-zero rooms on components rated for sustained operation to −40 °F, with the freezer-to-ambient transition designed so condensation and frost do not stop the belt.",
+    intro: [
+      "AQS builds freezer conveyors on the same continuous TIG-welded 304 or 316 stainless frames as every other belt conveyor, designed to 3-A Sanitary Standards, then specifies every moving part for the cold: low-temperature lubricants and seals, freezer-rated motors, drive cards, and photo eyes, and belting that stays flexible at −40 °F. Frost builds on a running belt — the marshmallow line pictured above runs frosted every shift — so the frame is open, sloped, and reachable for a quick de-ice and washdown.",
+      "The point where product leaves the freezer is where most freezer conveyors fail: warm, wet air meets a cold belt and the frame sweats onto the floor. AQS manages that transition with drainage geometry and, where the room needs it, insulated frame members that keep ice off the drive.",
+    ],
+    whereUsed: [
+      { context: "Spiral and tunnel freezer discharge", detail: "Carry frozen product out of the freezer and into packaging on a belt that is still running cold, with condensation managed where the room changes." },
+      { context: "Blast freezer transport", detail: "Move racks, trays, or loose product inside the blast freezer on conveyors that live at −40 °F around the clock." },
+      { context: "Cold storage staging", detail: "Accumulate cases and pallets in the freezer warehouse before shipping on freezer-rated MDR and pallet conveyors." },
+      { context: "Ice cream and frozen bakery lines", detail: "Hot product into the tunnel, frozen product out, with belts and cleats chosen for the product at both temperatures." },
+    ],
+    construction: [
+      { title: "Rated to −40 °F", body: "Motors, gearboxes, drive cards, sensors, and belting are specified for sustained sub-zero operation, not derated ambient parts." },
+      { title: "Low-temperature seals and lubricants", body: "Bearings and gearboxes use lubricants that stay fluid in the cold; seals stay pliable so they keep water out through freeze–thaw cycles." },
+      { title: "Condensation management", body: "Sloped frames and drainage at the freezer-to-ambient transition, with insulated frame options where sweat and ice would otherwise reach the drive." },
+      { title: "Frost-tolerant belting", body: "Cleated and flat modular belts from Intralox or Habasit chosen for flexibility and grip at temperature, on nosebars that shed ice." },
+      { title: "Welded, open stainless frame", body: "Continuous TIG welds on 304 or 316 stainless, open sides, no closed cavities that can fill with ice — designed to 3-A Sanitary Standards." },
+      { title: "Freezer-rated MDR and pallet options", body: "The same cold specification carries into 24V MDR and pallet conveyors for staging cases and pallets inside cold storage." },
+    ],
+    specs: [
+      { label: "Temperature rating", value: "Sustained operation to −40 °F / −40 °C" },
+      { label: "Configurations", value: "Straight, incline, Z-frame, radius; MDR and pallet conveyors in freezer-rated builds" },
+      { label: "Belt", value: "Freezer-rated flat or cleated modular belt (Intralox, Habasit); FDA-approved materials" },
+      { label: "Belt width", value: TODO },
+      { label: "Length", value: TODO },
+      { label: "Belt speed", value: TODO },
+      { label: "Load", value: TODO },
+      { label: "Frame", value: "304 or 316 stainless, continuous TIG-welded, sloped for drainage; insulated members optional" },
+      { label: "Protection", value: "IP65 washdown standard; IP69K available" },
+      { label: "Controls", value: "Freezer-rated motors and sensors; Allen-Bradley controls on request" },
+    ],
+    ipTier: "IP65",
+    hero: { src: "/images/conveyors/freezer-conveyor-marshmallow.jpg", alt: "Frosted blue cleated modular belt at the discharge of a freezer conveyor inside a marshmallow production freezer" },
+    relatedProject: "freezer-conveyor-marshmallow-line",
+    faq: [
+      { q: "What makes a conveyor freezer-rated?", a: "Every moving part is specified for the cold: low-temperature lubricants and seals, freezer-rated motors and drive cards, sensors that read through frost, and belting that stays flexible at −40 °F. A standard washdown conveyor with the same frame will bind, sweat, and ice up." },
+      { q: "How do you stop condensation where the belt leaves the freezer?", a: "The transition is designed for it: sloped, drained frame members where warm wet air meets cold steel, and insulated frame options that keep the sweat and ice away from the drive. It is engineered per room, because every transition is different." },
+      { q: "Can the belt run frosted?", a: "Yes. A running freezer belt carries frost every shift; the belt and cleats are chosen so frost does not change how they grip the product, and the open frame lets sanitation de-ice and wash it down quickly." },
+      { q: "Do you build freezer-rated MDR and pallet conveyors?", a: "Yes. The same cold specification carries into 24V MDR zones and pallet conveyors for staging cases and pallets inside cold storage — AQS has run 24V MDR pallet loops in a 0–20 °F freezer area." },
+    ],
+    tools: ["belt-pull-calculator", "incline-conveyor-calculator", "conveyor-motor-sizing-calculator", "friction-coefficient-table"],
+  },
+  {
+    family: "mdr",
+    slug: "accumulation",
+    typeSlug: "accumulation",
+    h1: "Zero-Pressure Accumulation Conveyors",
+    title: "Zero-Pressure Accumulation Conveyors — ZPA for Food | AQS",
+    description:
+      "Zero-pressure accumulation conveyors for washdown lines: MDR zones or belt that buffer minutes of production without product contact, sized to your rate and stoppage time.",
+    primaryTerm: "accumulation conveyor",
+    alias: "ZPA conveyor",
+    definition:
+      "An accumulation conveyor (zero-pressure accumulation, or ZPA conveyor) buffers product between two machines that do not run at the same speed, holding cases, trays, or pallets in a queue without letting them push on each other.",
+    intro: [
+      "AQS builds accumulation as 24V MDR zones for cases and pallets — each zone stops its own roller when the zone ahead is full — and as belt or modular-belt accumulation for trays and packages that need a continuous surface. Both run on continuous TIG-welded stainless frames designed to 3-A Sanitary Standards, with washdown-rated PulseRoller options and IP67 drive cards where the room is hosed down.",
+      "The buffer is sized in seconds of downstream stoppage at the incoming rate, then turned into feet of conveyor at the product's closed-up pitch. The accumulation calculator below does that arithmetic; the line flow simulator shows what the whole line does when a downstream machine stops.",
+    ],
+    whereUsed: [
+      { context: "Ahead of a case packer or palletizer", detail: "Hold cases through a jam clear or a pallet change so the upstream line never stops." },
+      { context: "Between machines of different speeds", detail: "Absorb the difference between a fast filler and a slower labeler, or between two shifts' rates." },
+      { context: "Planned stoppages and changeovers", detail: "Give sanitation and changeover crews minutes of runway without shutting down production upstream." },
+      { context: "Pallet staging", detail: "Accumulate loaded pallets ahead of a stretch wrapper or forklift pickup so the fill station never waits." },
+    ],
+    construction: [
+      { title: "Zones that manage themselves", body: "Each 24V MDR zone has its own roller, sensor, and drive card; zones talk to their neighbours for singulation or slug release with no PLC code." },
+      { title: "Zero pressure by design", body: "A zone stops when the one ahead is occupied, so product queues with a gap and nothing is crushed at the head of the line." },
+      { title: "Belt accumulation for trays", body: "Where product needs a continuous surface, low-friction modular belt accumulates against a stop with the belt slipping under the product." },
+      { title: "Sized from the stoppage", body: "Buffer time × rate × closed-up pitch = feet of conveyor. AQS sizes it from your worst-case downstream stop, not a catalog length." },
+      { title: "Washdown-rated", body: "Continuous TIG-welded stainless frames, PulseRoller washdown rollers, IP67 drive cards, sealed sensors — designed to 3-A Sanitary Standards." },
+      { title: "Line integration", body: "Release logic ties into the downstream machine's ready signal; zone status can report to VeriPak SCADA on Allen-Bradley controls." },
+    ],
+    specs: [
+      { label: "Types", value: "24V MDR zone accumulation (cases, pallets); modular belt accumulation (trays, packages)" },
+      { label: "Release modes", value: "Singulated (one per zone) or slug (train release), selectable per zone" },
+      { label: "Buffer capacity", value: "Sized in seconds of stoppage at the incoming rate — see the accumulation calculator" },
+      { label: "Conveyor width", value: TODO },
+      { label: "Zone length", value: TODO },
+      { label: "Speed", value: TODO },
+      { label: "Load per zone", value: TODO },
+      { label: "Frame", value: "304 stainless, continuous TIG-welded, sloped for drainage" },
+      { label: "Temperature", value: "Ambient; freezer-rated components available" },
+      { label: "Protection", value: "IP65 washdown standard; IP67 drive cards; IP69K-capable frames" },
+      { label: "Controls", value: "Zone logic in the drive cards; Allen-Bradley CompactLogix ready; VeriPak reporting on request" },
+    ],
+    ipTier: "IP67",
+    hero: { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in a dairy production environment" },
+    secondary: [
+      { src: "/images/conveyors/eq70-accumulation-dairy.jpg", alt: "EQ70 accumulation conveyor with blue modular belt and stainless guide rails on a washdown dairy production floor", caption: "Belt accumulation on a dairy line." },
+      { src: "/images/conveyors/renders/serpentine-accumulation-conveyor-line-layout.png", alt: "Engineering render of a packaging line with a serpentine zero-pressure accumulation section, lane divider, and HMI between the infeed and outfeed", caption: "Serpentine accumulation folds minutes of buffer into a short room.", kind: "render" },
+    ],
+    faq: [
+      { q: "How long does an accumulation conveyor need to be?", a: "Rate × buffer time ÷ 60 × closed-up pitch. Buffering 30 seconds at 40 cases per minute with a 12 in pitch is 20 cases, or 20 ft of conveyor. The accumulation calculator in the toolbox works it from your numbers." },
+      { q: "What is zero-pressure accumulation?", a: "A queue in which each product stops before it touches the one ahead. In MDR, each zone stops its own roller when the next zone is occupied; in belt accumulation, a low-friction belt slips under product held against a stop. Either way nothing is crushed at the head of the line." },
+      { q: "Singulated or slug release?", a: "Singulated releases one product per zone with a gap, which a labeler or scanner needs. Slug release lets the whole queue move as a train, which is faster into a palletizer. AQS sets it per zone and the downstream machine can switch it." },
+      { q: "Is accumulation conveyor washdown-rated?", a: "Yes. AQS builds it on continuous TIG-welded stainless frames with washdown-rated PulseRoller options, IP67 drive cards, and sealed sensors, designed to 3-A Sanitary Standards." },
+    ],
+    tools: ["accumulation-conveyor-calculator", "line-flow-simulator", "mdr-motorized-roller-selection", "conveyor-speed-calculator"],
+  },
+  {
+    family: "mdr",
+    slug: "merge-divert",
+    typeSlug: "merge-divert",
+    h1: "Merge & Divert Conveyors",
+    title: "Merge & Divert Conveyors — Lane Dividers & Sortation | AQS",
+    description:
+      "Sanitary merge and divert conveyors: combine lines into one case packer or split one line to several destinations with pneumatic or servo diverts, photo-eye tracking, and barcode routing.",
+    primaryTerm: "merge and divert conveyor",
+    alias: "lane divider",
+    definition:
+      "A merge and divert conveyor combines several product lanes into one, or splits one line to several destinations, using a lane divider, pusher, or servo divert with photo-eye tracking so every product reaches the right lane.",
+    intro: [
+      "AQS builds merges and diverts as part of the line, not as a bolt-on sorter: the divert mechanism, its guide rails, and the conveyors on both sides share the same continuous TIG-welded stainless construction designed to 3-A Sanitary Standards, and the routing logic runs on the line's Allen-Bradley PLC with photo-eye tracking from the upstream machine.",
+      "Merges hold the gap: after two lines combine, the belt speed or the gap has to change, and the line flow simulator below shows which. Diverts route on a count, a barcode, or a vision result, and the mechanism — pneumatic pusher, servo lane divider, or belt-driven transfer — is chosen for the product's weight, speed, and how gently it has to be handled.",
+    ],
+    whereUsed: [
+      { context: "Multiple lines to one case packer", detail: "Merge two or three packaging lines into a single case packer or palletizer infeed while holding the gap the packer needs." },
+      { context: "SKU-based sorting", detail: "Divert cases by barcode or code date to the right palletizer, dock door, or reject lane." },
+      { context: "Lane dividing ahead of a packer", detail: "Split one stream into the two or three lanes a multi-lane case packer or tray loader expects." },
+      { context: "Reject and inspection lanes", detail: "Pull a failed package off the line after a checkweigher, metal detector, or VeriPak inspection without stopping the belt." },
+    ],
+    construction: [
+      { title: "Divert mechanisms", body: "Pneumatic pushers for light cases at moderate rates, servo lane dividers where the pattern changes every product, belt-driven transfers where product must not be pushed." },
+      { title: "Photo-eye tracking", body: "Every product is tracked from the upstream sensor so the divert fires on the product it was meant for, at the belt speed the line is running." },
+      { title: "Merge geometry", body: "Merge angle and guide rails set for the product; belt speed or gap recalculated after the merge so nothing collides downstream." },
+      { title: "Routing decisions", body: "Count, barcode, vision, or an inspection result from VeriPak — the PLC routes and logs the decision." },
+      { title: "Washdown-rated", body: "Continuous TIG-welded stainless frames and guarding, sealed pneumatics and sensors — designed to 3-A Sanitary Standards." },
+      { title: "One controls platform", body: "Merge, divert, and the conveyors around them run on the line's Allen-Bradley PLC; no separate sorter controller to integrate." },
+    ],
+    specs: [
+      { label: "Merge types", value: "Angled merge, side-by-side lane merge, alternating merge" },
+      { label: "Divert types", value: "Pneumatic pusher, servo lane divider, belt-driven transfer, reject arm" },
+      { label: "Routing", value: "Count, barcode, vision, or inspection result" },
+      { label: "Rate", value: TODO },
+      { label: "Product size and weight", value: TODO },
+      { label: "Lanes", value: TODO },
+      { label: "Frame", value: "304 or 316 stainless, continuous TIG-welded, sloped for drainage" },
+      { label: "Protection", value: "IP65 washdown standard; IP69K available" },
+      { label: "Controls", value: "Allen-Bradley CompactLogix; VeriPak SCADA integration on request" },
+    ],
+    ipTier: "IP65",
+    hero: { src: "/images/conveyors/dairy-facility.jpg", alt: "Multi-lane sanitary modular belt conveyors with stainless guide rails merging product in a dairy plant" },
+    secondary: [
+      { src: "/images/conveyors/renders/serpentine-accumulation-conveyor-line-layout.png", alt: "Engineering render of a packaging line with an inline lane divider station between a serpentine accumulation section and the outfeed", caption: "Inline lane divider between accumulation and the packer.", kind: "render" },
+      { src: "/images/conveyors/modular-belt-line.jpg", alt: "Long multi-lane sanitary modular belt line with guide rails staged in the AQS shop", caption: "Multi-lane sanitary line staged before shipment." },
+    ],
+    faq: [
+      { q: "What happens to the gap after a merge?", a: "Two lines' worth of product now share one belt, so either the belt runs faster or the gap closes. AQS sets which one happens for the downstream machine, and the line flow simulator in the toolbox shows the result before anything is built." },
+      { q: "Pneumatic or servo divert?", a: "A pneumatic pusher is simple and fast for light cases going to one of two lanes. A servo lane divider positions every product to any lane at high rates with gentle handling, and it changes pattern per SKU without hardware changes." },
+      { q: "Can the divert route on an inspection result?", a: "Yes. A VeriPak checkweigher, metal detector, or vision result reaches the PLC before the product reaches the divert, so the failed package is pulled to the reject lane and the event is logged." },
+      { q: "Is a merge and divert conveyor washdown-rated?", a: "Yes. The divert mechanism, guarding, and the conveyors around it are continuous TIG-welded stainless with sealed pneumatics and sensors, designed to 3-A Sanitary Standards." },
+    ],
+    tools: ["line-flow-simulator", "conveyor-speed-calculator", "accumulation-conveyor-calculator", "light-curtain-safety-distance-calculator"],
+  },
+  {
+    family: "pallet",
+    slug: "chain",
+    typeSlug: "chain",
+    h1: "Stainless Chain Pallet Conveyors",
+    title: "Stainless Chain Pallet Conveyors — Washdown CDLR | AQS",
+    description:
+      "Stainless chain conveyors for full pallets, bulk containers, and heavy cases: single-, dual-, and multi-strand, washdown to IP69K, integrated with wrappers, strappers, and palletizers.",
+    primaryTerm: "chain pallet conveyor",
+    alias: "chain-driven pallet conveyor",
+    definition:
+      "A chain pallet conveyor (chain-driven pallet conveyor) carries full pallets, bulk containers, and heavy cases on two or more strands of stainless chain, taking the heaviest loads on the line and tolerating rough or damaged pallets that rollers cannot.",
+    intro: [
+      "AQS builds chain conveyors on continuous TIG-welded stainless frames with stainless chain, designed to 3-A Sanitary Standards for the washdown end of dairy and protein lines where pallets leave the palletizer wet. Single-strand chain handles containers with a flat base; dual- and multi-strand chain carries pallets across their stringers and bridges bad boards.",
+      "Chain is the family's heavy lifter: where a 24V MDR pallet loop gives zone control and zero-pressure accumulation, chain conveyors take the transfer from the palletizer, the run to the stretch wrapper, and any pallet that a roller conveyor would not move.",
+    ],
+    whereUsed: [
+      { context: "Palletizer discharge", detail: "Take the finished pallet off a robotic or conventional palletizer and carry its full weight to the wrapper." },
+      { context: "Stretch wrapper and strapper infeed", detail: "Index pallets through wrapping and strapping with the handshakes those machines expect." },
+      { context: "Bulk containers and totes", detail: "Move combos, bins, and IBC-style containers that have no pallet, on chain that supports them across their base." },
+      { context: "Rough pallet handling", detail: "Carry damaged, mixed, or wet pallets that roller conveyors would catch or stall on." },
+    ],
+    construction: [
+      { title: "Strands for the load", body: "Single-strand for flat-bottom containers, dual-strand for standard pallets, multi-strand for wide or bridged loads and pallets of mixed size." },
+      { title: "Stainless chain on stainless frame", body: "Chain, sprockets, and wear surfaces in stainless or UHMW, on a continuous TIG-welded 304 or 316 frame designed to 3-A Sanitary Standards." },
+      { title: "Washdown drives", body: "Sealed gear motors and IP65 to IP69K components, with drive placement that keeps the motor out of the spray path." },
+      { title: "Transfers and turns", body: "Chain-to-roller transfers, pop-up transfers, and turntables where the pallet path changes direction." },
+      { title: "Machine handshakes", body: "Wrapper, strapper, labeler, and palletizer signals handled on the line's Allen-Bradley PLC; pallet dispensers integrated on request." },
+      { title: "Freezer-rated option", body: "Low-temperature lubricants, seals, and motors for chain conveyors that stage pallets in cold storage." },
+    ],
+    specs: [
+      { label: "Strands", value: "Single, dual, or multi-strand stainless chain" },
+      { label: "Loads", value: "Full pallets, bulk containers, heavy cases — the heaviest loads on the line" },
+      { label: "Pallet sizes", value: TODO },
+      { label: "Capacity", value: TODO },
+      { label: "Speed", value: TODO },
+      { label: "Length", value: TODO },
+      { label: "Frame", value: "304 or 316 stainless, continuous TIG-welded, sloped for drainage" },
+      { label: "Temperature", value: "Ambient; freezer-rated build available" },
+      { label: "Protection", value: "IP65 washdown standard; IP69K available" },
+      { label: "Controls", value: "Allen-Bradley; wrapper, strapper, and palletizer handshakes; VeriPak reporting on request" },
+    ],
+    ipTier: "IP69K",
+    faq: [
+      { q: "Chain or roller for a pallet conveyor?", a: "Chain takes the heaviest loads and tolerates rough or wet pallets, so it goes at the palletizer discharge and through the wrapper. Roller and 24V MDR pallet conveyors give zone control and zero-pressure accumulation. Most end-of-line layouts use both." },
+      { q: "How many chain strands do I need?", a: "Two for a standard pallet carried across its stringers, one for flat-bottom containers, three or more for wide loads, mixed pallet sizes, or pallets with missing boards." },
+      { q: "Can a chain conveyor be washdown-rated?", a: "Yes. Stainless chain and sprockets on a continuous TIG-welded stainless frame with sealed drives from IP65 to IP69K, designed to 3-A Sanitary Standards." },
+      { q: "Does it integrate with the stretch wrapper and palletizer?", a: "Yes. The handshakes for the wrapper, strapper, labeler, pallet dispenser, and a KUKA or conventional palletizer run on the line's Allen-Bradley PLC, with VeriPak reporting when the plant wants pallet-level records." },
+    ],
+    tools: ["conveyor-throughput-calculator", "conveyor-motor-sizing-calculator", "mdr-motorized-roller-selection", "machine-guard-opening-distance"],
   },
 ];
 

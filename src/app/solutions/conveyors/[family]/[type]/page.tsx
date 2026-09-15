@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       description: page.description,
       url,
       type: "website",
-      images: [{ url: `${SITE}${page.hero.src}`, alt: page.hero.alt }],
+      ...(page.hero ? { images: [{ url: `${SITE}${page.hero.src}`, alt: page.hero.alt }] } : {}),
     },
   };
 }
@@ -57,7 +57,7 @@ export default async function ConveyorTypePage({ params }: { params: Params }) {
             { name: category.title, path: `/solutions/conveyors/${category.slug}` },
             { name: page.h1, path },
           ]),
-          service({ name: page.h1, description: page.description, url: path, image: page.hero.src }),
+          service({ name: page.h1, description: page.description, url: path, image: page.hero?.src }),
           faqPage(page.faq),
         ]}
       />
