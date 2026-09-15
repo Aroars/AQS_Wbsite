@@ -17,6 +17,7 @@ import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
 import { ConveyorFamilyNav } from "@/components/ui/conveyor-family-nav";
 import { ConstructionStandards } from "@/components/ui/construction-standards";
+import { VideoFigure } from "@/components/ui/video-figure";
 import { FAQSection } from "@/components/sections/faq-section";
 import {
   CONVEYOR_ACCENT,
@@ -163,6 +164,16 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          {category.video && (
+            <AnimatedSection delay={0.05}>
+              <div className="mt-8">
+                <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-3" style={{ color: accent }}>
+                  In motion
+                </div>
+                <VideoFigure video={category.video} className="max-w-[960px]" />
+              </div>
+            </AnimatedSection>
+          )}
         </div>
       </section>
 

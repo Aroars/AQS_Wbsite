@@ -27,6 +27,17 @@ export interface ImageRef {
   caption?: string;
   /** Renders get a light tile and object-contain; photos fill their frame */
   kind?: "photo" | "render";
+  /** Tall photos get a 3:4 frame instead of 4:3 so they are not cropped to a strip */
+  orientation?: "portrait";
+}
+
+/** A short muted loop (mp4, no audio) with its poster frame */
+export interface VideoRef {
+  src: string;
+  poster: string;
+  /** What the clip shows, for assistive tech */
+  alt: string;
+  caption?: string;
 }
 
 export interface FAQItem {
@@ -61,6 +72,8 @@ export interface ConveyorCategory {
   driveTitles: string[];
   /** Family-page questions (rendered and emitted as FAQPage schema) */
   faq?: FAQItem[];
+  /** A short loop shown under the type cards */
+  video?: VideoRef;
   types: ConveyorType[];
 }
 
@@ -77,6 +90,12 @@ export const categories: ConveyorCategory[] = [
       "Food grade belt conveyors for washdown environments — from point-A-to-point-B transport to freezer-rated arctic systems and steep elevation changes. The widest range of sanitary applications, on TIG-welded stainless frames with FDA belting.",
     heroImage: { src: "/images/conveyors/dairy-line-full.jpg", alt: "Modular belt conveyor system handling clamshell packaging in a sanitary production environment" },
     driveTitles: ["One Motion™ Mag-Drive", "Standard Gear Motor Drives"],
+    video: {
+      src: "/video/auto-adjusting-rails-loop.mp4",
+      poster: "/images/conveyors/auto-adjusting-rails-loop-poster.jpg",
+      alt: "Sanitary modular belt conveyor with automatically adjusting guide rails closing in on a bottle",
+      caption: "Auto-adjusting guide rails on a sanitary modular belt line — one recipe change resets the rails for the next container.",
+    },
     faq: [
       {
         q: "Which belt should I use for wet product?",
@@ -182,6 +201,12 @@ export const categories: ConveyorCategory[] = [
       "Washdown-rated motorized drive roller conveyors for cases, trays, and totes. Each zone runs its own 24V roller, so product queues without contact, only active zones draw power, and traffic control lives in the conveyor instead of a PLC rack — from zero-pressure accumulation to multi-line merging and SKU-based sorting.",
     heroImage: { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
     driveTitles: ["Motorized Drive Rolls (MDR)", "Standard Gear Motor Drives"],
+    video: {
+      src: "/video/mdr-180-curve-loop.mp4",
+      poster: "/images/conveyors/mdr-180-curve-loop-poster.jpg",
+      alt: "A case riding a stainless 24V MDR conveyor through a 180° curve",
+      caption: "Stainless 24V MDR through a 180° curve — each zone runs only while product is on it.",
+    },
     faq: [
       {
         q: "What is a 24V MDR conveyor?",
@@ -262,8 +287,14 @@ export const categories: ConveyorCategory[] = [
     subtitle: "Washdown Pallet Handling & Heavy-Duty Chain",
     description:
       "Stainless pallet conveyors for end-of-line food and dairy lines — roller and chain-driven pallet conveyance, zero-pressure pallet accumulation, automated dispensing, and stretch-wrapper, strapper, and robotic palletizer integration, built for the heaviest loads on the line in full washdown environments.",
-    heroImage: { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in dairy production environment" },
+    heroImage: { src: "/images/conveyors/mdr-pallet-loop-full-system.jpg", alt: "Stainless 24V MDR pallet conveyor loop with tapered-roller curves, a loaded pallet, and a stainless HMI pedestal in the AQS shop" },
     driveTitles: ["Standard Gear Motor Drives", "Motorized Drive Rolls (MDR)"],
+    video: {
+      src: "/video/mdr-pallet-loop-wrapped-pallet.mp4",
+      poster: "/images/conveyors/mdr-pallet-loop-wrapped-pallet-poster.jpg",
+      alt: "A stretch-wrapped pallet moving around a stainless 24V MDR pallet conveyor loop",
+      caption: "A wrapped pallet indexing through the tapered-roller curve on a stainless 24V MDR pallet loop.",
+    },
     faq: [
       {
         q: "Chain or roller for a washdown pallet line?",
@@ -298,6 +329,7 @@ export const categories: ConveyorCategory[] = [
           "Protein processing",
           "Full-line washdown facilities",
         ],
+        image: { src: "/images/conveyors/mdr-pallet-curve-loaded.jpg", alt: "Loaded pallet riding the white tapered rollers of a stainless 24V MDR pallet conveyor curve" },
       },
       {
         title: "Chain Conveyors",
@@ -595,7 +627,17 @@ export const galleryImages: ImageRef[] = [
   { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
   { src: "/images/conveyors/accumulation-production.jpg", alt: "Carton accumulation conveyors in dairy production environment" },
   { src: "/images/conveyors/sanitary-motor-detail.jpg", alt: "Close-up of sanitary conveyor motor and drive assembly with stainless steel construction" },
+  { src: "/images/conveyors/modular-belt-conveyor-shop.jpg", alt: "Blue modular belt conveyor on a TIG-welded stainless frame ready to ship from the AQS shop" },
+  { src: "/images/conveyors/mdr-tapered-curve-rollers.jpg", alt: "White tapered rollers of a stainless 24V MDR conveyor curve" },
+  { src: "/images/conveyors/mdr-pallet-section-outdoor.jpg", alt: "Stainless 24V MDR pallet conveyor section with leveling feet and a drive card cable" },
 ];
+
+/** Construction detail shown beside the construction standards on the hub */
+export const weldDetailImage: ImageRef = {
+  src: "/images/conveyors/weld-polish-detail.jpg",
+  alt: "Close-up of a continuous TIG-welded and polished stainless steel conveyor frame joint with blue modular belt",
+  caption: "Continuous TIG weld, ground and polished — no crevice for water or product to sit in.",
+};
 
 /* ================================================
    FAQ Items

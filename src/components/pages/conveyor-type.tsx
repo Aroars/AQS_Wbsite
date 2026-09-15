@@ -5,6 +5,7 @@ import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
 import { ConveyorFamilyNav } from "@/components/ui/conveyor-family-nav";
 import { RenderFigure } from "@/components/ui/render-figure";
+import { VideoFigure } from "@/components/ui/video-figure";
 import { SpecTable } from "@/components/ui/spec-table";
 import { ProtectionTierTable } from "@/components/ui/protection-tier-table";
 import { ProjectCard } from "@/components/ui/project-card";
@@ -13,12 +14,13 @@ import type { ConveyorTypePage } from "@/data/conveyor-type-pages";
 
 const accent = CONVEYOR_ACCENT;
 
-/** A photo fills its frame; a render sits on a light tile so it is not cropped */
+/** A photo fills its frame (3:4 when it is a portrait shot); a render sits on a light tile so it is not cropped */
 function Figure({ image, priority = false, sizes }: { image: ImageRef; priority?: boolean; sizes?: string }) {
   if (image.kind === "render") return <RenderFigure image={image} priority={priority} sizes={sizes} />;
+  const aspect = image.orientation === "portrait" ? "aspect-[3/4] max-h-[560px] mx-auto" : "aspect-[4/3]";
   return (
     <figure className="m-0">
-      <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08]">
+      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-white/[0.08]`}>
         <Image src={image.src} alt={image.alt} fill priority={priority} className="object-cover" sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"} />
       </div>
       {image.caption && <figcaption className="font-sans text-[0.76rem] text-text-dim mt-2 leading-[1.5]">{image.caption}</figcaption>}
@@ -106,10 +108,15 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
               </StaggerItem>
             ))}
           </StaggerContainer>
-          {page.secondary && page.secondary.length > 0 && (
+          {((page.secondary && page.secondary.length > 0) || page.video) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-              {page.secondary.map((img, i) => (
-                <AnimatedSection key={img.src} delay={0.05 * i}>
+              {page.video && (
+                <AnimatedSection>
+                  <VideoFigure video={page.video} aspect="aspect-[4/3]" />
+                </AnimatedSection>
+              )}
+              {page.secondary?.map((img, i) => (
+                <AnimatedSection key={img.src} delay={0.05 * (i + 1)}>
                   <Figure image={img} />
                 </AnimatedSection>
               ))}

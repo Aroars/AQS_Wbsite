@@ -1,7 +1,7 @@
 // Per-type conveyor pages at /solutions/conveyors/<family>/<slug>.
 // Each entry is one page; the family page and hub link to it when it exists.
 
-import { TODO, type FAQItem, type ImageRef, type SpecRow } from "./conveyors";
+import { TODO, type FAQItem, type ImageRef, type SpecRow, type VideoRef } from "./conveyors";
 
 export interface ConveyorTypePage {
   family: "belt" | "mdr" | "pallet";
@@ -28,6 +28,8 @@ export interface ConveyorTypePage {
   ipTier?: string;
   hero: ImageRef;
   secondary?: ImageRef[];
+  /** A short loop shown with the secondary images */
+  video?: VideoRef;
   /** Spotlight slug; the card shows only if that project has a spotlight body */
   relatedProject?: string;
   faq: FAQItem[];
@@ -90,6 +92,12 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { src: "/images/conveyors/renders/s-curve-radius-belt-conveyor-stainless.png", alt: "Engineering render of a stainless S-curve radius belt conveyor with side-flexing belt and drive at the outfeed", caption: "S-curve: two opposed turns on one continuous belt.", kind: "render" },
       { src: "/images/conveyors/renders/180-degree-radius-belt-conveyor-food-grade.png", alt: "Engineering render of a 180° radius belt conveyor with curved guide rails and a discharge chute", caption: "180° return with curved guide rails and discharge chute.", kind: "render" },
     ],
+    video: {
+      src: "/video/zero-tangent-modular-belt-loop.mp4",
+      poster: "/images/conveyors/zero-tangent-modular-belt-loop-poster.jpg",
+      alt: "White modular belt running through a zero-tangent radius turn on a sanitary conveyor in a food plant",
+      caption: "Zero-tangent modular belt curve running in a washdown plant — one belt, no transfer.",
+    },
     faq: [
       { q: "Why use a curve instead of a transfer between two straight conveyors?", a: "A transfer is a gap, a dead plate, and usually a second drive — three things that catch product, collect residue, and need their own cleaning. A radius belt conveyor carries product through the turn on one belt with one drive, so there is nothing to tumble on and nothing extra to wash." },
       { q: "How tight can the turn be?", a: "The minimum inside radius is the belt's collapse factor multiplied by its width. A 12 in side-flexing belt with a collapse factor of 2.2 needs a 26.4 in inside radius. AQS picks the belt for the product first, then sets the turn; the belt pull calculator flags a radius below the belt's minimum." },
@@ -142,10 +150,10 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { label: "Controls", value: "Gear motor with VFD; Allen-Bradley controls on request" },
     ],
     ipTier: "IP69K",
-    hero: { src: "/images/conveyors/incline-conveyor.jpg", alt: "Stainless steel incline conveyor with cleated belt for positive product control at elevation changes" },
+    hero: { src: "/images/conveyors/z-incline-washdown-modular.jpg", alt: "Blue cleated modular belt Z-frame incline conveyor on a stainless frame in a washdown processing room", orientation: "portrait" },
     secondary: [
+      { src: "/images/conveyors/incline-conveyor.jpg", alt: "Stainless steel incline conveyor with cleated belt for positive product control at elevation changes", caption: "Cleated belt incline with sanitary guide rails." },
       { src: "/images/conveyors/full-line.jpg", alt: "Elevated stainless incline conveyor feeding a mezzanine in a food production facility", caption: "Floor-to-mezzanine incline on a packaging line." },
-      { src: "/images/conveyors/renders/cleated-incline-z-conveyor-bulk-elevator.png", alt: "Engineering render of a cleated sidewall Z-frame incline conveyor elevating bulk product with a nosebar discharge", caption: "Z-frame bulk elevator with cleated sidewall belt.", kind: "render" },
     ],
     faq: [
       { q: "How steep can an incline conveyor run without cleats?", a: "It depends on the product's friction on the belt — a plain belt holds most packaged product only to a modest angle before it slides. Cleated belts carry product up much steeper angles and sidewall belts take loose product nearly vertical. The incline calculator works the geometry; AQS confirms the belt against the product." },
@@ -199,10 +207,10 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { label: "Controls", value: "Allen-Bradley CompactLogix ready; VeriPak SCADA reporting on request" },
     ],
     ipTier: "IP67",
-    hero: { src: "/images/conveyors/mdr-tilt-gates.jpg", alt: "Motorized drive roll conveyor with tilt-up gate mechanism for zone-controlled product accumulation" },
+    hero: { src: "/images/conveyors/mdr-stainless-straight-section.jpg", alt: "Stainless 24V MDR conveyor section with sealed drive card connections in the AQS shop" },
     secondary: [
-      { src: "/images/conveyors/installed-conveyor.jpg", alt: "Stainless roller conveyor installed in a food plant with washdown-rated drives", caption: "Installed washdown MDR conveyance." },
-      { src: "/images/conveyors/renders/24v-mdr-pallet-conveyor-tapered-curve-stainless.png", alt: "Engineering render of a 24V MDR pallet conveyor loop with tapered-roller curves and a stainless control panel", caption: "24V MDR pallet loop with tapered-roller curves — see the tote filling spotlight.", kind: "render" },
+      { src: "/images/conveyors/mdr-tapered-curve-rollers.jpg", alt: "White tapered rollers of a stainless 24V MDR conveyor curve", caption: "Tapered rollers carry product around the curve without pneumatics." },
+      { src: "/images/conveyors/mdr-conveylinx-drive-card.jpg", alt: "PulseRoller ConveyLinx drive card mounted under a stainless MDR conveyor frame with sealed 24V connections", caption: "One sealed drive card per zone, mounted where it can be reached without tools." },
     ],
     relatedProject: "stainless-24v-pallet-tote-filling-system",
     faq: [

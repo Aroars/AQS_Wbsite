@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
-import { CONVEYOR_ACCENT, constructionStats } from "@/data/conveyors";
+import { CONVEYOR_ACCENT, constructionStats, weldDetailImage } from "@/data/conveyors";
 
 const accent = CONVEYOR_ACCENT;
 
@@ -58,17 +59,29 @@ export function ConstructionStandards({ variant = "full" }: { variant?: "full" |
             the baseline.
           </SectionDesc>
         </AnimatedSection>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-          {constructionStats.map((stat) => (
-            <AnimatedSection key={stat.label} delay={0.05}>
-              <div className="text-center p-6 rounded-xl bg-black/20 border border-white/[0.04]">
-                <div className="font-mono text-[1.3rem] font-bold mb-1" style={{ color: accent }}>
-                  {stat.value}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6 mt-2 items-start">
+          <div className="grid grid-cols-2 gap-4">
+            {constructionStats.map((stat) => (
+              <AnimatedSection key={stat.label} delay={0.05}>
+                <div className="text-center p-6 rounded-xl bg-black/20 border border-white/[0.04]">
+                  <div className="font-mono text-[1.3rem] font-bold mb-1" style={{ color: accent }}>
+                    {stat.value}
+                  </div>
+                  <div className="font-sans text-[0.78rem] text-text-body">{stat.label}</div>
                 </div>
-                <div className="font-sans text-[0.78rem] text-text-body">{stat.label}</div>
+              </AnimatedSection>
+            ))}
+          </div>
+          <AnimatedSection delay={0.1}>
+            <figure className="m-0">
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08]">
+                <Image src={weldDetailImage.src} alt={weldDetailImage.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
               </div>
-            </AnimatedSection>
-          ))}
+              {weldDetailImage.caption && (
+                <figcaption className="font-sans text-[0.76rem] text-text-dim mt-2 leading-[1.5]">{weldDetailImage.caption}</figcaption>
+              )}
+            </figure>
+          </AnimatedSection>
         </div>
       </div>
     </section>
