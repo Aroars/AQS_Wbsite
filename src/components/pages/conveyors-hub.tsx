@@ -198,43 +198,60 @@ export function ConveyorsHubContent() {
           <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
             {categories.map((cat) => (
               <StaggerItem key={cat.slug}>
-                <div className="rounded-xl p-6 h-full flex flex-col bg-[rgba(17,34,64,0.5)] border border-white/[0.06]">
-                  <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2" style={{ color: accent }}>
-                    {cat.subtitle}
-                  </div>
-                  <h3 className="font-sans text-[1.25rem] font-bold text-white mb-2">
-                    <Link href={`/solutions/conveyors/${cat.slug}`} className="no-underline text-white hover:text-[#cbd5e1] transition-colors">
-                      {cat.title}
-                    </Link>
-                  </h3>
-                  <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] mb-4">
-                    {cat.description}
-                  </p>
-                  <ul className="space-y-1.5 mb-5 flex-1">
-                    {cat.types.map((type) => (
-                      <li key={type.slug}>
-                        <Link
-                          href={getTypePage(cat.slug, type.slug)?.href ?? `/solutions/conveyors/${cat.slug}#${type.slug}`}
-                          className="flex items-baseline gap-2 no-underline group"
-                        >
-                          <span className="shrink-0 text-[0.7rem]" style={{ color: accent }}>&rarr;</span>
-                          <span className="font-sans text-[0.85rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
-                            {type.shortTitle}
-                          </span>
-                          <span className="font-sans text-[0.72rem] text-text-dim hidden xl:inline">
-                            {type.useCase}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                {/* The whole card opens the family page (stretched link); the type rows are their own links above it */}
+                <div className="group/card relative rounded-xl overflow-hidden h-full flex flex-col bg-[rgba(17,34,64,0.5)] border border-white/[0.06] hover:border-[#94A3B8]/60 hover:-translate-y-1 transition-all duration-300">
                   <Link
                     href={`/solutions/conveyors/${cat.slug}`}
-                    className="inline-flex items-center gap-1.5 font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
-                    style={{ color: accent }}
-                  >
-                    Explore {cat.shortTitle} conveyors &rarr;
-                  </Link>
+                    aria-label={`Explore ${cat.shortTitle} conveyors`}
+                    className="absolute inset-0 z-0 rounded-xl"
+                  />
+                  {cat.heroImage && (
+                    <div className="relative aspect-[16/9] overflow-hidden pointer-events-none">
+                      <Image
+                        src={cat.heroImage.src}
+                        alt={cat.heroImage.alt}
+                        fill
+                        className="object-cover group-hover/card:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(17,34,64,0.9)] to-transparent" />
+                    </div>
+                  )}
+                  <div className="relative p-6 flex-1 flex flex-col pointer-events-none">
+                    <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2" style={{ color: accent }}>
+                      {cat.subtitle}
+                    </div>
+                    <h3 className="font-sans text-[1.25rem] font-bold text-white mb-2 group-hover/card:text-[#cbd5e1] transition-colors">
+                      {cat.title}
+                    </h3>
+                    <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] mb-4">
+                      {cat.description}
+                    </p>
+                    <ul className="space-y-1.5 mb-5 flex-1 pointer-events-auto">
+                      {cat.types.map((type) => (
+                        <li key={type.slug} className="relative z-10">
+                          <Link
+                            href={getTypePage(cat.slug, type.slug)?.href ?? `/solutions/conveyors/${cat.slug}#${type.slug}`}
+                            className="flex items-baseline gap-2 no-underline group"
+                          >
+                            <span className="shrink-0 text-[0.7rem]" style={{ color: accent }}>&rarr;</span>
+                            <span className="font-sans text-[0.85rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
+                              {type.shortTitle}
+                            </span>
+                            <span className="font-sans text-[0.72rem] text-text-dim hidden xl:inline">
+                              {type.useCase}
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <span
+                      className="inline-flex items-center gap-1.5 font-mono text-[0.62rem] tracking-[0.08em] uppercase group-hover/card:text-white transition-colors"
+                      style={{ color: accent }}
+                    >
+                      Explore {cat.shortTitle} conveyors &rarr;
+                    </span>
+                  </div>
                 </div>
               </StaggerItem>
             ))}

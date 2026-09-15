@@ -41,12 +41,15 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
       id={type.slug}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="rounded-xl overflow-hidden transition-all duration-300 scroll-mt-[110px]"
+      className={`relative rounded-xl overflow-hidden transition-all duration-300 scroll-mt-[110px] ${page ? "cursor-pointer" : ""}`}
       style={{
         background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
         border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        transform: hovered && page ? "translateY(-2px)" : "translateY(0)",
       }}
     >
+      {/* When the type has its own page, the whole card is the link */}
+      {page && <Link href={page.href} aria-label={`Read more about ${type.shortTitle} conveyors`} className="absolute inset-0 z-10 rounded-xl" />}
       <div className={`flex flex-col ${type.image ? "md:flex-row" : ""}`}>
         {/* Text content */}
         <div className={`p-8 ${type.image ? "md:flex-1" : ""}`}>
@@ -87,13 +90,12 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
             ))}
           </div>
           {page && (
-            <Link
-              href={page.href}
-              className="inline-flex items-center gap-1.5 mt-5 font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
-              style={{ color: accent }}
+            <span
+              className="inline-flex items-center gap-1.5 mt-5 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors"
+              style={{ color: hovered ? "#fff" : accent }}
             >
               Read more about {type.shortTitle} conveyors &rarr;
-            </Link>
+            </span>
           )}
         </div>
         {/* Inline image on right */}

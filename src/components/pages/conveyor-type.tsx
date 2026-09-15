@@ -74,7 +74,7 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Where It&apos;s Used</SectionLabel>
-            <SectionTitle>Where a {page.primaryTerm} earns its place</SectionTitle>
+            <SectionTitle>Where {/^[aeiou]/i.test(page.primaryTerm) ? "an" : "a"} {page.primaryTerm} earns its place</SectionTitle>
           </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             {page.whereUsed.map((w) => (
