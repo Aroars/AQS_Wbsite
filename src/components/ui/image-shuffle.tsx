@@ -9,7 +9,7 @@ import type { ImageRef } from "@/data/conveyors";
  * (stacked, absolute) so the swap is a pure opacity transition. Honors
  * prefers-reduced-motion by showing only the first image.
  */
-export function ImageShuffle({ images, intervalMs = 4500, sizes, className = "" }: { images: ImageRef[]; intervalMs?: number; sizes?: string; className?: string }) {
+export function ImageShuffle({ images, intervalMs = 4500, sizes, className = "absolute inset-0" }: { images: ImageRef[]; intervalMs?: number; sizes?: string; /** Positioning for the stack; the parent supplies the size */ className?: string }) {
   const [index, setIndex] = useState(0);
   useEffect(() => {
     if (images.length < 2) return;
@@ -19,7 +19,7 @@ export function ImageShuffle({ images, intervalMs = 4500, sizes, className = "" 
   }, [images.length, intervalMs]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={className}>
       {images.map((img, i) => (
         <Image
           key={img.src}

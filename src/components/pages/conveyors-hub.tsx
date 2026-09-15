@@ -210,7 +210,7 @@ export function ConveyorsHubContent() {
                   {(cat.cardImages?.length || cat.heroImage) && (
                     <div className="relative aspect-[16/9] overflow-hidden pointer-events-none">
                       {cat.cardImages && cat.cardImages.length > 1 ? (
-                        <ImageShuffle images={cat.cardImages} className="absolute inset-0" sizes="(max-width: 1024px) 100vw, 33vw" />
+                        <ImageShuffle images={cat.cardImages} sizes="(max-width: 1024px) 100vw, 33vw" />
                       ) : (
                         <Image
                           src={(cat.cardImages?.[0] ?? cat.heroImage)!.src}
