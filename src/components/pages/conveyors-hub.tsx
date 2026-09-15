@@ -15,8 +15,8 @@ import {
 import { ProjectCard } from "@/components/ui/project-card";
 import { ConveyorGallery } from "@/components/ui/conveyor-gallery";
 import { ConstructionStandards } from "@/components/ui/construction-standards";
-import { ConveyorChooser } from "@/components/ui/conveyor-chooser";
-import { FamilyCompare } from "@/components/ui/family-compare";
+import { WhatAreYouConveying } from "@/components/ui/what-are-you-conveying";
+import { ImageShuffle } from "@/components/ui/image-shuffle";
 import {
   CONVEYOR_ACCENT,
   categories,
@@ -197,12 +197,6 @@ export function ConveyorsHubContent() {
               totes with zone control; pallet for end of line.
             </SectionDesc>
           </AnimatedSection>
-          {/* Second way in: what are you moving, and where */}
-          <AnimatedSection delay={0.05}>
-            <div className="mb-8">
-              <ConveyorChooser />
-            </div>
-          </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
             {categories.map((cat) => (
               <StaggerItem key={cat.slug}>
@@ -213,15 +207,19 @@ export function ConveyorsHubContent() {
                     aria-label={`Explore ${cat.shortTitle} conveyors`}
                     className="absolute inset-0 z-0 rounded-xl"
                   />
-                  {cat.heroImage && (
+                  {(cat.cardImages?.length || cat.heroImage) && (
                     <div className="relative aspect-[16/9] overflow-hidden pointer-events-none">
-                      <Image
-                        src={cat.heroImage.src}
-                        alt={cat.heroImage.alt}
-                        fill
-                        className="object-cover group-hover/card:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 1024px) 100vw, 33vw"
-                      />
+                      {cat.cardImages && cat.cardImages.length > 1 ? (
+                        <ImageShuffle images={cat.cardImages} className="absolute inset-0" sizes="(max-width: 1024px) 100vw, 33vw" />
+                      ) : (
+                        <Image
+                          src={(cat.cardImages?.[0] ?? cat.heroImage)!.src}
+                          alt={(cat.cardImages?.[0] ?? cat.heroImage)!.alt}
+                          fill
+                          className="object-cover group-hover/card:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 1024px) 100vw, 33vw"
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-[rgba(17,34,64,0.9)] to-transparent" />
                     </div>
                   )}
@@ -235,19 +233,16 @@ export function ConveyorsHubContent() {
                     <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] mb-4">
                       {cat.description}
                     </p>
-                    <ul className="space-y-1.5 mb-5 flex-1 pointer-events-auto">
+                    <ul className="space-y-2 mb-5 flex-1 pointer-events-auto">
                       {cat.types.map((type) => (
                         <li key={type.slug} className="relative z-10">
                           <Link
                             href={getTypePage(cat.slug, type.slug)?.href ?? `/solutions/conveyors/${cat.slug}#${type.slug}`}
-                            className="flex items-baseline gap-2 no-underline group"
+                            className="flex items-center gap-2.5 no-underline group"
                           >
-                            <span className="shrink-0 text-[0.7rem]" style={{ color: accent }}>&rarr;</span>
-                            <span className="font-sans text-[0.85rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
+                            <span className="shrink-0 text-[0.75rem]" style={{ color: accent }}>&rarr;</span>
+                            <span className="font-sans text-[0.98rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
                               {type.shortTitle}
-                            </span>
-                            <span className="font-sans text-[0.72rem] text-text-dim hidden xl:inline">
-                              {type.useCase}
                             </span>
                           </Link>
                         </li>
@@ -267,8 +262,8 @@ export function ConveyorsHubContent() {
         </div>
       </section>
 
-      {/* Compare the families */}
-      <FamilyCompare />
+      {/* What are you conveying? — hover a product, see the types that carry it */}
+      <WhatAreYouConveying />
 
       {/* Showcase Video */}
       <section className="pb-[50px] pt-[20px] px-6">
