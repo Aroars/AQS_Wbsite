@@ -599,6 +599,7 @@ export const conveyorProjects: ConveyorProject[] = [
         { q: "Do pallets have to enter a specific way?", a: "No. The dual-direction radius sections accept pallets fed either 40\" or 48\" side leading." },
       ],
       related: [
+        { label: "White paper: filling 1,800 lb totes at 20 °F", href: "/blog/automated-tote-filling-frozen-vegetables" },
         { label: "24V MDR Zone Conveyors", href: "/solutions/conveyors/mdr/zones" },
         { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet" },
         { label: "Zero-Pressure Accumulation", href: "/solutions/conveyors/mdr#accumulation" },

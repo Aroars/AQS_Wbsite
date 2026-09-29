@@ -9,9 +9,64 @@ export interface BlogPost {
   content: string;
   /** Toolbox slugs worth linking from this post ("Size it yourself" callout) */
   tools?: string[];
+  /** ISO date for Article schema; `date` stays the display string */
+  isoDate?: string;
+  /** Social preview image (Open Graph) and Article schema image */
+  image?: { src: string; alt: string };
+  /** Laid-out PDF of a white paper, under /public */
+  pdf?: string;
 }
 
+/* White papers: customers are anonymized in every post ("a frozen vegetable
+   processor in the Upper Midwest", "an ice cream plant in the Southeast").
+   Do not add customer or brand names without written approval. */
+
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "veripak-production-quality-platform",
+    title: "Every Inspection System Can Reject a Bad Package. VeriPak Proves a Good One.",
+    description:
+      "How the VeriPak Production Quality Platform records every primary package, coordinates the inspection devices you own, and turns an audit into a query.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "10 min",
+    date: "September 2026",
+    isoDate: "2026-09-24",
+    content: "veripak-production-quality-platform",
+    image: { src: "/images/blog/veripak-platform-architecture.jpg", alt: "VeriPak Production Quality Platform architecture diagram" },
+    pdf: "/whitepapers/aqs-white-paper-veripak-production-quality-platform.pdf",
+    tools: ["product-giveaway-calculator", "packaging-line-downtime-cost-calculator"],
+  },
+  {
+    slug: "ice-cream-lid-match-inspection",
+    title: "The Lid Says Vanilla. Does the Tub Agree?",
+    description:
+      "A VeriPak inspection system reads the lid and sidewall UPC of every ice cream tub at 65 per minute, rejects mismatches, and logs the rest.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "9 min",
+    date: "September 2026",
+    isoDate: "2026-09-24",
+    content: "ice-cream-lid-match-inspection",
+    image: { src: "/images/blog/lid-match-inspection-system-shop.jpg", alt: "Stainless lid-match inspection system with controls enclosure and inspection shroud" },
+    pdf: "/whitepapers/aqs-white-paper-veripak-ice-cream-lid-match.pdf",
+    tools: ["conveyor-speed-calculator", "product-giveaway-calculator"],
+  },
+  {
+    slug: "automated-tote-filling-frozen-vegetables",
+    title: "Filling 1,800-Pound Totes at 20 °F. Hands-Free.",
+    description:
+      "A densification pallet filling system for frozen vegetables: live weighing to 1%, recipe-controlled settling, 24V MDR conveyance, built for 0 to 20 °F.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "8 min",
+    date: "September 2026",
+    isoDate: "2026-09-24",
+    content: "automated-tote-filling-frozen-vegetables",
+    image: { src: "/images/blog/tote-filling-system-24v-mdr-pallet-loop.jpg", alt: "Stainless 24 VDC MDR pallet conveyor circuit with swept-radius corners and a scale deck" },
+    pdf: "/whitepapers/aqs-white-paper-densification-tote-filling.pdf",
+    tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "conveyor-throughput-calculator"],
+  },
   {
     slug: "what-is-packaging-scada",
     title: "What Is Packaging SCADA and Why Does Your Plant Need One?",
@@ -54,6 +109,12 @@ export function getBlogPost(slug: string): BlogPost | undefined {
   return blogPosts.find((post) => post.slug === slug);
 }
 
+/** Up to four other posts, same category first */
 export function getRelatedPosts(currentSlug: string): BlogPost[] {
-  return blogPosts.filter((post) => post.slug !== currentSlug);
+  const current = getBlogPost(currentSlug);
+  const others = blogPosts.filter((post) => post.slug !== currentSlug);
+  return [
+    ...others.filter((p) => p.category === current?.category),
+    ...others.filter((p) => p.category !== current?.category),
+  ].slice(0, 4);
 }

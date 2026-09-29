@@ -7,11 +7,11 @@ import { blogPosts } from "@/content/blog";
 export const metadata: Metadata = {
   title: "Blog | Packaging Automation Insights | AQS",
   description:
-    "Technical articles on packaging SCADA, sanitary conveyor design, leak detection, and ROI optimization from the AQS engineering team.",
+    "White papers and technical articles on packaging quality platforms, sanitary conveyor design, inspection, and leak detection from the AQS engineering team.",
   openGraph: {
     title: "Blog | Packaging Automation Insights | AQS",
     description:
-      "Technical articles on packaging SCADA, sanitary conveyor design, leak detection, and ROI optimization from the AQS engineering team.",
+      "White papers and technical articles on packaging quality platforms, sanitary conveyor design, inspection, and leak detection from the AQS engineering team.",
     url: "https://automatedqs.com/blog",
     siteName: "Automated Quality Solutions",
     type: "website",
@@ -24,7 +24,7 @@ export default function BlogPage() {
       <Navigation />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 px-6">
+      <section className="relative pt-36 pb-20 px-6 overflow-hidden">
         {/* Glow orb */}
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
@@ -42,7 +42,7 @@ export default function BlogPage() {
             The AQS Blog
           </h1>
           <p className="text-[rgba(255,255,255,0.55)] text-[0.95rem] leading-[1.7] max-w-2xl mx-auto">
-            Technical insights, industry trends, and practical guidance for
+            White papers, project write-ups, and practical guidance for
             packaging line automation — from the engineers who build the systems.
           </p>
         </div>

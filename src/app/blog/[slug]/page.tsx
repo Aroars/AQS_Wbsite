@@ -10,8 +10,16 @@ import { getToolPage } from "@/toolbox/lib/toolSeo";
 import PostWhatIsPackagingScada from "@/components/blog/post-what-is-packaging-scada";
 import PostMagDriveVsConventionalGearbox from "@/components/blog/post-mag-drive-vs-conventional-gearbox";
 import PostMechanicalVsVisionLeakDetection from "@/components/blog/post-mechanical-vs-vision-leak-detection";
+import PostVeriPakPlatform from "@/components/blog/post-veripak-production-quality-platform";
+import PostIceCreamLidMatch from "@/components/blog/post-ice-cream-lid-match-inspection";
+import PostAutomatedToteFilling from "@/components/blog/post-automated-tote-filling-frozen-vegetables";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE, article, breadcrumbList } from "@/lib/schema";
 
 const contentComponents: Record<string, React.ComponentType> = {
+  "veripak-production-quality-platform": PostVeriPakPlatform,
+  "ice-cream-lid-match-inspection": PostIceCreamLidMatch,
+  "automated-tote-filling-frozen-vegetables": PostAutomatedToteFilling,
   "what-is-packaging-scada": PostWhatIsPackagingScada,
   "mag-drive-vs-conventional-gearbox": PostMagDriveVsConventionalGearbox,
   "mechanical-vs-vision-leak-detection": PostMechanicalVsVisionLeakDetection,
@@ -32,15 +40,20 @@ export async function generateMetadata({
   const post = getBlogPost(slug);
   if (!post) return {};
 
+  const url = `${SITE}/blog/${post.slug}`;
   return {
     title: `${post.title} | AQS Blog`,
     description: post.description,
+    alternates: { canonical: url },
     openGraph: {
       title: `${post.title} | AQS Blog`,
       description: post.description,
-      url: `https://automatedqs.com/blog/${post.slug}`,
+      url,
       siteName: "Automated Quality Solutions",
       type: "article",
+      ...(post.isoDate ? { publishedTime: post.isoDate } : {}),
+      // The preview image a shared link shows (LinkedIn, email, chat)
+      ...(post.image ? { images: [{ url: `${SITE}${post.image.src}`, alt: post.image.alt }] } : {}),
     },
   };
 }
@@ -64,6 +77,23 @@ export default async function BlogPostPage({
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbList([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+          article({
+            headline: post.title,
+            description: post.description,
+            url: `/blog/${post.slug}`,
+            images: post.image ? [{ url: post.image.src, caption: post.image.alt }] : [],
+            datePublished: post.isoDate ?? null,
+            articleSection: post.category,
+          }),
+        ]}
+      />
       <Navigation />
 
       {/* Breadcrumb */}
@@ -90,7 +120,7 @@ export default async function BlogPostPage({
       </div>
 
       {/* Hero / Header */}
-      <header className="relative px-6 pt-6 pb-14">
+      <header className="relative px-6 pt-6 pb-14 overflow-hidden">
         {/* Glow orb */}
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full pointer-events-none"

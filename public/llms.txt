@@ -77,6 +77,12 @@
 - Binary pass/fail with no ML drift or false-positive fatigue
 - VeriPak SCADA integrated module
 
+## White Papers
+
+- Every Inspection System Can Reject a Bad Package. VeriPak Proves a Good One. — the VeriPak Production Quality Platform: Continuous Package Awareness, Product Configuration Library, Deterministic Quality Sampling, dual-network architecture (https://automatedqs.com/blog/veripak-production-quality-platform)
+- The Lid Says Vanilla. Does the Tub Agree? — lid-to-body match inspection for ice cream tubs at 65 per minute on a split belt, two code readers and one vision sensor, IP69K (https://automatedqs.com/blog/ice-cream-lid-match-inspection)
+- Filling 1,800-Pound Totes at 20 °F. Hands-Free. — densification pallet tote filling for frozen vegetables: 1% live weighing, recipe-controlled settling, 24V MDR, 0 to 20 °F (https://automatedqs.com/blog/automated-tote-filling-frozen-vegetables)
+
 ## Key Differentiators
 
 1. Mag-Drive technology eliminates oil leaks, gearbox maintenance, and encoder cables
