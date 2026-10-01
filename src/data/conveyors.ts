@@ -516,6 +516,12 @@ export const spotlightHref = (p: ConveyorProject) => `/solutions/conveyors/proje
 export const spotlightProjects = () => conveyorProjects.filter((p) => p.spotlight);
 export const getSpotlight = (slug: string) => conveyorProjects.find((p) => p.slug === slug && p.spotlight);
 
+const toteFillingPhoto: ImageRef = {
+  src: "/images/conveyors/tote-filling-line-in-production.jpg",
+  alt: "Stainless 24V MDR pallet tote filling circuit in production, with a lined tote on a blue pallet staged at the infeed and the fill station beyond",
+  caption: "The line in production: a lined tote staged at the infeed, the fill station and HMI pedestal beyond.",
+};
+
 const toteFillingRender: ImageRef = {
   src: "/images/conveyors/renders/24v-mdr-pallet-conveyor-tapered-curve-stainless.png",
   alt: "Engineering render of a stainless 24V MDR pallet conveyor loop with two tapered-roller 90° curves and a stainless control enclosure",
@@ -531,7 +537,7 @@ export const conveyorProjects: ConveyorProject[] = [
     description:
       "A seven-zone stainless 24V MDR pallet loop with live in-zone weighing and vibratory densification, running hands-off in a 0–20 °F freezer area from forklift drop to forklift pickup.",
     tags: ["24V MDR", "Pallet Handling", "Freezer 0–20 °F", "Live Weighing"],
-    image: toteFillingRender,
+    image: toteFillingPhoto,
     spotlight: {
       h1: "Automated Pallet Tote Filling Line — Stainless 24V MDR Conveyor with Live Weighing and Vibratory Densification",
       title: "24V MDR Pallet Tote Filling Line with Live Weighing | AQS",
@@ -540,8 +546,8 @@ export const conveyorProjects: ConveyorProject[] = [
         "Seven-zone stainless 24V MDR pallet loop with in-zone scale and vibratory densification fills 1,800 lb totes to 1% in a 0–20 °F freezer area — an AQS conveyor project spotlight.",
       industry: "Frozen vegetable processing",
       region: "Upper Midwest",
-      datePublished: TODO,
-      hero: toteFillingRender,
+      datePublished: "2026-09-14",
+      hero: toteFillingPhoto,
       atAGlance: [
         { label: "Customer", value: "Frozen vegetable processor, Upper Midwest" },
         { label: "Application", value: "Filling lined bulk totes on pallets with diced raw and frozen vegetables to a target weight" },
@@ -591,7 +597,7 @@ export const conveyorProjects: ConveyorProject[] = [
           { value: "7", label: "pallets buffered in zero-pressure accumulation" },
         ],
       },
-      gallery: [toteFillingRender],
+      gallery: [toteFillingPhoto, toteFillingRender],
       faq: [
         { q: "Can a 24V MDR conveyor carry pallets?", a: "Yes. This system moves 1,800 lb loaded pallets on 2.5\" hub-motor rollers with one drive card per zone." },
         { q: "Can you weigh a pallet on a conveyor during filling?", a: "Yes. The fill zone rides on weigh modules and reads live to 1% of 2,500 lb, so the PLC can stop the filler at target and record the final weight before release." },
