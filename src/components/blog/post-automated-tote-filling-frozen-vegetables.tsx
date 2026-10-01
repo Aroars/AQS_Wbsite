@@ -168,8 +168,12 @@ export default function PostAutomatedToteFilling() {
       />
 
       <Closing>
-        AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho. See
-        the{" "}
+        AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho. A
+        companion paper covers the photo eye lesson from this line:{" "}
+        <Link href="/blog/photo-eyes-retroreflective-vs-diffuse" className="text-accent-primary hover:underline">
+          The Pallet Was Blue. The Sensor Couldn&apos;t See It.
+        </Link>{" "}
+        See the{" "}
         <Link href="/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system" className="text-accent-primary hover:underline">
           project spotlight
         </Link>

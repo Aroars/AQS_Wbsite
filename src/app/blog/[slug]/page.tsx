@@ -13,10 +13,12 @@ import PostMechanicalVsVisionLeakDetection from "@/components/blog/post-mechanic
 import PostVeriPakPlatform from "@/components/blog/post-veripak-production-quality-platform";
 import PostIceCreamLidMatch from "@/components/blog/post-ice-cream-lid-match-inspection";
 import PostAutomatedToteFilling from "@/components/blog/post-automated-tote-filling-frozen-vegetables";
+import PostPhotoEyesRetroreflective from "@/components/blog/post-photo-eyes-retroreflective-vs-diffuse";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE, article, breadcrumbList } from "@/lib/schema";
 
 const contentComponents: Record<string, React.ComponentType> = {
+  "photo-eyes-retroreflective-vs-diffuse": PostPhotoEyesRetroreflective,
   "veripak-production-quality-platform": PostVeriPakPlatform,
   "ice-cream-lid-match-inspection": PostIceCreamLidMatch,
   "automated-tote-filling-frozen-vegetables": PostAutomatedToteFilling,

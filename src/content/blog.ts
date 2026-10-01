@@ -23,6 +23,21 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "photo-eyes-retroreflective-vs-diffuse",
+    title: "The Pallet Was Blue. The Sensor Couldn't See It.",
+    description:
+      "Why diffuse photo eyes miss dark pallets, why polarized retro-reflective sensing is the right default for pallet and tote lines, and how to specify for change.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "11 min",
+    date: "October 2026",
+    isoDate: "2026-10-01",
+    content: "photo-eyes-retroreflective-vs-diffuse",
+    image: { src: "/images/blog/photo-eyes-blue-pallet-on-mdr-line.jpg", alt: "A blue pooled rental pallet staged on a stainless 24 VDC MDR pallet conveyor" },
+    pdf: "/whitepapers/aqs-white-paper-photo-eyes-retroreflective.pdf",
+    tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "light-curtain-safety-distance-calculator"],
+  },
+  {
     slug: "veripak-production-quality-platform",
     title: "Every Inspection System Can Reject a Bad Package. VeriPak Proves a Good One.",
     description:
