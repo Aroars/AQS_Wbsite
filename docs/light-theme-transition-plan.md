@@ -61,7 +61,7 @@ Two kinds of tokens. **Semantic** tokens flip with the theme. **Brand** tokens n
 | `--border-soft` | `#E6EBF1` | `#262A38` | inner dividers (FAQ rows, testimonial footers) |
 | `--text-strong` | `#0A1628` | `#FFFFFF` | headings, brand name |
 | `--text-body` | `#475569` | `#ADB3BF` | paragraphs, bullets |
-| `--text-dim` | `#64748B` | `#8B94A3` | captions, roles, "Trusted Partners" |
+| `--text-dim` | `#5B6B7F` | `#8B94A3` | captions, roles, "Trusted Partners" (light value darkened post-launch from #64748B, which measured 4.36:1) |
 | `--text-nav` | `#334155` | `#CBD5E1` | nav links |
 | `--accent-text` | `#007099` | `#00C2FF` | eyebrows, "Learn more" links, list markers, active nav item, icon strokes |
 | `--logo-filter` | `grayscale(1)` at opacity .55 | `brightness(0) invert(1)` at opacity .3 | partner logos |

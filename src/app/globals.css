@@ -44,7 +44,7 @@
   --border-soft: #E6EBF1;
   --text-strong: #0A1628;
   --text-body: #475569;
-  --text-dim: #64748B;
+  --text-dim: #5B6B7F; /* 4.99:1 on the page ground; #64748B measured 4.36:1 */
   --text-nav: #334155;
   --accent-text: #007099;
   --logo-filter: grayscale(1);

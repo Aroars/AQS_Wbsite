@@ -7,7 +7,7 @@ export function PartnersBar() {
   return (
     <section className="py-8 px-8 border-b border-border overflow-hidden">
       <div className="max-w-[1280px] mx-auto flex items-center justify-center gap-10 flex-wrap">
-        <span className="font-mono text-[0.58rem] text-text-dim tracking-[0.14em] uppercase">
+        <span className="font-mono text-[0.75rem] text-text-dim tracking-[0.14em] uppercase">
           Trusted Partners
         </span>
         {partners.map((p) => (
