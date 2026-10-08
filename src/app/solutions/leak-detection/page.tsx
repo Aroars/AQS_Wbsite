@@ -20,7 +20,8 @@ export default function LeakDetectionPage() {
   const schema = {"@context":"https://schema.org","@type":"Service","name":"Leak Detection — Dual-Pull Suction Technology","description":"VeriPak SCADA module — mechanical dual-pull suction system that detects pinholes, grease-in-seal, and board cuts that camera systems miss. Patent pending. Available through the Founding Partner Program.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Leak Detection Systems","areaServed":"US","url":"https://automatedqs.com/solutions/leak-detection"};
 
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -31,6 +32,6 @@ export default function LeakDetectionPage() {
       <FAQSection />
       <CTASection />
       <Footer />
-    </>
+    </div>
   );
 }

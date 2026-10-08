@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorAnimation, MagDriveAnimation } from "@/components/ui/intellipak-animations";
 import { BatchDemo } from "@/components/ui/batch-demo";
 import { intellipakStats } from "@/data/intellipak";
@@ -16,7 +15,6 @@ export function IntelliPakContent() {
           SECTION 1: HERO
           ══════════════════════════════════════════ */}
       <section className="pt-[140px] pb-[100px] px-8 relative">
-        <GlowOrb top="-100px" left="-5%" size={500} color="245,166,35" />
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
             <div
@@ -30,14 +28,14 @@ export function IntelliPakContent() {
                 className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
               />
-              <span className="font-mono text-[0.62rem] tracking-[0.1em] uppercase" style={{ color: accent }}>
+              <span className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text">
                 IntelliPak Feed Systems
               </span>
             </div>
 
-            <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white max-w-[720px] mb-6">
+            <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-text-strong max-w-[720px] mb-6">
               Every Product in the Right Place.{" "}
-              <span style={{ color: accent }}>Every Time.</span>
+              <span className="text-accent-text">Every Time.</span>
             </h1>
 
             <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[620px]">
@@ -50,14 +48,14 @@ export function IntelliPakContent() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="#product-flow"
-                className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-white px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
-                style={{ background: `linear-gradient(135deg, ${accent}, #e09000)`, boxShadow: `0 4px 20px ${accent}44` }}
+                className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-brand-navy-deep px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: accent, boxShadow: `0 4px 20px ${accent}44` }}
               >
                 See How It Works &rarr;
               </a>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-text-body px-8 py-3.5 rounded-lg border border-white/20 hover:border-[#f5a623] hover:text-white transition-all duration-200"
+                className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-accent-text px-8 py-3.5 rounded-lg border border-border hover:border-accent-text transition-all duration-200"
               >
                 Request a Quote
               </Link>
@@ -72,7 +70,7 @@ export function IntelliPakContent() {
       <section id="product-flow" className="px-8 mb-[50px]">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection delay={0.05}>
-            <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-4 text-accent-text">
               Live Product Flow &mdash; Random &rarr; Gapped &rarr; Batched
             </div>
             <ConveyorAnimation />
@@ -82,7 +80,7 @@ export function IntelliPakContent() {
                 <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Product arrives at random intervals from upstream equipment</div>
               </div>
               <div className="text-center">
-                <div className="font-mono text-[0.6rem] tracking-[0.08em] uppercase" style={{ color: accent }}>IntelliPak Gapping &amp; Batching</div>
+                <div className="font-mono text-[0.6rem] tracking-[0.08em] uppercase text-accent-text">IntelliPak Gapping &amp; Batching</div>
                 <div className="font-sans text-[0.78rem] text-text-body mt-0.5">Sensors read each product&apos;s position. Belts accelerate and decelerate independently to create precise gaps and form exact groups.</div>
               </div>
               <div className="text-center">
@@ -97,18 +95,15 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 3: THE INFEED BOTTLENECK
           ══════════════════════════════════════════ */}
-      <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
-      >
+      <section className="py-[100px] px-6 bg-surface-card border-y border-border">
         <div className="max-w-[900px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4 text-accent-text">
               The Infeed Bottleneck
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-7">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong max-w-[700px] mb-7">
               Your Packaging Equipment Is Only as Good as{" "}
-              <span style={{ color: accent }}>What Feeds It</span>
+              <span className="text-accent-text">What Feeds It</span>
             </h2>
             <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px] mb-10">
               Thermoformers, case packers, and flow wrappers are precision
@@ -149,10 +144,10 @@ export function IntelliPakContent() {
               ].map((item) => (
                 <StaggerItem key={item.title}>
                   <div
-                    className="bg-bg-card border border-border-default rounded-xl p-7 h-full"
+                    className="bg-surface-page border border-border rounded-xl p-7 h-full"
                     style={{ borderLeftWidth: 3, borderLeftColor: item.color }}
                   >
-                    <div className="font-sans text-[1.05rem] font-bold text-white mb-2">
+                    <div className="font-sans text-[1.05rem] font-bold text-text-strong mb-2">
                       {item.title}
                     </div>
                     <div className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -169,15 +164,15 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 4: WHAT INTELLIPAK DOES
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section className="py-[100px] px-6">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4 text-accent-text">
               What IntelliPak Does
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong mb-5">
               Precision Gapping. Intelligent Batching.{" "}
-              <span style={{ color: accent }}>Seamless Integration.</span>
+              <span className="text-accent-text">Seamless Integration.</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-12">
               IntelliPak uses independently controlled belt zones with photo-eye
@@ -211,9 +206,9 @@ export function IntelliPakContent() {
               },
             ].map((fn) => (
               <StaggerItem key={fn.title}>
-                <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-300">
+                <div className="bg-surface-card border border-border rounded-xl p-7 h-full group hover:bg-surface-card-hover hover:-translate-y-1 transition-all duration-300">
                   <div className="text-[1.5rem] mb-3">{fn.icon}</div>
-                  <h3 className="font-sans text-[1.05rem] font-bold text-white mb-2 group-hover:text-[#f5a623] transition-colors">
+                  <h3 className="font-sans text-[1.05rem] font-bold text-text-strong mb-2 group-hover:text-accent-text transition-colors">
                     {fn.title}
                   </h3>
                   <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -229,10 +224,7 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 5: INTERACTIVE BATCH DEMO
           ══════════════════════════════════════════ */}
-      <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
-      >
+      <section className="py-[100px] px-6 border-t border-border">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <BatchDemo />
@@ -243,11 +235,11 @@ export function IntelliPakContent() {
       {/* ── Stats Bar ── */}
       <section>
         <AnimatedSection delay={0.08}>
-          <div className="bg-gradient-to-r from-[#112240] to-[#1A3055]/50 py-10 px-8">
+          <div className="bg-surface-card border-y border-border py-10 px-8">
             <div className="max-w-[1280px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
               {intellipakStats.map((stat, i) => (
                 <div key={i} className="text-center">
-                  <div className="font-mono text-[2rem] font-bold" style={{ color: accent }}>
+                  <div className="font-mono text-[2rem] font-bold text-accent-text">
                     {stat.value}
                   </div>
                   <div className="font-mono text-[0.6rem] text-text-dim tracking-[0.1em] uppercase mt-1">
@@ -263,15 +255,15 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 5: MAG-DRIVE TECHNOLOGY
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section className="py-[100px] px-6">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4 text-accent-text">
               The Technology Behind It
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong mb-5">
               Mag-Drive Precision &mdash;{" "}
-              <span style={{ color: accent }}>No Gears, No Drift, No Limits</span>
+              <span className="text-accent-text">No Gears, No Drift, No Limits</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-10">
               IntelliPak is powered by magnetic direct-drive hub motors &mdash; a
@@ -284,7 +276,7 @@ export function IntelliPakContent() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-14">
             {/* Text column */}
             <AnimatedSection delay={0.1}>
-              <h3 className="font-sans text-[1.2rem] font-bold text-white mb-5">This matters for product handling because:</h3>
+              <h3 className="font-sans text-[1.2rem] font-bold text-text-strong mb-5">This matters for product handling because:</h3>
               <div className="flex flex-col gap-4">
                 {[
                   ["Zero backlash", "Magnetic coupling maintains exact position without the mechanical slop that degrades in gearbox-driven conveyors over time. Your gaps stay precise on day 1,000 just like day 1."],
@@ -295,7 +287,7 @@ export function IntelliPakContent() {
                   <div key={i} className="flex gap-3 items-start">
                     <div className="w-1.5 h-1.5 rounded-full mt-2.5 shrink-0" style={{ backgroundColor: accent, boxShadow: `0 0 6px ${accent}66` }} />
                     <div>
-                      <span className="font-sans text-[0.92rem] font-semibold text-white">{label}</span>
+                      <span className="font-sans text-[0.92rem] font-semibold text-text-strong">{label}</span>
                       <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mt-0.5">{desc}</p>
                     </div>
                   </div>
@@ -316,14 +308,14 @@ export function IntelliPakContent() {
 
           {/* Comparison table */}
           <AnimatedSection delay={0.2}>
-            <h3 className="font-sans text-[1.1rem] font-bold text-white mb-6">What That Means on the Line</h3>
+            <h3 className="font-sans text-[1.1rem] font-bold text-text-strong mb-6">What That Means on the Line</h3>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-text-dim text-left p-4 border-b border-border-default">Metric</th>
-                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-red text-left p-4 border-b border-border-default">Conventional Gearbox</th>
-                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-left p-4 border-b border-border-default" style={{ color: accent }}>IntelliPak Mag-Drive</th>
+                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-text-dim text-left p-4 border-b border-border">Metric</th>
+                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-text-dim text-left p-4 border-b border-border">Conventional Gearbox</th>
+                    <th className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-left p-4 border-b border-border text-accent-text">IntelliPak Mag-Drive</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -338,8 +330,8 @@ export function IntelliPakContent() {
                     ["Sanitation time", "Full teardown required", "50% faster \u2014 no housings to clean"],
                     ["Warranty", "Typically 1 year", "3-year AQS warranty"],
                   ].map(([metric, old, newVal], i) => (
-                    <tr key={i} className="border-b border-border-default">
-                      <td className="font-sans text-[0.88rem] font-medium text-white p-4">{metric}</td>
+                    <tr key={i} className="border-b border-border">
+                      <td className="font-sans text-[0.88rem] font-medium text-text-strong p-4">{metric}</td>
                       <td className="font-sans text-[0.85rem] text-text-dim p-4">{old}</td>
                       <td className="font-sans text-[0.85rem] text-text-body p-4 font-medium">{newVal}</td>
                     </tr>
@@ -354,18 +346,15 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 6: CONFIGURATIONS
           ══════════════════════════════════════════ */}
-      <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
-      >
+      <section className="py-[100px] px-6 bg-surface-card border-y border-border">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4 text-accent-text">
               System Options
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong mb-5">
               Designed for Your Line,{" "}
-              <span style={{ color: accent }}>Not a Catalog</span>
+              <span className="text-accent-text">Not a Catalog</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-12">
               Every IntelliPak system is engineered for the specific product, speed,
@@ -394,10 +383,10 @@ export function IntelliPakContent() {
             ].map((config) => (
               <StaggerItem key={config.title}>
                 <div
-                  className="bg-bg-card border border-border-default rounded-xl p-7 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-300"
+                  className="bg-surface-page border border-border rounded-xl p-7 h-full group hover:bg-surface-card-hover hover:-translate-y-1 transition-all duration-300"
                   style={{ borderLeftWidth: 3, borderLeftColor: accent }}
                 >
-                  <h3 className="font-sans text-[1.05rem] font-bold text-white mb-2 group-hover:text-[#f5a623] transition-colors">
+                  <h3 className="font-sans text-[1.05rem] font-bold text-text-strong mb-2 group-hover:text-accent-text transition-colors">
                     {config.title}
                   </h3>
                   <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -413,19 +402,19 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           SECTION 7: TECHNICAL SPECS
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section className="py-[100px] px-6">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4" style={{ color: accent }}>
+            <div className="font-mono text-[0.68rem] tracking-[0.2em] uppercase mb-4 text-accent-text">
               Specifications
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-10">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-text-strong mb-10">
               Technical Specifications
             </h2>
           </AnimatedSection>
 
           <AnimatedSection delay={0.1}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-border-default rounded-xl overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-border rounded-xl overflow-hidden">
               {[
                 { label: "Drive Technology", value: "One Motion Mag-Drive hub motors" },
                 { label: "Motor Type", value: "Permanent-magnet synchronous, direct-drive" },
@@ -440,10 +429,9 @@ export function IntelliPakContent() {
               ].map((spec, i) => (
                 <div
                   key={i}
-                  className="p-4 border-b border-r border-border-default"
-                  style={{ background: "rgba(17,34,64,0.3)" }}
+                  className="p-4 border-b border-r border-border bg-surface-card"
                 >
-                  <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase mb-1" style={{ color: accent }}>
+                  <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase mb-1 text-accent-text">
                     {spec.label}
                   </div>
                   <div className="font-sans text-[0.85rem] text-text-body leading-[1.5]">
@@ -459,13 +447,10 @@ export function IntelliPakContent() {
       {/* ══════════════════════════════════════════
           CTA — Page-specific
           ══════════════════════════════════════════ */}
-      <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
-      >
+      <section className="py-[100px] px-6 bg-surface-card border-y border-border">
         <div className="max-w-[700px] mx-auto text-center">
           <AnimatedSection>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-text-strong mb-5">
               See What IntelliPak Can Do for Your Line
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.7] mb-8">
@@ -476,8 +461,8 @@ export function IntelliPakContent() {
             <div className="flex justify-center gap-4 flex-wrap">
               <Link
                 href="/contact"
-                className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
-                style={{ background: `linear-gradient(135deg, ${accent}, #e09000)`, color: "#0B1A2E", boxShadow: `0 4px 20px ${accent}44` }}
+                className="font-sans font-bold text-[15px] text-brand-navy-deep px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: accent, boxShadow: `0 4px 20px ${accent}44` }}
               >
                 Start a Project Review &rarr;
               </Link>
@@ -485,8 +470,7 @@ export function IntelliPakContent() {
                 href="https://apps.automatedqs.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-white/20 text-text-body hover:text-white transition-all duration-200"
-                style={{ borderColor: `${accent}33` }}
+                className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-border text-accent-text hover:border-accent-text transition-all duration-200"
               >
                 Run the ROI Calculator &rarr;
               </a>

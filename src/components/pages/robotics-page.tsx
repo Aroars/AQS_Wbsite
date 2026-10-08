@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { roboticsApplications } from "@/data/case-studies";
 
 const capabilities = [
@@ -30,12 +29,15 @@ function AppCard({ title, description }: { title: string; description: string })
       onMouseLeave={() => setHovered(false)}
       className="rounded-xl p-[22px] h-full transition-all duration-300"
       style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? `${accent}0C` : "var(--surface-card)",
+        border: `1px solid ${hovered ? accent : "var(--border)"}`,
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        boxShadow: hovered
+          ? "0 20px 40px rgba(10,22,40,0.14)"
+          : "0 4px 12px rgba(10,22,40,0.06)",
       }}
     >
-      <div className="font-sans text-[0.95rem] font-semibold text-white mb-1">
+      <div className="font-sans text-[0.95rem] font-semibold text-text-strong mb-1">
         {title}
       </div>
       <div className="font-sans text-[0.8rem] text-text-body leading-[1.5]">
@@ -49,7 +51,6 @@ export function RoboticsContent() {
   const accent = "#4d9fff";
   return (
     <section className="pt-[140px] pb-[100px] px-8 relative">
-      <GlowOrb top="-100px" left="-5%" size={500} color="77,159,255" />
       <div className="max-w-[1280px] mx-auto relative z-10">
         <AnimatedSection>
           <div
@@ -63,14 +64,14 @@ export function RoboticsContent() {
               className="w-1.5 h-1.5 rounded-full"
               style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
             />
-            <span className="font-mono text-[0.62rem] tracking-[0.1em] uppercase" style={{ color: accent }}>
+            <span className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text">
               Sanitary Robotics
             </span>
           </div>
 
-          <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white max-w-[720px] mb-6">
+          <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-text-strong max-w-[720px] mb-6">
             Washdown Robotic Systems{" "}
-            <span style={{ color: accent }}>Built for Food Production</span>
+            <span className="text-accent-text">Built for Food Production</span>
           </h1>
 
           <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[620px]">
@@ -84,14 +85,14 @@ export function RoboticsContent() {
           <div className="flex flex-wrap gap-3">
             <a
               href="#showcases"
-              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-white px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
-              style={{ background: `linear-gradient(135deg, ${accent}, #2266cc)`, boxShadow: `0 4px 20px ${accent}44` }}
+              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-bold text-brand-navy-deep px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5"
+              style={{ background: accent, boxShadow: `0 4px 20px ${accent}44` }}
             >
               See It In Action &rarr;
             </a>
             <a
               href="/contact"
-              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-text-body px-8 py-3.5 rounded-lg border border-white/20 hover:border-[#4d9fff] hover:text-white transition-all duration-200"
+              className="inline-flex items-center gap-1.5 font-sans text-[15px] font-semibold text-accent-text px-8 py-3.5 rounded-lg border border-border hover:border-accent-text transition-all duration-200"
             >
               Request a Quote
             </a>
@@ -102,10 +103,10 @@ export function RoboticsContent() {
         <AnimatedSection delay={0.08}>
           <div id="showcases" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_0.32fr] gap-4 mb-[50px]">
             <div>
-              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+              <div className="font-mono text-[0.58rem] text-accent-text tracking-[0.1em] uppercase mb-2">
                 Palletizing Showcase
               </div>
-              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border">
                 <video
                   controls
                   preload="metadata"
@@ -117,10 +118,10 @@ export function RoboticsContent() {
               </div>
             </div>
             <div>
-              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+              <div className="font-mono text-[0.58rem] text-accent-text tracking-[0.1em] uppercase mb-2">
                 Robotic Picking Showcase
               </div>
-              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+              <div className="relative aspect-video rounded-2xl overflow-hidden border border-border">
                 <video
                   controls
                   preload="metadata"
@@ -133,10 +134,10 @@ export function RoboticsContent() {
             </div>
             {/* Portrait phone clip: fills the row height beside the two landscape showcases */}
             <div className="lg:flex lg:flex-col">
-              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+              <div className="font-mono text-[0.58rem] text-accent-text tracking-[0.1em] uppercase mb-2">
                 Case Packing Showcase
               </div>
-              <div className="relative aspect-[9/16] max-w-[320px] lg:max-w-none lg:aspect-auto lg:flex-1 rounded-2xl overflow-hidden border border-border-default bg-black/40">
+              <div className="relative aspect-[9/16] max-w-[320px] lg:max-w-none lg:aspect-auto lg:flex-1 rounded-2xl overflow-hidden border border-border bg-brand-navy-deep">
                 <video
                   controls
                   muted
@@ -161,7 +162,7 @@ export function RoboticsContent() {
                 <div key={i} className="flex gap-3">
                   <div className="w-[7px] h-[7px] rounded-full bg-[#4d9fff] mt-2 shrink-0 shadow-[0_0_8px_rgba(77,159,255,0.4)]" />
                   <div>
-                    <div className="font-sans text-[0.92rem] font-semibold text-white">
+                    <div className="font-sans text-[0.92rem] font-semibold text-text-strong">
                       {item.t}
                     </div>
                     <div className="font-sans text-[0.84rem] text-text-body leading-[1.5]">
@@ -178,8 +179,9 @@ export function RoboticsContent() {
             <div
               className="rounded-2xl p-9 text-center relative overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, rgba(0,194,255,0.05), rgba(0,102,255,0.03))",
-                border: "1px solid rgba(0,194,255,0.1)",
+                background: "linear-gradient(135deg, rgba(0,194,255,0.06), transparent 60%), var(--surface-card)",
+                border: "1px solid var(--border)",
+                boxShadow: "0 4px 12px rgba(10,22,40,0.06)",
               }}
             >
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 -mx-2">
@@ -191,7 +193,7 @@ export function RoboticsContent() {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
-              <div className="font-sans text-[1.1rem] font-bold text-white mb-2">
+              <div className="font-sans text-[1.1rem] font-bold text-text-strong mb-2">
                 Full Washdown. Full Ownership.
               </div>
               <div className="font-sans text-[0.85rem] text-text-body leading-[1.7] max-w-[320px] mx-auto mb-[18px]">
@@ -200,8 +202,8 @@ export function RoboticsContent() {
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {specCards.map((s) => (
-                  <div key={s.l} className="bg-black/30 rounded-lg py-3 px-2">
-                    <div className="font-mono text-[1.1rem] font-bold text-accent-primary">
+                  <div key={s.l} className="bg-surface-page border border-border rounded-lg py-3 px-2">
+                    <div className="font-mono text-[1.1rem] font-bold text-accent-text">
                       {s.v}
                     </div>
                     <div className="font-sans text-[0.6rem] text-text-dim mt-0.5 uppercase tracking-[0.08em]">
@@ -223,7 +225,7 @@ export function RoboticsContent() {
               { src: "/images/robotics/end-effectors-assembly.jpg", alt: "Custom robotic end effectors on assembly table showing precision stainless steel components" },
               { src: "/images/robotics/case-packing-pies.jpg", alt: "Robotic case packing system handling pies with roller conveyor infeed" },
             ].map((img) => (
-              <div key={img.src} className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border-default group">
+              <div key={img.src} className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border group">
                 <Image
                   src={img.src}
                   alt={img.alt}
@@ -239,10 +241,10 @@ export function RoboticsContent() {
         {/* Applications Grid */}
         <AnimatedSection delay={0.25}>
           <div className="mt-[60px]">
-            <div className="font-mono text-[0.62rem] text-[#4d9fff] tracking-[0.12em] uppercase mb-2.5">
+            <div className="font-mono text-[0.62rem] text-accent-text tracking-[0.12em] uppercase mb-2.5">
               Applications
             </div>
-            <h3 className="font-sans text-[1.3rem] font-bold text-white mb-5">
+            <h3 className="font-sans text-[1.3rem] font-bold text-text-strong mb-5">
               Where Sanitary Robotics Replaces Manual Labor
             </h3>
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

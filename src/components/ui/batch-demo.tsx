@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 // ─── Design tokens matching AQS site ───
 const COLORS = {
-  navy: "#0B1A2E",
+  navy: "#0A1628", // brand-navy-deep: the canvas is a deliberate dark machine panel
   navyMid: "#112240",
   navyLight: "#1A3055",
   slate: "#8892B0",
@@ -142,7 +142,7 @@ export function BatchDemo() {
     const sf = ppmRef.current / 200;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = COLORS.navyMid;
+    ctx.fillStyle = COLORS.navy;
     ctx.fillRect(0, 0, W, H);
 
     // ─── Belt zones ───
@@ -486,21 +486,19 @@ export function BatchDemo() {
 
   return (
     <div
-      className="w-full rounded-xl overflow-hidden"
-      style={{ background: COLORS.navyMid, border: "1px solid rgba(255,255,255,0.08)" }}
+      className="w-full rounded-xl overflow-hidden bg-surface-card border border-border"
+      style={{ boxShadow: "0 4px 12px rgba(10,22,40,0.06)" }}
     >
       {/* Header */}
       <div className="px-6 pt-5 pb-3">
         <p
-          className="font-mono text-[0.58rem] font-semibold tracking-[0.12em] uppercase mb-2"
-          style={{ color: COLORS.gold }}
-        >
+          className="font-mono text-[0.58rem] font-semibold tracking-[0.12em] uppercase mb-2 text-accent-text">
           In Action
         </p>
-        <h3 className="font-sans text-xl font-bold mb-1" style={{ color: COLORS.white }}>
+        <h3 className="font-sans text-xl font-bold mb-1 text-text-strong">
           One System. Any Format. Change It on the Fly.
         </h3>
-        <p className="font-sans text-sm mb-4" style={{ color: COLORS.slateLight }}>
+        <p className="font-sans text-sm mb-4 text-text-body">
           Select a batch configuration and adjust line speed to see the system respond in real time.
         </p>
 
@@ -508,7 +506,7 @@ export function BatchDemo() {
         <div className="flex gap-6 flex-wrap items-end">
           {/* Batch size slider */}
           <div className="flex items-center gap-3">
-            <span className="font-sans text-xs font-semibold whitespace-nowrap" style={{ color: COLORS.slateLight }}>
+            <span className="font-sans text-xs font-semibold whitespace-nowrap text-text-body">
               Batch Size
             </span>
             <input
@@ -520,13 +518,13 @@ export function BatchDemo() {
               onChange={(e) => setBatchSize(parseInt(e.target.value))}
               className="w-32 h-1.5 rounded-full outline-none cursor-pointer"
               style={{
-                background: "rgba(255,255,255,0.1)",
+                background: "var(--border)",
                 accentColor: COLORS.gold,
               }}
             />
             <span
-              className="font-mono text-sm font-bold"
-              style={{ color: COLORS.gold, minWidth: 80, textAlign: "right" }}
+              className="font-mono text-sm font-bold text-accent-text"
+              style={{ minWidth: 80, textAlign: "right" }}
             >
               Groups of {batchSize}
             </span>
@@ -534,7 +532,7 @@ export function BatchDemo() {
 
           {/* PPM slider */}
           <div className="flex items-center gap-3">
-            <span className="font-sans text-xs font-semibold whitespace-nowrap" style={{ color: COLORS.slateLight }}>
+            <span className="font-sans text-xs font-semibold whitespace-nowrap text-text-body">
               Line Speed
             </span>
             <input
@@ -546,13 +544,13 @@ export function BatchDemo() {
               onChange={(e) => setPpm(parseInt(e.target.value))}
               className="w-40 h-1.5 rounded-full outline-none cursor-pointer"
               style={{
-                background: "rgba(255,255,255,0.1)",
+                background: "var(--border)",
                 accentColor: COLORS.gold,
               }}
             />
             <span
-              className="font-mono text-sm font-bold"
-              style={{ color: COLORS.gold, minWidth: 70, textAlign: "right" }}
+              className="font-mono text-sm font-bold text-accent-text"
+              style={{ minWidth: 70, textAlign: "right" }}
             >
               {ppm} PPM
             </span>
@@ -561,7 +559,7 @@ export function BatchDemo() {
       </div>
 
       {/* Canvas */}
-      <div className="relative w-full overflow-hidden" style={{ height: CANVAS_HEIGHT }}>
+      <div className="relative w-full overflow-hidden border-y border-border-soft" style={{ height: CANVAS_HEIGHT, background: COLORS.navy }}>
         <canvas
           ref={canvasRef}
           width={1100}
@@ -571,8 +569,8 @@ export function BatchDemo() {
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <p className="font-sans text-xs" style={{ color: COLORS.slate }}>
+      <div className="px-6 py-4">
+        <p className="font-sans text-xs text-text-dim">
           Batch sizes and line speeds are configured from the Allen-Bradley Optix HMI —
           switch formats between runs or mid-shift without stopping the line.
         </p>

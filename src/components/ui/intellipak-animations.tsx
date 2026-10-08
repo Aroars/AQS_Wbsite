@@ -67,7 +67,7 @@ export function ConveyorAnimation() {
   const totalPatternWidth = cursor;
 
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-[#112240]/60 p-2">
+    <div className="w-full overflow-hidden rounded-lg border border-border bg-brand-navy-deep p-2">
       <svg
         viewBox="0 0 720 100"
         xmlns="http://www.w3.org/2000/svg"
@@ -684,8 +684,8 @@ export function BeforeAfterAnimation() {
         <div
           className="rounded-xl overflow-hidden relative p-4"
           style={{
-            background: `${C.navyLight}44`,
-            border: `1px solid rgba(255,255,255,0.06)`,
+            background: "#0A1628", // brand-navy-deep: a deliberate dark machine panel
+            border: "1px solid var(--border)",
           }}
         >
           <WithoutIntelliPak tick={tick} />
@@ -695,8 +695,8 @@ export function BeforeAfterAnimation() {
         <div
           className="rounded-xl overflow-hidden relative p-4"
           style={{
-            background: `${C.navyLight}44`,
-            border: `1px solid rgba(255,255,255,0.06)`,
+            background: "#0A1628", // brand-navy-deep: a deliberate dark machine panel
+            border: "1px solid var(--border)",
           }}
         >
           <WithIntelliPak tick={tick} />
@@ -715,12 +715,12 @@ export function BeforeAfterAnimation() {
           { label: "Data Visibility", without: "None", wit: "Real-Time" },
         ].map((cmp) => (
           <div key={cmp.label} style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 9, color: C.slate, letterSpacing: "0.1em", marginBottom: 4 }}>
+            <div style={{ fontSize: 9, color: "var(--text-dim)", letterSpacing: "0.1em", marginBottom: 4 }}>
               {cmp.label}
             </div>
-            <div style={{ fontSize: 10, color: C.red, fontWeight: 600 }}>{cmp.without}</div>
-            <div style={{ fontSize: 8, color: C.slate, margin: "2px 0" }}>↓</div>
-            <div style={{ fontSize: 10, color: C.green, fontWeight: 700 }}>{cmp.wit}</div>
+            <div style={{ fontSize: 10, color: "var(--text-dim)", fontWeight: 600 }}>{cmp.without}</div>
+            <div style={{ fontSize: 8, color: "var(--text-dim)", margin: "2px 0" }}>↓</div>
+            <div style={{ fontSize: 10, color: "var(--accent-text)", fontWeight: 700 }}>{cmp.wit}</div>
           </div>
         ))}
       </div>

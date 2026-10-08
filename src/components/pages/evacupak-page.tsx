@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 
 const features = [
   {
@@ -39,6 +38,8 @@ const features = [
   },
 ];
 
+/* Card on the semantic surfaces; the EvacuPak green is a hover tint and
+   border only, never text. */
 function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
   const [hovered, setHovered] = useState(false);
   const accent = "#00d4aa";
@@ -48,9 +49,12 @@ function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc:
       onMouseLeave={() => setHovered(false)}
       className="rounded-xl p-7 h-full transition-all duration-300"
       style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? `${accent}0C` : "var(--surface-card)",
+        border: `1px solid ${hovered ? accent : "var(--border)"}`,
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        boxShadow: hovered
+          ? "0 20px 40px rgba(10,22,40,0.14)"
+          : "0 4px 12px rgba(10,22,40,0.06)",
       }}
     >
       <div
@@ -59,7 +63,7 @@ function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc:
       >
         {icon}
       </div>
-      <div className="font-sans text-[1.02rem] font-bold text-white mb-1.5">
+      <div className="font-sans text-[1.02rem] font-bold text-text-strong mb-1.5">
         {title}
       </div>
       <div className="font-sans text-[0.85rem] text-text-body leading-[1.6]">
@@ -72,7 +76,6 @@ function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc:
 export function EvacuPakContent() {
   return (
     <section className="pt-[140px] pb-[100px] px-8 relative">
-      <GlowOrb top="-100px" left="70%" size={500} color="0,212,170" />
       <div className="max-w-[1280px] mx-auto relative z-10">
         <AnimatedSection>
           <SectionLabel>EvacuPak Liquid Recovery</SectionLabel>
@@ -87,19 +90,19 @@ export function EvacuPakContent() {
           </SectionDesc>
         </AnimatedSection>
 
-        {/* Product imagery */}
+        {/* Product imagery: photo frames keep their border on the light ground */}
         <AnimatedSection delay={0.05}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-[50px] items-center">
-            <div className="relative aspect-[800/545] rounded-2xl overflow-hidden border border-border-default mx-auto max-w-[500px] w-full">
+            <div className="relative aspect-[800/545] rounded-2xl overflow-hidden border border-border bg-surface-card mx-auto max-w-[500px] w-full">
               <Image
                 src="/images/evacupak/product-render.webp"
                 alt="EvacuPak liquid recovery system — patented hygienic lance design for up to 97% product recovery"
                 fill
-                className="object-contain bg-white/5"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
-            <div className="relative aspect-[2/3] rounded-2xl overflow-hidden border border-border-default mx-auto max-w-[400px] w-full">
+            <div className="relative aspect-[2/3] rounded-2xl overflow-hidden border border-border mx-auto max-w-[400px] w-full">
               <Image
                 src="/images/evacupak/product-shot.jpg"
                 alt="EvacuPak system physical unit with 3A certified stainless steel construction"
