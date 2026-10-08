@@ -186,24 +186,11 @@ body {
 
 /* ========================================
    VeriPak Product Journey log grid
-   Six fixed columns on tablet and up; at phone width the columns go fluid
-   and the mono text shrinks and may wrap, so nothing is clipped by the
-   log's overflow box. The font sizes are set inline in the animation, so
-   the phone override needs !important.
+   Six fixed columns at every width. On phones the whole diagram scrolls
+   sideways (overflow-x on its root) rather than shrinking its labels.
    ======================================== */
 .pj-log-grid {
   grid-template-columns: minmax(150px, 1fr) 68px 76px 106px 96px 68px;
-}
-@media (max-width: 639px) {
-  .pj-log-grid {
-    grid-template-columns: minmax(0, 1.7fr) repeat(5, minmax(0, 1fr));
-    column-gap: 4px;
-  }
-  .pj-log-grid > span {
-    font-size: 8px !important;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
 }
 
 /* ========================================

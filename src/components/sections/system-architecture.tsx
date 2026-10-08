@@ -927,12 +927,12 @@ function StageCard({
           onClick();
         }
       }}
-      className="relative flex flex-col items-center text-center w-[96px] shrink-0 cursor-pointer group"
+      className="relative flex flex-col items-center text-center w-[106px] shrink-0 cursor-pointer group"
     >
       {/* YOU ARE HERE badge */}
       {isCurrentProduct && (
         <div
-          className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[0.58rem] tracking-[0.12em] uppercase px-2 py-0.5 rounded-full text-accent-text"
+          className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] tracking-[0.12em] uppercase px-2 py-0.5 rounded-full text-accent-text"
           style={{
             backgroundColor: `${accentColor}22`,
             border: `1px solid ${accentColor}55`,
@@ -971,7 +971,7 @@ function StageCard({
         </div>
 
         {/* Subtitle */}
-        <div className="font-mono text-[0.54rem] tracking-[0.08em] uppercase text-text-dim leading-tight">
+        <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-text-dim leading-tight">
           {stage.subtitle}
         </div>
       </div>
@@ -1044,7 +1044,7 @@ export function SystemArchitecture({
         <AnimatedSection>
           {/* Section header */}
           <div className="mb-10">
-            <div className="font-mono text-[0.68rem] tracking-[0.15em] uppercase mb-3 text-accent-text">
+            <div className="font-mono text-[11px] tracking-[0.15em] uppercase mb-3 text-accent-text">
               System Architecture
             </div>
             <h2 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-text-strong mb-4 leading-[1.1]">
@@ -1086,7 +1086,7 @@ export function SystemArchitecture({
           </p>
 
           {/* Production line flow — centered */}
-          <div className="bg-surface-card border border-border rounded-xl p-6 md:p-8 overflow-x-auto">
+          <div className="bg-surface-card border border-border rounded-xl p-6 md:p-8 overflow-x-auto" data-diagram="system-architecture">
             <div className="flex items-start justify-center gap-0 min-w-max pt-8 pb-4 px-2">
               {activeConfig.stages.map((stage, idx) => {
                 const isCurrentStage = stage.productSlug === currentProduct;
@@ -1120,7 +1120,7 @@ export function SystemArchitecture({
             {/* Flow direction label */}
             <div className="flex items-center justify-center gap-2 mt-4 opacity-60">
               <div className="h-px w-12 bg-text-dim" />
-              <span className="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-text-dim">
+              <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-text-dim">
                 Product Flow Direction
               </span>
               <svg width="16" height="8" viewBox="0 0 16 8" fill="none">
@@ -1161,7 +1161,7 @@ export function SystemArchitecture({
                   <div>
                     <div className="font-sans text-[0.88rem] font-semibold text-text-strong mb-1">
                       {activeConfig.stages[activeStageIndex].label}
-                      <span className="font-mono text-[0.58rem] tracking-[0.1em] uppercase ml-2 text-text-dim">
+                      <span className="font-mono text-[11px] tracking-[0.1em] uppercase ml-2 text-text-dim">
                         {activeConfig.stages[activeStageIndex].subtitle}
                       </span>
                     </div>
@@ -1178,7 +1178,7 @@ export function SystemArchitecture({
                                 .productSlug!
                             ]
                           }
-                          className="inline-flex items-center gap-1 mt-2 font-mono text-[0.68rem] tracking-[0.1em] uppercase no-underline transition-opacity hover:opacity-80 text-accent-text"
+                          className="inline-flex items-center gap-1 mt-2 font-mono text-[11px] tracking-[0.1em] uppercase no-underline transition-opacity hover:opacity-80 text-accent-text"
                         >
                           Learn more
                           <svg
