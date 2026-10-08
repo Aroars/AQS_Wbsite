@@ -48,7 +48,8 @@ export default async function ConveyorTypePage({ params }: { params: Params }) {
   const path = typePageHref(page);
 
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <JsonLd
         data={[
           breadcrumbList([
@@ -67,6 +68,6 @@ export default async function ConveyorTypePage({ params }: { params: Params }) {
       <FAQSection items={page.faq} />
       <ConveyorCTA />
       <Footer />
-    </>
+    </div>
   );
 }

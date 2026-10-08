@@ -25,7 +25,8 @@ export function ConveyorGallery({
   const cols = columns === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-2 md:grid-cols-3";
   const sizes = columns === 2 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 50vw, 33vw";
   return (
-    <section className="py-[72px] px-8 bg-black/[0.06]">
+    /* A card-surface band so it alternates against the page ground */
+    <section className="py-[72px] px-8 bg-surface-card border-y border-border">
       <div className="max-w-[1280px] mx-auto">
         <AnimatedSection>
           <SectionLabel>{label}</SectionLabel>
@@ -36,7 +37,7 @@ export function ConveyorGallery({
           {images.map((img) => (
             <figure key={img.src} className="m-0">
               <div
-                className={`relative aspect-[4/3] rounded-xl overflow-hidden border border-border-default group ${
+                className={`relative aspect-[4/3] rounded-xl overflow-hidden border border-border group ${
                   img.kind === "render" ? "bg-[#f3f5f7]" : ""
                 }`}
               >

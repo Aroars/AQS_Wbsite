@@ -2,8 +2,9 @@ import Image from "next/image";
 import type { ImageRef } from "@/data/conveyors";
 
 /**
- * A CAD render on the dark theme: white-background renders get a light card
- * and `object-contain` so the model is not cropped, plus a small "Engineering
+ * A CAD render: white-background renders get a fixed light tile (the same in
+ * both themes, so the model's own white ground never shows as a box) and
+ * `object-contain` so the model is not cropped, plus a small "Engineering
  * render" tag so nobody mistakes it for an install photo. Photos should use
  * the usual fill + object-cover pattern instead.
  */
@@ -22,7 +23,7 @@ export function RenderFigure({
 }) {
   return (
     <figure className={`m-0 ${className}`}>
-      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-white/[0.08] bg-[#f3f5f7]`}>
+      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-border bg-[#f3f5f7]`}>
         <Image
           src={image.src}
           alt={image.alt}

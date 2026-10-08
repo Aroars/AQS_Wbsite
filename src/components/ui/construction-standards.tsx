@@ -4,6 +4,8 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { CONVEYOR_ACCENT, constructionStats, weldDetailImage } from "@/data/conveyors";
 
+/* The conveyor accent (steel) tints and borders the stat pills; all text is
+   on the semantic tokens (plan section 3). */
 const accent = CONVEYOR_ACCENT;
 
 /**
@@ -14,7 +16,8 @@ const accent = CONVEYOR_ACCENT;
 export function ConstructionStandards({ variant = "full" }: { variant?: "full" | "compact" }) {
   if (variant === "compact") {
     return (
-      <section className="py-[56px] px-8 bg-black/[0.06]">
+      /* A card-surface band so it alternates against the page ground */
+      <section className="py-[56px] px-8 bg-surface-card border-y border-border">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Construction Standards</SectionLabel>
@@ -27,16 +30,15 @@ export function ConstructionStandards({ variant = "full" }: { variant?: "full" |
               {constructionStats.map((s) => (
                 <span
                   key={s.label}
-                  className="font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5"
-                  style={{ color: accent, background: `${accent}14`, border: `1px solid ${accent}55` }}
+                  className="font-mono text-[0.62rem] tracking-[0.06em] uppercase text-accent-text rounded-full px-3 py-1.5"
+                  style={{ background: `${accent}14`, border: `1px solid ${accent}55` }}
                 >
-                  <span className="font-bold text-white">{s.value}</span> {s.label}
+                  <span className="font-bold text-text-strong">{s.value}</span> {s.label}
                 </span>
               ))}
               <Link
                 href="/solutions/conveyors#construction"
-                className="ml-1 font-mono text-[0.62rem] tracking-[0.08em] uppercase no-underline transition-colors hover:text-white"
-                style={{ color: accent }}
+                className="ml-1 font-mono text-[0.62rem] tracking-[0.08em] uppercase text-accent-text no-underline transition-colors hover:text-text-strong"
               >
                 How we build them &rarr;
               </Link>
@@ -63,8 +65,8 @@ export function ConstructionStandards({ variant = "full" }: { variant?: "full" |
           <div className="grid grid-cols-2 gap-4">
             {constructionStats.map((stat) => (
               <AnimatedSection key={stat.label} delay={0.05}>
-                <div className="text-center p-6 rounded-xl bg-black/20 border border-white/[0.04]">
-                  <div className="font-mono text-[1.3rem] font-bold mb-1" style={{ color: accent }}>
+                <div className="text-center p-6 rounded-xl bg-surface-card border border-border">
+                  <div className="font-mono text-[1.3rem] font-bold text-accent-text mb-1">
                     {stat.value}
                   </div>
                   <div className="font-sans text-[0.78rem] text-text-body">{stat.label}</div>
@@ -74,7 +76,7 @@ export function ConstructionStandards({ variant = "full" }: { variant?: "full" |
           </div>
           <AnimatedSection delay={0.1}>
             <figure className="m-0">
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08]">
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border">
                 <Image src={weldDetailImage.src} alt={weldDetailImage.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
               </div>
               {weldDetailImage.caption && (

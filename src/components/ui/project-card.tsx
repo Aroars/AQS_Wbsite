@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CONVEYOR_ACCENT, spotlightHref, type ConveyorProject } from "@/data/conveyors";
 
+/* The conveyor accent (steel) is the hover border and the tag borders;
+   all text is on the semantic tokens (plan section 3). */
 const accent = CONVEYOR_ACCENT;
 
 /**
@@ -32,8 +34,8 @@ export function ProjectCard({
       onMouseLeave={() => setHovered(false)}
       className="rounded-xl p-8 h-full transition-all duration-300"
       style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? "var(--surface-card-hover)" : "var(--surface-card)",
+        border: `1px solid ${hovered ? accent : "var(--border)"}`,
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
       }}
     >
@@ -52,13 +54,13 @@ export function ProjectCard({
           />
         </div>
       )}
-      <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-1.5" style={{ color: accent }}>
+      <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase text-accent-text mb-1.5">
         {href ? "Project Spotlight" : "Case Study"}
       </div>
-      <div className={`font-sans font-bold text-white mb-1 ${preview ? "text-[1.15rem]" : "text-[1.25rem]"}`}>
+      <div className={`font-sans font-bold text-text-strong mb-1 ${preview ? "text-[1.15rem]" : "text-[1.25rem]"}`}>
         {project.title}
       </div>
-      <div className={`font-sans mb-3 ${preview ? "text-[0.78rem]" : "text-[0.82rem]"}`} style={{ color: accent }}>
+      <div className={`font-sans text-accent-text mb-3 ${preview ? "text-[0.78rem]" : "text-[0.82rem]"}`}>
         {project.subtitle}
       </div>
       <p className={`font-sans text-text-body ${preview ? "text-[0.85rem] leading-[1.6] mb-3.5" : "text-[0.88rem] leading-[1.65] mb-4"}`}>
@@ -68,15 +70,15 @@ export function ProjectCard({
         {project.tags.map((t) => (
           <span
             key={t}
-            className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
-            style={{ color: `${accent}BF`, borderColor: `${accent}2E` }}
+            className="font-mono text-[0.56rem] text-accent-text border rounded-full px-2.5 py-1"
+            style={{ borderColor: `${accent}2E` }}
           >
             {t}
           </span>
         ))}
       </div>
       {href && (
-        <div className="mt-4 font-mono text-[0.62rem] tracking-[0.08em] uppercase" style={{ color: accent }}>
+        <div className="mt-4 font-mono text-[0.62rem] tracking-[0.08em] uppercase text-accent-text">
           Read the spotlight &rarr;
         </div>
       )}

@@ -27,6 +27,8 @@ import {
 import type { ConveyorType } from "@/data/conveyors";
 import { getTypePage } from "@/data/conveyor-type-pages";
 
+/* The conveyor accent (steel) is the hover border and the tag borders;
+   all text on the light surfaces is on the semantic tokens (plan section 3). */
 const accent = CONVEYOR_ACCENT;
 
 /* ================================================
@@ -43,8 +45,8 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
       onMouseLeave={() => setHovered(false)}
       className={`relative rounded-xl overflow-hidden transition-all duration-300 scroll-mt-[110px] ${page ? "cursor-pointer" : ""}`}
       style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? "var(--surface-card-hover)" : "var(--surface-card)",
+        border: `1px solid ${hovered ? accent : "var(--border)"}`,
         transform: hovered && page ? "translateY(-2px)" : "translateY(0)",
       }}
     >
@@ -53,13 +55,10 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
       <div className={`flex flex-col ${type.image ? "md:flex-row" : ""}`}>
         {/* Text content */}
         <div className={`p-8 ${type.image ? "md:flex-1" : ""}`}>
-          <div
-            className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2"
-            style={{ color: accent }}
-          >
+          <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase text-accent-text mb-2">
             {type.useCase}
           </div>
-          <h3 className="font-sans text-[1.25rem] font-bold text-white mb-3">
+          <h3 className="font-sans text-[1.25rem] font-bold text-text-strong mb-3">
             {type.title}
           </h3>
           <p className="font-sans text-[0.88rem] text-text-body leading-[1.65] mb-4">
@@ -71,7 +70,7 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
                 key={f}
                 className="flex items-start gap-2 text-[0.82rem] text-text-body"
               >
-                <span style={{ color: accent }} className="mt-0.5 shrink-0">
+                <span className="mt-0.5 shrink-0 text-accent-text">
                   ✓
                 </span>
                 {f}
@@ -82,8 +81,8 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
             {type.idealFor.map((tag) => (
               <span
                 key={tag}
-                className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
-                style={{ color: `${accent}BF`, borderColor: `${accent}2E` }}
+                className="font-mono text-[0.56rem] text-accent-text border rounded-full px-2.5 py-1"
+                style={{ borderColor: `${accent}2E` }}
               >
                 {tag}
               </span>
@@ -91,8 +90,9 @@ function TypeDetailCard({ type, family }: { type: ConveyorType; family: string }
           </div>
           {page && (
             <span
-              className="inline-flex items-center gap-1.5 mt-5 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors"
-              style={{ color: hovered ? "#fff" : accent }}
+              className={`inline-flex items-center gap-1.5 mt-5 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors ${
+                hovered ? "text-text-strong" : "text-accent-text"
+              }`}
             >
               Read more about {type.shortTitle} conveyors &rarr;
             </span>
@@ -125,8 +125,9 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
   const drives = driveTechnologies.filter((d) => category.driveTitles.includes(d.title));
   return (
     <>
-      {/* Hero with background image */}
-      <section className="relative pt-[140px] pb-[80px] px-8 overflow-hidden">
+      {/* Hero with a photo background — a dark band in both themes, like the
+          homepage hero: brand tokens only, never the semantic surfaces */}
+      <section className="relative pt-[140px] pb-[80px] px-8 overflow-hidden bg-brand-navy-band">
         {category.heroImage && (
           <div className="absolute inset-0 z-0">
             <Image
@@ -137,22 +138,28 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
               priority
               sizes="100vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1a1d2b]/80 via-[#1a1d2b]/60 to-[#1a1d2b]/90" />
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-navy-band/80 via-brand-navy-band/60 to-brand-navy-band/90" />
           </div>
         )}
         <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
-            <ConveyorBreadcrumb current={category.title} />
-            <SectionLabel>{category.subtitle}</SectionLabel>
-            <SectionTitle as="h1">{category.title}</SectionTitle>
-            <SectionDesc>{category.description}</SectionDesc>
+            <ConveyorBreadcrumb current={category.title} tone="dark" />
+            <div className="font-mono text-[0.68rem] text-brand-cyan tracking-[0.15em] uppercase mb-3">
+              {category.subtitle}
+            </div>
+            <h1 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1]">
+              {category.title}
+            </h1>
+            <p className="font-sans text-[1.02rem] text-[#CBD5E1] max-w-[640px] leading-[1.7] mb-12">
+              {category.description}
+            </p>
           </AnimatedSection>
         </div>
       </section>
 
       {/* Type Detail Cards */}
-      <section className="pb-[72px] px-8">
+      <section className="py-[72px] px-8">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <div className="mb-6">
@@ -169,7 +176,7 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
           {category.video && (
             <AnimatedSection delay={0.05}>
               <div className="mt-8">
-                <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-3" style={{ color: accent }}>
+                <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase text-accent-text mb-3">
                   In motion
                 </div>
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
@@ -201,8 +208,8 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
             {drives.map((drive) => (
               <StaggerItem key={drive.title}>
-                <div className="rounded-xl p-6 bg-black/20 border border-white/[0.04] h-full">
-                  <div className="font-sans text-[1rem] font-semibold text-white mb-2">
+                <div className="rounded-xl p-6 bg-surface-card border border-border h-full">
+                  <div className="font-sans text-[1rem] font-semibold text-text-strong mb-2">
                     {drive.title}
                   </div>
                   <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] mb-3">
@@ -212,8 +219,8 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
                     {drive.highlights.map((h) => (
                       <span
                         key={h}
-                        className="font-mono text-[0.56rem] border rounded-full px-2.5 py-1"
-                        style={{ color: `${accent}BF`, borderColor: `${accent}2E` }}
+                        className="font-mono text-[0.56rem] text-accent-text border rounded-full px-2.5 py-1"
+                        style={{ borderColor: `${accent}2E` }}
                       >
                         {h}
                       </span>

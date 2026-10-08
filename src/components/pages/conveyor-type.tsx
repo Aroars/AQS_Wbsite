@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
 import { ConveyorFamilyNav } from "@/components/ui/conveyor-family-nav";
 import { RenderFigure } from "@/components/ui/render-figure";
@@ -9,10 +8,8 @@ import { VideoFigure } from "@/components/ui/video-figure";
 import { SpecTable } from "@/components/ui/spec-table";
 import { ProtectionTierTable } from "@/components/ui/protection-tier-table";
 import { ProjectCard } from "@/components/ui/project-card";
-import { CONVEYOR_ACCENT, categories, getSpotlight, spotlightHref, type ImageRef } from "@/data/conveyors";
+import { categories, getSpotlight, spotlightHref, type ImageRef } from "@/data/conveyors";
 import type { ConveyorTypePage } from "@/data/conveyor-type-pages";
-
-const accent = CONVEYOR_ACCENT;
 
 /** A photo fills its frame (3:4 when it is a portrait shot); a render sits on a light tile so it is not cropped */
 function Figure({ image, priority = false, sizes }: { image: ImageRef; priority?: boolean; sizes?: string }) {
@@ -20,7 +17,7 @@ function Figure({ image, priority = false, sizes }: { image: ImageRef; priority?
   const aspect = image.orientation === "portrait" ? "aspect-[3/4] max-h-[560px] mx-auto" : "aspect-[4/3]";
   return (
     <figure className="m-0">
-      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-white/[0.08]`}>
+      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-border`}>
         <Image src={image.src} alt={image.alt} fill priority={priority} className="object-cover" sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"} />
       </div>
       {image.caption && <figcaption className="font-sans text-[0.76rem] text-text-dim mt-2 leading-[1.5]">{image.caption}</figcaption>}
@@ -32,6 +29,9 @@ function Figure({ image, priority = false, sizes }: { image: ImageRef; priority?
  * One conveyor type, in the order an engineer reads it: what it is → where
  * it is used → how AQS builds this type → specifications → a related project.
  * FAQ, calculators, and the CTA follow from the route shell.
+ *
+ * Sections alternate between the page ground and card-surface bands; cards
+ * inside a band sit on the page ground (plan section 5e).
  */
 export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
   const category = categories.find((c) => c.slug === page.family)!;
@@ -39,9 +39,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
 
   return (
     <>
-      {/* What it is — definition beside the hero image */}
+      {/* What it is — definition beside the hero image; a text hero, so it is on the page ground */}
       <section className="relative pt-[140px] pb-[64px] px-8 overflow-hidden">
-        <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
             <ConveyorBreadcrumb trail={[{ label: category.shortTitle, href: `/solutions/conveyors/${category.slug}` }]} current={page.h1} />
@@ -49,8 +48,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
           <div className={`grid grid-cols-1 gap-10 items-center ${page.hero ? "lg:grid-cols-[1.1fr_1fr]" : ""}`}>
             <AnimatedSection>
               <SectionLabel>{category.title}</SectionLabel>
-              <h1 className="font-sans font-extrabold text-[clamp(1.9rem,3.6vw,2.8rem)] leading-[1.1] text-white mb-5">{page.h1}</h1>
-              <p className="font-sans text-[1.05rem] text-white/85 leading-[1.65] mb-4">{page.definition}</p>
+              <h1 className="font-sans font-extrabold text-[clamp(1.9rem,3.6vw,2.8rem)] leading-[1.1] text-text-strong mb-5">{page.h1}</h1>
+              <p className="font-sans text-[1.05rem] text-text-strong leading-[1.65] mb-4">{page.definition}</p>
               <div className={page.hero ? "" : "max-w-[820px]"}>
                 {page.intro.map((p) => (
                   <p key={p} className="font-sans text-[0.95rem] text-text-body leading-[1.7] mb-3">
@@ -73,8 +72,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
         </div>
       </section>
 
-      {/* Where it is used */}
-      <section className="py-[64px] px-8 bg-black/[0.06]">
+      {/* Where it is used — a card-surface band */}
+      <section className="py-[64px] px-8 bg-surface-card border-y border-border">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Where It&apos;s Used</SectionLabel>
@@ -83,8 +82,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             {page.whereUsed.map((w) => (
               <StaggerItem key={w.context}>
-                <div className="p-5 rounded-xl bg-black/20 border border-white/[0.04] h-full">
-                  <div className="font-sans text-[0.95rem] font-semibold text-white mb-1.5">{w.context}</div>
+                <div className="p-5 rounded-xl bg-surface-page border border-border h-full">
+                  <div className="font-sans text-[0.95rem] font-semibold text-text-strong mb-1.5">{w.context}</div>
                   <p className="font-sans text-[0.84rem] text-text-body leading-[1.65] m-0">{w.detail}</p>
                 </div>
               </StaggerItem>
@@ -103,8 +102,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
             {page.construction.map((c) => (
               <StaggerItem key={c.title}>
-                <div className="p-5 rounded-xl bg-[rgba(17,34,64,0.5)] border border-white/[0.06] h-full">
-                  <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-2" style={{ color: accent }}>
+                <div className="p-5 rounded-xl bg-surface-card border border-border h-full">
+                  <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase text-accent-text mb-2">
                     {c.title}
                   </div>
                   <p className="font-sans text-[0.84rem] text-text-body leading-[1.65] m-0">{c.body}</p>
@@ -129,8 +128,8 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
         </div>
       </section>
 
-      {/* Specifications */}
-      <section className="py-[64px] px-8 bg-black/[0.06]">
+      {/* Specifications — a card-surface band; the tables sit on the page ground inside it */}
+      <section className="py-[64px] px-8 bg-surface-card border-y border-border">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
             <SectionLabel>Specifications</SectionLabel>
@@ -142,10 +141,10 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
           </AnimatedSection>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 items-start">
             <AnimatedSection>
-              <SpecTable rows={page.specs} caption={`${page.h1} — as built by AQS`} />
+              <SpecTable rows={page.specs} caption={`${page.h1} — as built by AQS`} surface="page" />
             </AnimatedSection>
             <AnimatedSection delay={0.05}>
-              <ProtectionTierTable highlight={page.ipTier} />
+              <ProtectionTierTable highlight={page.ipTier} surface="page" />
             </AnimatedSection>
           </div>
         </div>

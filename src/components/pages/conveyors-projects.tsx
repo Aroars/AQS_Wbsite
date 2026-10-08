@@ -10,7 +10,6 @@ import {
   SectionTitle,
   SectionDesc,
 } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
 import { ProjectCard } from "@/components/ui/project-card";
 import { ConveyorGallery } from "@/components/ui/conveyor-gallery";
@@ -23,9 +22,8 @@ import { conveyorProjects, galleryImages } from "@/data/conveyors";
 export function ConveyorsProjectsContent() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero — text only, so it is on the page ground */}
       <section className="pt-[140px] pb-[80px] px-8 relative overflow-hidden">
-        <GlowOrb top="-100px" left="80%" size={500} color="148,163,184" />
         <div className="max-w-[1280px] mx-auto relative z-10">
           <AnimatedSection>
             <ConveyorBreadcrumb current="Projects" />

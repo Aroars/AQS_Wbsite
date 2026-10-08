@@ -8,7 +8,7 @@ import type { VideoRef } from "@/data/conveyors";
 export function VideoFigure({ video, aspect = "aspect-video", className = "" }: { video: VideoRef; aspect?: string; className?: string }) {
   return (
     <figure className={`m-0 ${className}`}>
-      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-white/[0.08] bg-black/40`}>
+      <div className={`relative ${aspect} rounded-xl overflow-hidden border border-border bg-brand-navy-band`}>
         <video
           autoPlay
           muted

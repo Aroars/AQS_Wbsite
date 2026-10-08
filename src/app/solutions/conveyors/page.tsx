@@ -25,7 +25,8 @@ export default function ConveyorsPage() {
   const schema = {"@context":"https://schema.org","@type":"Service","name":"Custom Sanitary Conveyor Systems","description":"Custom-engineered sanitary conveyors: belt, modular, MDR, chain, incline, accumulation, merge/divert, freezer, and washdown pallet systems.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Custom Conveyor Engineering","areaServed":"US","url":"https://automatedqs.com/solutions/conveyors"};
 
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <JsonLd
         data={[
           schema,
@@ -43,6 +44,6 @@ export default function ConveyorsPage() {
       <FAQSection items={conveyorFAQs} />
       <ConveyorCTA />
       <Footer />
-    </>
+    </div>
   );
 }

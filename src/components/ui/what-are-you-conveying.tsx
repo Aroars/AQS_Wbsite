@@ -8,6 +8,8 @@ import { CONVEYOR_ACCENT, categories } from "@/data/conveyors";
 import { getTypePage } from "@/data/conveyor-type-pages";
 import { conveyingItems } from "@/data/conveying";
 
+/* The conveyor accent (steel) tints and borders the active product box and
+   glows under it; all text is on the semantic tokens (plan section 3). */
 const accent = CONVEYOR_ACCENT;
 
 /**
@@ -48,13 +50,13 @@ export function WhatAreYouConveying() {
                       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActiveId(item.id); } }}
                       className="rounded-xl px-5 py-4 cursor-default transition-all duration-200 select-none"
                       style={{
-                        background: on ? `${accent}22` : "rgba(17,34,64,0.5)",
-                        border: `1px solid ${on ? accent : "rgba(255,255,255,0.08)"}`,
+                        background: on ? `${accent}22` : "var(--surface-card)",
+                        border: `1px solid ${on ? accent : "var(--border)"}`,
                         transform: on ? "translateY(-2px)" : "translateY(0)",
                         boxShadow: on ? `0 8px 24px ${accent}22` : "none",
                       }}
                     >
-                      <div className="font-sans text-[1.05rem] font-bold" style={{ color: on ? "#fff" : "rgba(255,255,255,0.85)" }}>
+                      <div className="font-sans text-[1.05rem] font-bold text-text-strong">
                         {item.label}
                       </div>
                       <div className="font-sans text-[0.74rem] text-text-dim mt-0.5">{item.hint}</div>
@@ -65,11 +67,11 @@ export function WhatAreYouConveying() {
             </ul>
 
             {/* Picks for the hovered product */}
-            <div className="rounded-xl p-6 bg-[rgba(17,34,64,0.5)] border border-white/[0.08] lg:sticky lg:top-[110px]" aria-live="polite">
-              <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-1" style={{ color: accent }}>
+            <div className="rounded-xl p-6 bg-surface-card border border-border lg:sticky lg:top-[110px]" aria-live="polite">
+              <div className="font-mono text-[0.58rem] tracking-[0.12em] uppercase text-accent-text mb-1">
                 Conveyors for
               </div>
-              <div className="font-sans text-[1.3rem] font-bold text-white mb-4">{active.label}</div>
+              <div className="font-sans text-[1.3rem] font-bold text-text-strong mb-4">{active.label}</div>
               <ul className="space-y-2 list-none p-0 m-0">
                 {active.picks.map((p) => {
                   const family = categories.find((c) => c.slug === p.family)!;
@@ -77,15 +79,15 @@ export function WhatAreYouConveying() {
                   const href = getTypePage(p.family, p.typeSlug)?.href ?? `/solutions/conveyors/${p.family}#${p.typeSlug}`;
                   return (
                     <li key={`${p.family}-${p.typeSlug}`}>
-                      <Link href={href} className="block rounded-lg px-4 py-3 no-underline border border-white/[0.08] bg-black/20 hover:border-[#94A3B8]/70 hover:bg-black/30 transition-colors group">
+                      <Link href={href} className="block rounded-lg px-4 py-3 no-underline border border-border bg-surface-page hover:border-brand-steel/70 hover:bg-surface-card-hover transition-colors group">
                         <div className="flex items-baseline gap-2 flex-wrap">
-                          <span className="font-mono text-[0.56rem] tracking-[0.1em] uppercase" style={{ color: accent }}>
+                          <span className="font-mono text-[0.56rem] tracking-[0.1em] uppercase text-accent-text">
                             {family.shortTitle}
                           </span>
-                          <span className="font-sans text-[0.95rem] font-semibold text-white group-hover:text-[#cbd5e1] transition-colors">
+                          <span className="font-sans text-[0.95rem] font-semibold text-text-strong group-hover:text-accent-text transition-colors">
                             {type.title}
                           </span>
-                          <span className="ml-auto font-mono text-[0.62rem]" style={{ color: accent }}>&rarr;</span>
+                          <span className="ml-auto font-mono text-[0.62rem] text-accent-text">&rarr;</span>
                         </div>
                         <div className="font-sans text-[0.8rem] text-text-body mt-1">{p.why}</div>
                       </Link>

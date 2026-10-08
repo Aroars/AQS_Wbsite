@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { CONVEYOR_ACCENT, categories } from "@/data/conveyors";
 
+/* The conveyor accent (steel) fills and borders the active pills; all text
+   is on the semantic tokens so it reads on both grounds. */
 const accent = CONVEYOR_ACCENT;
 
 /**
@@ -32,11 +34,12 @@ export function ConveyorFamilyNav({
             <Link
               key={cat.slug}
               href={`/solutions/conveyors/${cat.slug}`}
-              className="font-sans text-[0.8rem] font-semibold rounded-lg px-3.5 py-1.5 no-underline transition-all duration-200"
+              className={`font-sans text-[0.8rem] font-semibold rounded-lg px-3.5 py-1.5 no-underline transition-all duration-200 ${
+                active ? "text-text-strong" : "text-text-body hover:text-text-strong"
+              }`}
               style={{
-                color: active ? "#fff" : "rgba(255,255,255,0.6)",
-                background: active ? `${accent}22` : "rgba(255,255,255,0.03)",
-                border: `1px solid ${active ? accent : "rgba(255,255,255,0.1)"}`,
+                background: active ? `${accent}22` : "var(--surface-card)",
+                border: `1px solid ${active ? accent : "var(--border)"}`,
               }}
             >
               {cat.shortTitle}
@@ -57,9 +60,10 @@ export function ConveyorFamilyNav({
                 key={type.slug}
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className="font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 no-underline transition-all duration-200 hover:text-white"
+                className={`font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 no-underline transition-all duration-200 ${
+                  active ? "text-text-strong" : "text-accent-text hover:text-text-strong"
+                }`}
                 style={{
-                  color: active ? "#fff" : accent,
                   background: active ? `${accent}33` : `${accent}14`,
                   border: `1px solid ${active ? accent : `${accent}55`}`,
                 }}
