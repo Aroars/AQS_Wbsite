@@ -369,7 +369,7 @@ interface LogRow {
 }
 
 const MAX_VISIBLE_ROWS = 4;
-const GRID = "minmax(150px,1fr) 68px 76px 106px 96px 68px";
+/* Log columns live in globals.css (.pj-log-grid) so they can shrink at phone width */
 
 export function ProductJourneyAnimation() {
   const [vis, setVis] = useState(false);
@@ -709,9 +709,8 @@ export function ProductJourneyAnimation() {
       >
         {/* Header */}
         <div
-          className="grid"
+          className="grid pj-log-grid"
           style={{
-            gridTemplateColumns: GRID,
             padding: "10px 16px",
             background: `${C.cyan}08`,
             borderBottom: `1px solid ${C.navyLight}`,
@@ -739,9 +738,8 @@ export function ProductJourneyAnimation() {
             <>
               {bp && (
                 <div
-                  className="grid"
+                  className="grid pj-log-grid"
                   style={{
-                    gridTemplateColumns: GRID,
                     padding: "9px 16px",
                     borderBottom: `1px solid ${C.navyLight}33`,
                     background: bp.rejected
@@ -822,9 +820,8 @@ export function ProductJourneyAnimation() {
                 return (
                   <div
                     key={row.uid}
-                    className="grid"
+                    className="grid pj-log-grid"
                     style={{
-                      gridTemplateColumns: GRID,
                       padding: "9px 16px",
                       borderBottom: `1px solid ${C.navyLight}15`,
                       background:
@@ -878,9 +875,8 @@ export function ProductJourneyAnimation() {
               {Array.from({ length: blankCount }).map((_, i) => (
                 <div
                   key={`blank-${i}`}
-                  className="grid"
+                  className="grid pj-log-grid"
                   style={{
-                    gridTemplateColumns: GRID,
                     padding: "9px 16px",
                     borderBottom: `1px solid ${C.navyLight}08`,
                   }}
