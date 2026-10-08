@@ -40,8 +40,8 @@ function CoreFeatureCard({ icon, title, desc }: { icon: string; title: string; d
       onMouseLeave={() => setHovered(false)}
       className="rounded-xl px-4 py-3 h-full transition-all duration-300"
       style={{
-        background: hovered ? `${accent}0C` : "rgba(17,34,64,0.5)",
-        border: `1px solid ${hovered ? accent : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? `${accent}0C` : "var(--surface-card)",
+        border: `1px solid ${hovered ? accent : "var(--border)"}`,
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
       }}
     >
@@ -49,7 +49,7 @@ function CoreFeatureCard({ icon, title, desc }: { icon: string; title: string; d
         <div className="text-[1rem] leading-none">{icon}</div>
         <div
           className="font-sans text-[0.88rem] font-bold"
-          style={{ color: hovered ? accent : "#fff" }}
+          style={{ color: hovered ? "var(--accent-text)" : "var(--text-strong)" }}
         >
           {title}
         </div>
@@ -105,18 +105,15 @@ function ModuleCarousel() {
                 className="block h-full no-underline"
               >
                 <div
-                  className="relative overflow-hidden flex flex-col h-full transition-colors duration-300"
+                  className="relative overflow-hidden flex flex-col h-full transition-colors duration-300 bg-surface-page hover:bg-surface-card-hover"
                   style={{
-                    background: isHovered
-                      ? "rgba(0,0,0,0.50)"
-                      : "rgba(0,0,0,0.32)",
-                    border: `1px solid ${isHovered ? accent + "50" : "rgba(0,0,0,0.25)"}`,
+                    border: `1px solid ${isHovered ? accent + "80" : "var(--border)"}`,
                     borderRadius: 14,
                     padding: "28px 22px",
                     minHeight: 340,
                     boxShadow: isHovered
-                      ? `0 20px 40px rgba(0,0,0,0.4), 0 0 30px ${accent}15`
-                      : "0 4px 12px rgba(0,0,0,0.2)",
+                      ? `0 20px 40px rgba(10,22,40,0.14), 0 0 30px ${accent}15`
+                      : "0 4px 12px rgba(10,22,40,0.06)",
                   }}
                 >
                   {/* Hover glow */}
@@ -127,22 +124,19 @@ function ModuleCarousel() {
                       background: `radial-gradient(circle at 50% 0%, ${accent}, transparent 70%)`,
                     }}
                   />
-                  <div className="text-[1.8rem] mb-2.5 relative z-10">
+                  <div className="text-[1.8rem] mb-2.5 relative z-10 text-accent-text">
                     {m.icon}
                   </div>
-                  <div className="font-sans text-[1.05rem] font-bold text-white mb-1 relative z-10">
+                  <div className="font-sans text-[1.05rem] font-bold text-text-strong mb-1 relative z-10">
                     {m.title}
                   </div>
-                  <div
-                    className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2 relative z-10"
-                    style={{ color: accent }}
-                  >
+                  <div className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2 relative z-10 text-accent-text">
                     {m.subtitle}
                   </div>
                   {m.badge && (
                     <div
-                      className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3 relative z-10"
-                      style={{ background: "rgba(0,194,255,0.1)", border: "1px solid rgba(0,194,255,0.2)", color: "#00c2ff" }}
+                      className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3 relative z-10 text-accent-text"
+                      style={{ background: `${accent}1A`, border: `1px solid ${accent}33` }}
                     >
                       {m.badge}
                     </div>
@@ -153,20 +147,14 @@ function ModuleCarousel() {
                         key={fi}
                         className="font-sans text-[0.78rem] text-text-body leading-[1.6] pl-3 relative mb-0.5"
                       >
-                        <span
-                          className="absolute left-0 text-[0.55rem] top-[4px]"
-                          style={{ color: accent }}
-                        >
+                        <span className="absolute left-0 text-[0.55rem] top-[4px] text-accent-text">
                           &#x25B8;
                         </span>
                         {f}
                       </div>
                     ))}
                   </div>
-                  <div
-                    className="font-sans text-[0.75rem] font-semibold mt-3 relative z-10"
-                    style={{ color: accent }}
-                  >
+                  <div className="font-sans text-[0.75rem] font-semibold mt-3 relative z-10 text-accent-text">
                     Learn more &rarr;
                   </div>
                 </div>
@@ -185,28 +173,23 @@ function ModuleCarousel() {
             className="block no-underline"
           >
             <div
-              className="relative overflow-hidden flex flex-col h-full"
+              className="relative overflow-hidden flex flex-col h-full bg-surface-page border border-border"
               style={{
-                background: "rgba(0,0,0,0.28)",
-                border: "1px solid rgba(0,0,0,0.25)",
                 borderRadius: 14,
                 padding: "28px 22px",
               }}
             >
-              <div className="text-[1.8rem] mb-2.5">{m.icon}</div>
-              <div className="font-sans text-[1.05rem] font-bold text-white mb-1">
+              <div className="text-[1.8rem] mb-2.5 text-accent-text">{m.icon}</div>
+              <div className="font-sans text-[1.05rem] font-bold text-text-strong mb-1">
                 {m.title}
               </div>
-              <div
-                className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2"
-                style={{ color: accent }}
-              >
+              <div className="font-mono text-[0.55rem] tracking-[0.1em] uppercase mb-2 text-accent-text">
                 {m.subtitle}
               </div>
               {m.badge && (
                 <div
-                  className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3"
-                  style={{ background: "rgba(0,194,255,0.1)", border: "1px solid rgba(0,194,255,0.2)", color: "#00c2ff" }}
+                  className="inline-block font-mono text-[0.5rem] tracking-[0.08em] uppercase px-2 py-0.5 rounded-full mb-3 text-accent-text"
+                  style={{ background: `${accent}1A`, border: `1px solid ${accent}33` }}
                 >
                   {m.badge}
                 </div>
@@ -217,20 +200,14 @@ function ModuleCarousel() {
                     key={fi}
                     className="font-sans text-[0.8rem] text-text-body leading-[1.6] pl-3 relative mb-0.5"
                   >
-                    <span
-                      className="absolute left-0 text-[0.55rem] top-[4px]"
-                      style={{ color: accent }}
-                    >
+                    <span className="absolute left-0 text-[0.55rem] top-[4px] text-accent-text">
                       &#x25B8;
                     </span>
                     {f}
                   </div>
                 ))}
               </div>
-              <div
-                className="font-sans text-[0.75rem] font-semibold mt-3"
-                style={{ color: accent }}
-              >
+              <div className="font-sans text-[0.75rem] font-semibold mt-3 text-accent-text">
                 Learn more &rarr;
               </div>
             </div>
@@ -251,7 +228,8 @@ export function VeriPakHubContent() {
       {/* ══════════════════════════════════════════
           SECTION 1: HERO
           ══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ height: "88vh", minHeight: 540, maxHeight: "88vh" }}>
+      {/* Video hero: a dark band in both themes on brand tokens only, like the homepage hero */}
+      <section className="relative overflow-hidden bg-brand-navy-band" style={{ height: "88vh", minHeight: 540, maxHeight: "88vh" }}>
         {/* Background video */}
         <video
           autoPlay
@@ -265,7 +243,7 @@ export function VeriPakHubContent() {
         </video>
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/[0.72]" />
+        <div className="absolute inset-0 bg-brand-navy-band/80" />
 
         {/* Grid texture */}
         <div
@@ -290,10 +268,10 @@ export function VeriPakHubContent() {
                   }}
                 >
                   <div
-                    className="w-1.5 h-1.5 rounded-full bg-accent-primary"
+                    className="w-1.5 h-1.5 rounded-full bg-brand-cyan"
                     style={{ boxShadow: `0 0 8px ${accent}` }}
                   />
-                  <span className="font-mono text-[0.65rem] text-accent-primary tracking-[0.1em] uppercase">
+                  <span className="font-mono text-[0.65rem] text-brand-cyan tracking-[0.1em] uppercase">
                     VeriPak SCADA Platform
                   </span>
                 </div>
@@ -302,13 +280,13 @@ export function VeriPakHubContent() {
                 <h1 className="font-sans font-extrabold text-[clamp(32px,5vw,56px)] leading-[1.1] text-white mb-6">
                   Stop Proving Quality
                   <br />
-                  <span className="text-accent-primary">After the Fact</span>
+                  <span className="text-brand-cyan">After the Fact</span>
                 </h1>
 
                 {/* Subheadline */}
-                <p className="font-sans text-[clamp(16px,2vw,20px)] text-text-body leading-[1.65] mb-8 max-w-[600px]">
+                <p className="font-sans text-[clamp(16px,2vw,20px)] text-[#CBD5E1] leading-[1.65] mb-8 max-w-[600px]">
                   Your plant runs quality checks on every package. But when an
-                  auditor or a customer asks you to prove a <em className="text-white not-italic font-medium">specific</em> package
+                  auditor or a customer asks you to prove a <em className="text-text-strong not-italic font-medium">specific</em> package
                   passed &mdash; you can&apos;t. VeriPak changes that.
                 </p>
 
@@ -316,14 +294,14 @@ export function VeriPakHubContent() {
                 <div className="flex gap-4 flex-wrap">
                   <a
                     href="#product-journey"
-                    className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
+                    className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-brand-cyan text-brand-navy-deep transition-all duration-200 hover:-translate-y-0.5"
                     style={{ boxShadow: `0 4px 20px ${accent}44` }}
                   >
                     See How It Works &rarr;
                   </a>
                   <Link
                     href="/contact"
-                    className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-white/20 text-text-body hover:border-accent-primary hover:text-white transition-all duration-200"
+                    className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-brand-cyan/40 text-brand-cyan hover:border-brand-cyan/70 transition-all duration-200"
                   >
                     Request a Quote
                   </Link>
@@ -339,18 +317,17 @@ export function VeriPakHubContent() {
           ══════════════════════════════════════════ */}
       <section
         id="problem"
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
+        className="py-[100px] px-6 bg-surface-card border-y border-border"
       >
         <div className="max-w-[900px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+            <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.2em] uppercase mb-4">
               The Status Quo
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-7">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong max-w-[700px] mb-7">
               Your QC Devices Work.
               <br />
-              <span className="text-accent-red">
+              <span className="text-accent-text">
                 They Just Don&apos;t Talk.
               </span>
             </h2>
@@ -365,7 +342,7 @@ export function VeriPakHubContent() {
                 The problem isn&apos;t that bad product is getting through. Your
                 equipment catches it.
               </p>
-              <p className="font-sans text-[16px] leading-[1.75] text-white font-medium max-w-[700px]">
+              <p className="font-sans text-[16px] leading-[1.75] text-text-strong font-medium max-w-[700px]">
                 The problem is what happens next.
               </p>
               <p className="font-sans text-[16px] leading-[1.75] text-text-body max-w-[700px]">
@@ -382,7 +359,7 @@ export function VeriPakHubContent() {
                 when you piece it together, you still can&apos;t tie the data to a
                 specific package.
               </p>
-              <p className="font-sans text-[16px] leading-[1.75] text-white font-semibold max-w-[700px]">
+              <p className="font-sans text-[16px] leading-[1.75] text-text-strong font-semibold max-w-[700px]">
                 That&apos;s the gap VeriPak closes.
               </p>
             </div>
@@ -393,9 +370,8 @@ export function VeriPakHubContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Status Quo */}
               <div
-                className="rounded-xl p-7 relative overflow-hidden"
+                className="rounded-xl p-7 relative overflow-hidden bg-surface-page"
                 style={{
-                  background: "#0B1A2E",
                   border: "1px solid rgba(255,102,102,0.2)",
                 }}
               >
@@ -406,7 +382,7 @@ export function VeriPakHubContent() {
                       "linear-gradient(90deg, #ff6666, #ff666644)",
                   }}
                 />
-                <div className="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-accent-red mb-4">
+                <div className="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-text-dim mb-4">
                   Status Quo
                 </div>
                 <div className="flex gap-2.5 mb-4 flex-wrap">
@@ -415,11 +391,11 @@ export function VeriPakHubContent() {
                       key={t}
                       className="w-11 h-11 rounded-lg flex items-center justify-center"
                       style={{
-                        background: "rgba(17,34,64,0.5)",
-                        border: "1px solid rgba(136,146,176,0.2)",
+                        background: "var(--surface-card)",
+                        border: "1px solid var(--border)",
                       }}
                     >
-                      <DeviceIcon type={t} size={22} color="#8892B0" />
+                      <DeviceIcon type={t} size={22} color="var(--text-dim)" />
                     </div>
                   ))}
                 </div>
@@ -433,16 +409,15 @@ export function VeriPakHubContent() {
                     key={i}
                     className="font-sans text-[13px] text-text-dim py-1 flex items-center gap-2"
                   >
-                    <span className="text-accent-red text-sm">&times;</span> {t}
+                    <span className="text-text-dim text-sm">&times;</span> {t}
                   </div>
                 ))}
               </div>
 
               {/* With VeriPak */}
               <div
-                className="rounded-xl p-7 relative overflow-hidden"
+                className="rounded-xl p-7 relative overflow-hidden bg-surface-page"
                 style={{
-                  background: "#0B1A2E",
                   border: `1px solid ${accent}33`,
                 }}
               >
@@ -452,7 +427,7 @@ export function VeriPakHubContent() {
                     background: `linear-gradient(90deg, ${accent}, ${accent}44)`,
                   }}
                 />
-                <div className="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-accent-primary mb-4">
+                <div className="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-accent-text mb-4">
                   With VeriPak
                 </div>
                 <div className="flex gap-2.5 mb-4 flex-wrap items-center">
@@ -468,7 +443,7 @@ export function VeriPakHubContent() {
                       <DeviceIcon type={t} size={22} color={accent} />
                     </div>
                   ))}
-                  <span className="text-accent-primary text-lg">&rarr;</span>
+                  <span className="text-accent-text text-lg">&rarr;</span>
                   <div
                     className="w-11 h-11 rounded-lg flex items-center justify-center"
                     style={{
@@ -490,7 +465,7 @@ export function VeriPakHubContent() {
                     key={i}
                     className="font-sans text-[13px] text-text-body py-1 flex items-center gap-2"
                   >
-                    <span className="text-accent-green text-sm">&#x2713;</span>{" "}
+                    <span className="text-accent-text text-sm">&#x2713;</span>{" "}
                     {t}
                   </div>
                 ))}
@@ -503,16 +478,16 @@ export function VeriPakHubContent() {
       {/* ══════════════════════════════════════════
           SECTION 3: THE PRODUCT JOURNEY
           ══════════════════════════════════════════ */}
-      <section id="product-journey" className="py-[100px] px-6 border-t border-border-default">
+      <section id="product-journey" className="py-[100px] px-6">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+            <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.2em] uppercase mb-4">
               The VeriPak Difference
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white max-w-[700px] mb-4">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong max-w-[700px] mb-4">
               One Package. One Identity.
               <br />
-              <span className="text-accent-primary">Every Inspection Recorded.</span>
+              <span className="text-accent-text">Every Inspection Recorded.</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[700px] mb-10">
               VeriPak doesn&apos;t just monitor your inspection equipment &mdash; it assigns
@@ -536,8 +511,8 @@ export function VeriPakHubContent() {
 
             {/* Right: Product Journey animation + result callout */}
             <AnimatedSection delay={0.2}>
-              <div className="rounded-2xl overflow-hidden border border-border-default p-4 bg-black/20">
-                <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-2">
+              <div className="rounded-2xl overflow-hidden border border-border p-4 bg-surface-card">
+                <div className="font-mono text-[0.58rem] text-accent-text tracking-[0.1em] uppercase mb-2">
                   QC Integration &mdash; Product Journey
                 </div>
                 <ProductJourneyAnimation />
@@ -552,7 +527,7 @@ export function VeriPakHubContent() {
                 }}
               >
                 <div className="font-sans text-[14px] text-text-body leading-[1.75]">
-                  <span className="font-bold text-white">The result:</span>{" "}
+                  <span className="font-bold text-text-strong">The result:</span>{" "}
                   Every package that leaves your facility carries a verifiable data
                   trail &mdash; weight, metal detection, visual image, leak integrity,
                   operator, timestamp, SKU. If a customer ever questions a specific
@@ -568,27 +543,26 @@ export function VeriPakHubContent() {
           SECTION 4: THREE PROBLEMS VERIPAK SOLVES
           ══════════════════════════════════════════ */}
       <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
+        className="py-[100px] px-6 bg-surface-card border-y border-border"
       >
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+            <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.2em] uppercase mb-4">
               Why It Matters
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-12">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong mb-12">
               Built for the Three Moments
               <br />
-              <span className="text-accent-primary">That Cost You Money</span>
+              <span className="text-accent-text">That Cost You Money</span>
             </h2>
           </AnimatedSection>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 1. The Audit */}
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
-                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-primary mb-2">01</div>
-                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Audit</h3>
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-text mb-2">01</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-text-strong mb-3">The Audit</h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
                   An auditor asks your QC team to prove compliance for a specific
                   production run. Without VeriPak, this is a two-week scramble
@@ -596,10 +570,7 @@ export function VeriPakHubContent() {
                   it&apos;s one screen, one query, one report &mdash; every package,
                   every inspection, every operator, timestamped and exportable.
                 </p>
-                <div
-                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
-                  style={{ color: accent }}
-                >
+                <div className="font-mono text-[0.68rem] tracking-[0.08em] uppercase text-accent-text">
                   Audit response: weeks &rarr; same day
                 </div>
               </div>
@@ -607,20 +578,17 @@ export function VeriPakHubContent() {
 
             {/* 2. The Chargeback */}
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
-                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-primary mb-2">02</div>
-                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Chargeback</h3>
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: accent }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-text mb-2">02</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-text-strong mb-3">The Chargeback</h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
                   A customer claims a case was underweight, a package was damaged,
                   or a seal failed. Today, you can prove your equipment was running.
-                  But you can&apos;t prove <em className="text-white not-italic font-medium">that specific package</em> was
+                  But you can&apos;t prove <em className="text-text-strong not-italic font-medium">that specific package</em> was
                   in spec. VeriPak can. Pull up the unique product record &mdash;
                   the weight reading, the metal detection pass, the package image.
                 </p>
-                <div
-                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
-                  style={{ color: accent }}
-                >
+                <div className="font-mono text-[0.68rem] tracking-[0.08em] uppercase text-accent-text">
                   Prove conformance per package
                 </div>
               </div>
@@ -628,9 +596,9 @@ export function VeriPakHubContent() {
 
             {/* 3. The Discovery */}
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: "#f5a623" }}>
-                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-warning mb-2">03</div>
-                <h3 className="font-sans text-[1.1rem] font-bold text-white mb-3">The Discovery</h3>
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full" style={{ borderTopWidth: 3, borderTopColor: "#F5A623" }}>
+                <div className="font-mono text-[2rem] font-extrabold opacity-15 text-accent-text mb-2">03</div>
+                <h3 className="font-sans text-[1.1rem] font-bold text-text-strong mb-3">The Discovery</h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65] mb-5">
                   Your QC manager realizes Monday morning that Friday&apos;s second
                   shift ran 10% overweight. That&apos;s margin you already gave away.
@@ -638,10 +606,7 @@ export function VeriPakHubContent() {
                   catch drift as it happens &mdash; visual alerts on the floor, then
                   email/text, then RACI-based routing if nobody responds.
                 </p>
-                <div
-                  className="font-mono text-[0.68rem] tracking-[0.08em] uppercase"
-                  style={{ color: "#f5a623" }}
-                >
+                <div className="font-mono text-[0.68rem] tracking-[0.08em] uppercase text-accent-text">
                   Real-time alarm escalation
                 </div>
               </div>
@@ -653,15 +618,15 @@ export function VeriPakHubContent() {
       {/* ══════════════════════════════════════════
           SECTION 5: TECHNICAL ARCHITECTURE
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section className="py-[100px] px-6">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+            <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.2em] uppercase mb-4">
               Under the Hood
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,44px)] leading-[1.15] text-text-strong mb-5">
               Standalone SCADA.{" "}
-              <span className="text-accent-primary">No Middleware. No IT Headaches.</span>
+              <span className="text-accent-text">No Middleware. No IT Headaches.</span>
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.75] max-w-[720px] mb-12">
               VeriPak runs on its own Allen-Bradley CompactLogix PLC with a 12-inch
@@ -674,8 +639,8 @@ export function VeriPakHubContent() {
           {/* Three architecture points */}
           <AnimatedSection delay={0.1}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-              <div className="bg-bg-card border border-border-default rounded-xl p-7">
-                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+              <div className="bg-surface-card border border-border rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-text-strong mb-2">
                   Connects to What You Already Have
                 </h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
@@ -684,8 +649,8 @@ export function VeriPakHubContent() {
                   You don&apos;t rip and replace. You connect and centralize.
                 </p>
               </div>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7">
-                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+              <div className="bg-surface-card border border-border rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-text-strong mb-2">
                   Dual-Network Security
                 </h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
@@ -694,8 +659,8 @@ export function VeriPakHubContent() {
                   firewall. No attack surface created.
                 </p>
               </div>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7">
-                <h3 className="font-sans text-[1rem] font-bold text-white mb-2">
+              <div className="bg-surface-card border border-border rounded-xl p-7">
+                <h3 className="font-sans text-[1rem] font-bold text-text-strong mb-2">
                   Grows With Your Line
                 </h3>
                 <p className="font-sans text-[0.85rem] text-text-body leading-[1.65]">
@@ -712,13 +677,9 @@ export function VeriPakHubContent() {
             <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]">
               {/* Machine Network */}
               <div
-                className="rounded-xl md:rounded-r-none p-7"
-                style={{
-                  background: "rgba(17,34,64,0.5)",
-                  border: "1px solid rgba(26,48,85,1)",
-                }}
+                className="rounded-xl md:rounded-r-none p-7 bg-surface-card border border-border"
               >
-                <div className="font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-red mb-4 flex items-center gap-1.5">
+                <div className="font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-text mb-4 flex items-center gap-1.5">
                   <span>&#x1F512;</span> Machine Network (Isolated)
                 </div>
                 {machineDevices.map((d, i) => (
@@ -726,7 +687,7 @@ export function VeriPakHubContent() {
                     key={i}
                     className="font-sans text-[13px] text-text-body py-1 flex items-center gap-2"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-green" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand-green" />
                     {d}
                   </div>
                 ))}
@@ -741,7 +702,7 @@ export function VeriPakHubContent() {
                 }}
               >
                 <DeviceIcon type="veripak" size={36} color={accent} />
-                <div className="font-mono text-[11px] font-bold text-accent-primary text-center tracking-[0.08em]">
+                <div className="font-mono text-[11px] font-bold text-accent-text text-center tracking-[0.08em]">
                   VeriPak HMI
                 </div>
                 <div className="font-sans text-[11px] text-text-body text-center leading-[1.4]">
@@ -764,13 +725,9 @@ export function VeriPakHubContent() {
 
               {/* User Network */}
               <div
-                className="rounded-xl md:rounded-l-none p-7"
-                style={{
-                  background: "rgba(17,34,64,0.5)",
-                  border: "1px solid rgba(26,48,85,1)",
-                }}
+                className="rounded-xl md:rounded-l-none p-7 bg-surface-card border border-border"
               >
-                <div className="font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-green mb-4 flex items-center gap-1.5">
+                <div className="font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-text mb-4 flex items-center gap-1.5">
                   <span>&#x1F310;</span> User Network (Reporting)
                 </div>
                 {userServices.map((d, i) => (
@@ -778,7 +735,7 @@ export function VeriPakHubContent() {
                     key={i}
                     className="font-sans text-[13px] text-text-body py-1 flex items-center gap-2"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-primary" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand-cyan" />
                     {d}
                   </div>
                 ))}
@@ -793,7 +750,7 @@ export function VeriPakHubContent() {
                 border: "1px solid rgba(0,212,170,0.15)",
               }}
             >
-              <span className="text-accent-green text-lg">&#x2713;</span>
+              <span className="text-accent-text text-lg">&#x2713;</span>
               <span className="font-sans text-[14px] text-text-body">
                 IT departments approve VeriPak because it provides visibility
                 without creating attack surface.
@@ -804,10 +761,10 @@ export function VeriPakHubContent() {
           {/* Technical specs grid */}
           <AnimatedSection delay={0.2}>
             <div className="mt-14">
-              <h3 className="font-sans text-[1.1rem] font-bold text-white mb-6">
+              <h3 className="font-sans text-[1.1rem] font-bold text-text-strong mb-6">
                 Technical Specifications
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-border-default rounded-xl overflow-hidden">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 border border-border rounded-xl overflow-hidden">
                 {[
                   { label: "PLC", value: "Allen-Bradley CompactLogix with expandable I/O" },
                   { label: "HMI", value: "Allen-Bradley Optix 12\u201D color touchscreen" },
@@ -821,10 +778,9 @@ export function VeriPakHubContent() {
                 ].map((spec, i) => (
                   <div
                     key={i}
-                    className="p-4 border-b border-r border-border-default last:border-b-0"
-                    style={{ background: "rgba(17,34,64,0.3)" }}
+                    className="p-4 border-b border-r border-border last:border-b-0 bg-surface-card"
                   >
-                    <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-1">
+                    <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text mb-1">
                       {spec.label}
                     </div>
                     <div className="font-sans text-[0.85rem] text-text-body leading-[1.5]">
@@ -842,23 +798,22 @@ export function VeriPakHubContent() {
           SECTION 6: WHO VERIPAK IS FOR
           ══════════════════════════════════════════ */}
       <section
-        className="py-[100px] px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
+        className="py-[100px] px-6 bg-surface-card border-y border-border"
       >
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
-            <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.2em] uppercase mb-4">
+            <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.2em] uppercase mb-4">
               Built for Your Role
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-white mb-10">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,3.5vw,40px)] leading-[1.15] text-text-strong mb-10">
               Who VeriPak Is For
             </h2>
           </AnimatedSection>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
-                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text mb-3">
                   QC Manager / Plant Engineer
                 </div>
                 <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -872,8 +827,8 @@ export function VeriPakHubContent() {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
-                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text mb-3">
                   VP of Operations / Plant Director
                 </div>
                 <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -887,8 +842,8 @@ export function VeriPakHubContent() {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="bg-bg-card border border-border-default rounded-xl p-7 h-full">
-                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-primary mb-3">
+              <div className="bg-surface-page border border-border rounded-xl p-7 h-full">
+                <div className="font-mono text-[0.62rem] tracking-[0.1em] uppercase text-accent-text mb-3">
                   Multi-Facility Evaluator
                 </div>
                 <p className="font-sans text-[0.88rem] text-text-body leading-[1.65]">
@@ -906,13 +861,13 @@ export function VeriPakHubContent() {
       {/* ══════════════════════════════════════════
           SHOWCASE VIDEO
           ══════════════════════════════════════════ */}
-      <section className="py-[72px] px-6 border-t border-border-default">
+      <section className="py-[72px] px-6">
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection delay={0.05}>
-            <div className="font-mono text-[0.58rem] text-accent-primary tracking-[0.1em] uppercase mb-3">
+            <div className="font-mono text-[0.58rem] text-accent-text tracking-[0.1em] uppercase mb-3">
               VeriPak In Action
             </div>
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border-default">
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border">
               <video
                 controls
                 preload="metadata"
@@ -930,8 +885,7 @@ export function VeriPakHubContent() {
           MODULE CAROUSEL
           ══════════════════════════════════════════ */}
       <section
-        className="py-[72px] px-8 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
+        className="py-[72px] px-8 bg-surface-card border-y border-border"
       >
         <div className="max-w-[1280px] mx-auto">
           <AnimatedSection>
@@ -954,14 +908,13 @@ export function VeriPakHubContent() {
           STATS
           ══════════════════════════════════════════ */}
       <section
-        className="py-20 px-6 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.35)" }}
+        className="py-20 px-6 bg-surface-card border-b border-border"
       >
         <StaggerContainer className="max-w-[900px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6">
           {hubStats.map((s, i) => (
             <StaggerItem key={i}>
               <div className="text-center">
-                <div className="font-mono font-bold text-[clamp(28px,4vw,42px)] text-accent-primary">
+                <div className="font-mono font-bold text-[clamp(28px,4vw,42px)] text-accent-text">
                   {s.value}
                 </div>
                 <div className="font-sans text-[13px] text-text-dim mt-1.5">
@@ -976,10 +929,10 @@ export function VeriPakHubContent() {
       {/* ══════════════════════════════════════════
           CTA — Page-specific
           ══════════════════════════════════════════ */}
-      <section className="py-[100px] px-6 border-t border-border-default">
+      <section className="py-[100px] px-6">
         <div className="max-w-[700px] mx-auto text-center">
           <AnimatedSection>
-            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-white mb-5">
+            <h2 className="font-sans font-extrabold text-[clamp(26px,4vw,40px)] leading-[1.15] text-text-strong mb-5">
               See What Verifiable Quality Data Looks Like
             </h2>
             <p className="font-sans text-[16px] text-text-body leading-[1.7] mb-8">
@@ -990,7 +943,7 @@ export function VeriPakHubContent() {
             <div className="flex justify-center gap-4 flex-wrap">
               <Link
                 href="/contact"
-                className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-accent-primary text-[#0B1A2E] transition-all duration-200 hover:-translate-y-0.5"
+                className="font-sans font-bold text-[15px] px-8 py-3.5 rounded-lg bg-brand-cyan text-brand-navy-deep transition-all duration-200 hover:-translate-y-0.5"
                 style={{ boxShadow: `0 4px 20px ${accent}44` }}
               >
                 Start a Project Review &rarr;

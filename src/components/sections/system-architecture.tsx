@@ -47,9 +47,10 @@ const ACCENT_COLORS: Record<ProductSlug, string> = {
   intellipak: "#f5a623",
 };
 
-const NEUTRAL_COLOR = "#8892B0";
+/* Non-AQS stages use the brand steel; reject keeps its warning red (fills and icon glyphs only) */
+const NEUTRAL_COLOR = "#94A3B8";
 const REJECT_COLOR = "#F87171";
-const GAPPING_COLOR = "#A8B2D1";
+const GAPPING_COLOR = "#94A3B8";
 
 const SLUG_TO_ROUTE: Record<ProductSlug, string> = {
   veripak: "/solutions/veripak",
@@ -871,11 +872,12 @@ function ConnectingArrow({
         y1="12"
         x2="32"
         y2="12"
-        stroke="rgba(255,255,255,0.2)"
+        stroke="var(--text-dim)"
+        strokeOpacity="0.35"
         strokeWidth="1.5"
         strokeDasharray="3 3"
       />
-      <polygon points="32,8 38,12 32,16" fill="rgba(255,255,255,0.25)" />
+      <polygon points="32,8 38,12 32,16" fill="var(--text-dim)" fillOpacity="0.4" />
       <circle cx={dotX} cy="12" r="2.5" fill={color} opacity="0.9">
         <animate
           attributeName="opacity"
@@ -912,7 +914,7 @@ function StageCard({
     ? accentColor
     : isActive
       ? stageColor
-      : "rgba(0,0,0,0.25)";
+      : "var(--border)";
 
   const card = (
     <div
@@ -930,10 +932,9 @@ function StageCard({
       {/* YOU ARE HERE badge */}
       {isCurrentProduct && (
         <div
-          className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[0.58rem] tracking-[0.12em] uppercase px-2 py-0.5 rounded-full"
+          className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[0.58rem] tracking-[0.12em] uppercase px-2 py-0.5 rounded-full text-accent-text"
           style={{
             backgroundColor: `${accentColor}22`,
-            color: accentColor,
             border: `1px solid ${accentColor}55`,
           }}
         >
@@ -943,7 +944,7 @@ function StageCard({
 
       {/* Card body */}
       <div
-        className="w-full rounded-xl p-3 transition-all duration-300 bg-black/30 group-hover:bg-black/50"
+        className="w-full rounded-xl p-3 transition-all duration-300 bg-surface-page group-hover:bg-surface-card-hover"
         style={{
           border: `1.5px solid ${borderColor}`,
           boxShadow: isCurrentProduct
@@ -964,7 +965,7 @@ function StageCard({
         {/* Label */}
         <div
           className="font-sans text-[0.72rem] font-semibold leading-tight mb-0.5"
-          style={{ color: isAQS || stage.color ? "#fff" : "rgba(255,255,255,0.6)" }}
+          style={{ color: isAQS || stage.color ? "var(--text-strong)" : "var(--text-dim)" }}
         >
           {stage.label}
         </div>
@@ -1043,13 +1044,10 @@ export function SystemArchitecture({
         <AnimatedSection>
           {/* Section header */}
           <div className="mb-10">
-            <div
-              className="font-mono text-[0.68rem] tracking-[0.15em] uppercase mb-3"
-              style={{ color: currentAccent }}
-            >
+            <div className="font-mono text-[0.68rem] tracking-[0.15em] uppercase mb-3 text-accent-text">
               System Architecture
             </div>
-            <h2 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1]">
+            <h2 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-text-strong mb-4 leading-[1.1]">
               Where It Fits in the Line
             </h2>
             <p className="font-sans text-[1.02rem] text-text-body max-w-[640px] leading-[1.7]">
@@ -1066,13 +1064,14 @@ export function SystemArchitecture({
                 <button
                   key={config.id}
                   onClick={() => handleConfigChange(idx)}
-                  className="rounded-lg px-4 py-2 text-[0.78rem] font-medium transition-all duration-200 cursor-pointer"
+                  className={`rounded-lg px-4 py-2 text-[0.78rem] font-medium transition-all duration-200 cursor-pointer ${
+                    isActive ? "text-accent-text" : "text-text-body hover:text-text-strong"
+                  }`}
                   style={{
                     backgroundColor: isActive
                       ? `${currentAccent}18`
                       : "transparent",
-                    border: `1px solid ${isActive ? currentAccent : "rgba(0,0,0,0.25)"}`,
-                    color: isActive ? currentAccent : "rgba(255,255,255,0.55)",
+                    border: `1px solid ${isActive ? currentAccent : "var(--border)"}`,
                   }}
                 >
                   {config.name}
@@ -1087,7 +1086,7 @@ export function SystemArchitecture({
           </p>
 
           {/* Production line flow — centered */}
-          <div className="bg-black/30 border border-[rgba(0,0,0,0.25)] rounded-xl p-6 md:p-8 overflow-x-auto">
+          <div className="bg-surface-card border border-border rounded-xl p-6 md:p-8 overflow-x-auto">
             <div className="flex items-start justify-center gap-0 min-w-max pt-8 pb-4 px-2">
               {activeConfig.stages.map((stage, idx) => {
                 const isCurrentStage = stage.productSlug === currentProduct;
@@ -1119,15 +1118,15 @@ export function SystemArchitecture({
             </div>
 
             {/* Flow direction label */}
-            <div className="flex items-center justify-center gap-2 mt-4 opacity-30">
-              <div className="h-px w-12 bg-white/20" />
-              <span className="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-white/30">
+            <div className="flex items-center justify-center gap-2 mt-4 opacity-60">
+              <div className="h-px w-12 bg-text-dim" />
+              <span className="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-text-dim">
                 Product Flow Direction
               </span>
               <svg width="16" height="8" viewBox="0 0 16 8" fill="none">
                 <path
                   d="M0 4H14M14 4L10 0.5M14 4L10 7.5"
-                  stroke="rgba(255,255,255,0.2)"
+                  stroke="var(--text-dim)"
                   strokeWidth="1"
                 />
               </svg>
@@ -1143,7 +1142,7 @@ export function SystemArchitecture({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-4 rounded-lg p-4 bg-black/50"
+                className="mt-4 rounded-lg p-4 bg-surface-card"
                 style={{
                   border: `1px solid ${getStageColor(activeConfig.stages[activeStageIndex])}55`,
                 }}
@@ -1160,7 +1159,7 @@ export function SystemArchitecture({
                     {activeConfig.stages[activeStageIndex].icon}
                   </span>
                   <div>
-                    <div className="font-sans text-[0.88rem] font-semibold text-white mb-1">
+                    <div className="font-sans text-[0.88rem] font-semibold text-text-strong mb-1">
                       {activeConfig.stages[activeStageIndex].label}
                       <span className="font-mono text-[0.58rem] tracking-[0.1em] uppercase ml-2 text-text-dim">
                         {activeConfig.stages[activeStageIndex].subtitle}
@@ -1179,12 +1178,7 @@ export function SystemArchitecture({
                                 .productSlug!
                             ]
                           }
-                          className="inline-flex items-center gap-1 mt-2 font-mono text-[0.68rem] tracking-[0.1em] uppercase no-underline transition-opacity hover:opacity-80"
-                          style={{
-                            color: getStageColor(
-                              activeConfig.stages[activeStageIndex],
-                            ),
-                          }}
+                          className="inline-flex items-center gap-1 mt-2 font-mono text-[0.68rem] tracking-[0.1em] uppercase no-underline transition-opacity hover:opacity-80 text-accent-text"
                         >
                           Learn more
                           <svg

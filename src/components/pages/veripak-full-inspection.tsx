@@ -10,7 +10,6 @@ import {
   SectionTitle,
   SectionDesc,
 } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { VeriPakBreadcrumb } from "@/components/ui/veripak-breadcrumb";
 import {
   VERIPAK_ACCENT,
@@ -24,7 +23,6 @@ const accent = VERIPAK_ACCENT;
 export function VeriPakFullInspectionContent() {
   return (
     <section className="pt-[140px] pb-[100px] px-8 relative">
-      <GlowOrb top="-100px" left="60%" size={500} />
       <div className="max-w-[1280px] mx-auto relative z-10">
         {/* Breadcrumb + Hero */}
         <AnimatedSection>
@@ -45,19 +43,18 @@ export function VeriPakFullInspectionContent() {
         <AnimatedSection delay={0.1}>
           <div className="mt-[50px] mb-[60px]">
             <div
-              className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5"
-              style={{ color: accent }}
+              className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5 text-accent-text"
             >
               Keyence Vision Integration
             </div>
-            <h3 className="font-sans text-[1.3rem] font-bold text-white mb-5">
+            <h3 className="font-sans text-[1.3rem] font-bold text-text-strong mb-5">
               See Every Detail at Production Speed
             </h3>
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {visionCapabilities.map((v, i) => (
                 <StaggerItem key={i}>
-                  <div className="rounded-xl p-6 bg-black/20 border border-white/[0.04] h-full">
-                    <div className="font-sans text-[0.95rem] font-semibold text-white mb-1.5">
+                  <div className="rounded-xl p-6 bg-surface-card border border-border h-full">
+                    <div className="font-sans text-[0.95rem] font-semibold text-text-strong mb-1.5">
                       {v.title}
                     </div>
                     <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] m-0">
@@ -81,12 +78,11 @@ export function VeriPakFullInspectionContent() {
               }}
             >
               <div
-                className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5"
-                style={{ color: accent }}
+                className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5 text-accent-text"
               >
                 Package Image Historian
               </div>
-              <h3 className="font-sans text-[1.3rem] font-bold text-white mb-4">
+              <h3 className="font-sans text-[1.3rem] font-bold text-text-strong mb-4">
                 Every Package Photographed. Every Image Saved.
               </h3>
               <p className="font-sans text-[0.9rem] text-text-body leading-[1.7] max-w-[640px] mb-5">
@@ -101,7 +97,7 @@ export function VeriPakFullInspectionContent() {
                     key={i}
                     className="font-sans text-[0.85rem] text-text-body flex items-center gap-2"
                   >
-                    <span className="text-accent-green text-sm">&#x2713;</span>
+                    <span className="text-accent-text text-sm">&#x2713;</span>
                     {f}
                   </div>
                 ))}
@@ -114,19 +110,18 @@ export function VeriPakFullInspectionContent() {
         <AnimatedSection delay={0.2}>
           <div className="mb-[60px]">
             <div
-              className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5"
-              style={{ color: accent }}
+              className="font-mono text-[0.65rem] tracking-[0.12em] uppercase mb-2.5 text-accent-text"
             >
               Reject System
             </div>
-            <h3 className="font-sans text-[1.3rem] font-bold text-white mb-5">
+            <h3 className="font-sans text-[1.3rem] font-bold text-text-strong mb-5">
               Remove Every Failure. Automatically.
             </h3>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {rejectFeatures.map((r, i) => (
                 <StaggerItem key={i}>
-                  <div className="rounded-xl p-6 bg-black/20 border border-white/[0.04] h-full">
-                    <div className="font-sans text-[0.95rem] font-semibold text-white mb-1.5">
+                  <div className="rounded-xl p-6 bg-surface-card border border-border h-full">
+                    <div className="font-sans text-[0.95rem] font-semibold text-text-strong mb-1.5">
                       {r.title}
                     </div>
                     <p className="font-sans text-[0.82rem] text-text-body leading-[1.6] m-0">
@@ -142,15 +137,10 @@ export function VeriPakFullInspectionContent() {
         {/* Process Flow */}
         <AnimatedSection delay={0.25}>
           <div
-            className="rounded-2xl p-8 text-center"
-            style={{
-              background: "#0B1A2E",
-              border: "1px solid rgba(26,48,85,1)",
-            }}
+            className="rounded-2xl p-8 text-center bg-surface-card border border-border"
           >
             <div
-              className="font-mono text-[0.62rem] tracking-[0.1em] uppercase mb-3"
-              style={{ color: accent }}
+              className="font-mono text-[0.62rem] tracking-[0.1em] uppercase mb-3 text-accent-text"
             >
               Full Inspection Process Flow
             </div>
@@ -165,17 +155,16 @@ export function VeriPakFullInspectionContent() {
               ].map((step, i) => (
                 <span key={i} className="flex items-center gap-2">
                   <span
-                    className="font-mono px-3 py-1.5 rounded-lg"
+                    className="font-mono px-3 py-1.5 rounded-lg text-accent-text"
                     style={{
                       background: `${accent}11`,
                       border: `1px solid ${accent}22`,
-                      color: accent,
                     }}
                   >
                     {step}
                   </span>
                   {i < 5 && (
-                    <span className="text-accent-primary/30">&rarr;</span>
+                    <span className="text-text-dim">&rarr;</span>
                   )}
                 </span>
               ))}
