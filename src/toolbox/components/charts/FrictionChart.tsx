@@ -22,14 +22,14 @@ export function FrictionChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Friction Coefficients</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Friction Coefficients</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('friction')} />
             </div>
             <div className="p-4 space-y-4">
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Material A</label>
                     <select value={matA} onChange={(e) => { setMatA(e.target.value); setMatB(''); setCondition('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select material...</option>
                         {allMaterials.map((m: string) => <option key={m} value={m}>{m}</option>)}
                     </select>
@@ -37,7 +37,7 @@ export function FrictionChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Material B</label>
                     <select value={matB} onChange={(e) => { setMatB(e.target.value); setCondition('') }} disabled={!matA}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
                         <option value="">Select material...</option>
                         {compatibleB.map((m: string) => <option key={m} value={m}>{m}</option>)}
                     </select>
@@ -45,7 +45,7 @@ export function FrictionChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Surface Condition</label>
                     <select value={condition} onChange={(e) => setCondition(e.target.value)} disabled={conditions.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
                         <option value="">Select condition...</option>
                         {conditions.map((c: string) => <option key={c} value={c}>{c}</option>)}
                     </select>

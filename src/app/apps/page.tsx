@@ -124,8 +124,7 @@ function CheckIcon({ className }: { className?: string }) {
 
 export default function AppsPage() {
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <Navigation />
       <main className="min-h-screen pt-24 pb-20">
         {/* Hero Section */}
@@ -305,6 +304,6 @@ export default function AppsPage() {
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

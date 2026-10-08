@@ -21,7 +21,7 @@ import { emptyState, num, defaultHours, modeFields, restore, buildEntries, runSo
  * The solver is lib/calculators/lineThroughput.
  */
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
+const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 const unitSelectCls = 'px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0'
 const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
@@ -293,7 +293,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
 
     const packageFill = (
         <details open={!!state.fill.density}>
-            <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+            <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">
                 Package Fill ({isBulk ? 'bag or box volume → weight per package' : 'bulk product in a fixed box'})
             </summary>
             <div className="mt-2 space-y-2">
@@ -320,7 +320,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <div>
-                    <h3 className="text-sm font-semibold text-text-primary">Belt Load <span className="text-text-muted font-normal">(lb/ft)</span></h3>
+                    <h3 className="text-sm font-semibold text-text-strong">Belt Load <span className="text-text-muted font-normal">(lb/ft)</span></h3>
                     <div className="text-[10px] text-text-muted">Line throughput → belt load. Enter what you know; the rest solves.</div>
                 </div>
                 <CalcPinButton toolId="beltLoad" instanceId={instanceId} />
@@ -424,7 +424,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         {speed !== null && (
                             <div className="text-right pb-1">
                                 <div className={tileLabelCls}>Belt speed</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(speed)} ft/min</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(speed)} ft/min</div>
                             </div>
                         )}
                     </div>
@@ -432,25 +432,25 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         {derived.lbPerMin !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Throughput</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(derived.lbPerMin)} lb/min <span className="text-text-muted">·</span> {fmtNum(derived.lbPerHr!)} lb/hr</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.lbPerMin)} lb/min <span className="text-text-muted">·</span> {fmtNum(derived.lbPerHr!)} lb/hr</div>
                             </div>
                         )}
                         {ppm !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>{isBulk ? 'Bags' : 'Packages'}</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(ppm)}/min <span className="text-text-muted">·</span> {fmtNum(ppm * 60)}/hr</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(ppm)}/min <span className="text-text-muted">·</span> {fmtNum(ppm * 60)}/hr</div>
                             </div>
                         )}
                         {weight !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>{isBulk ? 'Weight per bag' : 'Package weight'}</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(weight)} lb</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(weight)} lb</div>
                             </div>
                         )}
                         {!isBulk && derived.pitchIn !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Pitch</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(derived.pitchIn)} in <span className="text-text-muted">·</span> {derived.productsPerFt !== null ? fmtNum(derived.productsPerFt) : '—'}/ft</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.pitchIn)} in <span className="text-text-muted">·</span> {derived.productsPerFt !== null ? fmtNum(derived.productsPerFt) : '—'}/ft</div>
                             </div>
                         )}
                         {isBulk && values.depth?.source === 'solved' && (
@@ -462,7 +462,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         {isBulk && derived.bedLbPerFt !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Bed at max depth carries</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(derived.bedLbPerFt)} lb/ft{speed !== null ? ` · ${fmtNum(derived.bedLbPerFt * speed * 60)} lb/hr` : ''}</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.bedLbPerFt)} lb/ft{speed !== null ? ` · ${fmtNum(derived.bedLbPerFt * speed * 60)} lb/hr` : ''}</div>
                             </div>
                         )}
                     </div>
@@ -493,7 +493,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                             </div>
                             <div>
                                 <label className={labelCls}>Required rate</label>
-                                <div className="font-mono text-sm text-text-primary py-2">{fmtNum(ppm)} pkg/min</div>
+                                <div className="font-mono text-sm text-text-strong py-2">{fmtNum(ppm)} pkg/min</div>
                             </div>
                         </div>
                         {headroom && (

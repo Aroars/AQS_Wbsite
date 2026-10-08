@@ -22,8 +22,7 @@ export default function VeriPakPage() {
   const schema = {"@context":"https://schema.org","@type":"Product","name":"VeriPak Standalone SCADA Platform","description":"Packaging quality control SCADA system with real-time dashboards, sub-second alerts, auto line stop, and audit-ready records. Allen-Bradley CompactLogix, no middleware required.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"SCADA Systems","url":"https://automatedqs.com/solutions/veripak"};
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -35,6 +34,6 @@ export default function VeriPakPage() {
       <FAQSection items={veripakFAQs} />
       <CTASection />
       <Footer />
-    </div>
+    </>
   );
 }

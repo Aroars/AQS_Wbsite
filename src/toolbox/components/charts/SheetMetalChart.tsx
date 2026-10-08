@@ -36,14 +36,14 @@ export function SheetMetalChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Sheet Metal Gauge</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Sheet Metal Gauge</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('sheetmetal')} />
             </div>
             <div className="p-4 space-y-4">
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Material</label>
                     <select value={material} onChange={(e) => { setMaterial(e.target.value); setGauge('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select material...</option>
                         {materials.map((m: string) => <option key={m} value={m}>{m}</option>)}
                     </select>
@@ -56,7 +56,7 @@ export function SheetMetalChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Gauge</label>
                     <select value={gauge} onChange={(e) => setGauge(e.target.value)} disabled={!material}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
                         <option value="">Select gauge...</option>
                         {gauges.map((g: number) => <option key={g} value={g}>{g} ga</option>)}
                     </select>
@@ -75,11 +75,11 @@ export function SheetMetalChart() {
                             <>
                                 <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
                                     <div className="text-xs text-text-muted uppercase">Tolerance (in)</div>
-                                    <div className="font-mono text-sm text-text-primary">±{data.toleranceIn}"</div>
+                                    <div className="font-mono text-sm text-text-strong">±{data.toleranceIn}"</div>
                                 </div>
                                 <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
                                     <div className="text-xs text-text-muted uppercase">Tolerance (mm)</div>
-                                    <div className="font-mono text-sm text-text-primary">±{data.toleranceMm} mm</div>
+                                    <div className="font-mono text-sm text-text-strong">±{data.toleranceMm} mm</div>
                                 </div>
                             </>
                         )}
@@ -115,9 +115,9 @@ export function SheetMetalChart() {
                     <div className="flex gap-2">
                         <input type="number" value={measured} onChange={(e) => setMeasured(e.target.value)}
                             placeholder="Measured thickness" min="0" step="any"
-                            className="flex-1 px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="flex-1 px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                         <select value={measuredUnit} onChange={(e) => setMeasuredUnit(e.target.value as 'mm' | 'in')}
-                            className="px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                            className="px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                             <option value="mm">mm</option>
                             <option value="in">in</option>
                         </select>

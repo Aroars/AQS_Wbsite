@@ -80,8 +80,7 @@ export default async function BlogPostPage({
     .filter((c): c is { slug: string; label: string | undefined; page: NonNullable<ReturnType<typeof getToolPage>> } => !!c.page && c.page.published);
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <JsonLd
         data={[
           breadcrumbList([
@@ -244,6 +243,6 @@ export default async function BlogPostPage({
       </section>
 
       <Footer />
-    </div>
+    </>
   );
 }

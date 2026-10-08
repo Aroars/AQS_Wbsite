@@ -130,7 +130,7 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                             {IconRenderer({ className: 'w-4 h-4' })}
                         </span>
                     )}
-                    <span className="text-sm font-medium text-text-primary">
+                    <span className="text-sm font-medium text-text-strong">
                         {converter.category}
                     </span>
                 </div>
@@ -178,14 +178,14 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                             value={converter.fromValue}
                             onChange={(e) => handleFromChange(e.target.value)}
                             placeholder="Enter value"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono focus:outline-none focus:border-primary transition-colors"
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-primary transition-colors"
                             step="any"
                         />
                     </div>
                     <select
                         value={converter.fromUnit}
                         onChange={(e) => handleUnitChange('from', e.target.value)}
-                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary transition-colors"
                     >
                         {unitNames.map((name) => (
                             <option key={name} value={name}>
@@ -214,14 +214,14 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                             value={converter.toValue}
                             onChange={(e) => handleToChange(e.target.value)}
                             placeholder="Result"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono focus:outline-none focus:border-primary transition-colors"
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-primary transition-colors"
                             step="any"
                         />
                     </div>
                     <select
                         value={converter.toUnit}
                         onChange={(e) => handleUnitChange('to', e.target.value)}
-                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary transition-colors"
                     >
                         {unitNames.map((name) => (
                             <option key={name} value={name}>

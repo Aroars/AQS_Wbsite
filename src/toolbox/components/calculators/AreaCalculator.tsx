@@ -59,7 +59,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Area Calculator</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Area Calculator</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="area" instanceId={instanceId} />
                     {areaMemory.length > 0 && (
@@ -77,7 +77,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                     <select
                         value={shape}
                         onChange={(e) => { setShape(e.target.value); setDimensions([]) }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
                     >
                         {shapes.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -89,7 +89,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                     <select
                         value={inputUnit}
                         onChange={(e) => setInputUnit(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
                     >
                         {lengthUnits.map((u) => <option key={u} value={u}>{u} ({unitCategories['Length'].units[u].symbol})</option>)}
                     </select>
@@ -107,7 +107,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                                 placeholder="0"
                                 min="0"
                                 step="any"
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary"
+                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary"
                             />
                         </div>
                     ))}
@@ -119,7 +119,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                     <select
                         value={outputUnit}
                         onChange={(e) => setOutputUnit(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
                     >
                         {areaUnits.map((u) => <option key={u} value={u}>{u} ({unitCategories['Area'].units[u].symbol})</option>)}
                     </select>
@@ -151,7 +151,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                                 <select
                                     value={totalUnit}
                                     onChange={(e) => setTotalUnit(e.target.value)}
-                                    className="px-2 py-1 bg-dark-900 border border-border rounded text-text-primary text-xs focus:outline-none focus:border-primary"
+                                    className="px-2 py-1 bg-dark-900 border border-border rounded text-text-strong text-xs focus:outline-none focus:border-primary"
                                 >
                                     {areaUnits.map((u) => <option key={u} value={u}>{unitCategories['Area'].units[u].symbol}</option>)}
                                 </select>
@@ -161,7 +161,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                             <div key={entry.id} className="flex items-center justify-between bg-dark-900 rounded-lg px-3 py-2">
                                 <div>
                                     <span className="text-xs text-text-muted">{entry.shape}</span>
-                                    <div className="font-mono text-sm text-text-primary">
+                                    <div className="font-mono text-sm text-text-strong">
                                         {formatNumber(convertUnits(entry.area, entry.unit, totalUnit, 'Area'))} {unitCategories['Area'].units[totalUnit]?.symbol}
                                     </div>
                                 </div>

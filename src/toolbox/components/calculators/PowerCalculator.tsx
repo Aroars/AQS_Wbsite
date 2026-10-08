@@ -105,7 +105,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Power Requirements</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Power Requirements</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="power" instanceId={instanceId} />
                     {powerEquipment.length > 0 && (
@@ -121,17 +121,17 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                         <div className="col-span-2">
                             <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Equipment Label</label>
                             <input type="text" value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Motor, PLC, HMI"
-                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary" />
+                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary" />
                         </div>
                         <div>
                             <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Power Draw (W)</label>
                             <input type="number" value={watts} onChange={(e) => setWatts(e.target.value)} placeholder="0" min="0" step="any"
-                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                         </div>
                         <div>
                             <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Qty</label>
                             <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="1" min="1" step="1"
-                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                         </div>
                     </div>
 
@@ -153,7 +153,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">AC Voltage</label>
                                 <select value={eqVoltage} onChange={(e) => setEqVoltage(Number(e.target.value))}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     {acVoltages.map((v: any) => <option key={v.value} value={v.value}>{v.label}</option>)}
                                 </select>
                             </div>
@@ -179,7 +179,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">DC Voltage</label>
                                 <select value={dcVoltage} onChange={(e) => setDcVoltage(Number(e.target.value))}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     {dcVoltages.map((v: any) => <option key={v.value} value={v.value}>{v.label}</option>)}
                                 </select>
                             </div>
@@ -210,7 +210,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                             return (
                                 <div key={eq.id} className="flex items-center justify-between bg-dark-900 rounded-lg px-3 py-2">
                                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => openEdit(eq)}>
-                                        <div className="text-sm text-text-primary">{eq.label}</div>
+                                        <div className="text-sm text-text-strong">{eq.label}</div>
                                         <div className="text-xs text-text-muted font-mono">
                                             {eq.quantity > 1 ? `${eq.quantity}x ` : ''}{eq.watts.toLocaleString()}W{eq.quantity > 1 ? ` = ${total.toLocaleString()}W` : ''} @ {voltDisplay}
                                         </div>
@@ -250,7 +250,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Supply Voltage</label>
                                 <select value={supplyVoltage} onChange={(e) => setSupplyVoltage(Number(e.target.value))}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     {supplyVoltages.map((v: any) => <option key={v.value} value={v.value}>{v.label}</option>)}
                                 </select>
                             </div>
@@ -291,11 +291,11 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-dark-700 rounded-lg px-3 py-2">
                                 <div className="text-xs text-text-muted uppercase">Total AC Power</div>
-                                <div className="font-mono font-semibold text-text-primary">{results.totalAcWatts.toLocaleString()} W</div>
+                                <div className="font-mono font-semibold text-text-strong">{results.totalAcWatts.toLocaleString()} W</div>
                             </div>
                             <div className="bg-dark-700 rounded-lg px-3 py-2">
                                 <div className="text-xs text-text-muted uppercase">Total DC Power</div>
-                                <div className="font-mono font-semibold text-text-primary">{results.totalDcWatts.toLocaleString()} W</div>
+                                <div className="font-mono font-semibold text-text-strong">{results.totalDcWatts.toLocaleString()} W</div>
                             </div>
                             <div className="bg-dark-700 rounded-lg px-3 py-2">
                                 <div className="text-xs text-text-muted uppercase">Converter Overhead</div>
@@ -309,7 +309,7 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                             </div>
                             <div className="bg-dark-700 rounded-lg px-3 py-2">
                                 <div className="text-xs text-text-muted uppercase">Supply Amps</div>
-                                <div className="font-mono font-semibold text-text-primary">{results.supplyAmps.toFixed(1)} A</div>
+                                <div className="font-mono font-semibold text-text-strong">{results.supplyAmps.toFixed(1)} A</div>
                             </div>
                             <div className="bg-dark-700 rounded-lg px-3 py-2">
                                 <div className="text-xs text-text-muted uppercase">Breaker Size</div>
@@ -334,28 +334,28 @@ export function PowerCalculator({ instanceId = MAIN }: { instanceId?: string } =
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setEditingId(null)}>
                     <div className="bg-dark-800 border border-border rounded-xl p-4 w-80 space-y-3" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-semibold text-text-primary">Edit Equipment</h4>
-                            <button onClick={() => setEditingId(null)} className="text-text-muted hover:text-text-primary">
+                            <h4 className="text-sm font-semibold text-text-strong">Edit Equipment</h4>
+                            <button onClick={() => setEditingId(null)} className="text-text-muted hover:text-text-strong">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
                         <div>
                             <label className="block text-xs text-text-muted mb-1">Label</label>
                             <input type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)}
-                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary"
+                                className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
                                 onKeyDown={(e) => e.key === 'Enter' && saveEdit()} />
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Power (W)</label>
                                 <input type="number" value={editWatts} onChange={(e) => setEditWatts(e.target.value)} min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary"
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary"
                                     onKeyDown={(e) => e.key === 'Enter' && saveEdit()} />
                             </div>
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Quantity</label>
                                 <input type="number" value={editQty} onChange={(e) => setEditQty(e.target.value)} min="1" step="1"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary"
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary"
                                     onKeyDown={(e) => e.key === 'Enter' && saveEdit()} />
                             </div>
                         </div>

@@ -10,7 +10,7 @@ import {
     type FlowCard, type SolveFor, type InfeedReading,
 } from '@/toolbox/lib/calculators/infeedCard'
 
-export const flowInputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-l-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
+export const flowInputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-l-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
 export const flowUnitCls = 'px-1.5 bg-dark-700 border border-l-0 border-border rounded-r-lg text-text-secondary text-xs focus:outline-none'
 const labelCls = 'block text-xs text-text-muted mb-1'
 

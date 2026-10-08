@@ -21,7 +21,7 @@ export function ConnectorChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Connectors & Protocols</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Connectors & Protocols</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('connector')} />
             </div>
             <div className="p-4 space-y-4">
@@ -40,7 +40,7 @@ export function ConnectorChart() {
                         {mode === 'connector' ? 'Select Connector' : 'Select Protocol'}
                     </label>
                     <select value={selected} onChange={(e) => setSelected(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Choose...</option>
                         {(mode === 'connector' ? connectorList : protocolList).map(([key, val]: any) => (
                             <option key={key} value={key}>{val.name}</option>
@@ -57,11 +57,11 @@ export function ConnectorChart() {
                         <div className="bg-dark-700 rounded-lg px-3 py-3">
                             <div className="text-xs text-text-muted uppercase mb-2">Specifications</div>
                             <div className="grid grid-cols-2 gap-2 text-sm">
-                                {detail.category && <div className="flex justify-between"><span className="text-text-secondary">Category:</span><span className="text-text-primary">{detail.category}</span></div>}
-                                {detail.pinCount && <div className="flex justify-between"><span className="text-text-secondary">Pins:</span><span className="font-mono text-text-primary">{detail.pinCount}</span></div>}
-                                {detail.ipRating && <div className="flex justify-between"><span className="text-text-secondary">IP Rating:</span><span className="font-mono text-text-primary">{detail.ipRating}</span></div>}
-                                {detail.maxVoltage && <div className="flex justify-between"><span className="text-text-secondary">Max Voltage:</span><span className="font-mono text-text-primary">{detail.maxVoltage}</span></div>}
-                                {detail.maxCurrent && <div className="flex justify-between"><span className="text-text-secondary">Max Current:</span><span className="font-mono text-text-primary">{detail.maxCurrent}</span></div>}
+                                {detail.category && <div className="flex justify-between"><span className="text-text-secondary">Category:</span><span className="text-text-strong">{detail.category}</span></div>}
+                                {detail.pinCount && <div className="flex justify-between"><span className="text-text-secondary">Pins:</span><span className="font-mono text-text-strong">{detail.pinCount}</span></div>}
+                                {detail.ipRating && <div className="flex justify-between"><span className="text-text-secondary">IP Rating:</span><span className="font-mono text-text-strong">{detail.ipRating}</span></div>}
+                                {detail.maxVoltage && <div className="flex justify-between"><span className="text-text-secondary">Max Voltage:</span><span className="font-mono text-text-strong">{detail.maxVoltage}</span></div>}
+                                {detail.maxCurrent && <div className="flex justify-between"><span className="text-text-secondary">Max Current:</span><span className="font-mono text-text-strong">{detail.maxCurrent}</span></div>}
                             </div>
                         </div>
                         {detail.pinout?.length > 0 && (
@@ -76,7 +76,7 @@ export function ConnectorChart() {
                                             {detail.pinout.map((p: any, i: number) => (
                                                 <tr key={i} className="border-b border-border/50">
                                                     <td className="py-1 font-mono text-primary">{p.pin}</td>
-                                                    <td className="py-1 font-mono text-text-primary">{p.signal}</td>
+                                                    <td className="py-1 font-mono text-text-strong">{p.signal}</td>
                                                     <td className="py-1 text-text-secondary">{p.description}</td>
                                                 </tr>
                                             ))}
@@ -104,12 +104,12 @@ export function ConnectorChart() {
                         <div className="bg-dark-700 rounded-lg px-3 py-3">
                             <div className="text-xs text-text-muted uppercase mb-2">Protocol Details</div>
                             <div className="grid grid-cols-2 gap-2 text-sm">
-                                {detail.category && <div className="flex justify-between"><span className="text-text-secondary">Category:</span><span className="text-text-primary">{detail.category}</span></div>}
-                                {detail.dataRate && <div className="flex justify-between"><span className="text-text-secondary">Data Rate:</span><span className="font-mono text-text-primary">{detail.dataRate}</span></div>}
-                                {detail.maxNodes && <div className="flex justify-between"><span className="text-text-secondary">Max Nodes:</span><span className="font-mono text-text-primary">{detail.maxNodes}</span></div>}
-                                {detail.maxLength && <div className="flex justify-between"><span className="text-text-secondary">Max Length:</span><span className="font-mono text-text-primary">{detail.maxLength}</span></div>}
-                                {detail.topology && <div className="flex justify-between"><span className="text-text-secondary">Topology:</span><span className="text-text-primary">{detail.topology}</span></div>}
-                                {detail.deterministic && <div className="flex justify-between"><span className="text-text-secondary">Deterministic:</span><span className="text-text-primary">{detail.deterministic}</span></div>}
+                                {detail.category && <div className="flex justify-between"><span className="text-text-secondary">Category:</span><span className="text-text-strong">{detail.category}</span></div>}
+                                {detail.dataRate && <div className="flex justify-between"><span className="text-text-secondary">Data Rate:</span><span className="font-mono text-text-strong">{detail.dataRate}</span></div>}
+                                {detail.maxNodes && <div className="flex justify-between"><span className="text-text-secondary">Max Nodes:</span><span className="font-mono text-text-strong">{detail.maxNodes}</span></div>}
+                                {detail.maxLength && <div className="flex justify-between"><span className="text-text-secondary">Max Length:</span><span className="font-mono text-text-strong">{detail.maxLength}</span></div>}
+                                {detail.topology && <div className="flex justify-between"><span className="text-text-secondary">Topology:</span><span className="text-text-strong">{detail.topology}</span></div>}
+                                {detail.deterministic && <div className="flex justify-between"><span className="text-text-secondary">Deterministic:</span><span className="text-text-strong">{detail.deterministic}</span></div>}
                             </div>
                         </div>
                         {detail.commonBrands?.length > 0 && (

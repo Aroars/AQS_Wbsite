@@ -33,15 +33,8 @@
    Theme tokens (light-theme transition plan, section 3)
 
    Semantic tokens flip with [data-theme]; brand tokens never change.
-   The legacy tokens above keep their original values until each route
-   is swept onto this model, so unswept pages look exactly as before.
-   The toolbox and ROI calculator stay on the dark values in both
-   themes until their own sweep.
-
-   Transition only: a route that has been swept marks its root with
-   data-theme-ready. Any route without that marker is forced onto the
-   dark values so it looks as it always has. The :has() rule and the
-   markers are deleted in the final shim-removal commit.
+   The toolbox and ROI calculator (toolbox-scope, roi-scope) keep the
+   dark values in both themes until their own sweep.
    ======================================== */
 :root {
   --surface-page: #F3F5F8;
@@ -60,7 +53,6 @@
 }
 
 [data-theme="dark"],
-:root:not(:has([data-theme-ready])),
 .toolbox-scope,
 .roi-scope {
   --surface-page: #1A1D2B;
@@ -89,13 +81,6 @@
   --color-text-dim: var(--text-dim);
   --color-text-nav: var(--text-nav);
   --color-accent-text: var(--accent-text);
-
-  /* Legacy names on the semantic model (plan section 4 shim); removed once every route is swept */
-  --color-bg-primary: var(--surface-page);
-  --color-bg-card: var(--surface-card);
-  --color-bg-card-hover: var(--surface-card-hover);
-  --color-border-default: var(--border);
-  --color-text-primary: var(--text-strong);
 
   --color-brand-cyan: #00C2FF;
   --color-brand-gold: #F5A623;

@@ -5,8 +5,8 @@ import { useAppStore } from '@/toolbox/stores/appStore'
 import { useBeltSpecs, beltChoices, minInsideRadiusIn, BELT_SPECS_URL, type BeltChoice } from '@/toolbox/lib/beltSpecs'
 import { chordalPdMm } from '@/toolbox/lib/calculators/beltPull'
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
-const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary'
+const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
+const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 
 type SortKey = 'brand' | 'belt' | 'build' | 'pitch' | 'thickness' | 'weight' | 'rating' | 'radius' | 'curve' | 'speed' | 'open'
@@ -78,7 +78,7 @@ export function BeltSpecsChart() {
 
     const selectedChoice = rows.find((r) => r.key === selected) ?? null
     const header = (key: SortKey, label: string, align: 'left' | 'right' = 'right') => (
-        <th className={`py-1.5 text-${align} cursor-pointer select-none hover:text-text-primary ${sort.key === key ? 'text-primary' : ''}`}
+        <th className={`py-1.5 text-${align} cursor-pointer select-none hover:text-text-strong ${sort.key === key ? 'text-primary' : ''}`}
             onClick={() => setSort((s) => ({ key, dir: s.key === key ? (s.dir === 1 ? -1 : 1) : 1 }))}>
             {label}{sort.key === key ? (sort.dir === 1 ? ' ↑' : ' ↓') : ''}
         </th>
@@ -87,7 +87,7 @@ export function BeltSpecsChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Belt Comparison Chart</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Belt Comparison Chart</h3>
                 <div className="flex items-center gap-2">
                     <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
                         source === 'live' ? 'border-success/40 text-success' : source === 'cache' ? 'border-primary/40 text-primary' : 'border-warning/40 text-warning'
@@ -163,12 +163,12 @@ export function BeltSpecsChart() {
                                         <tr key={r.key} onClick={() => setSelected(selected === r.key ? null : r.key)}
                                             className={`border-b border-border/50 font-mono cursor-pointer hover:bg-dark-700/40 ${selected === r.key ? 'bg-primary/5' : ''}`}>
                                             <td className="py-1.5 font-sans text-text-secondary">{r.belt.brand ?? '—'}</td>
-                                            <td className="py-1.5 font-sans text-text-primary">{r.belt.name}</td>
+                                            <td className="py-1.5 font-sans text-text-strong">{r.belt.name}</td>
                                             <td className="py-1.5 font-sans text-text-secondary">{r.build.name}{r.build.build ? '' : <span className="text-warning" title="material family not set"> ?</span>}</td>
                                             <td className="py-1.5 text-right text-text-secondary">{fmt(r.belt.pitchMm)}</td>
                                             <td className="py-1.5 text-right text-text-secondary">{fmt(r.belt.thicknessIn, 3)}</td>
-                                            <td className="py-1.5 text-right text-text-primary">{fmt(r.build.weightLbFt2, 2)}</td>
-                                            <td className="py-1.5 text-right text-text-primary">{metricRating ? fmt(r.build.ratingKgfM, 0) : fmt(r.build.ratingLbIn === null ? null : r.build.ratingLbIn * 12, 0)}</td>
+                                            <td className="py-1.5 text-right text-text-strong">{fmt(r.build.weightLbFt2, 2)}</td>
+                                            <td className="py-1.5 text-right text-text-strong">{metricRating ? fmt(r.build.ratingKgfM, 0) : fmt(r.build.ratingLbIn === null ? null : r.build.ratingLbIn * 12, 0)}</td>
                                             <td className="py-1.5 text-right text-text-secondary">
                                                 {r.belt.radiusCapable
                                                     ? (widthIn > 0 && minR !== null ? `${minR.toFixed(1)}"` : fmt(r.belt.collapseFactor, 2))
@@ -187,7 +187,7 @@ export function BeltSpecsChart() {
 
                 {selectedChoice && (
                     <div className="rounded-lg border border-primary/20 bg-dark-700 px-3 py-2.5 text-xs space-y-1">
-                        <div className="text-text-primary font-medium">{selectedChoice.label}</div>
+                        <div className="text-text-strong font-medium">{selectedChoice.label}</div>
                         <div className="text-text-secondary font-mono">
                             {selectedChoice.belt.type} · pitch {fmt(selectedChoice.belt.pitchMm)} mm · {fmt(selectedChoice.build.weightLbFt2, 2)} lb/ft² ·
                             rating {fmt(selectedChoice.build.ratingLbIn, 1)} lb/in ({fmt(selectedChoice.build.ratingKgfM, 0)} kgf/m)

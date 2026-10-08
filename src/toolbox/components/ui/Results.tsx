@@ -4,8 +4,8 @@ import type { ReactNode } from 'react'
 export const panelCls = 'rounded-lg border border-primary/20 bg-dark-700 px-3 py-3 space-y-2'
 export const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
 export const tileLabelCls = 'text-text-muted uppercase text-[10px]'
-export const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
-export const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary'
+export const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
+export const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'
 export const labelCls = 'block text-xs text-text-muted mb-1'
 export const sendBtnCls = 'w-full px-3 py-2 rounded-lg text-xs border transition-colors flex items-center justify-center gap-1.5 border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10'
 export const ghostBtnCls = 'px-3 py-2 rounded-lg text-xs border border-border bg-dark-900 text-text-secondary hover:border-primary/40 hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed'
@@ -27,7 +27,7 @@ export function Tile({ label, children }: { label: string; children: ReactNode }
     return (
         <div className={tileCls}>
             <div className={tileLabelCls}>{label}</div>
-            <div className="font-mono text-sm text-text-primary">{children}</div>
+            <div className="font-mono text-sm text-text-strong">{children}</div>
         </div>
     )
 }

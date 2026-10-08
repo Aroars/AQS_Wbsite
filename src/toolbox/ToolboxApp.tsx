@@ -35,7 +35,7 @@ export default function ToolboxApp({ initialTool, initialSection }: { initialToo
     }, [])
 
     return (
-        <div id="toolbox-app" className="min-h-[80vh] bg-dark-900 text-text-primary scroll-mt-[53px]">
+        <div id="toolbox-app" className="min-h-[80vh] bg-dark-900 text-text-strong scroll-mt-[53px]">
             <TabNav />
             <main className="px-4 md:px-6 py-6">
                 {/* Views stay mounted and toggle visibility so in-progress work

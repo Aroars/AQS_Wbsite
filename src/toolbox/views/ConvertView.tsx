@@ -11,7 +11,7 @@ export function ConvertView() {
             {/* Working converters live right here — no round-trip to Home to convert */}
             {savedConverters.length > 0 && (
                 <div className="space-y-4">
-                    <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+                    <h2 className="text-sm font-semibold text-text-strong uppercase tracking-wider">
                         Your Converters
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -25,7 +25,7 @@ export function ConvertView() {
             )}
 
             <div className="space-y-4">
-                <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+                <h2 className="text-sm font-semibold text-text-strong uppercase tracking-wider">
                     Add Category
                 </h2>
                 <CategoryGrid />

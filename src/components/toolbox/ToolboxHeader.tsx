@@ -32,7 +32,7 @@ export function ToolboxHeader() {
           <div className="p-1.5 bg-primary/10 rounded-lg">
             <Wrench className="w-5 h-5 text-primary" />
           </div>
-          <div className="text-base md:text-lg font-semibold text-text-primary leading-tight m-0">
+          <div className="text-base md:text-lg font-semibold text-text-strong leading-tight m-0">
             Engineering Toolbox
           </div>
           <div className="flex-1 flex justify-center">

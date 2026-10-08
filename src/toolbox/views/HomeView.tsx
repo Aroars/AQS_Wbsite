@@ -112,7 +112,7 @@ export function HomeView() {
             {/* Converters column */}
             <div className={hasPinned ? 'lg:w-1/3 space-y-4' : ''}>
                 <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+                    <h2 className="text-sm font-semibold text-text-strong uppercase tracking-wider">
                         Converters
                     </h2>
                     <button
@@ -152,7 +152,7 @@ export function HomeView() {
                 <div className="lg:w-2/3 space-y-4">
                     <div className="flex items-center gap-2">
                         <Pin className="w-3.5 h-3.5 text-primary" />
-                        <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+                        <h2 className="text-sm font-semibold text-text-strong uppercase tracking-wider">
                             Pinned
                         </h2>
                     </div>

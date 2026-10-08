@@ -10,8 +10,8 @@ import {
     type WearstripConfig,
 } from '@/toolbox/lib/calculators/wearstrip'
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
-const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary'
+const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
+const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 
 function num(v: string, fallback = 0): number {
@@ -88,7 +88,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Wearstrip Span Calculator</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Wearstrip Span Calculator</h3>
                 <CalcPinButton toolId="wearstrip" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
@@ -208,7 +208,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             <div className="px-3 py-2 bg-dark-900 rounded text-xs text-text-secondary flex items-center justify-between gap-2 flex-wrap">
                                 <span>
                                     Uniform layout for {cfg.conveyorLengthFt} ft:{' '}
-                                    <span className="font-mono text-text-primary">
+                                    <span className="font-mono text-text-strong">
                                         {layout.segments} × {layout.spanIn.toFixed(1)}" spans · {layout.overhangIn.toFixed(1)}" overhangs · {layout.supports} supports
                                     </span>
                                 </span>
@@ -246,7 +246,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
 
                 {/* Criteria */}
                 <details>
-                    <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">Design Criteria</summary>
+                    <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">Design Criteria</summary>
                     <div className="mt-2 space-y-2">
                         <div className="flex flex-wrap gap-1.5 items-center">
                             <span className="text-xs text-text-muted">Stiffness class:</span>
@@ -323,7 +323,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             <span className={`text-sm font-semibold ${result.passAll ? 'text-success' : 'text-error'}`}>
                                 {result.passAll ? '✓ PASSES' : '✗ FAILS'} — {cfg.stripWidthIn}×{cfg.stripHeightIn} int / {cfg.edgeStripWidthIn}×{cfg.edgeStripHeightIn} edge {mat.name} @ {cfg.spanIn}" × {cfg.stripCount}
                             </span>
-                            <span className="font-mono text-sm text-text-primary">${result.totalCost.toFixed(0)}</span>
+                            <span className="font-mono text-sm text-text-strong">${result.totalCost.toFixed(0)}</span>
                         </div>
                         <div className="p-3 space-y-3 bg-dark-700">
                             <div className="text-xs text-text-secondary">
@@ -366,11 +366,11 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             <div className="grid grid-cols-2 gap-2 text-xs">
                                 <div className="bg-dark-800 rounded px-2.5 py-2">
                                     <span className="text-text-muted">Cost: </span>
-                                    <span className="font-mono text-text-primary">${result.plasticCost.toFixed(0)} plastic + ${result.supportCost.toFixed(0)} steel ({result.supportCount} supports)</span>
+                                    <span className="font-mono text-text-strong">${result.plasticCost.toFixed(0)} plastic + ${result.supportCost.toFixed(0)} steel ({result.supportCount} supports)</span>
                                 </div>
                                 <div className="bg-dark-800 rounded px-2.5 py-2">
                                     <span className="text-text-muted">vs 1.5×2 @ 18": </span>
-                                    <span className="font-mono text-text-primary">
+                                    <span className="font-mono text-text-strong">
                                         {result.plasticSavedPct >= 0 ? '−' : '+'}{Math.abs(result.plasticSavedPct).toFixed(0)}% plastic, {result.supportsSavedPer10Ft >= 0 ? '−' : '+'}{Math.abs(result.supportsSavedPer10Ft).toFixed(1)} supports/10 ft
                                     </span>
                                 </div>
@@ -415,7 +415,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                                         className={`border-b border-border/50 font-mono cursor-pointer hover:bg-dark-700 ${
                                                             isCheapest ? 'bg-success/5' : isStiffest ? 'bg-primary/5' : ''
                                                         }`}>
-                                                        <td className="py-1.5 text-text-primary">
+                                                        <td className="py-1.5 text-text-strong">
                                                             {o.stripWidthIn}×{o.stripHeightIn}
                                                             {isCheapest && <span className="ml-1 text-success text-[10px]">cheapest</span>}
                                                             {isStiffest && <span className="ml-1 text-primary text-[10px]">stiffest/$</span>}
@@ -425,7 +425,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                                         <td className="py-1.5 text-right text-text-secondary">{o.result.pointDeflIn.toFixed(3)}</td>
                                                         <td className="py-1.5 text-right text-text-secondary">{o.result.maxOverhangIn.toFixed(1)}"</td>
                                                         <td className="py-1.5 text-right text-text-muted">{o.result.plasticVolumeIn3.toFixed(0)}</td>
-                                                        <td className="py-1.5 text-right text-text-primary">${o.result.totalCost.toFixed(0)}</td>
+                                                        <td className="py-1.5 text-right text-text-strong">${o.result.totalCost.toFixed(0)}</td>
                                                     </tr>
                                                 )
                                             })}

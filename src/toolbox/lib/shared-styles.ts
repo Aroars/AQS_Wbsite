@@ -1,8 +1,8 @@
 export const inputStyle =
-    "w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary focus:outline-none focus:border-primary"
+    "w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong focus:outline-none focus:border-primary"
 
 export const selectStyle =
-    "w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary focus:outline-none focus:border-primary"
+    "w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong focus:outline-none focus:border-primary"
 
 export const labelStyle =
     "block text-xs text-text-secondary uppercase mb-1 tracking-wider"

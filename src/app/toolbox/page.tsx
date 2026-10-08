@@ -64,9 +64,7 @@ const softwareSchema = {
 
 export default function ToolboxPage() {
   return (
-    // data-theme-ready: page chrome is on the light/dark token model; the tool
-    // app below keeps its own dark palette (toolbox-scope) until its own sweep
-    <div data-theme-ready>
+    <>
       <Navigation />
       <script
         type="application/ld+json"
@@ -144,6 +142,6 @@ export default function ToolboxPage() {
         </section>
       </div>
       <Footer />
-    </div>
+    </>
   );
 }

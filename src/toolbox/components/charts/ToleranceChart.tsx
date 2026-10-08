@@ -162,7 +162,7 @@ export function ToleranceChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Hole/Shaft Tolerance (ISO 286)</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Hole/Shaft Tolerance (ISO 286)</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('tolerance')} />
             </div>
             <div className="p-4 space-y-4">
@@ -192,7 +192,7 @@ export function ToleranceChart() {
                     <div className="flex gap-2">
                         <input type="number" value={diameter} onChange={(e) => setDiameter(e.target.value)}
                             placeholder={isMetric ? 'e.g. 25' : 'e.g. 1.000'} min="0" step="any"
-                            className="flex-1 px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="flex-1 px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                         <span className="flex items-center px-3 bg-dark-700 border border-border rounded-lg text-text-muted text-sm">
                             {isMetric ? 'mm' : 'in'}
                         </span>
@@ -203,14 +203,14 @@ export function ToleranceChart() {
                     <div>
                         <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Hole Class</label>
                         <select value={holeClass} onChange={(e) => setHoleClass(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                             {(holeClasses as any[]).map((c: string) => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
                     <div>
                         <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Shaft Class</label>
                         <select value={shaftClass} onChange={(e) => setShaftClass(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                             {(shaftClasses as any[]).map((c: string) => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
@@ -240,7 +240,7 @@ export function ToleranceChart() {
                 {/* Active fit description */}
                 {activeFit && (
                     <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
-                        <strong className="text-text-primary">{activeFit.name}</strong> ({activeFit.hole}/{activeFit.shaft}) — {activeFit.description}
+                        <strong className="text-text-strong">{activeFit.name}</strong> ({activeFit.hole}/{activeFit.shaft}) — {activeFit.description}
                         {fitApplications[activeFit.name] && (
                             <div className="mt-1 text-text-muted">{fitApplications[activeFit.name]}</div>
                         )}
@@ -254,7 +254,7 @@ export function ToleranceChart() {
                         <div className={`px-4 py-3 ${fitStyle.bg} border-b ${fitStyle.border} flex items-center justify-between`}>
                             <div>
                                 <span className={`text-sm font-semibold ${fitStyle.color}`}>{fitStyle.label}</span>
-                                <span className="ml-2 font-mono text-sm text-text-primary">{holeClass}/{shaftClass}</span>
+                                <span className="ml-2 font-mono text-sm text-text-strong">{holeClass}/{shaftClass}</span>
                                 {activeFit && <span className="ml-2 text-xs text-text-muted">— {activeFit.name}</span>}
                             </div>
                             {diameter && (
@@ -296,7 +296,7 @@ export function ToleranceChart() {
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-dark-800 rounded-lg px-3 py-3">
                                     <div className="text-xs text-text-muted uppercase mb-1">Hole ({holeClass})</div>
-                                    <div className="font-mono text-sm text-text-primary">
+                                    <div className="font-mono text-sm text-text-strong">
                                         Ø{fmtNum(result.nominalMm + result.holeUpper)} / Ø{fmtNum(result.nominalMm + result.holeLower)} {unitLabel}
                                     </div>
                                     <div className="text-xs text-text-muted mt-1 font-mono">
@@ -305,7 +305,7 @@ export function ToleranceChart() {
                                 </div>
                                 <div className="bg-dark-800 rounded-lg px-3 py-3">
                                     <div className="text-xs text-text-muted uppercase mb-1">Shaft ({shaftClass})</div>
-                                    <div className="font-mono text-sm text-text-primary">
+                                    <div className="font-mono text-sm text-text-strong">
                                         Ø{fmtNum(result.nominalMm + result.shaftUpper)} / Ø{fmtNum(result.nominalMm + result.shaftLower)} {unitLabel}
                                     </div>
                                     <div className="text-xs text-text-muted mt-1 font-mono">

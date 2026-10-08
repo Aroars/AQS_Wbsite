@@ -102,7 +102,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Torque &amp; Motor</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Torque &amp; Motor</h3>
                 <CalcPinButton toolId="driveMotor" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
@@ -198,7 +198,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                 <button onClick={() => {
                                     const p = presets.find((x) => x.series === picks.recommended!.series)
                                     upd({ driveType: 'drum', presetSeries: picks.recommended!.series, ...(p ? { ratedPullN: p.pullN.toFixed(0), drumDiaMm: String(p.diameter) } : {}) })
-                                }} className="ml-2 underline hover:text-text-primary">use it</button>
+                                }} className="ml-2 underline hover:text-text-strong">use it</button>
                             </div>
                         ) : (
                             <div className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error">
@@ -213,7 +213,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                             <tbody>
                                 {picks.rows.map((r) => (
                                     <tr key={r.series} className={`border-b border-border/50 font-mono ${r.passes ? '' : 'opacity-60'}`}>
-                                        <td className={`py-1 font-sans ${r.passes ? 'text-text-primary' : 'text-text-muted'}`}>{r.passes ? '✓ ' : ''}{r.series}</td>
+                                        <td className={`py-1 font-sans ${r.passes ? 'text-text-strong' : 'text-text-muted'}`}>{r.passes ? '✓ ' : ''}{r.series}</td>
                                         <td className={`py-1 text-right ${r.fits ? 'text-text-secondary' : 'text-error'}`}>{r.fits ? 'fits' : 'no'}</td>
                                         <td className="py-1 text-right text-text-secondary">{r.pullN.toFixed(0)}</td>
                                         <td className={`py-1 text-right ${utilizationCls(Math.min(r.contUtil, 999))}`}>{Number.isFinite(r.contUtil) ? `${r.contUtil.toFixed(0)}%` : '—'}</td>
@@ -231,7 +231,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
 
                 {/* 5. Manual drive capability (moved from Belt Pull) */}
                 <details>
-                    <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none uppercase tracking-wider">Manual drive entry &amp; utilisation</summary>
+                    <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none uppercase tracking-wider">Manual drive entry &amp; utilisation</summary>
                     <div className="mt-2 space-y-2">
                         {s.driveType === 'drum' ? (
                             <>
@@ -279,12 +279,12 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                             <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
                                 {drive.screens.map((sc, i) => <div key={i} className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error font-medium">{sc}</div>)}
                                 <div className="text-xs text-text-secondary">
-                                    Available pull: <span className="font-mono text-text-primary">{drive.availableN.toFixed(0)} N cont ({(drive.availableN / LBF_TO_N).toFixed(1)} lbf)</span>
+                                    Available pull: <span className="font-mono text-text-strong">{drive.availableN.toFixed(0)} N cont ({(drive.availableN / LBF_TO_N).toFixed(1)} lbf)</span>
                                     <span className="font-mono text-text-muted"> · {drive.peakN.toFixed(0)} N peak</span>
                                     {drive.pdMm !== null && <span className="font-mono text-text-muted"> · PD {(drive.pdMm / 25.4).toFixed(2)}&quot;</span>}
                                     {thermal !== 1 && <span className="font-mono text-text-muted"> · cool-adj ×{thermal.toFixed(2)}</span>}
                                     {drive.rpm !== null && (
-                                        <span className="ml-2">· RPM: <span className={`font-mono ${drive.maxRpm !== null && drive.rpm > drive.maxRpm ? 'text-error' : 'text-text-primary'}`}>{drive.rpm.toFixed(0)}</span>
+                                        <span className="ml-2">· RPM: <span className={`font-mono ${drive.maxRpm !== null && drive.rpm > drive.maxRpm ? 'text-error' : 'text-text-strong'}`}>{drive.rpm.toFixed(0)}</span>
                                             {drive.maxRpm !== null && <span className="text-text-muted font-mono"> / {drive.maxRpm} max</span>}</span>
                                     )}
                                 </div>
@@ -305,7 +305,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                             const util = (contFloorN / drive.availableN) * 100; const utilAdj = (contFloorN / (drive.availableN * thermal)) * 100; const peakUtil = (peakFloorN / drive.peakN) * 100
                                             return (
                                                 <tr key={row.id} className="border-b border-border/50 font-mono">
-                                                    <td className="py-1 text-text-primary font-sans">{row.label}</td>
+                                                    <td className="py-1 text-text-strong font-sans">{row.label}</td>
                                                     <td className="py-1 text-right text-text-secondary">{row.cont.toFixed(1)}</td>
                                                     <td className={`py-1 text-right font-semibold ${utilizationCls(util)}`}>{util.toFixed(0)}%</td>
                                                     {thermal !== 1 && <td className={`py-1 text-right ${utilizationCls(utilAdj)}`}>{utilAdj.toFixed(0)}%</td>}

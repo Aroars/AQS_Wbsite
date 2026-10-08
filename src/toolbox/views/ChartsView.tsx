@@ -73,7 +73,7 @@ export function ChartsView() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search charts — try M8, H7, NPT, 12awg..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-dark-800 border border-border rounded-xl text-text-primary text-sm focus:outline-none focus:border-primary"
+                    className="w-full pl-10 pr-4 py-2.5 bg-dark-800 border border-border rounded-xl text-text-strong text-sm focus:outline-none focus:border-primary"
                 />
             </div>
 
@@ -114,7 +114,7 @@ export function ChartsView() {
                             <button
                                 onClick={() => setExpanded((prev) => ({ ...prev, [chart.id]: true }))}
                                 className="w-full bg-dark-800 border border-border rounded-xl px-4 py-3 flex items-center justify-between text-left hover:border-primary/50 transition-colors group">
-                                <span className="text-sm font-medium text-text-primary">{chart.label}</span>
+                                <span className="text-sm font-medium text-text-strong">{chart.label}</span>
                                 <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
                             </button>
                         )}

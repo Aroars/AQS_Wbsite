@@ -20,8 +20,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <Navigation />
 
       {/* Hero */}
@@ -82,6 +81,6 @@ export default function BlogPage() {
       </section>
 
       <Footer />
-    </div>
+    </>
   );
 }

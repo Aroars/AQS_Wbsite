@@ -24,8 +24,8 @@ type SectionPatch = Partial<Omit<TurnSection, 'kind'>> & Partial<Omit<InclineSec
 /** Onshape configurator commons for turn angles */
 const ANGLE_PRESETS = [30, 60, 90, 120, 150, 180]
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
-const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary'
+const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
+const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 
 function num(v: string, fallback = 0): number {
@@ -204,7 +204,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Radius/S-Conveyor Belt Pull</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Radius/S-Conveyor Belt Pull</h3>
                 <CalcPinButton toolId="beltPull" instanceId={instanceId}
                     examples={exampleConfigs.map((e) => ({ label: e.label, onSelect: () => applyExample(e.id) }))} />
             </div>
@@ -656,7 +656,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                         j === i ? { ...r, lengthIn: v === '' ? null : num(v) } : r)
                                     upd({ returnSegments: segments })
                                 }}
-                                className="w-32 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
+                                className="w-32 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong font-mono text-xs focus:outline-none focus:border-primary" />
                             <span className="text-[10px] text-text-muted">in</span>
                             <select value={seg.support}
                                 onChange={(e) => upd({ returnSegments: cfg.returnSegments.map((r, j): ReturnSegment => j === i ? { ...r, support: e.target.value as 'slider' | 'roller' } : r) })}
@@ -688,7 +688,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                 {/* ── Wear scenario presets live under advanced; Clean/New is the default ── */}
                 <div className="space-y-2">
                     <details>
-                        <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+                        <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">
                             Friction & Tension (advanced)
                         </summary>
                         <div className="mt-2 space-y-1">
@@ -749,7 +749,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                     <span className="text-xs text-text-muted w-40 shrink-0">{row.label}</span>
                                     <input type="number" min="0" step="0.01" value={cfg.materials[row.key]}
                                         onChange={(e) => setMaterialBase(row.key, numEdit(e.target.value, 0.18))}
-                                        className="w-20 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
+                                        className="w-20 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong font-mono text-xs focus:outline-none focus:border-primary" />
                                     <select value={wearstripMaterials.find((m) => m.mu === cfg.materials[row.key])?.id ?? ''}
                                         onChange={(e) => {
                                             const m = wearstripMaterials.find((x) => x.id === e.target.value)
@@ -865,7 +865,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                         <label className="text-xs text-text-muted whitespace-nowrap ml-2">Ref ratio</label>
                                         <input type="number" min="1" step="0.1" value={cfg.turnDragModel.refRatio}
                                             onChange={(e) => upd({ turnDragModel: { ...cfg.turnDragModel, refRatio: numEdit(e.target.value, 2.2) } })}
-                                            className="w-16 px-2 py-1 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
+                                            className="w-16 px-2 py-1 bg-dark-900 border border-border rounded text-text-strong font-mono text-xs focus:outline-none focus:border-primary" />
                                     </div>
                                     <div className="text-[10px] text-text-muted">
                                         μ_eff = μ_rail × (ref ÷ ratio)ⁿ below the reference ratio — tight turns drag harder as the belt
@@ -886,7 +886,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
 
                     {/* Service factors (Forbo additive) */}
                     <details>
-                        <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+                        <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">
                             Service Factors — SF = {result.serviceFactor.toFixed(1)}
                         </summary>
                         <div className="mt-2 space-y-2">
@@ -975,8 +975,8 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             <tbody>
                                 {scenarios.map((s) => (
                                     <tr key={s.id} className={`border-b border-border/50 ${activeScenario === s.id ? 'bg-primary/5' : ''}`}>
-                                        <td className="py-1.5 text-text-primary">{s.label} <span className="text-text-muted font-mono">{s.frictions.carryway.toFixed(2)}/{s.frictions.rail.toFixed(2)}</span></td>
-                                        <td className="py-1.5 text-right font-mono text-text-primary">{s.result.beltPullLbf.toFixed(1)} / {s.result.beltPullN.toFixed(0)}</td>
+                                        <td className="py-1.5 text-text-strong">{s.label} <span className="text-text-muted font-mono">{s.frictions.carryway.toFixed(2)}/{s.frictions.rail.toFixed(2)}</span></td>
+                                        <td className="py-1.5 text-right font-mono text-text-strong">{s.result.beltPullLbf.toFixed(1)} / {s.result.beltPullN.toFixed(0)}</td>
                                         <td className="py-1.5 text-right font-mono text-text-secondary">{s.result.startupPullLbf.toFixed(1)} / {s.result.startupPullN.toFixed(0)}</td>
                                     </tr>
                                 ))}
@@ -987,16 +987,16 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                         <div className="grid grid-cols-2 gap-2 text-xs">
                             <div className="bg-dark-800 rounded px-2.5 py-2">
                                 <span className="text-text-muted">Carryway: </span>
-                                <span className="font-mono text-text-primary">{result.carrywayFt.toFixed(2)} ft ({result.carrywayIn.toFixed(0)} in)</span>
+                                <span className="font-mono text-text-strong">{result.carrywayFt.toFixed(2)} ft ({result.carrywayIn.toFixed(0)} in)</span>
                             </div>
                             <div className="bg-dark-800 rounded px-2.5 py-2">
                                 <span className="text-text-muted">Loop: </span>
-                                <span className="font-mono text-text-primary">{(result.loopIn / 12).toFixed(1)} ft</span>
+                                <span className="font-mono text-text-strong">{(result.loopIn / 12).toFixed(1)} ft</span>
                                 <span className="font-mono text-text-muted"> · return {result.returnResolved.map((r) => `${r.lengthIn.toFixed(0)}" ${r.support}`).join(' + ')}</span>
                             </div>
                             <div className="bg-dark-800 rounded px-2.5 py-2">
                                 <span className="text-text-muted">Turns: </span>
-                                <span className="font-mono text-text-primary">{result.turnCount}</span>
+                                <span className="font-mono text-text-strong">{result.turnCount}</span>
                                 {result.totalRiseIn !== 0 && (
                                     <span className="font-mono text-text-secondary"> · rise {result.totalRiseIn > 0 ? '+' : ''}{result.totalRiseIn.toFixed(0)} in</span>
                                 )}
@@ -1011,7 +1011,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                             </div>
                             <div className="bg-dark-800 rounded px-2.5 py-2">
                                 <span className="text-text-muted">Product: </span>
-                                <span className="font-mono text-text-primary">{result.productLoadLbf.toFixed(1)} lbf ({result.productLoadPerFt.toFixed(2)}/ft avg)</span>
+                                <span className="font-mono text-text-strong">{result.productLoadLbf.toFixed(1)} lbf ({result.productLoadPerFt.toFixed(2)}/ft avg)</span>
                                 <span className="font-mono text-text-muted"> · {result.productType}</span>
                             </div>
                         </div>
@@ -1034,7 +1034,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                         )}
 
                         <details>
-                            <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">
+                            <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">
                                 Details{detailWarnings > 0 ? ` — ${detailWarnings} warning${detailWarnings === 1 ? '' : 's'}` : ''} · turn-by-turn tension, screens, sign-off
                             </summary>
                             <div className="mt-2 space-y-3">
@@ -1055,12 +1055,12 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                     <tbody>
                                         {result.perTurn.map((t) => (
                                             <tr key={t.turn} className="border-b border-border/50 font-mono">
-                                                <td className="py-1 text-text-primary">T{t.turn} ({t.angleDeg}°)</td>
+                                                <td className="py-1 text-text-strong">T{t.turn} ({t.angleDeg}°)</td>
                                                 <td className={`py-1 text-right ${t.turnRatio < 2.2 ? 'text-warning' : 'text-text-secondary'}`}>{t.turnRatio.toFixed(2)}</td>
                                                 <td className={`py-1 text-right ${t.muEff > cfg.frictions.rail + 1e-9 ? 'text-warning' : 'text-text-muted'}`}>{t.muEff.toFixed(3)}</td>
                                                 <td className="py-1 text-right text-text-secondary">{t.tensionIn.toFixed(1)}</td>
                                                 <td className="py-1 text-right text-text-muted">{t.multiplier.toFixed(3)}</td>
-                                                <td className="py-1 text-right text-text-primary">{t.tensionOut.toFixed(1)}</td>
+                                                <td className="py-1 text-right text-text-strong">{t.tensionOut.toFixed(1)}</td>
                                                 <td className={`py-1 text-right ${result.curveCapacityLbf !== null && t.tensionOutHigh > result.curveCapacityLbf ? 'text-error' : 'text-text-muted'}`}>
                                                     {t.tensionOutHigh.toFixed(1)}{result.curveCapacityLbf !== null ? ` / ${result.curveCapacityLbf.toFixed(0)}` : ''}
                                                 </td>
@@ -1089,10 +1089,10 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                     <tbody>
                                         {result.sectionLoads.map((r, k) => (
                                             <tr key={k} className="border-b border-border/50 font-mono">
-                                                <td className="py-1 text-text-primary">{r.index === -1 ? 'Infeed straight' : `${r.kind === 'turn' ? 'Turn' : r.kind === 'incline' ? 'Incline' : 'Straight'} ${r.index + 1}`}</td>
+                                                <td className="py-1 text-text-strong">{r.index === -1 ? 'Infeed straight' : `${r.kind === 'turn' ? 'Turn' : r.kind === 'incline' ? 'Incline' : 'Straight'} ${r.index + 1}`}</td>
                                                 <td className="py-1 text-right text-text-secondary">{r.lengthIn.toFixed(0)}</td>
                                                 <td className={`py-1 text-right ${r.source === 'uniform' ? 'text-text-secondary' : 'text-primary'}`}>{r.lbfPerFt.toFixed(2)}</td>
-                                                <td className="py-1 text-right text-text-primary">{r.lbf.toFixed(1)}</td>
+                                                <td className="py-1 text-right text-text-strong">{r.lbf.toFixed(1)}</td>
                                                 <td className="py-1 text-right text-text-muted">{r.source}</td>
                                             </tr>
                                         ))}
@@ -1137,7 +1137,7 @@ export function BeltPullCalculator({ instanceId = MAIN }: { instanceId?: string 
                                 : 'bg-error/10 border-error'
                             }`}>
                                 <div className="text-text-secondary">
-                                    <span className="font-medium text-text-primary">Corner speed ceiling</span> at{' '}
+                                    <span className="font-medium text-text-strong">Corner speed ceiling</span> at{' '}
                                     <span className="font-mono">{result.cornerPressurePsi!.toFixed(2)} psi</span> corner pressure:{' '}
                                     virgin UHMW <span className="font-mono">{result.vCeilVirginFpm!.toFixed(0)}</span> ·{' '}
                                     DG-321 <span className="font-mono">{result.vCeilDg321Fpm!.toFixed(0)}</span> ft/min
@@ -1231,7 +1231,7 @@ function CalibrationLog({ currentCentral }: { currentCentral: number }) {
 
     return (
         <details>
-            <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none uppercase tracking-wider">
+            <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none uppercase tracking-wider">
                 Calibration Log ({rows.length})
             </summary>
             <div className="mt-2 space-y-2">
@@ -1248,7 +1248,7 @@ function CalibrationLog({ currentCentral }: { currentCentral: number }) {
                         <tbody>
                             {rows.map((r, i) => (
                                 <tr key={i} className="border-b border-border/50">
-                                    <td className="py-1 text-text-primary">{r.conveyor}</td>
+                                    <td className="py-1 text-text-strong">{r.conveyor}</td>
                                     <td className="py-1 text-text-muted font-mono">{r.date}</td>
                                     <td className="py-1 text-right font-mono text-text-secondary">{r.central}</td>
                                     <td className="py-1 text-text-muted">{r.vendor}</td>
@@ -1266,7 +1266,7 @@ function CalibrationLog({ currentCentral }: { currentCentral: number }) {
                     {(['conveyor', 'date', 'vendor', 'measured'] as const).map((k) => (
                         <input key={k} type="text" value={draft[k]} placeholder={k}
                             onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
-                            className="w-28 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary text-xs focus:outline-none focus:border-primary" />
+                            className="w-28 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong text-xs focus:outline-none focus:border-primary" />
                     ))}
                     <button onClick={() => {
                         if (!draft.conveyor) return
@@ -1304,9 +1304,9 @@ function CalibrationSolver({ cfg, onApply }: { cfg: BeltPullConfig; onApply: (mu
             <div className="flex gap-1.5 items-center">
                 <input type="number" min="0" step="any" value={target} onChange={(e) => setTarget(e.target.value)}
                     placeholder="Vendor program / pull-test result"
-                    className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary font-mono text-xs focus:outline-none focus:border-primary" />
+                    className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong font-mono text-xs focus:outline-none focus:border-primary" />
                 <select value={unit} onChange={(e) => setUnit(e.target.value as 'lbf' | 'N')}
-                    className="px-1.5 py-1.5 bg-dark-900 border border-border rounded text-text-primary text-xs focus:outline-none">
+                    className="px-1.5 py-1.5 bg-dark-900 border border-border rounded text-text-strong text-xs focus:outline-none">
                     <option value="lbf">lbf</option>
                     <option value="N">N</option>
                 </select>

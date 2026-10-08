@@ -27,7 +27,7 @@ export function SourceBar({ handoff, note }: { handoff: Handoff; note?: string }
         <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-text-muted uppercase tracking-wider text-[10px]">From</span>
             <select value={`${selected.tool}#${selected.instanceId}`} onChange={(e) => setChoice(e.target.value)}
-                className="px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-primary text-xs focus:outline-none focus:border-primary">
+                className="px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-strong text-xs focus:outline-none focus:border-primary">
                 {instances.map((i) => <option key={`${i.tool}#${i.instanceId}`} value={`${i.tool}#${i.instanceId}`}>{i.label}</option>)}
             </select>
             <button onClick={() => pull(selected.tool, selected.instanceId)} title="Copy that card's values in once"

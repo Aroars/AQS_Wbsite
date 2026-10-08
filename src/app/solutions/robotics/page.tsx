@@ -20,8 +20,7 @@ export default function RoboticsPage() {
   const schema = {"@context":"https://schema.org","@type":"Service","name":"Sanitary Robotics Integration","description":"Fully washdown-rated robotic systems for palletizing, case packing, pick-and-place, and end-of-line automation. 316L stainless, IP69K, USDA/FDA compliant.","provider":{"@type":"Organization","name":"Automated Quality Solutions"},"serviceType":"Industrial Automation","areaServed":"US","url":"https://automatedqs.com/solutions/robotics"};
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -32,6 +31,6 @@ export default function RoboticsPage() {
       <FAQSection />
       <CTASection />
       <Footer />
-    </div>
+    </>
   );
 }

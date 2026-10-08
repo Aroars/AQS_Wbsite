@@ -21,8 +21,7 @@ export default function IntelliPakPage() {
   const schema = {"@context":"https://schema.org","@type":"Product","name":"IntelliPak Feed Systems","description":"Smart conveyor system with precision gapping and intelligent batching for sanitary packaging lines. Up to 500 PPM, up to 7 independent belt zones, on-the-fly batch size changes.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Feed Systems","url":"https://automatedqs.com/solutions/intellipak"};
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -33,6 +32,6 @@ export default function IntelliPakPage() {
       <FAQSection items={intellipakFAQs} />
       <CTASection />
       <Footer />
-    </div>
+    </>
   );
 }

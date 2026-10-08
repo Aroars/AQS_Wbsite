@@ -11,7 +11,7 @@ import { SourceBar } from '@/toolbox/components/ui/SourceBar'
 import type { InfeedPayload } from '@/toolbox/stores/appStore'
 
 const labelCls = 'block text-xs text-text-muted mb-1'
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
+const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
 const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
 const tileLabelCls = 'text-text-muted uppercase text-[10px]'
 
@@ -54,7 +54,7 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Conveyor Speed &amp; Throughput</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Conveyor Speed &amp; Throughput</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="conveyorFlow" instanceId={instanceId} />
                     {!r.pristine && (
@@ -98,30 +98,30 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
                         <div className="grid grid-cols-2 gap-2 text-xs">
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Pitch</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(r.pitchIn!)} in <span className="text-text-muted">·</span> {r.productsPerFt !== null ? fmtNum(r.productsPerFt) : '—'}/ft</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(r.pitchIn!)} in <span className="text-text-muted">·</span> {r.productsPerFt !== null ? fmtNum(r.productsPerFt) : '—'}/ft</div>
                             </div>
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Packages</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(r.ppm)}/min <span className="text-text-muted">·</span> {fmtNum(r.ppm * 60)}/hr</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(r.ppm)}/min <span className="text-text-muted">·</span> {fmtNum(r.ppm * 60)}/hr</div>
                             </div>
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Belt speed</div>
-                                <div className="font-mono text-sm text-text-primary">{fmtNum(r.speedFpm!)} ft/min</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(r.speedFpm!)} ft/min</div>
                             </div>
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Gap time</div>
-                                <div className="font-mono text-sm text-text-primary">{r.gapTimeS !== null ? `${fmtNum(r.gapTimeS * 1000, 3)} ms` : '—'}</div>
+                                <div className="font-mono text-sm text-text-strong">{r.gapTimeS !== null ? `${fmtNum(r.gapTimeS * 1000, 3)} ms` : '—'}</div>
                             </div>
                             {r.transitS !== null && (
                                 <div className={tileCls}>
                                     <div className={tileLabelCls}>Transit time</div>
-                                    <div className="font-mono text-sm text-text-primary">{fmtNum(r.transitS, 3)} s</div>
+                                    <div className="font-mono text-sm text-text-strong">{fmtNum(r.transitS, 3)} s</div>
                                 </div>
                             )}
                             {r.lbPerFt !== null && (
                                 <div className={tileCls}>
                                     <div className={tileLabelCls}>Belt load</div>
-                                    <div className="font-mono text-sm text-text-primary">{fmtNum(r.lbPerFt)} lb/ft</div>
+                                    <div className="font-mono text-sm text-text-strong">{fmtNum(r.lbPerFt)} lb/ft</div>
                                 </div>
                             )}
                         </div>
@@ -149,7 +149,7 @@ export function ConveyorSpeed({ instanceId = MAIN }: { instanceId?: string } = {
 
                 {/* Belt speed from the drive */}
                 <details open={rpm !== null || dia !== null}>
-                    <summary className="text-xs text-text-secondary hover:text-text-primary cursor-pointer select-none">Belt speed from drive RPM</summary>
+                    <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">Belt speed from drive RPM</summary>
                     <div className="mt-2 grid grid-cols-3 gap-2 items-end">
                         <div>
                             <label className={labelCls}>Drive RPM</label>

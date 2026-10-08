@@ -151,7 +151,7 @@ export function CommandPalette() {
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={onInputKeyDown}
                         placeholder="Jump to a tool — try belt pull, H7, M8, awg..."
-                        className="w-full pl-10 pr-4 py-3 bg-transparent text-text-primary text-sm focus:outline-none"
+                        className="w-full pl-10 pr-4 py-3 bg-transparent text-text-strong text-sm focus:outline-none"
                     />
                 </div>
                 <div ref={listRef} className="max-h-[50vh] overflow-y-auto py-1.5">
@@ -170,7 +170,7 @@ export function CommandPalette() {
                                 onMouseMove={() => setSelected(i)}
                                 className={cn(
                                     'w-full px-3 py-2 flex items-center gap-3 text-left text-sm transition-colors',
-                                    isSel ? 'bg-primary/10 text-text-primary' : 'text-text-secondary'
+                                    isSel ? 'bg-primary/10 text-text-strong' : 'text-text-secondary'
                                 )}
                             >
                                 <Icon className={cn('w-4 h-4 shrink-0', isSel ? 'text-primary' : 'text-text-muted')} />

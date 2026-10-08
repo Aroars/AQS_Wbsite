@@ -46,8 +46,7 @@ export default async function ConveyorSpotlightPage({ params }: { params: Params
   const path = spotlightHref(project);
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <JsonLd
         data={[
           breadcrumbList([
@@ -74,6 +73,6 @@ export default async function ConveyorSpotlightPage({ params }: { params: Params
       <FAQSection items={s.faq} />
       <ConveyorCTA />
       <Footer />
-    </div>
+    </>
   );
 }

@@ -77,7 +77,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Line Flow Simulator</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Line Flow Simulator</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="lineFlow" instanceId={instanceId} />
                     {cards.length > 0 && (
@@ -105,7 +105,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                             <div className="flex items-center justify-between px-3 py-2" style={{ background: typeDef.color + '15' }}>
                                 <div className="flex items-center gap-2">
                                     <span className="text-sm" style={{ color: typeDef.color }}>{typeDef.icon}</span>
-                                    <span className="text-sm font-medium text-text-primary">{typeDef.name}</span>
+                                    <span className="text-sm font-medium text-text-strong">{typeDef.name}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {feasibility !== 'ok' && !outputs.pristine && (
@@ -135,7 +135,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                                     <label className="block text-xs text-text-muted mb-1">{input.label}</label>
                                                     <select value={String(card.inputs[input.key] ?? input.options[0])}
                                                         onChange={(e) => handleSelectChange(cardIndex, input.key, e.target.value)}
-                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-primary text-xs focus:outline-none focus:border-primary">
+                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-strong text-xs focus:outline-none focus:border-primary">
                                                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                                         {input.options.map((opt: any) => (
                                                             <option key={opt} value={opt}>{input.optionsFull ? input.optionsFull[input.options.indexOf(opt)] : opt}</option>
@@ -150,7 +150,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                                     <label className="block text-xs text-text-muted mb-1">{input.label}</label>
                                                     <input type="text" value={String(card.inputs[input.key] ?? '')}
                                                         onChange={(e) => handleInputChange(cardIndex, input.key, e.target.value)} placeholder={input.placeholder}
-                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-primary text-xs font-mono focus:outline-none focus:border-primary" />
+                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-strong text-xs font-mono focus:outline-none focus:border-primary" />
                                                 </div>
                                             )
                                         }
@@ -161,7 +161,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                                     <input type="number" value={card.inputs[input.key] === null || card.inputs[input.key] === undefined ? '' : String(card.inputs[input.key])}
                                                         onChange={(e) => handleInputChange(cardIndex, input.key, e.target.value)} placeholder={input.placeholder}
                                                         min={input.min} max={input.max} step="any"
-                                                        className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded-l-lg text-text-primary text-xs font-mono focus:outline-none focus:border-primary" />
+                                                        className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded-l-lg text-text-strong text-xs font-mono focus:outline-none focus:border-primary" />
                                                     {input.unitType && unitTypes[input.unitType] && (
                                                         <select value={card.units[input.key] ?? unitTypes[input.unitType].default}
                                                             onChange={(e) => handleUnitChange(cardIndex, input.key, e.target.value)}
@@ -184,19 +184,19 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                     <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                                         <div className="flex justify-between">
                                             <span className="text-text-muted">Speed:</span>
-                                            <span className="font-mono text-text-primary">{formatValue(fromBase(outputs.productSpeed, card.units.productSpeed || 'ft/min', 'speed'))} {card.units.productSpeed || 'ft/min'}</span>
+                                            <span className="font-mono text-text-strong">{formatValue(fromBase(outputs.productSpeed, card.units.productSpeed || 'ft/min', 'speed'))} {card.units.productSpeed || 'ft/min'}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-text-muted">Rate:</span>
-                                            <span className="font-mono text-text-primary">{formatValue(outputs.ppm, 1)} PPM</span>
+                                            <span className="font-mono text-text-strong">{formatValue(outputs.ppm, 1)} PPM</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-text-muted">Gap:</span>
-                                            <span className="font-mono text-text-primary">{formatValue(fromBase(outputs.productGap, card.units.productGap || 'in', 'length'))} {card.units.productGap || 'in'}</span>
+                                            <span className="font-mono text-text-strong">{formatValue(fromBase(outputs.productGap, card.units.productGap || 'in', 'length'))} {card.units.productGap || 'in'}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-text-muted">Gap Time:</span>
-                                            <span className="font-mono text-text-primary">{formatValue(outputs.gapTimeAvailable * 1000, 0)} ms</span>
+                                            <span className="font-mono text-text-strong">{formatValue(outputs.gapTimeAvailable * 1000, 0)} ms</span>
                                         </div>
                                     </div>
                                     {outputs.issues?.length > 0 && (
@@ -224,7 +224,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                 <button key={key} onClick={() => addCard(key)}
                                     className="w-full px-3 py-2 text-left text-sm hover:bg-dark-600 transition-colors flex items-center gap-2">
                                     <span style={{ color: type.color }}>{type.icon}</span>
-                                    <span className="text-text-primary">{type.name}</span>
+                                    <span className="text-text-strong">{type.name}</span>
                                     <span className="text-text-muted text-xs ml-auto">{type.description || ''}</span>
                                 </button>
                             ))}

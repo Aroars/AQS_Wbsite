@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 
 export default function RoiCalculatorPage() {
   return (
-    // data-theme-ready: page chrome is on the light/dark token model; the
-    // calculator keeps its own dark palette (roi-scope) for now
-    <div data-theme-ready>
+    <>
       <Navigation />
       <section className="pt-[100px] pb-[60px] px-4 min-h-screen">
         <div className="max-w-7xl mx-auto">
@@ -34,6 +32,6 @@ export default function RoiCalculatorPage() {
         </div>
       </section>
       <Footer />
-    </div>
+    </>
   );
 }

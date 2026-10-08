@@ -63,7 +63,7 @@ export function SafetyChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Safety & Compliance</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Safety & Compliance</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('safety')} />
             </div>
             <div className="p-4 space-y-4">
@@ -86,7 +86,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Standard</label>
                                 <select value={standard} onChange={(e) => setStandard(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     <option value="iso">ISO 13855</option>
                                     <option value="osha">OSHA</option>
                                 </select>
@@ -94,7 +94,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Guard Type</label>
                                 <select value={guardType} onChange={(e) => setGuardType(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     {Object.entries(safetyDistanceConstants.penetrationFactors as Record<string, { value: number; label: string }>).map(([key, pf]) => (
                                         <option key={key} value={key}>
                                             {key.startsWith('lightCurtain') ? `Light Curtain — ${pf.label}` : pf.label}
@@ -105,7 +105,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Response (ms)</label>
                                 <input type="number" value={responseTime} onChange={(e) => setResponseTime(e.target.value)} min="0" step="1"
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                             </div>
                         </div>
                         {safetyDistance && (
@@ -116,7 +116,7 @@ export function SafetyChart() {
                                     <div className="text-xs text-text-muted mt-1">S = (K × T) + C = ({safetyDistance.K} × {safetyDistance.T}) + {safetyDistance.C}</div>
                                 </div>
                                 <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary leading-relaxed">
-                                    The safeguard must be at least <strong className="text-text-primary">{safetyDistance.distance?.toFixed(safetyDistance.unit === 'in' ? 1 : 0)} {safetyDistance.unit}</strong> from the nearest hazard point.
+                                    The safeguard must be at least <strong className="text-text-strong">{safetyDistance.distance?.toFixed(safetyDistance.unit === 'in' ? 1 : 0)} {safetyDistance.unit}</strong> from the nearest hazard point.
                                     {standard === 'osha'
                                         ? ` K = ${safetyDistance.K} in/s (hand speed constant per OSHA 1910.217).`
                                         : ` K = ${safetyDistance.K} mm/s (${guardType.startsWith('lightCurtain') ? 'hand/arm approach speed' : 'approach speed'} per ISO 13855), C = ${safetyDistance.C} mm penetration allowance.`}
@@ -142,7 +142,7 @@ export function SafetyChart() {
                                     <tbody>
                                         {(guardOpenings as any)?.slotOpenings?.map((row: any, i: number) => (
                                             <tr key={i} className="border-b border-border/50">
-                                                <td className="py-1.5 text-text-primary">Slot</td>
+                                                <td className="py-1.5 text-text-strong">Slot</td>
                                                 <td className="py-1.5 font-mono text-text-secondary">{row.opening}</td>
                                                 <td className="py-1.5 font-mono text-text-secondary">{row.safeDistance} mm</td>
                                                 <td className="py-1.5 text-text-muted">{row.bodyPart}</td>
@@ -150,7 +150,7 @@ export function SafetyChart() {
                                         ))}
                                         {(guardOpenings as any)?.squareOpenings?.map((row: any, i: number) => (
                                             <tr key={`sq-${i}`} className="border-b border-border/50">
-                                                <td className="py-1.5 text-text-primary">Square</td>
+                                                <td className="py-1.5 text-text-strong">Square</td>
                                                 <td className="py-1.5 font-mono text-text-secondary">{row.opening}</td>
                                                 <td className="py-1.5 font-mono text-text-secondary">{row.safeDistance} mm</td>
                                                 <td className="py-1.5 text-text-muted">{row.bodyPart}</td>
@@ -180,9 +180,9 @@ export function SafetyChart() {
                                         {Object.entries(clearanceData.electricalPanels.conditions).map(([cond, data]: any) => (
                                             data.voltages.map((v: any, vi: number) => (
                                                 <tr key={`${cond}-${vi}`} className="border-b border-border/50">
-                                                    {vi === 0 && <td className="py-1.5 text-text-primary" rowSpan={data.voltages.length}>Cond. {cond}</td>}
+                                                    {vi === 0 && <td className="py-1.5 text-text-strong" rowSpan={data.voltages.length}>Cond. {cond}</td>}
                                                     <td className="py-1.5 text-text-secondary">{v.range}</td>
-                                                    <td className="py-1.5 font-mono text-text-primary">{v.depth.in}" ({v.depth.mm} mm)</td>
+                                                    <td className="py-1.5 font-mono text-text-strong">{v.depth.in}" ({v.depth.mm} mm)</td>
                                                 </tr>
                                             ))
                                         ))}
@@ -199,7 +199,7 @@ export function SafetyChart() {
                                 {clearanceData.aisles.map((a: any, i: number) => (
                                     <div key={i} className="flex justify-between bg-dark-900 rounded px-3 py-1.5 text-sm">
                                         <span className="text-text-secondary">{a.type}</span>
-                                        <span className="font-mono text-text-primary">{a.minWidth.in}" min ({a.recommended.in}" rec.)</span>
+                                        <span className="font-mono text-text-strong">{a.minWidth.in}" min ({a.recommended.in}" rec.)</span>
                                     </div>
                                 ))}
                             </div>
@@ -212,7 +212,7 @@ export function SafetyChart() {
                                 {clearanceData.machineEquipment.map((m: any, i: number) => (
                                     <div key={i} className="flex justify-between bg-dark-900 rounded px-3 py-1.5 text-sm">
                                         <span className="text-text-secondary">{m.area}</span>
-                                        <span className="font-mono text-text-primary">{m.clearance.in}" ({m.clearance.mm} mm)</span>
+                                        <span className="font-mono text-text-strong">{m.clearance.in}" ({m.clearance.mm} mm)</span>
                                     </div>
                                 ))}
                             </div>
@@ -225,7 +225,7 @@ export function SafetyChart() {
                                 {clearanceData.cabinetMounting.map((c: any, i: number) => (
                                     <div key={i} className="flex justify-between bg-dark-900 rounded px-3 py-1.5 text-sm">
                                         <span className="text-text-secondary">{c.type}</span>
-                                        <span className="font-mono text-text-primary">Front: {c.front.in}" {c.rear.in > 0 ? `/ Rear: ${c.rear.in}"` : ''}</span>
+                                        <span className="font-mono text-text-strong">Front: {c.front.in}" {c.rear.in > 0 ? `/ Rear: ${c.rear.in}"` : ''}</span>
                                     </div>
                                 ))}
                             </div>
@@ -240,7 +240,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Severity</label>
                                 <select value={severity} onChange={(e) => setSeverity(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     <option value="S1">S1 - Slight</option>
                                     <option value="S2">S2 - Serious</option>
                                 </select>
@@ -248,7 +248,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Frequency</label>
                                 <select value={frequency} onChange={(e) => setFrequency(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     <option value="F1">F1 - Seldom</option>
                                     <option value="F2">F2 - Frequent</option>
                                 </select>
@@ -256,7 +256,7 @@ export function SafetyChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Possibility</label>
                                 <select value={possibility} onChange={(e) => setPossibility(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     <option value="P1">P1 - Possible</option>
                                     <option value="P2">P2 - Hardly</option>
                                 </select>
@@ -294,7 +294,7 @@ export function SafetyChart() {
                                             arr[i] = { ...arr[i], dba: e.target.value }
                                             setNoiseEntries(arr)
                                         }}
-                                        className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                        className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                                 </div>
                                 <div>
                                     <label className="block text-xs text-text-muted mb-1">Duration (hrs)</label>
@@ -304,7 +304,7 @@ export function SafetyChart() {
                                             arr[i] = { ...arr[i], hours: e.target.value }
                                             setNoiseEntries(arr)
                                         }}
-                                        className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                        className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                                 </div>
                             </div>
                         ))}

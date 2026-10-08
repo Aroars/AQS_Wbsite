@@ -84,7 +84,7 @@ export function GiveawayCalculator({ instanceId = MAIN }: { instanceId?: string 
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Product Giveaway</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Product Giveaway</h3>
                 <CalcPinButton toolId="giveaway" instanceId={instanceId} />
             </div>
             <div className="p-4"><GiveawayCalculatorCore s={s} setS={setS} /></div>

@@ -251,7 +251,7 @@ export function ExpressionCalculator({ instanceId = MAIN }: { instanceId?: strin
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Calculator</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Calculator</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="expression" instanceId={instanceId} />
                     {editingIndex !== null && (
@@ -299,7 +299,7 @@ export function ExpressionCalculator({ instanceId = MAIN }: { instanceId?: strin
                         onChange={(e) => handleExpressionChange(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder={editingIndex !== null ? 'Editing entry...' : calculatorMode === 'flow' ? 'e.g. 2+3*4, sqrt(16), ans*2' : 'e.g. A*B+10, sqrt(x)'}
-                        className={`w-full px-3 py-2.5 bg-dark-900 border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary ${
+                        className={`w-full px-3 py-2.5 bg-dark-900 border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary ${
                             editingIndex !== null ? 'border-warning' : 'border-border'
                         }`}
                     />
@@ -366,7 +366,7 @@ export function ExpressionCalculator({ instanceId = MAIN }: { instanceId?: strin
                                 {/* Content (clickable to edit) */}
                                 <div className="flex-1 min-w-0 cursor-pointer" onClick={() => handleClickEntry(index)}>
                                     <div className="font-mono text-xs text-text-muted truncate">{entry.expression}</div>
-                                    <div className="font-mono text-sm text-text-primary">
+                                    <div className="font-mono text-sm text-text-strong">
                                         {(entry as any).variable && (
                                             <span className="text-primary mr-1">{(entry as any).variable} =</span>
                                         )}
@@ -379,7 +379,7 @@ export function ExpressionCalculator({ instanceId = MAIN }: { instanceId?: strin
                                     <input type="text" value={labelInput} onChange={(e) => setLabelInput(e.target.value)}
                                         onBlur={saveLabel} onKeyDown={(e) => { if (e.key === 'Enter') saveLabel(); if (e.key === 'Escape') setEditingLabelIndex(null) }}
                                         maxLength={20} placeholder="label" autoFocus
-                                        className="w-20 px-1 py-0.5 bg-dark-700 border border-primary rounded text-xs text-text-primary focus:outline-none" />
+                                        className="w-20 px-1 py-0.5 bg-dark-700 border border-primary rounded text-xs text-text-strong focus:outline-none" />
                                 ) : (
                                     <button onClick={() => handleAssignLabel(index)}
                                         className={`px-1.5 py-0.5 rounded text-xs transition-colors ${

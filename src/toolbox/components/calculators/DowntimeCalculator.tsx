@@ -25,7 +25,7 @@ export function DowntimeCalculator({ instanceId = MAIN }: { instanceId?: string 
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Line Downtime Cost</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Line Downtime Cost</h3>
                 <CalcPinButton toolId="downtime" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">

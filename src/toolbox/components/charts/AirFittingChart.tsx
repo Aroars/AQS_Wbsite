@@ -52,14 +52,14 @@ export function AirFittingChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Air Fittings & Threads</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Air Fittings & Threads</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('airfitting')} />
             </div>
             <div className="p-4 space-y-4">
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Thread Type</label>
                     <select value={threadType} onChange={(e) => { setThreadType(e.target.value); setThreadSize('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select thread type...</option>
                         {types.map((t: string) => <option key={t} value={t}>{t} — {(threadTypes as any)[t]?.fullName ?? ''}</option>)}
                     </select>
@@ -75,7 +75,7 @@ export function AirFittingChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Thread Size</label>
                     <select value={threadSize} onChange={(e) => setThreadSize(e.target.value)} disabled={sizes.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
                         <option value="">Select size...</option>
                         {sizes.map((s: string) => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -84,14 +84,14 @@ export function AirFittingChart() {
                     <div className="bg-dark-700 rounded-lg px-3 py-3 space-y-2">
                         <div className="text-xs text-text-muted uppercase">Size Details</div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">OD:</span><span className="font-mono text-text-primary">{sizeInfo.od} mm</span></div>
-                            {sizeInfo.tpi && <div className="flex justify-between"><span className="text-text-secondary">TPI:</span><span className="font-mono text-text-primary">{sizeInfo.tpi}</span></div>}
-                            {sizeInfo.pitch && <div className="flex justify-between"><span className="text-text-secondary">Pitch:</span><span className="font-mono text-text-primary">{sizeInfo.pitch} mm</span></div>}
+                            <div className="flex justify-between"><span className="text-text-secondary">OD:</span><span className="font-mono text-text-strong">{sizeInfo.od} mm</span></div>
+                            {sizeInfo.tpi && <div className="flex justify-between"><span className="text-text-secondary">TPI:</span><span className="font-mono text-text-strong">{sizeInfo.tpi}</span></div>}
+                            {sizeInfo.pitch && <div className="flex justify-between"><span className="text-text-secondary">Pitch:</span><span className="font-mono text-text-strong">{sizeInfo.pitch} mm</span></div>}
                         </div>
                         {((sizeInfo.tubeSizesMetric?.length ?? 0) > 0 || (sizeInfo.tubeSizesImperial?.length ?? 0) > 0) && (
                             <div className="text-xs text-text-secondary">
                                 Push-in tube:{' '}
-                                <span className="font-mono text-text-primary">
+                                <span className="font-mono text-text-strong">
                                     {sizeInfo.tubeSizesMetric?.length > 0
                                         ? `${sizeInfo.tubeSizesMetric.join(', ')} mm`
                                         : sizeInfo.tubeSizesImperial.map((t: string) => `${t}"`).join(', ')}
@@ -105,7 +105,7 @@ export function AirFittingChart() {
                                     <div key={c.key} className={`px-2.5 py-1.5 rounded border-l-2 text-xs ${
                                         c.samePitch ? 'border-error bg-error/10' : 'border-warning bg-warning/5'
                                     }`}>
-                                        <span className="font-mono text-text-primary">{c.key}</span>{' '}
+                                        <span className="font-mono text-text-strong">{c.key}</span>{' '}
                                         <span className="text-text-secondary">
                                             ({c.tpi} TPI, ΔOD {c.dOd >= 0 ? '+' : ''}{c.dOd.toFixed(2)} mm) —{' '}
                                         </span>
@@ -151,8 +151,8 @@ export function AirFittingChart() {
                                             <tbody>
                                                 {group.compatibility.map((row: any, ri: number) => (
                                                     <tr key={ri} className="border-b border-border/50">
-                                                        <td className="py-1.5 font-mono text-text-primary">{row.male}</td>
-                                                        <td className="py-1.5 font-mono text-text-primary">{row.female}</td>
+                                                        <td className="py-1.5 font-mono text-text-strong">{row.male}</td>
+                                                        <td className="py-1.5 font-mono text-text-strong">{row.female}</td>
                                                         <td className="py-1.5">
                                                             {row.compatible === false
                                                                 ? <span className="text-error font-semibold">✕ DO NOT USE</span>

@@ -24,8 +24,7 @@ export const metadata: Metadata = {
 
 export default function ConveyorFamilyPage() {
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <JsonLd
         data={[
           breadcrumbList([
@@ -43,6 +42,6 @@ export default function ConveyorFamilyPage() {
       <SystemArchitecture currentProduct="conveyors" />
       <ConveyorCTA />
       <Footer />
-    </div>
+    </>
   );
 }

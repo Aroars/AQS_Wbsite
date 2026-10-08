@@ -153,7 +153,7 @@ function StepHeader({ step, label, status }: { step: number; label: string; stat
     )
 }
 
-const inputClass = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary'
+const inputClass = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
 const labelCls = 'block text-xs text-text-muted mb-1'
 
 export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}) {
@@ -284,7 +284,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Incline Conveyor Length &amp; Angle</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Incline Conveyor Length &amp; Angle</h3>
                 <CalcPinButton toolId="conveyorSpec" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
@@ -399,18 +399,18 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 {geo.totalFloorLength != null && (
                                     <>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Total Floor:</span><span className="font-mono text-text-primary">{displayFt(geo.totalFloorLength)} {lengthLabel}</span></div>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Total Actual:</span><span className="font-mono text-text-primary">{displayFt(geo.totalActualLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-secondary">Total Floor:</span><span className="font-mono text-text-strong">{displayFt(geo.totalFloorLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-secondary">Total Actual:</span><span className="font-mono text-text-strong">{displayFt(geo.totalActualLength)} {lengthLabel}</span></div>
                                     </>
                                 )}
                                 {geo.totalFloorLength == null && (
                                     <>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Floor Length:</span><span className="font-mono text-text-primary">{displayFt(geo.floorLength)} {lengthLabel}</span></div>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Actual Length:</span><span className="font-mono text-text-primary">{displayFt(geo.actualLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-secondary">Floor Length:</span><span className="font-mono text-text-strong">{displayFt(geo.floorLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-secondary">Actual Length:</span><span className="font-mono text-text-strong">{displayFt(geo.actualLength)} {lengthLabel}</span></div>
                                     </>
                                 )}
-                                <div className="flex justify-between"><span className="text-text-secondary">Height:</span><span className="font-mono text-text-primary">{displayFt(geo.heightDiff)} {lengthLabel}</span></div>
-                                <div className="flex justify-between"><span className="text-text-secondary">Angle:</span><span className="font-mono text-text-primary">{geo.angle?.toFixed(1)}°</span></div>
+                                <div className="flex justify-between"><span className="text-text-secondary">Height:</span><span className="font-mono text-text-strong">{displayFt(geo.heightDiff)} {lengthLabel}</span></div>
+                                <div className="flex justify-between"><span className="text-text-secondary">Angle:</span><span className="font-mono text-text-strong">{geo.angle?.toFixed(1)}°</span></div>
                             </div>
 
                             {/* Angle annotation: packages get the retention advice; bulk gets the plain-belt limit */}
@@ -445,7 +445,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                 ) : load ? (
                     <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
                         <span className="text-text-muted">From Belt Load: </span>
-                        <span className="text-text-primary">{describeLoad(load)}</span>
+                        <span className="text-text-strong">{describeLoad(load)}</span>
                         {load.lbPerFt !== null && <span className="font-mono text-primary"> · {load.lbPerFt.toFixed(2)} lb/ft</span>}
                         <div className="text-[10px] text-text-muted mt-0.5">Change it on the Belt Load card; this card and Belt Pull follow.</div>
                     </div>
@@ -484,7 +484,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                                 </div>
                                 <div className="bg-dark-800 rounded-lg px-3 py-2 text-center">
                                     <div className="text-xs text-text-muted">Belt Loading</div>
-                                    <div className="font-mono text-sm text-text-primary">
+                                    <div className="font-mono text-sm text-text-strong">
                                         {displayLoadPerLen(loading.beltLoading ?? null)} {isMetric ? 'kg/m' : 'lbs/ft'}
                                     </div>
                                 </div>

@@ -58,7 +58,7 @@ export function SnapshotsPanel() {
                         <div className="text-text-muted uppercase tracking-wider text-[10px] mb-1">Save the whole page</div>
                         <div className="flex gap-1">
                             <input value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') savePage() }} placeholder="name, e.g. Plant A line 3"
-                                className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-primary focus:outline-none focus:border-primary" />
+                                className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong focus:outline-none focus:border-primary" />
                             <button onClick={savePage} title="Save" className="px-2 py-1.5 rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"><Save className="w-3.5 h-3.5" /></button>
                             <button onClick={copyPage} title="Copy page code" className="px-2 py-1.5 rounded border border-border bg-dark-900 text-text-secondary hover:text-primary"><Copy className="w-3.5 h-3.5" /></button>
                         </div>
@@ -69,7 +69,7 @@ export function SnapshotsPanel() {
                         <div className="max-h-44 overflow-y-auto space-y-0.5">
                             {snapshots.map((snap) => (
                                 <div key={snap.id} className="flex items-center gap-1">
-                                    <button onClick={() => load(snap.code)} className="flex-1 text-left px-2 py-1 rounded hover:bg-dark-600 text-text-primary truncate">
+                                    <button onClick={() => load(snap.code)} className="flex-1 text-left px-2 py-1 rounded hover:bg-dark-600 text-text-strong truncate">
                                         <span className={`font-mono text-[10px] mr-1.5 ${snap.kind === 'page' ? 'text-primary' : 'text-text-muted'}`}>{snap.kind === 'page' ? 'PAGE' : snap.tool}</span>
                                         {snap.name} <span className="text-text-muted font-mono">{new Date(snap.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                     </button>
@@ -82,7 +82,7 @@ export function SnapshotsPanel() {
                     <div>
                         <div className="text-text-muted uppercase tracking-wider text-[10px] mb-1">Load a code</div>
                         <div className="flex gap-1">
-                            <textarea value={code} onChange={(e) => setCode(e.target.value)} rows={2} placeholder="aqs1.… (a page code, or a card code for its tab card)" className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded font-mono text-[11px] text-text-primary focus:outline-none focus:border-primary" />
+                            <textarea value={code} onChange={(e) => setCode(e.target.value)} rows={2} placeholder="aqs1.… (a page code, or a card code for its tab card)" className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded font-mono text-[11px] text-text-strong focus:outline-none focus:border-primary" />
                             <button onClick={() => load(code)} disabled={!code.trim()} title="Load" className="px-2 rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40"><Upload className="w-3.5 h-3.5" /></button>
                         </div>
                     </div>

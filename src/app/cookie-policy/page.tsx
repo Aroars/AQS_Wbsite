@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 
 export default function CookiePolicyPage() {
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <Navigation />
       <section className="pt-[140px] pb-[100px] px-8">
         <div className="max-w-[800px] mx-auto">
@@ -158,6 +157,6 @@ export default function CookiePolicyPage() {
         </div>
       </section>
       <Footer />
-    </div>
+    </>
   );
 }

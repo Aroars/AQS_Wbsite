@@ -34,7 +34,7 @@ export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: strin
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Drive Shaft Deflection &amp; Twist</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Drive Shaft Deflection &amp; Twist</h3>
                 <div className="flex items-center gap-2">
                     {r && <span className={`text-xs font-medium ${ok ? 'text-success' : 'text-error'}`}>{ok ? 'Within limits' : `${r.warnings.length} limit${r.warnings.length > 1 ? 's' : ''} exceeded`}</span>}
                     <CalcPinButton toolId="driveShaft" instanceId={instanceId} />

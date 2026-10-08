@@ -34,7 +34,7 @@ export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: str
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Accumulation Buffer</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Accumulation Buffer</h3>
                 <CalcPinButton toolId="accumulation" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">

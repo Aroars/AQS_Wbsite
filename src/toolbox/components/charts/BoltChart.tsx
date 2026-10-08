@@ -132,7 +132,7 @@ export function BoltChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Bolt, Tap & Drill Sizes</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Bolt, Tap & Drill Sizes</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('bolt')} />
             </div>
             <div className="p-4 space-y-4">
@@ -162,7 +162,7 @@ export function BoltChart() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={isMetric ? 'e.g. M8, M10...' : 'e.g. 1/4, #10...'}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary placeholder:text-text-muted"
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary placeholder:text-text-muted"
                     />
                 </div>
 
@@ -189,7 +189,7 @@ export function BoltChart() {
                         {/* Header */}
                         <div className="px-4 py-3 bg-primary/5 border-b border-primary/20 flex items-center justify-between">
                             <div>
-                                <span className="font-mono text-lg text-text-primary font-semibold">{selectedSize}</span>
+                                <span className="font-mono text-lg text-text-strong font-semibold">{selectedSize}</span>
                                 <span className="ml-2 text-sm text-text-secondary">{boltInfo.thread}</span>
                             </div>
                             <span className="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-medium">
@@ -211,11 +211,11 @@ export function BoltChart() {
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <div className="flex justify-between bg-dark-800 rounded px-3 py-1.5">
                                         <span className="text-text-secondary">Pitch</span>
-                                        <span className="font-mono text-text-primary">{boltInfo.pitch}{isMetric ? ' mm' : ' TPI'}</span>
+                                        <span className="font-mono text-text-strong">{boltInfo.pitch}{isMetric ? ' mm' : ' TPI'}</span>
                                     </div>
                                     <div className="flex justify-between bg-dark-800 rounded px-3 py-1.5">
                                         <span className="text-text-secondary">Major Ø</span>
-                                        <span className="font-mono text-text-primary">
+                                        <span className="font-mono text-text-strong">
                                             {isMetric
                                                 ? `${boltInfo.majorDia} mm`
                                                 : `${boltInfo.majorDia.toFixed(3)}"`
@@ -268,7 +268,7 @@ export function BoltChart() {
                                                         return (
                                                             <div key={sub.system} className="flex items-center gap-2 text-xs">
                                                                 <span className="text-text-muted w-14">{sub.system}</span>
-                                                                <span className="font-mono text-text-primary w-16">{sub.label}</span>
+                                                                <span className="font-mono text-text-strong w-16">{sub.label}</span>
                                                                 <span className="font-mono text-text-secondary w-20">{sub.sizeMm.toFixed(3)} mm</span>
                                                                 <span className="font-mono text-text-muted w-16">
                                                                     {sub.delta >= 0 ? '+' : ''}{sub.delta.toFixed(3)}
@@ -296,12 +296,12 @@ export function BoltChart() {
                                     <div className="grid grid-cols-2 gap-2">
                                         <div className="bg-dark-800 rounded-lg px-3 py-2">
                                             <div className="text-xs text-text-muted mb-1">Close Fit</div>
-                                            <div className="font-mono text-sm text-text-primary">{boltInfo.clearance.close.mm} mm</div>
+                                            <div className="font-mono text-sm text-text-strong">{boltInfo.clearance.close.mm} mm</div>
                                             <div className="font-mono text-xs text-text-muted">{boltInfo.clearance.close.inch}</div>
                                         </div>
                                         <div className="bg-dark-800 rounded-lg px-3 py-2">
                                             <div className="text-xs text-text-muted mb-1">Normal Fit</div>
-                                            <div className="font-mono text-sm text-text-primary">{boltInfo.clearance.normal.mm} mm</div>
+                                            <div className="font-mono text-sm text-text-strong">{boltInfo.clearance.normal.mm} mm</div>
                                             <div className="font-mono text-xs text-text-muted">{boltInfo.clearance.normal.inch}</div>
                                         </div>
                                     </div>
@@ -344,7 +344,7 @@ export function BoltChart() {
                 {/* Collapsible full table */}
                 <button
                     onClick={() => setShowAllSizes(!showAllSizes)}
-                    className="w-full text-left text-xs text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1">
+                    className="w-full text-left text-xs text-text-secondary hover:text-text-strong transition-colors flex items-center gap-1">
                     <span className="transition-transform inline-block" style={{ transform: showAllSizes ? 'rotate(90deg)' : 'rotate(0deg)' }}>&#9656;</span>
                     {showAllSizes ? 'Hide' : 'Show'} full {isMetric ? 'metric' : 'imperial'} reference table
                 </button>
@@ -372,9 +372,9 @@ export function BoltChart() {
                                             className={`border-b border-border/50 cursor-pointer transition-colors ${
                                                 isActive ? 'bg-primary/10' : 'hover:bg-dark-700'
                                             }`}>
-                                            <td className="py-1.5 font-mono text-text-primary font-medium">{s}</td>
+                                            <td className="py-1.5 font-mono text-text-strong font-medium">{s}</td>
                                             <td className="py-1.5 text-text-secondary">{d.thread}</td>
-                                            <td className="py-1.5 font-mono text-text-primary">{d.tapDrill?.mm ?? '—'} mm</td>
+                                            <td className="py-1.5 font-mono text-text-strong">{d.tapDrill?.mm ?? '—'} mm</td>
                                             <td className="py-1.5 font-mono text-text-secondary">{d.clearance?.close?.mm ?? '—'} mm</td>
                                             <td className="py-1.5 font-mono text-text-secondary">{d.clearance?.normal?.mm ?? '—'} mm</td>
                                         </tr>

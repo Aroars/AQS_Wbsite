@@ -20,8 +20,7 @@ export default function EvacuPakPage() {
   const schema = {"@context":"https://schema.org","@type":"Product","name":"EvacuPak Liquid Recovery System","description":"Patented fluid recovery with up to 97% product recovery from packaging. 3A certified hygienic lances, CIP capable, full HACCP traceability.","manufacturer":{"@type":"Organization","name":"Automated Quality Solutions"},"category":"Liquid Recovery Systems","url":"https://automatedqs.com/solutions/evacupak"};
 
   return (
-    // data-theme-ready: this route is on the light/dark token model (see globals.css)
-    <div data-theme-ready>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -31,6 +30,6 @@ export default function EvacuPakPage() {
       <FAQSection />
       <CTASection />
       <Footer />
-    </div>
+    </>
   );
 }

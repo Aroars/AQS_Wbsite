@@ -99,7 +99,7 @@ export function PneumaticChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Pneumatic Cylinder Sizing</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Pneumatic Cylinder Sizing</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('pneumatic')} />
             </div>
             <div className="p-4 space-y-4">
@@ -116,7 +116,7 @@ export function PneumaticChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Bore Size</label>
                     <select value={bore} onChange={(e) => { setBore(e.target.value); setRod('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select bore...</option>
                         {bores.map((b: string) => <option key={b} value={b}>{formatBoreSize(b, isMetric)}</option>)}
                     </select>
@@ -124,7 +124,7 @@ export function PneumaticChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Rod Size</label>
                     <select value={rod} onChange={(e) => setRod(e.target.value)} disabled={rods.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
                         <option value="">Select rod...</option>
                         {rods.map((r: string) => <option key={r} value={r}>{formatRodSize(r, isMetric)}</option>)}
                     </select>
@@ -132,7 +132,7 @@ export function PneumaticChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Pressure (gauge)</label>
                     <select value={pressure} onChange={(e) => setPressure(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select pressure...</option>
                         {pressureOptions.map((p: any) => <option key={p.value} value={p.value}>{p.label}</option>)}
                     </select>
@@ -140,11 +140,11 @@ export function PneumaticChart() {
                         <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
                             <div className="bg-dark-900 rounded-lg px-2.5 py-2 border-l-2 border-primary">
                                 <div className="text-text-muted uppercase text-[10px]">Gauge</div>
-                                <div className="font-mono text-text-primary">{pressureInfo.barG.toFixed(1)} bar(g) · {pressureInfo.psiG.toFixed(1)} psig</div>
+                                <div className="font-mono text-text-strong">{pressureInfo.barG.toFixed(1)} bar(g) · {pressureInfo.psiG.toFixed(1)} psig</div>
                             </div>
                             <div className="bg-dark-900 rounded-lg px-2.5 py-2 border-l-2 border-text-muted">
                                 <div className="text-text-muted uppercase text-[10px]">Absolute (+1 atm)</div>
-                                <div className="font-mono text-text-primary">{pressureInfo.barA.toFixed(2)} bar(a) · {pressureInfo.psiA.toFixed(1)} psia</div>
+                                <div className="font-mono text-text-strong">{pressureInfo.barA.toFixed(2)} bar(a) · {pressureInfo.psiA.toFixed(1)} psia</div>
                             </div>
                             <div className="col-span-2 text-[10px] text-text-muted">
                                 Force uses gauge pressure; free-air flow and consumption use absolute (×{pressureInfo.cr.toFixed(1)} compression).
@@ -169,12 +169,12 @@ export function PneumaticChart() {
                         <div>
                             <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Stroke Length ({isMetric ? 'mm' : 'in'})</label>
                             <input type="number" value={stroke} onChange={(e) => setStroke(e.target.value)} placeholder="Enter stroke" min="0" step="any"
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                         </div>
                         <div>
                             <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Supply Tubing</label>
                             <select value={tubingIdx} onChange={(e) => setTubingIdx(e.target.value)}
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                 {tubingOptions.map((t: any, i: number) => <option key={t.label} value={i}>{t.label}</option>)}
                             </select>
                         </div>
@@ -189,13 +189,13 @@ export function PneumaticChart() {
                                 <label className="block text-xs text-text-muted mb-1">Required at Cylinder ({isMetric ? 'bar g' : 'psig'})</label>
                                 <input type="number" value={lineOutlet} onChange={(e) => setLineOutlet(e.target.value)}
                                     placeholder={isMetric ? 'e.g. 4' : 'e.g. 60'} min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                             </div>
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Line Length ({isMetric ? 'm' : 'ft'})</label>
                                 <input type="number" value={lineLength} onChange={(e) => setLineLength(e.target.value)}
                                     placeholder={isMetric ? 'e.g. 2' : 'e.g. 6'} min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                             </div>
                         </div>
                         {lineFlow && (
@@ -240,12 +240,12 @@ export function PneumaticChart() {
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
                                 <div className="text-xs text-text-muted uppercase">Extend</div>
-                                <div className="font-mono font-semibold text-text-primary">{speedResults.extendTime?.toFixed(2)}s</div>
+                                <div className="font-mono font-semibold text-text-strong">{speedResults.extendTime?.toFixed(2)}s</div>
                                 <div className="text-xs text-text-muted font-mono">{speedResults.extendSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
                             </div>
                             <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
                                 <div className="text-xs text-text-muted uppercase">Retract</div>
-                                <div className="font-mono font-semibold text-text-primary">{speedResults.retractTime?.toFixed(2)}s</div>
+                                <div className="font-mono font-semibold text-text-strong">{speedResults.retractTime?.toFixed(2)}s</div>
                                 <div className="text-xs text-text-muted font-mono">{speedResults.retractSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
                             </div>
                         </div>

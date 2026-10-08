@@ -62,7 +62,7 @@ export function HubMotorChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Hub Motor (MDR) Selection</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Hub Motor (MDR) Selection</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('hubmotor')} />
             </div>
             <div className="p-4 space-y-4">
@@ -91,12 +91,12 @@ export function HubMotorChart() {
                     <div>
                         <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Conveyor Width ({isMetric ? 'mm' : 'in'})</label>
                         <input type="number" value={width} onChange={(e) => setWidth(e.target.value)} placeholder="e.g. 450" min="0" step="any"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                     </div>
                     <div>
                         <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Min Torque ({isMetric ? 'N·m' : 'ft·lb'})</label>
                         <input type="number" value={torqueFilter} onChange={(e) => setTorqueFilter(e.target.value)} placeholder="Optional" min="0" step="any"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                     </div>
                 </div>
 
@@ -151,7 +151,7 @@ export function HubMotorChart() {
                                         className={`border-b border-border/50 cursor-pointer transition-colors ${
                                             m.series === selectedSeries ? 'bg-primary/5' : 'hover:bg-dark-700'
                                         }`}>
-                                        <td className="py-2 font-mono text-text-primary">{m.series}</td>
+                                        <td className="py-2 font-mono text-text-strong">{m.series}</td>
                                         <td className="py-2 font-mono text-text-secondary">{isMetric ? m.diameter : (m.diameter / 25.4).toFixed(1)}</td>
                                         <td className="py-2 font-mono text-text-secondary">{toDisplay(m.torque ?? m.maxTorque)}</td>
                                         <td className="py-2 font-mono text-text-secondary">{toDisplay(m.beltPull ?? m.maxBeltPull, true)}</td>
@@ -187,10 +187,10 @@ export function HubMotorChart() {
                             )}
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">RPM (60Hz):</span><span className="font-mono text-text-primary">{selectedMotor.rpm60Hz}</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Width Range:</span><span className="font-mono text-text-primary">{selectedMotor.minLength}-{selectedMotor.maxLength}mm</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Torque:</span><span className="font-mono text-text-primary">{toDisplay(selectedMotor.torque ?? selectedMotor.maxTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Peak Torque:</span><span className="font-mono text-text-primary">{toDisplay(selectedMotor.peakTorque ?? selectedMotor.maxPeakTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">RPM (60Hz):</span><span className="font-mono text-text-strong">{selectedMotor.rpm60Hz}</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">Width Range:</span><span className="font-mono text-text-strong">{selectedMotor.minLength}-{selectedMotor.maxLength}mm</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.torque ?? selectedMotor.maxTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">Peak Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.peakTorque ?? selectedMotor.maxPeakTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
                         </div>
                     </div>
                 )}

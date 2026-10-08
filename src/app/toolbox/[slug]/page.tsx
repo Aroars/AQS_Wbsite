@@ -78,9 +78,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    // data-theme-ready: page chrome is on the light/dark token model; the tool
-    // app below keeps its own dark palette (toolbox-scope) until its own sweep
-    <div data-theme-ready>
+    <>
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -143,6 +141,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         </section>
       </div>
       <Footer />
-    </div>
+    </>
   );
 }

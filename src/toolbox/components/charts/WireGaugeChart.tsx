@@ -86,7 +86,7 @@ export function WireGaugeChart() {
     return (
         <div className="bg-dark-800 border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-primary">Wire Gauge & Ampacity</h3>
+                <h3 className="text-sm font-semibold text-text-strong">Wire Gauge & Ampacity</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('wiregauge')} />
             </div>
             <div className="p-4 space-y-4">
@@ -110,7 +110,7 @@ export function WireGaugeChart() {
                 <div>
                     <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Wire Size</label>
                     <select value={wireSize} onChange={(e) => setWireSize(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                         <option value="">Select size...</option>
                         {sizes.map((s) => <option key={s} value={s}>{data[s]?.label ?? s}</option>)}
                     </select>
@@ -119,10 +119,10 @@ export function WireGaugeChart() {
                     <div className="bg-dark-700 rounded-lg px-3 py-3">
                         <div className="text-xs text-text-muted uppercase mb-2">Wire Specifications</div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">Diameter:</span><span className="font-mono text-text-primary">{wireInfo.diameter_mm} mm</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Area:</span><span className="font-mono text-text-primary">{wireInfo.area_mm2} mm²</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">Diameter:</span><span className="font-mono text-text-strong">{wireInfo.diameter_mm} mm</span></div>
+                            <div className="flex justify-between"><span className="text-text-secondary">Area:</span><span className="font-mono text-text-strong">{wireInfo.area_mm2} mm²</span></div>
                             <div className="flex justify-between"><span className="text-text-secondary">Resistance:</span>
-                                <span className="font-mono text-text-primary">{isAwg ? `${wireInfo.resistance_ohm_per_1000ft} Ω/kft` : `${wireInfo.resistance_ohm_per_km} Ω/km`}</span>
+                                <span className="font-mono text-text-strong">{isAwg ? `${wireInfo.resistance_ohm_per_1000ft} Ω/kft` : `${wireInfo.resistance_ohm_per_km} Ω/km`}</span>
                             </div>
                             {crossEquivalent && (
                                 <div className="flex justify-between"><span className="text-text-secondary">{isAwg ? 'Metric:' : 'AWG:'}</span>
@@ -136,7 +136,7 @@ export function WireGaugeChart() {
                     <div>
                         <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Insulation Type</label>
                         <select value={insulation} onChange={(e) => setInsulation(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                             <option value="">Select insulation...</option>
                             {insulationTypes.map((t) => <option key={t} value={t}>{t} — {(insulationInfo as any)[t]?.temp ?? ''}</option>)}
                         </select>
@@ -157,24 +157,24 @@ export function WireGaugeChart() {
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Length ({isAwg ? 'ft' : 'm'})</label>
                                 <input type="number" value={vdLength} onChange={(e) => setVdLength(e.target.value)} placeholder="0" min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                             </div>
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Current (A)</label>
                                 <input type="number" value={vdCurrent} onChange={(e) => setVdCurrent(e.target.value)} placeholder="0" min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-primary font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
                             </div>
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Voltage</label>
                                 <select value={vdVoltage} onChange={(e) => setVdVoltage(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     {((isAwg ? voltageOptions.imperial : voltageOptions.metric) ?? []).map((v: any) => <option key={v.value} value={v.value}>{v.label}</option>)}
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-xs text-text-muted mb-1">Phase</label>
                                 <select value={vdPhase} onChange={(e) => setVdPhase(e.target.value as any)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-primary text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
                                     <option value="single">1φ</option>
                                     <option value="three">3φ</option>
                                 </select>
