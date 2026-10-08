@@ -58,21 +58,21 @@ export function CookieConsent() {
       <div
         className="max-w-[960px] mx-auto rounded-xl px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
         style={{
-          background: "#112240",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "var(--surface-card)",
+          border: "1px solid var(--border)",
           backdropFilter: "blur(20px)",
-          boxShadow: "0 -4px 30px rgba(0,0,0,0.3)",
+          boxShadow: "0 -4px 30px rgba(10,22,40,0.14)",
         }}
       >
         <div className="flex-1">
-          <div className="font-sans text-[0.92rem] font-bold text-white mb-1.5">
+          <div className="font-sans text-[0.92rem] font-bold text-text-strong mb-1.5">
             We value your privacy
           </div>
-          <p className="font-sans text-[0.82rem] leading-[1.6]" style={{ color: "#A8B2D1" }}>
+          <p className="font-sans text-[0.82rem] leading-[1.6] text-text-body">
             We use cookies to analyze site traffic and improve your experience. Essential cookies are
             required for the site to function. Analytics cookies help us understand how you interact
             with our content.{" "}
-            <a href="/cookie-policy" className="text-accent-primary hover:underline">
+            <a href="/cookie-policy" className="text-accent-text hover:underline">
               Cookie Policy
             </a>
           </p>
@@ -80,15 +80,13 @@ export function CookieConsent() {
         <div className="flex gap-2.5 shrink-0">
           <button
             onClick={decline}
-            className="font-sans text-[0.82rem] font-medium px-5 py-2 rounded-lg border transition-all"
-            style={{ color: "#8892B0", borderColor: "#8892B0" }}
+            className="font-sans text-[0.82rem] font-medium px-5 py-2 rounded-lg border border-border text-accent-text hover:border-accent-text transition-all"
           >
             Decline Non-Essential
           </button>
           <button
             onClick={accept}
-            className="font-sans text-[0.82rem] font-bold px-5 py-2 rounded-lg hover:brightness-110 transition-all"
-            style={{ background: "#00C6D7", color: "#0B1A2E" }}
+            className="font-sans text-[0.82rem] font-bold px-5 py-2 rounded-lg bg-brand-cyan text-brand-navy-deep hover:brightness-110 transition-all"
           >
             Accept All
           </button>

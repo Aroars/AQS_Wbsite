@@ -216,11 +216,11 @@ export default function PostIceCreamLidMatch() {
       <Closing>
         AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho. Read
         the platform paper,{" "}
-        <Link href="/blog/veripak-production-quality-platform" className="text-accent-primary hover:underline">
+        <Link href="/blog/veripak-production-quality-platform" className="text-accent-text hover:underline">
           VeriPak Proves a Good One
         </Link>
         , or{" "}
-        <Link href="/solutions/veripak" className="text-accent-primary hover:underline">
+        <Link href="/solutions/veripak" className="text-accent-text hover:underline">
           learn more about VeriPak &rarr;
         </Link>
       </Closing>

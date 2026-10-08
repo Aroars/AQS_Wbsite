@@ -217,11 +217,11 @@ export default function PostWeBoughtThemFirst() {
       <Closing>
         AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho. See
         the full{" "}
-        <Link href="/solutions/conveyors" className="text-accent-primary hover:underline">
+        <Link href="/solutions/conveyors" className="text-accent-text hover:underline">
           custom sanitary conveyor line
         </Link>
         , or the first standalone system in the{" "}
-        <Link href="/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system" className="text-accent-primary hover:underline">
+        <Link href="/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system" className="text-accent-text hover:underline">
           project spotlight &rarr;
         </Link>
       </Closing>

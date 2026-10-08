@@ -226,7 +226,7 @@ export default function PostVeriPakPlatform() {
         <B>Solve a specific inspection problem.</B> Add Vision Inspection, Leak Detection, or Product Handling to
         address a gap the existing equipment cannot cover, with the Core Platform recording the result for every
         package. The companion case study,{" "}
-        <Link href="/blog/ice-cream-lid-match-inspection" className="text-accent-primary hover:underline">
+        <Link href="/blog/ice-cream-lid-match-inspection" className="text-accent-text hover:underline">
           an ice cream plant verifying lid-to-body match on every tub at 65 per minute
         </Link>
         , is an example of this path.
@@ -263,7 +263,7 @@ export default function PostVeriPakPlatform() {
 
       <Closing>
         AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho.{" "}
-        <Link href="/solutions/veripak" className="text-accent-primary hover:underline">
+        <Link href="/solutions/veripak" className="text-accent-text hover:underline">
           Learn more about VeriPak &rarr;
         </Link>
       </Closing>

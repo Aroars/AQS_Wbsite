@@ -259,11 +259,11 @@ export default function PostPhotoEyesRetroreflective() {
       <Closing>
         AQS engineers and builds sanitary automation for food and beverage processors, designed in Nampa, Idaho. This
         paper is a companion to{" "}
-        <Link href="/blog/automated-tote-filling-frozen-vegetables" className="text-accent-primary hover:underline">
+        <Link href="/blog/automated-tote-filling-frozen-vegetables" className="text-accent-text hover:underline">
           Filling 1,800-Pound Totes at 20 °F
         </Link>
         ; the system itself is in the{" "}
-        <Link href="/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system" className="text-accent-primary hover:underline">
+        <Link href="/solutions/conveyors/projects/stainless-24v-pallet-tote-filling-system" className="text-accent-text hover:underline">
           project spotlight &rarr;
         </Link>
       </Closing>

@@ -124,22 +124,20 @@ function CheckIcon({ className }: { className?: string }) {
 
 export default function AppsPage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <main className="min-h-screen pt-24 pb-20">
         {/* Hero Section */}
         <section className="relative px-6 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="mx-auto max-w-4xl text-center">
-            <p
-              className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-4"
-              style={{ color: "#00c2ff" }}
-            >
+            <p className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-4 text-accent-text">
               DIGITAL TOOLS
             </p>
-            <h1 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-6">
+            <h1 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-text-strong mb-6">
               AQS Apps
             </h1>
-            <p className="text-[rgba(255,255,255,0.55)] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="text-text-body text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
               Purpose-built tools that help our team, partners, and fellow
               engineers move faster — from quoting custom conveyors and
               building defensible ROI projections to everyday conveyor math
@@ -157,13 +155,14 @@ export default function AppsPage() {
                   className={`relative flex flex-col h-full rounded-[16px] border overflow-hidden transition-all duration-300 ${
                     app.comingSoon
                       ? "opacity-70"
-                      : "hover:-translate-y-1 hover:shadow-lg"
+                      : "hover:-translate-y-1"
                   }`}
                   style={{
-                    background: "rgba(0,0,0,0.28)",
-                    borderColor: "rgba(0,0,0,0.25)",
+                    background: "var(--surface-card)",
+                    borderColor: "var(--border)",
                     borderTopWidth: "3px",
                     borderTopColor: app.accent,
+                    boxShadow: "0 4px 12px rgba(10,22,40,0.06)",
                     ...(app.comingSoon
                       ? {}
                       : {
@@ -176,9 +175,8 @@ export default function AppsPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <span
-                          className="font-mono text-[0.58rem] tracking-[0.1em] uppercase font-semibold px-2.5 py-1 rounded-md"
+                          className="font-mono text-[0.58rem] tracking-[0.1em] uppercase font-semibold px-2.5 py-1 rounded-md text-accent-text"
                           style={{
-                            color: app.accent,
                             background: `${app.accent}15`,
                             border: `1px solid ${app.accent}30`,
                           }}
@@ -186,29 +184,29 @@ export default function AppsPage() {
                           {app.badge}
                         </span>
                         {app.comingSoon && (
-                          <span className="font-mono text-[0.58rem] tracking-[0.1em] uppercase font-semibold px-2.5 py-1 rounded-md text-[rgba(255,255,255,0.4)] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]">
+                          <span className="font-mono text-[0.58rem] tracking-[0.1em] uppercase font-semibold px-2.5 py-1 rounded-md text-text-dim bg-surface-page border border-border">
                             COMING SOON
                           </span>
                         )}
                       </div>
                       {app.loginRequired ? (
-                        <div className="flex items-center gap-1.5 text-[rgba(255,255,255,0.35)]">
+                        <div className="flex items-center gap-1.5 text-text-dim">
                           <LockIcon className="w-3 h-3" />
                           <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase">
                             Login required
                           </span>
                         </div>
                       ) : (
-                        <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase text-[rgba(255,255,255,0.35)]">
+                        <span className="font-mono text-[0.5rem] tracking-[0.05em] uppercase text-text-dim">
                           No login
                         </span>
                       )}
                     </div>
 
-                    <h2 className="font-sans text-xl font-bold text-white mb-3">
+                    <h2 className="font-sans text-xl font-bold text-text-strong mb-3">
                       {app.title}
                     </h2>
-                    <p className="text-[rgba(255,255,255,0.55)] text-sm leading-relaxed mb-5">
+                    <p className="text-text-body text-sm leading-relaxed mb-5">
                       {app.description}
                     </p>
                   </div>
@@ -222,16 +220,9 @@ export default function AppsPage() {
                           className="flex items-start gap-2.5 text-sm"
                         >
                           <CheckIcon
-                            className="w-4 h-4 mt-0.5 shrink-0"
+                            className="w-4 h-4 mt-0.5 shrink-0 text-accent-text"
                           />
-                          <span
-                            className="text-[rgba(255,255,255,0.55)]"
-                            style={
-                              !app.comingSoon
-                                ? { color: "rgba(255,255,255,0.55)" }
-                                : undefined
-                            }
-                          >
+                          <span className="text-text-body">
                             {feature}
                           </span>
                         </li>
@@ -241,14 +232,13 @@ export default function AppsPage() {
 
                   {/* Card Footer */}
                   <div
-                    className="px-6 py-4 mt-auto border-t flex items-center justify-between"
-                    style={{ borderColor: "rgba(255,255,255,0.06)" }}
+                    className="px-6 py-4 mt-auto border-t border-border-soft flex items-center justify-between"
                   >
-                    <span className="text-[rgba(255,255,255,0.35)] text-xs font-mono tracking-wide">
+                    <span className="text-text-dim text-xs font-mono tracking-wide">
                       {app.footer}
                     </span>
                     {!app.comingSoon && (
-                      <ArrowRightIcon className="w-4 h-4 text-[rgba(255,255,255,0.35)]" />
+                      <ArrowRightIcon className="w-4 h-4 text-text-dim" />
                     )}
                   </div>
                 </div>
@@ -281,7 +271,8 @@ export default function AppsPage() {
                   <style>{`
                     .group:hover > div {
                       border-color: ${app.accent}40 !important;
-                      box-shadow: 0 0 30px ${app.accent}12, 0 8px 32px rgba(0,0,0,0.3);
+                      background: var(--surface-card-hover) !important;
+                      box-shadow: 0 0 30px ${app.accent}12, 0 20px 40px rgba(10,22,40,0.14) !important;
                     }
                   `}</style>
                   {cardContent}
@@ -296,17 +287,16 @@ export default function AppsPage() {
           <div
             className="mx-auto max-w-3xl text-center rounded-[16px] border px-8 py-12 md:py-16"
             style={{
-              background: "rgba(0,0,0,0.28)",
-              borderColor: "rgba(0,0,0,0.25)",
+              background: "var(--surface-card)",
+              borderColor: "var(--border)",
             }}
           >
-            <p className="text-[rgba(255,255,255,0.55)] text-base md:text-lg mb-6">
+            <p className="text-text-body text-base md:text-lg mb-6">
               Want to become an AQS sales partner? Get in touch.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-white transition-all duration-200 hover:brightness-110"
-              style={{ background: "#00c2ff" }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-brand-cyan text-brand-navy-deep transition-all duration-200 hover:brightness-110"
             >
               Contact Us
               <ArrowRightIcon className="w-4 h-4" />
@@ -315,6 +305,6 @@ export default function AppsPage() {
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

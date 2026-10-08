@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
 const solutionOptions = [
@@ -16,6 +15,7 @@ const solutionOptions = [
   "Other",
 ];
 
+/* Text-only page hero: light surfaces; the form fields sit on the card surface. */
 export function ContactContent() {
   const [formData, setFormData] = useState({
     name: "",
@@ -59,11 +59,10 @@ export function ContactContent() {
   };
 
   const inputClasses =
-    "w-full bg-black/30 border border-border-default rounded-lg px-4 py-3 font-sans text-[0.9rem] text-white placeholder:text-text-dim focus:outline-none focus:border-accent-primary/50 focus:shadow-[0_0_16px_rgba(0,194,255,0.1)] transition-all";
+    "w-full bg-surface-card border border-border rounded-lg px-4 py-3 font-sans text-[0.9rem] text-text-strong placeholder:text-text-dim focus:outline-none focus:border-accent-text focus:shadow-[0_0_16px_rgba(0,194,255,0.1)] transition-all";
 
   return (
     <section className="pt-[140px] pb-[100px] px-8 relative">
-      <GlowOrb top="-100px" left="60%" size={500} />
       <div className="max-w-[700px] mx-auto relative z-10">
         <AnimatedSection>
           <SectionLabel>Get in Touch</SectionLabel>
@@ -85,7 +84,7 @@ export function ContactContent() {
               }}
             >
               <div className="text-[2.5rem] mb-4">✓</div>
-              <h3 className="font-sans text-[1.3rem] font-bold text-white mb-2">
+              <h3 className="font-sans text-[1.3rem] font-bold text-text-strong mb-2">
                 Message Sent
               </h3>
               <p className="font-sans text-[0.9rem] text-text-body">
@@ -166,13 +165,13 @@ export function ContactContent() {
                       style={{
                         background: formData.solutions.includes(s)
                           ? "rgba(0,194,255,0.12)"
-                          : "rgba(0,0,0,0.2)",
+                          : "var(--surface-card)",
                         borderColor: formData.solutions.includes(s)
                           ? "rgba(0,194,255,0.4)"
-                          : "rgba(0,0,0,0.25)",
+                          : "var(--border)",
                         color: formData.solutions.includes(s)
-                          ? "#00c2ff"
-                          : "rgba(255,255,255,0.55)",
+                          ? "var(--accent-text)"
+                          : "var(--text-body)",
                       }}
                     >
                       {s}
@@ -196,7 +195,7 @@ export function ContactContent() {
               </div>
 
               {status === "error" && (
-                <p className="font-sans text-[0.85rem] text-[#ff6666]">
+                <p className="font-sans text-[0.85rem] text-text-strong rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3">
                   Something went wrong. Please email us directly at{" "}
                   <a href="mailto:info@automatedqs.com" className="underline">
                     info@automatedqs.com
@@ -205,7 +204,7 @@ export function ContactContent() {
               )}
 
               <MagneticButton
-                className="w-full font-sans text-[0.92rem] font-bold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] px-8 py-4 rounded-lg shadow-[0_0_28px_rgba(0,194,255,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full font-sans text-[0.92rem] font-bold text-brand-navy-deep bg-brand-cyan px-8 py-4 rounded-lg shadow-[0_0_28px_rgba(0,194,255,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {}}
               >
                 {status === "sending" ? "Sending..." : "Send Message →"}
@@ -216,14 +215,14 @@ export function ContactContent() {
 
         {/* Contact info */}
         <AnimatedSection delay={0.2}>
-          <div className="mt-12 pt-8 border-t border-border-default grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+          <div className="mt-12 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
               <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-1">
                 Email
               </div>
               <a
                 href="mailto:info@automatedqs.com"
-                className="font-sans text-[0.88rem] text-accent-primary no-underline hover:underline"
+                className="font-sans text-[0.88rem] text-accent-text no-underline hover:underline"
               >
                 info@automatedqs.com
               </a>
@@ -244,7 +243,7 @@ export function ContactContent() {
                 href="https://www.linkedin.com/company/automatedqs/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-sans text-[0.88rem] text-accent-primary no-underline hover:underline"
+                className="font-sans text-[0.88rem] text-accent-text no-underline hover:underline"
               >
                 @automatedqs
               </a>

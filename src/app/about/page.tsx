@@ -17,12 +17,13 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <AboutContent />
       <FAQSection />
       <CTASection />
       <Footer />
-    </>
+    </div>
   );
 }

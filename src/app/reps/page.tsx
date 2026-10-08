@@ -15,10 +15,11 @@ export const metadata: Metadata = {
 
 export default function RepsPage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <RepsPageContent />
       <Footer />
-    </>
+    </div>
   );
 }

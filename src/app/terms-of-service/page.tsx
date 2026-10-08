@@ -10,14 +10,15 @@ export const metadata: Metadata = {
 
 export default function TermsOfServicePage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <section className="pt-[140px] pb-[100px] px-8">
         <div className="max-w-[800px] mx-auto">
-          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-white mb-4">
+          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-text-strong mb-4">
             Terms of Service
           </h1>
-          <p className="font-mono text-[0.68rem] text-white/30 tracking-[0.1em] uppercase mb-10">
+          <p className="font-mono text-[0.68rem] text-text-dim tracking-[0.1em] uppercase mb-10">
             Last Updated: March 9, 2026
           </p>
 
@@ -31,7 +32,7 @@ export default function TermsOfServicePage() {
             </p>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Use of the Site</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Use of the Site</h2>
               <p className="mb-3">
                 Our Site provides information about AQS and our automation solutions for packaging
                 lines, including VeriPak SCADA systems, IntelliPak feed systems, EvacuPak liquid
@@ -68,7 +69,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Intellectual Property</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Intellectual Property</h2>
               <p className="mb-3">
                 All content on this Site, including but not limited to text, graphics, logos, images,
                 product descriptions, technical specifications, animations, and software, is the
@@ -77,24 +78,24 @@ export default function TermsOfServicePage() {
                 laws.
               </p>
 
-              <h3 className="text-white font-semibold text-[1rem] mb-2 mt-4">Trademarks</h3>
+              <h3 className="text-text-strong font-semibold text-[1rem] mb-2 mt-4">Trademarks</h3>
               <p className="mb-3">
                 The following are trademarks or registered trademarks of Automated Quality
                 Solutions, Inc.:
               </p>
               <ul className="list-disc pl-6 space-y-1 mb-3">
                 <li>
-                  <strong className="text-white">Automated Quality Solutions</strong> and the AQS
+                  <strong className="text-text-strong">Automated Quality Solutions</strong> and the AQS
                   logo
                 </li>
                 <li>
-                  <strong className="text-white">VeriPak</strong>
+                  <strong className="text-text-strong">VeriPak</strong>
                 </li>
                 <li>
-                  <strong className="text-white">IntelliPak</strong>
+                  <strong className="text-text-strong">IntelliPak</strong>
                 </li>
                 <li>
-                  <strong className="text-white">EvacuPak</strong>
+                  <strong className="text-text-strong">EvacuPak</strong>
                 </li>
               </ul>
               <p className="mb-3">
@@ -110,7 +111,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Quote Requests and Communications
               </h2>
               <p className="mb-3">
@@ -122,7 +123,7 @@ export default function TermsOfServicePage() {
               <p>
                 Information you provide in quote requests and contact forms will be handled in
                 accordance with our{" "}
-                <a href="/privacy-policy" className="text-accent-primary hover:underline">
+                <a href="/privacy-policy" className="text-accent-text hover:underline">
                   Privacy Policy
                 </a>
                 .
@@ -130,7 +131,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Product Information and Specifications
               </h2>
               <p className="mb-3">
@@ -154,7 +155,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Disclaimer of Warranties</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Disclaimer of Warranties</h2>
               <p className="mb-3 uppercase text-[0.85rem]">
                 The Site and all content, materials, and information provided on the Site are
                 provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of
@@ -173,7 +174,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Limitation of Liability</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Limitation of Liability</h2>
               <p className="mb-3 uppercase text-[0.85rem]">
                 To the fullest extent permitted by applicable law, AQS, its officers, directors,
                 employees, and agents shall not be liable for any indirect, incidental, special,
@@ -189,7 +190,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Indemnification</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Indemnification</h2>
               <p>
                 You agree to indemnify, defend, and hold harmless AQS and its officers, directors,
                 employees, and agents from and against any claims, liabilities, damages, losses,
@@ -199,7 +200,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Third-Party Links</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Third-Party Links</h2>
               <p>
                 The Site may contain links to third-party websites, including those of our technology
                 partners, industry organizations, and other resources. These links are provided for
@@ -210,7 +211,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 For Authorized Sales Representatives
               </h2>
               <p>
@@ -223,7 +224,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Governing Law and Jurisdiction
               </h2>
               <p>
@@ -236,7 +237,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Changes to These Terms</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Changes to These Terms</h2>
               <p>
                 We may update these Terms from time to time. When we do, we will revise the
                 &ldquo;Last Updated&rdquo; date at the top of this page. Your continued use of the
@@ -246,7 +247,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Severability</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Severability</h2>
               <p>
                 If any provision of these Terms is found to be invalid or unenforceable by a court of
                 competent jurisdiction, the remaining provisions shall remain in full force and
@@ -255,11 +256,11 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Contact Us</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Contact Us</h2>
               <p>
                 If you have any questions about these Terms of Service, please contact us:
               </p>
-              <p className="mt-3 text-white">
+              <p className="mt-3 text-text-strong">
                 Automated Quality Solutions, Inc.
                 <br />
                 1420 W. Karcher Rd.
@@ -270,13 +271,13 @@ export default function TermsOfServicePage() {
                 Email:{" "}
                 <a
                   href="mailto:sales@automatedqs.com"
-                  className="text-accent-primary hover:underline"
+                  className="text-accent-text hover:underline"
                 >
                   sales@automatedqs.com
                 </a>
                 <br />
                 Phone:{" "}
-                <a href="tel:+12082974420" className="text-accent-primary hover:underline">
+                <a href="tel:+12082974420" className="text-accent-text hover:underline">
                   (208) 297-4420
                 </a>
               </p>
@@ -285,6 +286,6 @@ export default function TermsOfServicePage() {
         </div>
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

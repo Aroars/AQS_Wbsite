@@ -10,14 +10,15 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <section className="pt-[140px] pb-[100px] px-8">
         <div className="max-w-[800px] mx-auto">
-          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-white mb-4">
+          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-text-strong mb-4">
             Privacy Policy
           </h1>
-          <p className="font-mono text-[0.68rem] text-white/30 tracking-[0.1em] uppercase mb-10">
+          <p className="font-mono text-[0.68rem] text-text-dim tracking-[0.1em] uppercase mb-10">
             Last Updated: March 9, 2026
           </p>
 
@@ -36,9 +37,9 @@ export default function PrivacyPolicyPage() {
             </p>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Information We Collect</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Information We Collect</h2>
 
-              <h3 className="text-white font-semibold text-[1rem] mb-2 mt-4">
+              <h3 className="text-text-strong font-semibold text-[1rem] mb-2 mt-4">
                 Information You Provide to Us
               </h3>
               <p className="mb-3">
@@ -46,21 +47,21 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Request a quote or contact us:</strong> Name, email
+                  <strong className="text-text-strong">Request a quote or contact us:</strong> Name, email
                   address, phone number, company name, job title, and details about your packaging
                   line or project requirements.
                 </li>
                 <li>
-                  <strong className="text-white">Subscribe to communications:</strong> Email address
+                  <strong className="text-text-strong">Subscribe to communications:</strong> Email address
                   and communication preferences.
                 </li>
                 <li>
-                  <strong className="text-white">Engage with our sales team:</strong> Business
+                  <strong className="text-text-strong">Engage with our sales team:</strong> Business
                   contact information and project specifications shared during consultations.
                 </li>
               </ul>
 
-              <h3 className="text-white font-semibold text-[1rem] mb-2 mt-4">
+              <h3 className="text-text-strong font-semibold text-[1rem] mb-2 mt-4">
                 Information Collected Automatically
               </h3>
               <p className="mb-3">
@@ -68,26 +69,26 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Device and browser information:</strong> Browser
+                  <strong className="text-text-strong">Device and browser information:</strong> Browser
                   type, operating system, device type, and screen resolution.
                 </li>
                 <li>
-                  <strong className="text-white">Usage data:</strong> Pages visited, time spent on
+                  <strong className="text-text-strong">Usage data:</strong> Pages visited, time spent on
                   pages, referring URLs, and navigation paths through the Site.
                 </li>
                 <li>
-                  <strong className="text-white">IP address and approximate location:</strong> Used
+                  <strong className="text-text-strong">IP address and approximate location:</strong> Used
                   for analytics and to understand our audience geographically.
                 </li>
                 <li>
-                  <strong className="text-white">Cookies and similar technologies:</strong> See our
+                  <strong className="text-text-strong">Cookies and similar technologies:</strong> See our
                   Cookie Policy section below for details.
                 </li>
               </ul>
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 How We Use Your Information
               </h2>
               <p className="mb-3">
@@ -95,33 +96,33 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Responding to inquiries:</strong> To process quote
+                  <strong className="text-text-strong">Responding to inquiries:</strong> To process quote
                   requests, answer questions about our VeriPak, IntelliPak, EvacuPak, Custom
                   Conveyor, and Sanitary Robotics solutions, and provide technical information.
                 </li>
                 <li>
-                  <strong className="text-white">Improving our Site:</strong> To understand how
+                  <strong className="text-text-strong">Improving our Site:</strong> To understand how
                   visitors interact with our content so we can improve the user experience.
                 </li>
                 <li>
-                  <strong className="text-white">Communications:</strong> To send you information
+                  <strong className="text-text-strong">Communications:</strong> To send you information
                   about our products, services, and industry developments, where you have opted in to
                   receive such communications.
                 </li>
                 <li>
-                  <strong className="text-white">Analytics:</strong> To analyze Site traffic, measure
+                  <strong className="text-text-strong">Analytics:</strong> To analyze Site traffic, measure
                   the effectiveness of our content, and understand which solutions are of most
                   interest to visitors.
                 </li>
                 <li>
-                  <strong className="text-white">Legal compliance:</strong> To comply with applicable
+                  <strong className="text-text-strong">Legal compliance:</strong> To comply with applicable
                   laws, regulations, and legal processes.
                 </li>
               </ul>
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Cookies and Tracking Technologies
               </h2>
               <p className="mb-3">
@@ -130,15 +131,15 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Essential cookies:</strong> Required for the Site to
+                  <strong className="text-text-strong">Essential cookies:</strong> Required for the Site to
                   function properly (e.g., session management, security).
                 </li>
                 <li>
-                  <strong className="text-white">Analytics cookies:</strong> Help us understand how
+                  <strong className="text-text-strong">Analytics cookies:</strong> Help us understand how
                   visitors interact with our Site by collecting usage data.
                 </li>
                 <li>
-                  <strong className="text-white">Preference cookies:</strong> Remember your choices,
+                  <strong className="text-text-strong">Preference cookies:</strong> Remember your choices,
                   such as cookie consent preferences.
                 </li>
               </ul>
@@ -150,7 +151,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <p className="mt-3">
                 For more information, see our{" "}
-                <a href="/cookie-policy" className="text-accent-primary hover:underline">
+                <a href="/cookie-policy" className="text-accent-text hover:underline">
                   Cookie Policy
                 </a>
                 .
@@ -158,7 +159,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 How We Share Your Information
               </h2>
               <p className="mb-3">
@@ -167,23 +168,23 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Service providers:</strong> We work with third-party
+                  <strong className="text-text-strong">Service providers:</strong> We work with third-party
                   service providers who assist us with website hosting, analytics, email delivery, and
                   customer relationship management. These providers are contractually obligated to
                   protect your information and use it only for the services they provide to us.
                 </li>
                 <li>
-                  <strong className="text-white">Sales representatives:</strong> If you are located
+                  <strong className="text-text-strong">Sales representatives:</strong> If you are located
                   in a territory served by one of our authorized sales representatives, we may share
                   your inquiry details with the appropriate representative to ensure you receive
                   timely, knowledgeable support.
                 </li>
                 <li>
-                  <strong className="text-white">Legal requirements:</strong> We may disclose your
+                  <strong className="text-text-strong">Legal requirements:</strong> We may disclose your
                   information if required by law, regulation, legal process, or governmental request.
                 </li>
                 <li>
-                  <strong className="text-white">Business transfers:</strong> In the event of a
+                  <strong className="text-text-strong">Business transfers:</strong> In the event of a
                   merger, acquisition, or sale of assets, your information may be transferred as part
                   of that transaction.
                 </li>
@@ -191,7 +192,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Data Retention</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Data Retention</h2>
               <p>
                 We retain your personal information only for as long as necessary to fulfill the
                 purposes described in this policy, unless a longer retention period is required or
@@ -202,33 +203,33 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Your Rights and Choices</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Your Rights and Choices</h2>
               <p className="mb-3">
                 Depending on your location, you may have certain rights regarding your personal
                 information:
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong className="text-white">Access and correction:</strong> You may request
+                  <strong className="text-text-strong">Access and correction:</strong> You may request
                   access to the personal information we hold about you and ask us to correct any
                   inaccuracies.
                 </li>
                 <li>
-                  <strong className="text-white">Deletion:</strong> You may request that we delete
+                  <strong className="text-text-strong">Deletion:</strong> You may request that we delete
                   your personal information, subject to certain exceptions required by law.
                 </li>
                 <li>
-                  <strong className="text-white">Opt-out of communications:</strong> You may
+                  <strong className="text-text-strong">Opt-out of communications:</strong> You may
                   unsubscribe from marketing emails at any time by clicking the
                   &ldquo;unsubscribe&rdquo; link in any email or by contacting us directly.
                 </li>
                 <li>
-                  <strong className="text-white">Cookie preferences:</strong> You may adjust your
+                  <strong className="text-text-strong">Cookie preferences:</strong> You may adjust your
                   cookie settings at any time through the cookie settings link in our Site footer.
                 </li>
               </ul>
 
-              <h3 className="text-white font-semibold text-[1rem] mb-2 mt-4">
+              <h3 className="text-text-strong font-semibold text-[1rem] mb-2 mt-4">
                 California Residents (CCPA)
               </h3>
               <p>
@@ -243,7 +244,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Data Security</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Data Security</h2>
               <p>
                 We implement reasonable administrative, technical, and physical safeguards to protect
                 your personal information against unauthorized access, alteration, disclosure, or
@@ -253,7 +254,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Third-Party Links</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Third-Party Links</h2>
               <p>
                 Our Site may contain links to third-party websites, including technology partner
                 sites, industry resources, and social media platforms. We are not responsible for the
@@ -263,7 +264,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Children&apos;s Privacy
               </h2>
               <p>
@@ -275,7 +276,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">
                 Changes to This Privacy Policy
               </h2>
               <p>
@@ -287,12 +288,12 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Contact Us</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Contact Us</h2>
               <p>
                 If you have any questions about this Privacy Policy, your personal information, or
                 wish to exercise any of your rights, please contact us:
               </p>
-              <p className="mt-3 text-white">
+              <p className="mt-3 text-text-strong">
                 Automated Quality Solutions, Inc.
                 <br />
                 1420 W. Karcher Rd.
@@ -303,13 +304,13 @@ export default function PrivacyPolicyPage() {
                 Email:{" "}
                 <a
                   href="mailto:sales@automatedqs.com"
-                  className="text-accent-primary hover:underline"
+                  className="text-accent-text hover:underline"
                 >
                   sales@automatedqs.com
                 </a>
                 <br />
                 Phone:{" "}
-                <a href="tel:+12082974420" className="text-accent-primary hover:underline">
+                <a href="tel:+12082974420" className="text-accent-text hover:underline">
                   (208) 297-4420
                 </a>
               </p>
@@ -318,6 +319,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

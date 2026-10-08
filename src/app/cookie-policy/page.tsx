@@ -10,14 +10,15 @@ export const metadata: Metadata = {
 
 export default function CookiePolicyPage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <section className="pt-[140px] pb-[100px] px-8">
         <div className="max-w-[800px] mx-auto">
-          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-white mb-4">
+          <h1 className="font-sans text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold text-text-strong mb-4">
             Cookie Policy
           </h1>
-          <p className="font-mono text-[0.68rem] text-white/30 tracking-[0.1em] uppercase mb-10">
+          <p className="font-mono text-[0.68rem] text-text-dim tracking-[0.1em] uppercase mb-10">
             Last Updated: March 9, 2026
           </p>
 
@@ -30,7 +31,7 @@ export default function CookiePolicyPage() {
             </p>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">What Are Cookies?</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">What Are Cookies?</h2>
               <p>
                 Cookies are small text files that are placed on your device when you visit a website.
                 They help the website remember your preferences and understand how you interact with
@@ -41,9 +42,9 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">How We Use Cookies</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">How We Use Cookies</h2>
 
-              <h3 className="text-white font-semibold text-[0.98rem] mt-5 mb-2">Essential Cookies</h3>
+              <h3 className="text-text-strong font-semibold text-[0.98rem] mt-5 mb-2">Essential Cookies</h3>
               <p className="mb-3">
                 These cookies are necessary for the Site to function properly. They enable core
                 functionality such as page navigation, security, and accessibility. You cannot opt
@@ -52,19 +53,19 @@ export default function CookiePolicyPage() {
               <div className="overflow-x-auto mb-5">
                 <table className="w-full text-[0.82rem]">
                   <thead>
-                    <tr className="border-b border-white/10">
-                      <th className="text-left text-white py-2 pr-4">Cookie</th>
-                      <th className="text-left text-white py-2 pr-4">Purpose</th>
-                      <th className="text-left text-white py-2">Duration</th>
+                    <tr className="border-b border-border">
+                      <th className="text-left text-text-strong py-2 pr-4">Cookie</th>
+                      <th className="text-left text-text-strong py-2 pr-4">Purpose</th>
+                      <th className="text-left text-text-strong py-2">Duration</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-white/5">
+                    <tr className="border-b border-border-soft">
                       <td className="py-2 pr-4">Cookie consent preference</td>
                       <td className="py-2 pr-4">Remembers your cookie choices so the banner is not shown on every visit</td>
                       <td className="py-2">1 year</td>
                     </tr>
-                    <tr className="border-b border-white/5">
+                    <tr className="border-b border-border-soft">
                       <td className="py-2 pr-4">Session ID</td>
                       <td className="py-2 pr-4">Maintains your browsing session</td>
                       <td className="py-2">Session</td>
@@ -73,7 +74,7 @@ export default function CookiePolicyPage() {
                 </table>
               </div>
 
-              <h3 className="text-white font-semibold text-[0.98rem] mt-5 mb-2">Analytics Cookies</h3>
+              <h3 className="text-text-strong font-semibold text-[0.98rem] mt-5 mb-2">Analytics Cookies</h3>
               <p>
                 These cookies help us understand how visitors interact with our Site by collecting
                 information about pages visited, time spent on pages, and navigation patterns. This
@@ -81,7 +82,7 @@ export default function CookiePolicyPage() {
                 consent.
               </p>
 
-              <h3 className="text-white font-semibold text-[0.98rem] mt-5 mb-2">Preference Cookies</h3>
+              <h3 className="text-text-strong font-semibold text-[0.98rem] mt-5 mb-2">Preference Cookies</h3>
               <p>
                 These cookies remember choices you make on the Site, such as language preferences or
                 display settings, to provide a more personalized experience.
@@ -89,7 +90,7 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Managing Your Cookie Preferences</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Managing Your Cookie Preferences</h2>
               <p className="mb-3">
                 When you first visit our Site, a cookie consent banner will ask you to accept or
                 decline non-essential cookies. You can change your preferences at any time by:
@@ -102,7 +103,7 @@ export default function CookiePolicyPage() {
                 </li>
               </ul>
 
-              <h3 className="text-white font-semibold text-[0.98rem] mt-5 mb-2">Browser-Level Controls</h3>
+              <h3 className="text-text-strong font-semibold text-[0.98rem] mt-5 mb-2">Browser-Level Controls</h3>
               <p>
                 Most web browsers allow you to manage cookies through their settings. You can
                 typically find these options in the &ldquo;Privacy&rdquo; or &ldquo;Security&rdquo;
@@ -112,7 +113,7 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Third-Party Cookies</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Third-Party Cookies</h2>
               <p>
                 Our analytics provider may set cookies on your device when you visit our Site. These
                 third-party cookies are governed by the respective provider&apos;s privacy policy. We
@@ -121,7 +122,7 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Do Not Track Signals</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Do Not Track Signals</h2>
               <p>
                 Some browsers include a &ldquo;Do Not Track&rdquo; feature that signals to websites
                 that you do not want your activity tracked. Our Site respects Do Not Track signals
@@ -130,7 +131,7 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Changes to This Cookie Policy</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Changes to This Cookie Policy</h2>
               <p>
                 We may update this Cookie Policy from time to time to reflect changes in the cookies
                 we use or for other operational, legal, or regulatory reasons. We will update the
@@ -139,14 +140,14 @@ export default function CookiePolicyPage() {
             </div>
 
             <div>
-              <h2 className="text-white font-bold text-[1.1rem] mb-3">Contact Us</h2>
+              <h2 className="text-text-strong font-bold text-[1.1rem] mb-3">Contact Us</h2>
               <p>If you have questions about our use of cookies, please contact us:</p>
-              <p className="mt-3 text-white">
+              <p className="mt-3 text-text-strong">
                 Automated Quality Solutions, Inc.<br />
                 1420 W. Karcher Rd.<br />
                 Nampa, ID 83687<br />
                 <br />
-                <a href="mailto:sales@automatedqs.com" className="text-accent-primary hover:underline">
+                <a href="mailto:sales@automatedqs.com" className="text-accent-text hover:underline">
                   sales@automatedqs.com
                 </a>
                 <br />
@@ -157,6 +158,6 @@ export default function CookiePolicyPage() {
         </div>
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

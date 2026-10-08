@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PostMechanicalVsVisionLeakDetection() {
   return (
-    <article className="max-w-[720px] mx-auto text-[0.95rem] leading-[1.8] text-[rgba(255,255,255,0.55)]">
+    <article className="max-w-[720px] mx-auto text-[0.95rem] leading-[1.8] text-text-body">
       <p className="mb-4">
         Package integrity is one of the hardest problems in food packaging quality control. A pinhole in a seal, a micro-leak in a pouch, or a subtle defect in a tray lid can compromise shelf life, introduce contamination risk, and ultimately lead to a recall — but many of these defects are invisible to the naked eye.
       </p>
@@ -11,7 +11,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
         The packaging industry has two fundamentally different approaches to catching them: vision-based inspection and mechanical suction-based testing. Both claim to solve the same problem. They work in very different ways, and the differences matter.
       </p>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         How Vision-Based Leak Detection Works
       </h2>
 
@@ -31,7 +31,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
         Vision-based systems catch defects that look wrong. They struggle with defects that look fine but aren&apos;t.
       </p>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         How Mechanical Leak Detection Works
       </h2>
 
@@ -44,18 +44,18 @@ export default function PostMechanicalVsVisionLeakDetection() {
       </p>
 
       <p className="mb-4">
-        <strong className="text-white">Stage 1 — Controlled aspiration.</strong> A suction cup or chamber applies a calibrated vacuum to the package surface. The system measures the structural response — how much the packaging material deflects under the applied force. This establishes a baseline mechanical profile for the package.
+        <strong className="text-text-strong">Stage 1 — Controlled aspiration.</strong> A suction cup or chamber applies a calibrated vacuum to the package surface. The system measures the structural response — how much the packaging material deflects under the applied force. This establishes a baseline mechanical profile for the package.
       </p>
 
       <p className="mb-4">
-        <strong className="text-white">Stage 2 — Differential aspiration with integrity analysis.</strong> A second aspiration pull is applied, and the system compares the response to the first. If the seal is intact, the package behaves consistently across both pulls. If there&apos;s a leak — even a micro-leak too small to see — the differential response reveals it. The system uses what&apos;s called Delta-Z integrity analysis to quantify the difference and make a binary pass/fail determination.
+        <strong className="text-text-strong">Stage 2 — Differential aspiration with integrity analysis.</strong> A second aspiration pull is applied, and the system compares the response to the first. If the seal is intact, the package behaves consistently across both pulls. If there&apos;s a leak — even a micro-leak too small to see — the differential response reveals it. The system uses what&apos;s called Delta-Z integrity analysis to quantify the difference and make a binary pass/fail determination.
       </p>
 
       <p className="mb-4">
         This approach doesn&apos;t depend on what the defect looks like. It depends on whether air can pass through the seal.
       </p>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         Where Each Technology Excels
       </h2>
 
@@ -64,7 +64,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
       </p>
 
       <p className="mb-4">
-        <strong className="text-white">Vision systems are strong for:</strong>
+        <strong className="text-text-strong">Vision systems are strong for:</strong>
       </p>
 
       <ul className="list-disc list-inside mb-4 space-y-1">
@@ -77,7 +77,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
       </ul>
 
       <p className="mb-4">
-        <strong className="text-white">Mechanical leak detection is strong for:</strong>
+        <strong className="text-text-strong">Mechanical leak detection is strong for:</strong>
       </p>
 
       <ul className="list-disc list-inside mb-4 space-y-1">
@@ -89,7 +89,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
         <li>Integrity verification of modified atmosphere packaging (MAP)</li>
       </ul>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         The False Positive Problem
       </h2>
 
@@ -105,7 +105,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
         Mechanical testing produces a binary result. The package either maintains its structural integrity under suction or it doesn&apos;t. There&apos;s no image to interpret, no algorithm confidence score, no gray area. The physics of the test doesn&apos;t drift over time.
       </p>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         Using Both Together
       </h2>
 
@@ -117,7 +117,7 @@ export default function PostMechanicalVsVisionLeakDetection() {
         When both systems feed their data into a centralized SCADA platform, you get a complete quality record for every package.
       </p>
 
-      <h2 className="text-white font-bold text-[1.25rem] mb-4 mt-10">
+      <h2 className="text-text-strong font-bold text-[1.25rem] mb-4 mt-10">
         The Bottom Line
       </h2>
 
@@ -125,9 +125,9 @@ export default function PostMechanicalVsVisionLeakDetection() {
         Vision systems are good at catching what looks wrong. Mechanical leak detection catches what is wrong — even when it looks fine. For food packaging applications where seal integrity directly determines shelf life and food safety, relying on cameras alone leaves a gap that mechanical testing fills.
       </p>
 
-      <p className="mb-4 italic text-[rgba(255,255,255,0.45)]">
+      <p className="mb-4 italic text-text-dim">
         AQS builds a mechanical leak detection module that integrates with the VeriPak SCADA platform.{" "}
-        <Link href="/solutions/leak-detection" className="text-accent-primary hover:underline">
+        <Link href="/solutions/leak-detection" className="text-accent-text hover:underline">
           Learn more about leak detection &rarr;
         </Link>
       </p>

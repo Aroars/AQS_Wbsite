@@ -7,7 +7,6 @@ import {
   StaggerContainer,
   StaggerItem,
 } from "@/components/ui/animated-section";
-import { GlowOrb } from "@/components/ui/glow-orb";
 import {
   reasons,
   products,
@@ -38,15 +37,17 @@ function ReasonCard({
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      className="rounded-xl p-7 h-full transition-all duration-300"
+      className="rounded-xl p-7 h-full transition-all duration-300 hover:-translate-y-1"
       style={{
-        background: hov ? "rgba(26,48,85,0.8)" : "rgba(26,48,85,0.44)",
-        border: `1px solid ${hov ? accent + "55" : "rgba(26,48,85,1)"}`,
-        boxShadow: hov ? `0 8px 32px ${accent}14` : "none",
+        background: hov ? "var(--surface-card-hover)" : "var(--surface-page)",
+        border: `1px solid ${hov ? accent + "4D" : "var(--border)"}`,
+        boxShadow: hov
+          ? "0 20px 40px rgba(10,22,40,0.14)"
+          : "0 4px 12px rgba(10,22,40,0.06)",
       }}
     >
       <div className="text-[1.5rem] mb-3.5">{icon}</div>
-      <h3 className="font-sans text-[1rem] font-bold text-white mb-2.5 leading-[1.4]">
+      <h3 className="font-sans text-[1rem] font-bold text-text-strong mb-2.5 leading-[1.4]">
         {title}
       </h3>
       <p className="font-sans text-[0.875rem] text-text-body leading-[1.75] m-0">
@@ -83,11 +84,13 @@ function ToolCard({
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      className="rounded-xl p-9 relative overflow-hidden transition-all duration-300"
+      className="rounded-xl p-9 relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
       style={{
-        background: hov ? "rgba(26,48,85,0.93)" : "rgba(26,48,85,1)",
-        border: `1px solid ${hov ? accent + "60" : "rgba(26,48,85,1)"}`,
-        boxShadow: hov ? `0 12px 40px ${accent}14` : "none",
+        background: hov ? "var(--surface-card-hover)" : "var(--surface-card)",
+        border: `1px solid ${hov ? accent + "4D" : "var(--border)"}`,
+        boxShadow: hov
+          ? "0 20px 40px rgba(10,22,40,0.14)"
+          : "0 4px 12px rgba(10,22,40,0.06)",
       }}
     >
       {/* Corner glow */}
@@ -108,9 +111,8 @@ function ToolCard({
           {icon}
         </div>
         <span
-          className="font-mono text-[0.62rem] uppercase tracking-[0.14em] px-2.5 py-0.5 rounded-full"
+          className="font-mono text-[0.62rem] uppercase tracking-[0.14em] px-2.5 py-0.5 rounded-full text-accent-text"
           style={{
-            color: accent,
             background: `${accent}14`,
             border: `1px solid ${accent}28`,
           }}
@@ -118,13 +120,10 @@ function ToolCard({
           {tag}
         </span>
       </div>
-      <h3 className="font-sans text-[1.35rem] font-extrabold text-white mb-1.5">
+      <h3 className="font-sans text-[1.35rem] font-extrabold text-text-strong mb-1.5">
         {title}
       </h3>
-      <p
-        className="font-mono text-[0.74rem] tracking-[0.06em] mb-5"
-        style={{ color: accent }}
-      >
+      <p className="font-mono text-[0.74rem] tracking-[0.06em] mb-5 text-accent-text">
         {url}
         <span className="opacity-60">{urlPath}</span>
       </p>
@@ -134,7 +133,7 @@ function ToolCard({
       <div className="flex flex-col gap-2.5 mb-7">
         {features.map((f, i) => (
           <div key={i} className="flex gap-2.5">
-            <span className="shrink-0 leading-[1.55]" style={{ color: accent }}>
+            <span className="shrink-0 leading-[1.55] text-accent-text">
               &#x2713;
             </span>
             <span className="font-sans text-[0.84rem] text-text-body leading-[1.6]">
@@ -147,7 +146,7 @@ function ToolCard({
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-[0.84rem] font-bold tracking-[0.03em]"
         style={{
           background: accent,
-          color: "#0B1A2E",
+          color: "var(--brand-navy-deep)",
           boxShadow: hov
             ? `0 4px 20px ${accent}45`
             : `0 0 14px ${accent}25`,
@@ -183,29 +182,30 @@ function DownloadCard({
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      className="rounded-xl p-6 flex flex-col transition-all duration-300"
+      className="rounded-xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1"
       style={{
-        background: hov ? "rgba(26,48,85,0.87)" : "rgba(26,48,85,0.53)",
-        border: `1px solid ${hov ? accent + "55" : "rgba(26,48,85,1)"}`,
-        boxShadow: hov ? `0 8px 28px ${accent}12` : "none",
+        background: hov ? "var(--surface-card-hover)" : "var(--surface-page)",
+        border: `1px solid ${hov ? accent + "4D" : "var(--border)"}`,
+        boxShadow: hov
+          ? "0 20px 40px rgba(10,22,40,0.14)"
+          : "0 4px 12px rgba(10,22,40,0.06)",
       }}
     >
       <div className="flex justify-between items-center mb-3">
         <span
-          className="font-mono text-[0.62rem] uppercase tracking-[0.12em] px-2.5 py-0.5 rounded-full"
+          className="font-mono text-[0.62rem] uppercase tracking-[0.12em] px-2.5 py-0.5 rounded-full text-accent-text"
           style={{
-            color: accent,
             background: `${accent}15`,
             border: `1px solid ${accent}30`,
           }}
         >
           {tag}
         </span>
-        <span className="font-mono text-[0.65rem] text-text-dim bg-bg-card px-2 py-0.5 rounded">
+        <span className="font-mono text-[0.65rem] text-text-dim bg-surface-card border border-border-soft px-2 py-0.5 rounded">
           {ext}
         </span>
       </div>
-      <h3 className="font-sans text-[0.92rem] font-bold text-white mb-2 leading-[1.4]">
+      <h3 className="font-sans text-[0.92rem] font-bold text-text-strong mb-2 leading-[1.4]">
         {title}
       </h3>
       <p className="font-sans text-[0.82rem] text-text-dim leading-[1.7] mb-5 flex-1">
@@ -214,8 +214,7 @@ function DownloadCard({
       <a
         href={`/downloads/${file}`}
         download
-        className="font-mono text-[0.82rem] font-semibold tracking-[0.04em] no-underline inline-flex items-center gap-1.5 transition-all duration-200 hover:gap-2.5"
-        style={{ color: accent }}
+        className="font-mono text-[0.82rem] font-semibold tracking-[0.04em] no-underline inline-flex items-center gap-1.5 transition-all duration-200 hover:gap-2.5 text-accent-text"
       >
         &darr; Download {ext}
       </a>
@@ -259,16 +258,16 @@ function RepContactForm() {
   };
 
   const inputClass =
-    "w-full bg-[rgba(26,48,85,1)] border border-[rgba(26,48,85,1)] rounded-md px-3.5 py-2.5 text-white text-[0.9rem] font-sans outline-none transition-colors duration-200 focus:border-[#00C6D7]";
+    "w-full bg-surface-card border border-border rounded-md px-3.5 py-2.5 text-text-strong placeholder:text-text-dim text-[0.9rem] font-sans outline-none transition-all duration-200 focus:border-accent-text focus:shadow-[0_0_16px_rgba(0,194,255,0.1)]";
 
   return (
-    <section id="contact" className="py-[88px] px-8 border-t border-border-default">
+    <section id="contact" className="py-[88px] px-8">
       <div className="max-w-[720px] mx-auto">
         <AnimatedSection>
-          <div className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5" style={{ color: REP_CYAN }}>
+          <div className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5 text-accent-text">
             Get in Touch
           </div>
-          <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-3.5">
+          <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-3.5">
             Ready to Add AQS to Your Line Card?
           </h2>
           <p className="font-sans text-text-dim leading-[1.7] mb-10">
@@ -287,7 +286,7 @@ function RepContactForm() {
               }}
             >
               <div className="text-[2.2rem] mb-3.5">&#x2713;</div>
-              <h3 className="font-sans font-bold text-[1.1rem] mb-2" style={{ color: REP_GOLD }}>
+              <h3 className="font-sans font-bold text-[1.1rem] mb-2 text-text-strong">
                 Message Received
               </h3>
               <p className="font-sans text-text-body m-0">
@@ -298,11 +297,7 @@ function RepContactForm() {
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="rounded-xl p-10"
-              style={{
-                background: "rgba(17,34,64,1)",
-                border: "1px solid rgba(26,48,85,1)",
-              }}
+              className="rounded-xl p-10 bg-surface-card border border-border"
             >
               <div className="space-y-4 mb-4">
                 <div>
@@ -368,12 +363,8 @@ function RepContactForm() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="font-sans font-bold text-[0.9rem] px-7 py-3 rounded-md transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-60"
-                  style={{
-                    background: REP_CYAN,
-                    color: "#0B1A2E",
-                    boxShadow: `0 0 22px ${REP_CYAN}38`,
-                  }}
+                  className="font-sans font-bold text-[0.9rem] px-7 py-3 rounded-md bg-brand-cyan text-brand-navy-deep transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-60"
+                  style={{ boxShadow: `0 0 22px ${REP_CYAN}38` }}
                 >
                   {status === "sending" ? "Sending..." : "Send Message \u2192"}
                 </button>
@@ -381,15 +372,14 @@ function RepContactForm() {
                   Or email us:{" "}
                   <a
                     href="mailto:sales@automatedqs.com"
-                    className="no-underline"
-                    style={{ color: REP_CYAN }}
+                    className="no-underline text-accent-text"
                   >
                     sales@automatedqs.com
                   </a>
                 </span>
               </div>
               {status === "error" && (
-                <p className="font-sans text-accent-red text-[0.84rem] mt-3">
+                <p className="font-sans text-text-strong text-[0.84rem] mt-3 rounded-md border border-accent-red/30 bg-accent-red/10 px-4 py-3">
                   Something went wrong. Please try again or email us directly.
                 </p>
               )}
@@ -413,23 +403,17 @@ export function RepsPageContent() {
       {/* ══════════════════════════════════════════
           HERO
           ══════════════════════════════════════════ */}
-      <section
-        className="relative min-h-[92vh] flex items-center overflow-hidden"
-        style={{
-          background: `radial-gradient(ellipse 90% 70% at 65% 45%, #0d2a4a 0%, #0B1A2E 65%)`,
-        }}
-      >
+      {/* Text-only hero: light surfaces (plan section 3); the grid texture is drawn with the soft border */}
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-surface-page">
         {/* Grid texture */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(26,48,85,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(26,48,85,0.1) 1px, transparent 1px)",
+              "linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px)",
             backgroundSize: "64px 64px",
           }}
         />
-        <GlowOrb top="25%" left="72%" size={480} color="0,198,215" />
-        <GlowOrb top="60%" left="2%" size={360} color="245,166,35" />
 
         <div className="relative z-10 max-w-[1100px] mx-auto px-8 py-[120px] w-full">
           <AnimatedSection>
@@ -445,18 +429,15 @@ export function RepsPageContent() {
                 className="w-1.5 h-1.5 rounded-full inline-block"
                 style={{ background: REP_CYAN }}
               />
-              <span
-                className="font-mono text-[0.62rem] tracking-[0.18em] uppercase"
-                style={{ color: REP_CYAN }}
-              >
+              <span className="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent-text">
                 Authorized Rep Program &middot; AQS
               </span>
             </div>
 
             <div className="max-w-[720px]">
-              <h1 className="font-sans font-extrabold text-[clamp(2.4rem,5.5vw,4rem)] leading-[1.08] text-white mb-5">
+              <h1 className="font-sans font-extrabold text-[clamp(2.4rem,5.5vw,4rem)] leading-[1.08] text-text-strong mb-5">
                 The Line Card That{" "}
-                <span style={{ color: REP_CYAN }}>Closes Itself.</span>
+                <span className="text-accent-text">Closes Itself.</span>
               </h1>
               <p className="font-sans text-[clamp(1rem,1.8vw,1.15rem)] text-text-body leading-[1.75] mb-9 max-w-[620px]">
                 AQS builds automation that food and beverage plants actually
@@ -468,18 +449,14 @@ export function RepsPageContent() {
               <div className="flex gap-3 flex-wrap">
                 <a
                   href="#contact"
-                  className="font-sans font-bold text-[0.92rem] px-7 py-3.5 rounded-md no-underline tracking-[0.03em] transition-all duration-200 hover:-translate-y-0.5"
-                  style={{
-                    background: REP_CYAN,
-                    color: "#0B1A2E",
-                    boxShadow: `0 0 28px ${REP_CYAN}45`,
-                  }}
+                  className="font-sans font-bold text-[0.92rem] px-7 py-3.5 rounded-md no-underline tracking-[0.03em] bg-brand-cyan text-brand-navy-deep transition-all duration-200 hover:-translate-y-0.5"
+                  style={{ boxShadow: `0 0 28px ${REP_CYAN}45` }}
                 >
                   Become a Rep Partner &rarr;
                 </a>
                 <a
                   href="#downloads"
-                  className="font-sans font-semibold text-[0.92rem] px-7 py-3.5 rounded-md no-underline border border-white/10 text-text-body hover:border-[#00C6D7] hover:text-white transition-all duration-200"
+                  className="font-sans font-semibold text-[0.92rem] px-7 py-3.5 rounded-md no-underline border border-border text-accent-text hover:border-accent-text transition-all duration-200"
                 >
                   Download Materials
                 </a>
@@ -491,9 +468,8 @@ export function RepsPageContent() {
               {productPills.map((pill, i) => (
                 <span
                   key={i}
-                  className="font-mono text-[0.78rem] tracking-[0.08em] px-3.5 py-1.5 rounded-full"
+                  className="font-mono text-[0.78rem] tracking-[0.08em] px-3.5 py-1.5 rounded-full text-accent-text"
                   style={{
-                    color: pill.accent,
                     background: `${pill.accent}12`,
                     border: `1px solid ${pill.accent}30`,
                   }}
@@ -511,18 +487,16 @@ export function RepsPageContent() {
           ══════════════════════════════════════════ */}
       <section
         id="why"
-        className="py-[88px] px-8 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.5)" }}
+        className="py-[88px] px-8 bg-surface-card border-y border-border"
       >
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div
-              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5"
-              style={{ color: REP_CYAN }}
+              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5 text-accent-text"
             >
               Why Carry AQS
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-3.5">
+            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-3.5">
               Six Reasons to Put Us on Your Line Card
             </h2>
             <p className="font-sans text-text-dim leading-[1.7] max-w-[540px] mb-14">
@@ -544,19 +518,15 @@ export function RepsPageContent() {
       {/* ══════════════════════════════════════════
           PRODUCT LINEUP
           ══════════════════════════════════════════ */}
-      <section
-        id="products"
-        className="py-[88px] px-8 border-t border-border-default"
-      >
+      <section id="products" className="py-[88px] px-8">
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div
-              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5"
-              style={{ color: REP_GOLD }}
+              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5 text-accent-text"
             >
               What You&apos;re Selling
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-12">
+            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-12">
               A Complete Automation Portfolio
             </h2>
           </AnimatedSection>
@@ -568,12 +538,14 @@ export function RepsPageContent() {
                 <button
                   key={i}
                   onClick={() => setActiveProduct(i)}
-                  className="font-sans font-semibold text-[0.85rem] px-5 py-2.5 rounded-full border-none cursor-pointer transition-all duration-200"
+                  className="font-sans font-semibold text-[0.85rem] px-5 py-2.5 rounded-full border cursor-pointer transition-all duration-200"
                   style={{
                     background:
-                      activeProduct === i ? prod.accent : "rgba(26,48,85,1)",
+                      activeProduct === i ? prod.accent : "var(--surface-card)",
+                    borderColor:
+                      activeProduct === i ? prod.accent : "var(--border)",
                     color:
-                      activeProduct === i ? "#0B1A2E" : "rgba(168,178,209,1)",
+                      activeProduct === i ? "var(--brand-navy-deep)" : "var(--text-body)",
                     boxShadow:
                       activeProduct === i
                         ? `0 0 18px ${prod.accent}45`
@@ -589,24 +561,20 @@ export function RepsPageContent() {
             <div
               className="rounded-xl p-10 transition-colors duration-300"
               style={{
-                background: "rgba(17,34,64,1)",
+                background: "var(--surface-card)",
                 border: `1px solid ${p.accent}28`,
-                boxShadow: `0 0 48px ${p.accent}0c`,
+                boxShadow: `0 4px 12px rgba(10,22,40,0.06), 0 0 48px ${p.accent}0c`,
               }}
             >
               <div className="flex items-center gap-3.5 mb-2 flex-wrap">
-                <h3
-                  className="font-sans text-[1.8rem] font-extrabold m-0"
-                  style={{ color: p.accent }}
-                >
+                <h3 className="font-sans text-[1.8rem] font-extrabold m-0 text-text-strong">
                   {p.name}
                 </h3>
                 <span
-                  className="font-mono text-[0.65rem] uppercase tracking-[0.12em] px-2.5 py-0.5 rounded-full"
+                  className="font-mono text-[0.65rem] uppercase tracking-[0.12em] px-2.5 py-0.5 rounded-full text-accent-text"
                   style={{
                     background: `${p.accent}18`,
                     border: `1px solid ${p.accent}40`,
-                    color: p.accent,
                   }}
                 >
                   {p.tag}
@@ -618,10 +586,7 @@ export function RepsPageContent() {
               <ul className="m-0 p-0 list-none grid grid-cols-1 md:grid-cols-2 gap-x-7 gap-y-3">
                 {p.points.map((pt, i) => (
                   <li key={i} className="flex gap-2.5 items-start">
-                    <span
-                      className="shrink-0 leading-[1.55] text-[0.95rem]"
-                      style={{ color: p.accent }}
-                    >
+                    <span className="shrink-0 leading-[1.55] text-[0.95rem] text-accent-text">
                       &rarr;
                     </span>
                     <span className="font-sans text-[0.875rem] text-text-body leading-[1.65]">
@@ -630,11 +595,10 @@ export function RepsPageContent() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-7 pt-6 border-t border-white/[0.06]">
+              <div className="mt-7 pt-6 border-t border-border-soft">
                 <Link
                   href={p.href}
-                  className="font-sans text-[0.85rem] font-semibold no-underline tracking-[0.04em]"
-                  style={{ color: p.accent }}
+                  className="font-sans text-[0.85rem] font-semibold no-underline tracking-[0.04em] text-accent-text"
                 >
                   View full product page &rarr;
                 </Link>
@@ -648,18 +612,16 @@ export function RepsPageContent() {
           HOW IT WORKS
           ══════════════════════════════════════════ */}
       <section
-        className="py-[88px] px-8 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.5)" }}
+        className="py-[88px] px-8 bg-surface-card border-y border-border"
       >
         <div className="max-w-[900px] mx-auto">
           <AnimatedSection>
             <div
-              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5"
-              style={{ color: REP_CYAN }}
+              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5 text-accent-text"
             >
               Getting Started
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-14">
+            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-14">
               How the Partnership Works
             </h2>
           </AnimatedSection>
@@ -670,18 +632,15 @@ export function RepsPageContent() {
                 style={{
                   borderBottom:
                     i < partnerSteps.length - 1
-                      ? "1px solid rgba(26,48,85,1)"
+                      ? "1px solid var(--border-soft)"
                       : "none",
                 }}
               >
-                <div
-                  className="font-mono text-[2rem] font-bold leading-none shrink-0 min-w-[48px]"
-                  style={{ color: s.accent }}
-                >
+                <div className="font-mono text-[2rem] font-bold leading-none shrink-0 min-w-[48px] text-accent-text">
                   {s.num}
                 </div>
                 <div>
-                  <h3 className="font-sans text-[1rem] font-bold text-white mb-2 mt-1">
+                  <h3 className="font-sans text-[1rem] font-bold text-text-strong mb-2 mt-1">
                     {s.title}
                   </h3>
                   <p className="font-sans text-[0.875rem] text-text-body leading-[1.75] m-0">
@@ -699,9 +658,8 @@ export function RepsPageContent() {
           ══════════════════════════════════════════ */}
       <section
         id="tools"
-        className="py-[88px] px-8 relative overflow-hidden border-t border-border-default"
+        className="py-[88px] px-8 relative overflow-hidden"
       >
-        <GlowOrb top="50%" left="50%" size={700} color="245,166,35" />
         <div className="max-w-[1100px] mx-auto relative z-10">
           <AnimatedSection>
             <div
@@ -711,14 +669,11 @@ export function RepsPageContent() {
                 border: `1px solid ${REP_GOLD}30`,
               }}
             >
-              <span
-                className="font-mono text-[0.62rem] tracking-[0.18em] uppercase"
-                style={{ color: REP_GOLD }}
-              >
+              <span className="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent-text">
                 Rep-Exclusive Access
               </span>
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-3.5">
+            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-3.5">
               Tools Built to Help You Close
             </h2>
             <p className="font-sans text-text-dim leading-[1.7] max-w-[560px] mb-13">
@@ -740,8 +695,8 @@ export function RepsPageContent() {
             <div
               className="mt-6 px-6 py-4 rounded-lg flex items-center gap-3 flex-wrap"
               style={{
-                background: "rgba(17,34,64,0.5)",
-                border: "1px solid rgba(26,48,85,1)",
+                background: "var(--surface-card)",
+                border: "1px solid var(--border)",
               }}
             >
               <span className="text-[1.1rem]">&#x1F512;</span>
@@ -754,8 +709,7 @@ export function RepsPageContent() {
                 onboarding. Questions?{" "}
                 <a
                   href="mailto:sales@automatedqs.com"
-                  className="no-underline"
-                  style={{ color: REP_CYAN }}
+                  className="no-underline text-accent-text"
                 >
                   sales@automatedqs.com
                 </a>
@@ -770,18 +724,16 @@ export function RepsPageContent() {
           ══════════════════════════════════════════ */}
       <section
         id="downloads"
-        className="py-[88px] px-8 border-t border-border-default"
-        style={{ background: "rgba(17,34,64,0.5)" }}
+        className="py-[88px] px-8 bg-surface-card border-y border-border"
       >
         <div className="max-w-[1100px] mx-auto">
           <AnimatedSection>
             <div
-              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5"
-              style={{ color: REP_GOLD }}
+              className="font-mono text-[0.65rem] tracking-[0.18em] uppercase mb-2.5 text-accent-text"
             >
               Rep Resource Center
             </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-white mb-3.5">
+            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-3.5">
               Everything You Need to Sell
             </h2>
             <p className="font-sans text-text-dim leading-[1.7] max-w-[500px] mb-12">
