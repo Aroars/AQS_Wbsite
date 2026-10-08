@@ -172,7 +172,12 @@ export function ConveyorFamilyContent({ family }: { family: string }) {
                 <div className="font-mono text-[0.58rem] tracking-[0.1em] uppercase mb-3" style={{ color: accent }}>
                   In motion
                 </div>
-                <VideoFigure video={category.video} className="max-w-[960px]" />
+                <div className="flex flex-col md:flex-row md:items-start gap-4">
+                  <VideoFigure video={category.video} className="flex-1 max-w-[960px]" />
+                  {category.portraitVideo && (
+                    <VideoFigure video={category.portraitVideo} aspect="aspect-[9/16]" className="w-full max-w-[300px] md:shrink-0" />
+                  )}
+                </div>
               </div>
             </AnimatedSection>
           )}

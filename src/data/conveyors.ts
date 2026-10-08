@@ -76,6 +76,8 @@ export interface ConveyorCategory {
   faq?: FAQItem[];
   /** A short loop shown under the type cards */
   video?: VideoRef;
+  /** A phone-shot portrait clip shown beside `video` */
+  portraitVideo?: VideoRef;
   types: ConveyorType[];
 }
 
@@ -213,6 +215,12 @@ export const categories: ConveyorCategory[] = [
       poster: "/images/conveyors/mdr-180-curve-loop-poster.jpg",
       alt: "A case riding a stainless 24V MDR conveyor through a 180° curve",
       caption: "Stainless 24V MDR through a 180° curve — each zone runs only while product is on it.",
+    },
+    portraitVideo: {
+      src: "/video/conveyor-origin-case-pack-cell.mp4",
+      poster: "/images/blog/conveyor-origin-case-pack-cell-poster.jpg",
+      alt: "Boxed pies advancing single file on a stainless roller conveyor into a robotic case-packing cell, where two robot arms pick each box from the stop position",
+      caption: "Stainless roller infeed to a robotic case packer — pitch, stop position, and product control belong to the conveyor.",
     },
     faq: [
       {

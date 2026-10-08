@@ -100,7 +100,7 @@ export function RoboticsContent() {
 
         {/* Video showcases */}
         <AnimatedSection delay={0.08}>
-          <div id="showcases" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-[50px]">
+          <div id="showcases" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_0.32fr] gap-4 mb-[50px]">
             <div>
               <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
                 Palletizing Showcase
@@ -128,6 +128,25 @@ export function RoboticsContent() {
                   className="w-full h-full object-cover"
                 >
                   <source src="/video/robotic-picking-showcase.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+            {/* Portrait phone clip: fills the row height beside the two landscape showcases */}
+            <div className="lg:flex lg:flex-col">
+              <div className="font-mono text-[0.58rem] text-[#4d9fff] tracking-[0.1em] uppercase mb-2">
+                Case Packing Showcase
+              </div>
+              <div className="relative aspect-[9/16] max-w-[320px] lg:max-w-none lg:aspect-auto lg:flex-1 rounded-2xl overflow-hidden border border-border-default bg-black/40">
+                <video
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  poster="/images/blog/conveyor-origin-case-pack-cell-poster.jpg"
+                  aria-label="Boxed pies advancing single file on a stainless roller conveyor into a robotic case-packing cell, where two robot arms pick each box from the stop position"
+                  className="absolute inset-0 w-full h-full object-cover"
+                >
+                  <source src="/video/conveyor-origin-case-pack-cell.mp4" type="video/mp4" />
                 </video>
               </div>
             </div>
