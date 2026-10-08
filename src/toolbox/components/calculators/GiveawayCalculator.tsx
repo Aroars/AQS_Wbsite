@@ -46,7 +46,7 @@ export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: Giveaw
                 <Field label="Product cost" unit="optional">
                     <div className="flex gap-1">
                         <input type="number" min="0" step="any" value={s.cost} placeholder="ingredient cost" className={inputCls} onChange={(e) => upd({ cost: e.target.value })} />
-                        <select value={s.costUnit} className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0" onChange={(e) => upd({ costUnit: e.target.value as 'lb' | 'kg' })}><option value="lb">$/lb</option><option value="kg">$/kg</option></select>
+                        <select value={s.costUnit} className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-body text-xs focus:outline-none shrink-0" onChange={(e) => upd({ costUnit: e.target.value as 'lb' | 'kg' })}><option value="lb">$/lb</option><option value="kg">$/kg</option></select>
                     </div>
                 </Field>
                 <Field label={`Overfill with feedback control (${s.unit})`} unit="optional" hint="what a checkweigher-to-filler loop holds; 1–2 g is typical"><input type="number" min="0" step="any" value={s.improved} className={inputCls} onChange={(e) => upd({ improved: e.target.value })} /></Field>
@@ -72,7 +72,7 @@ export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: Giveaw
                     </div>
                 )}
                 {r && r.overfillPerPkg < 0 && <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-warning">The average fill is below the declared weight — that is underfill, a compliance problem rather than giveaway.</div>}
-                <div className="text-[10px] text-text-muted">giveaway = (actual − target) × packages/min × 60 × hours/day × days/year; cost = giveaway × product cost. Savings compare against the overfill a feedback loop holds.</div>
+                <div className="text-[10px] text-text-dim">giveaway = (actual − target) × packages/min × 60 × hours/day × days/year; cost = giveaway × product cost. Savings compare against the overfill a feedback loop holds.</div>
             </div>
         </div>
     )
