@@ -11,7 +11,8 @@ import { CTASection } from "@/components/sections/cta-section";
 
 export default function HomePage() {
   return (
-    <>
+    // data-theme-ready: this route is on the light/dark token model (see globals.css)
+    <div data-theme-ready>
       <Navigation />
       <HeroSection />
       <PartnersBar />
@@ -22,6 +23,6 @@ export default function HomePage() {
       <FAQSection />
       <CTASection />
       <Footer />
-    </>
+    </div>
   );
 }

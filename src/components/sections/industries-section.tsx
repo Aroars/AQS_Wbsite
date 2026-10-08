@@ -30,9 +30,12 @@ const scenarios = [
   },
 ];
 
+/* "Built for the Moments That Cost You": a card-surface band with the
+   cards on the page ground; the cyan/gold left edges stay as fills and
+   the headings become strong text (plan section 5g). */
 export function IndustriesSection() {
   return (
-    <section className="py-[90px] px-8">
+    <section className="py-[90px] px-8 bg-surface-card border-y border-border">
       <div className="max-w-[1280px] mx-auto">
         <AnimatedSection>
           <div className="text-center mb-11">
@@ -47,13 +50,10 @@ export function IndustriesSection() {
           {scenarios.map((s) => (
             <StaggerItem key={s.title}>
               <div
-                className="bg-bg-card border border-border-default rounded-xl p-8 h-full group hover:bg-bg-card-hover hover:-translate-y-1 transition-all duration-400"
-                style={{ borderLeftWidth: 3, borderLeftColor: s.accent }}
+                className="bg-surface-page border border-border rounded-xl p-8 h-full group hover:-translate-y-1 transition-all duration-400"
+                style={{ borderLeftWidth: 5, borderLeftColor: s.accent }}
               >
-                <div
-                  className="font-sans text-[1.1rem] font-bold mb-3"
-                  style={{ color: s.accent }}
-                >
+                <div className="font-sans text-[1.1rem] font-bold mb-3 text-text-strong">
                   {s.title}
                 </div>
                 <div className="font-sans text-[0.88rem] text-text-body leading-[1.7]">

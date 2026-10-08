@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRevealOnce } from "@/components/ui/animated-section";
 
 interface SplitTextProps {
   text: string;
@@ -10,6 +10,9 @@ interface SplitTextProps {
   as?: "h1" | "h2" | "h3" | "p" | "span";
 }
 
+/* Word-by-word rise-in. The words are plain spans in the HTML, so the
+   headline is always present for crawlers and no-JS readers; the motion
+   is CSS (.reveal-word in globals.css) and only runs when allowed. */
 export function SplitText({
   text,
   className = "",
@@ -17,47 +20,24 @@ export function SplitText({
   stagger = 0.03,
   as: Tag = "span",
 }: SplitTextProps) {
+  const { ref, visible } = useRevealOnce<HTMLSpanElement>("0px");
   const words = text.split(" ");
 
   return (
     <Tag className={className}>
-      <motion.span
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={{
-          hidden: {},
-          visible: {
-            transition: {
-              staggerChildren: stagger,
-              delayChildren: delay,
-            },
-          },
-        }}
-        className="inline"
-      >
+      <span ref={ref} className="inline">
         {words.map((word, i) => (
           <span key={i} className="inline-block overflow-hidden">
-            <motion.span
-              className="inline-block"
-              variants={{
-                hidden: { y: "100%", opacity: 0 },
-                visible: {
-                  y: 0,
-                  opacity: 1,
-                  transition: {
-                    duration: 0.5,
-                    ease: [0.16, 1, 0.3, 1],
-                  },
-                },
-              }}
+            <span
+              className={`inline-block reveal-word ${visible ? "is-visible" : ""}`}
+              style={{ transitionDelay: `${delay + i * stagger}s` }}
             >
               {word}
-            </motion.span>
-            {i < words.length - 1 && "\u00A0"}
+            </span>
+            {i < words.length - 1 && " "}
           </span>
         ))}
-      </motion.span>
+      </span>
     </Tag>
   );
 }

@@ -29,9 +29,10 @@ const toolLinks = [
   { label: "All engineering tools →", href: "/toolbox" },
 ];
 
+/* Dark in both themes: brand tokens only (plan section 5j). */
 export function Footer() {
   return (
-    <footer className="border-t border-border-default pt-11 pb-8 px-8">
+    <footer className="bg-brand-navy-deep border-t border-[#1E3048] pt-11 pb-8 px-8">
       <div className="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1.1fr_1fr_1fr] gap-7">
         {/* Brand */}
         <div>
@@ -47,7 +48,7 @@ export function Footer() {
               Automated Quality Solutions
             </span>
           </div>
-          <p className="font-sans text-[0.78rem] text-text-dim leading-[1.7] max-w-[320px]">
+          <p className="font-sans text-[0.78rem] text-brand-steel leading-[1.7] max-w-[320px]">
             Standalone SCADA, intelligent feed systems, sanitary washdown
             conveyors (belt, MDR, and pallet), and food-grade robotics —
             engineered in Nampa, Idaho.
@@ -56,14 +57,14 @@ export function Footer() {
 
         {/* Solutions */}
         <div>
-          <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-3">
+          <div className="font-mono text-[0.58rem] text-brand-cyan tracking-[0.12em] uppercase mb-3">
             Solutions
           </div>
           {solutionLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block font-sans text-text-dim hover:text-white transition-colors mb-1.5 ${
+              className={`block font-sans text-[#CBD5E1] hover:text-white transition-colors mb-1.5 ${
                 link.sub ? "pl-3 text-[0.72rem]" : "text-[0.78rem]"
               }`}
             >
@@ -74,14 +75,14 @@ export function Footer() {
 
         {/* Engineering Tools */}
         <div>
-          <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-3">
+          <div className="font-mono text-[0.58rem] text-brand-cyan tracking-[0.12em] uppercase mb-3">
             Engineering Tools
           </div>
           {toolLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors mb-1.5"
+              className="block font-sans text-[0.78rem] text-[#CBD5E1] hover:text-white transition-colors mb-1.5"
             >
               {link.label}
             </Link>
@@ -90,14 +91,14 @@ export function Footer() {
 
         {/* Company */}
         <div>
-          <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-3">
+          <div className="font-mono text-[0.58rem] text-brand-cyan tracking-[0.12em] uppercase mb-3">
             Company
           </div>
           {companyLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors mb-1.5"
+              className="block font-sans text-[0.78rem] text-[#CBD5E1] hover:text-white transition-colors mb-1.5"
             >
               {link.label}
             </Link>
@@ -106,7 +107,7 @@ export function Footer() {
             href="https://www.linkedin.com/company/automatedqs/"
             target="_blank"
             rel="noopener noreferrer"
-            className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors mb-1.5"
+            className="block font-sans text-[0.78rem] text-[#CBD5E1] hover:text-white transition-colors mb-1.5"
           >
             LinkedIn
           </a>
@@ -114,7 +115,7 @@ export function Footer() {
             href="https://www.youtube.com/@AutomatedQS"
             target="_blank"
             rel="noopener noreferrer"
-            className="block font-sans text-[0.78rem] text-text-dim hover:text-white transition-colors"
+            className="block font-sans text-[0.78rem] text-[#CBD5E1] hover:text-white transition-colors"
           >
             YouTube
           </a>
@@ -122,10 +123,10 @@ export function Footer() {
 
         {/* Contact */}
         <div>
-          <div className="font-mono text-[0.58rem] text-text-dim tracking-[0.12em] uppercase mb-3">
+          <div className="font-mono text-[0.58rem] text-brand-cyan tracking-[0.12em] uppercase mb-3">
             Contact
           </div>
-          <div className="font-sans text-[0.78rem] text-text-dim leading-[1.8]">
+          <div className="font-sans text-[0.78rem] text-[#CBD5E1] leading-[1.8]">
             1420 W. Karcher Rd.
             <br />
             Nampa, ID 83687
@@ -148,12 +149,12 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="max-w-[1280px] mx-auto mt-6 pt-4 border-t border-border-default flex justify-between flex-wrap gap-2">
-        <div className="font-sans text-[0.72rem] text-white/[0.18]">
+      <div className="max-w-[1280px] mx-auto mt-6 pt-4 border-t border-[#1E3048] flex justify-between flex-wrap gap-2">
+        <div className="font-sans text-[0.72rem] text-brand-steel">
           &copy; 2026 Automated Quality Solutions. All rights reserved.
         </div>
-        <div className="font-sans text-[0.72rem] text-white/[0.18]">
-          <a href="/privacy-policy" className="hover:text-white/30 transition-colors">Privacy Policy</a> &middot; <a href="/terms-of-service" className="hover:text-white/30 transition-colors">Terms of Service</a> &middot; <a href="/cookie-policy" className="hover:text-white/30 transition-colors">Cookie Policy</a> &middot; <CookieSettingsButton />
+        <div className="font-sans text-[0.72rem] text-brand-steel">
+          <a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a> &middot; <a href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</a> &middot; <a href="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</a> &middot; <CookieSettingsButton />
         </div>
       </div>
     </footer>

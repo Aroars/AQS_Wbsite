@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { SectionTitle } from "@/components/ui/section-header";
 import { GlowOrb } from "@/components/ui/glow-orb";
 
 export interface CTASectionProps {
@@ -12,32 +10,35 @@ export interface CTASectionProps {
   body?: string;
   buttonLabel?: string;
   href?: string;
-  /** Button gradient start colour (the site cyan by default) */
+  /** Button fill (the brand cyan by default) */
   accent?: string;
 }
 
+/* A dark band in both themes: brand tokens only (plan section 5i). */
 export function CTASection({
   title = "Ready to Eliminate Quality Blind Spots?",
   body = "Whether you need VeriPak, EvacuPak, leak detection, sanitary robotics, or custom conveyors — let's architect your next system together.",
   buttonLabel = "Start a Project Review →",
   href = "/contact",
-  accent = "#00c2ff",
+  accent = "#00C2FF",
 }: CTASectionProps = {}) {
   return (
-    <section className="py-[90px] px-8 relative overflow-hidden">
+    <section className="py-[90px] px-8 relative overflow-hidden bg-brand-navy-band">
       <GlowOrb top="-100px" left="30%" size={600} />
       <div className="max-w-[780px] mx-auto text-center relative z-10">
         <AnimatedSection>
-          <SectionTitle className="text-center">{title}</SectionTitle>
-          <p className="font-sans text-[1.02rem] text-text-body leading-[1.7] max-w-[520px] mx-auto mb-8">
+          <h2 className="font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1] text-center">
+            {title}
+          </h2>
+          <p className="font-sans text-[1.02rem] text-[#CBD5E1] leading-[1.7] max-w-[520px] mx-auto mb-8">
             {body}
           </p>
           <MagneticButton
             as="a"
             href={href}
-            className="font-sans text-[0.92rem] font-bold text-bg-primary px-9 py-3.5 rounded-lg no-underline inline-block"
+            className="font-sans text-[0.92rem] font-bold text-brand-navy-deep px-9 py-3.5 rounded-lg no-underline inline-block"
             style={{
-              background: `linear-gradient(135deg, ${accent}, #0088ff)`,
+              background: accent,
               boxShadow: `0 0 36px ${accent}4D`,
             }}
           >

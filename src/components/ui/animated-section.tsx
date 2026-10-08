@@ -1,7 +1,52 @@
 "use client";
 
-import { type ReactNode } from "react";
-import { motion } from "framer-motion";
+import {
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+
+/*
+ * Scroll-triggered reveals, CSS-driven. The markup renders visible; the
+ * .reveal classes only hide an element when scripts run and the visitor
+ * allows motion (see globals.css), and an IntersectionObserver adds
+ * .is-visible once. Link previews, crawlers, and no-JS readers always get
+ * the complete page.
+ */
+
+export function useRevealOnce<T extends HTMLElement>(rootMargin = "0px 0px -80px 0px") {
+  const ref = useRef<T>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [rootMargin]);
+
+  return { ref, visible };
+}
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -10,39 +55,34 @@ interface AnimatedSectionProps {
   direction?: "up" | "down" | "left" | "right";
 }
 
-const directionOffset = {
-  up: { x: 0, y: 40 },
-  down: { x: 0, y: -40 },
-  left: { x: 40, y: 0 },
-  right: { x: -40, y: 0 },
-};
-
 export function AnimatedSection({
   children,
   delay = 0,
   className = "",
   direction = "up",
 }: AnimatedSectionProps) {
-  const offset = directionOffset[direction];
-
+  const { ref, visible } = useRevealOnce<HTMLDivElement>();
   return (
-    <motion.div
-      initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{
-        duration: 0.8,
-        delay,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      className={className}
+    <div
+      ref={ref}
+      className={`reveal reveal-${direction} ${visible ? "is-visible" : ""} ${className}`}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-// Stagger container for child animations
+// Stagger: the container is observed once; each item delays by its index
+const StaggerContext = createContext<{ visible: boolean; step: number }>({ visible: true, step: 0 });
+
+interface StaggerItemProps {
+  children: ReactNode;
+  className?: string;
+  /** Set by StaggerContainer */
+  index?: number;
+}
+
 export function StaggerContainer({
   children,
   className = "",
@@ -52,49 +92,29 @@ export function StaggerContainer({
   className?: string;
   staggerDelay?: number;
 }) {
+  const { ref, visible } = useRevealOnce<HTMLDivElement>();
+  let i = 0;
+  const items = Children.map(children, (child) => {
+    if (!isValidElement(child) || child.type !== StaggerItem) return child;
+    return cloneElement(child as ReactElement<StaggerItemProps>, { index: i++ });
+  });
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <StaggerContext.Provider value={{ visible, step: staggerDelay }}>
+      <div ref={ref} className={className}>
+        {items}
+      </div>
+    </StaggerContext.Provider>
   );
 }
 
-export function StaggerItem({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function StaggerItem({ children, className = "", index = 0 }: StaggerItemProps) {
+  const { visible, step } = useContext(StaggerContext);
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1],
-          },
-        },
-      }}
-      className={className}
+    <div
+      className={`reveal reveal-item ${visible ? "is-visible" : ""} ${className}`}
+      style={index ? { transitionDelay: `${index * step}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

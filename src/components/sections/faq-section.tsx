@@ -40,20 +40,19 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-border-default">
+    <div className="border-b border-border-soft last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full bg-transparent border-none py-5 flex justify-between items-center gap-4 text-left"
         data-cursor-hover
       >
         <span
-          className="font-sans text-[0.98rem] font-semibold transition-colors duration-300"
-          style={{ color: open ? "#00c2ff" : "#ffffff" }}
+          className={`font-sans text-[0.98rem] font-semibold transition-colors duration-300 ${open ? "text-accent-text" : "text-text-strong"}`}
         >
           {question}
         </span>
         <motion.span
-          className="text-[1.1rem] text-accent-primary shrink-0"
+          className="text-[1.1rem] text-accent-text shrink-0"
           animate={{ rotate: open ? 45 : 0 }}
           transition={{ duration: 0.3 }}
         >
@@ -86,7 +85,7 @@ export function FAQSection({
 } = {}) {
   const data = items ?? faqs;
   return (
-    <section className="py-[70px] px-8 bg-black/[0.06]">
+    <section className="py-[70px] px-8">
       <div className="max-w-[780px] mx-auto">
         <AnimatedSection>
           <div className="text-center mb-9">
@@ -96,11 +95,14 @@ export function FAQSection({
             </SectionTitle>
           </div>
         </AnimatedSection>
-        {data.map((item, i) => (
-          <AnimatedSection key={i} delay={i * 0.03}>
-            <FAQItem question={item.q} answer={item.a} />
-          </AnimatedSection>
-        ))}
+        {/* One box; rows divided by the soft border (plan section 5h) */}
+        <AnimatedSection delay={0.05}>
+          <div className="bg-surface-card border border-border rounded-xl px-6">
+            {data.map((item, i) => (
+              <FAQItem key={i} question={item.q} answer={item.a} />
+            ))}
+          </div>
+        </AnimatedSection>
       </div>
     </section>
   );

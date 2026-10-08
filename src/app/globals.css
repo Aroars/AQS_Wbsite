@@ -4,10 +4,6 @@
    AQS Design Tokens
    ======================================== */
 @theme {
-  --color-bg-primary: #1a1d2b;
-  --color-bg-card: rgba(0, 0, 0, 0.28);
-  --color-bg-card-hover: rgba(0, 0, 0, 0.42);
-
   --color-accent-primary: #00c2ff;
   --color-accent-secondary: #0066ff;
   --color-accent-green: #00d4aa;
@@ -16,13 +12,7 @@
   --color-accent-conveyor: #66b3ff;
   --color-accent-warning: #f5a623;
 
-  --color-border-default: rgba(0, 0, 0, 0.25);
-
-  --color-text-primary: #ffffff;
-  --color-text-body: rgba(255, 255, 255, 0.55);
-  --color-text-dim: rgba(255, 255, 255, 0.35);
-
-  /* Engineering Toolbox tokens (src/toolbox) — shares --color-text-primary above */
+  /* Engineering Toolbox tokens (src/toolbox) — text-primary is the semantic text-strong below */
   --color-dark-900: #0A1628;
   --color-dark-800: #0F1D2F;
   --color-dark-700: #162A40;
@@ -47,6 +37,11 @@
    is swept onto this model, so unswept pages look exactly as before.
    The toolbox and ROI calculator stay on the dark values in both
    themes until their own sweep.
+
+   Transition only: a route that has been swept marks its root with
+   data-theme-ready. Any route without that marker is forced onto the
+   dark values so it looks as it always has. The :has() rule and the
+   markers are deleted in the final shim-removal commit.
    ======================================== */
 :root {
   --surface-page: #F3F5F8;
@@ -55,6 +50,8 @@
   --border: #D9E0E8;
   --border-soft: #E6EBF1;
   --text-strong: #0A1628;
+  --text-body: #475569;
+  --text-dim: #64748B;
   --text-nav: #334155;
   --accent-text: #007099;
   --logo-filter: grayscale(1);
@@ -63,6 +60,7 @@
 }
 
 [data-theme="dark"],
+:root:not(:has([data-theme-ready])),
 .toolbox-scope,
 .roi-scope {
   --surface-page: #1A1D2B;
@@ -71,6 +69,8 @@
   --border: #2F3344;
   --border-soft: #262A38;
   --text-strong: #FFFFFF;
+  --text-body: #ADB3BF;
+  --text-dim: #8B94A3;
   --text-nav: #CBD5E1;
   --accent-text: #00C2FF;
   --logo-filter: brightness(0) invert(1);
@@ -85,8 +85,17 @@
   --color-border: var(--border);
   --color-border-soft: var(--border-soft);
   --color-text-strong: var(--text-strong);
+  --color-text-body: var(--text-body);
+  --color-text-dim: var(--text-dim);
   --color-text-nav: var(--text-nav);
   --color-accent-text: var(--accent-text);
+
+  /* Legacy names on the semantic model (plan section 4 shim); removed once every route is swept */
+  --color-bg-primary: var(--surface-page);
+  --color-bg-card: var(--surface-card);
+  --color-bg-card-hover: var(--surface-card-hover);
+  --color-border-default: var(--border);
+  --color-text-primary: var(--text-strong);
 
   --color-brand-cyan: #00C2FF;
   --color-brand-gold: #F5A623;
@@ -100,22 +109,21 @@
    Base Styles
    ======================================== */
 html {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--surface-page);
+  color: var(--text-strong);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg-primary);
+  background-color: var(--surface-page);
   min-height: 100vh;
   overflow-x: clip;
 }
 
 ::selection {
-  background-color: rgba(0, 194, 255, 0.25);
-  color: #ffffff;
+  background-color: rgba(0, 194, 255, 0.3);
 }
 
 /* ========================================
@@ -159,6 +167,39 @@ body {
 
 
 /* ========================================
+   Scroll reveal (plan section 6)
+
+   Sections render visible. Only when JavaScript is running (html.js, set
+   before first paint in layout.tsx) and the visitor allows motion are
+   .reveal elements hidden until an IntersectionObserver adds .is-visible.
+   No JavaScript, or reduced motion: nothing is ever hidden.
+   ======================================== */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.js .reveal-down { transform: translateY(-40px); }
+  html.js .reveal-left { transform: translateX(40px); }
+  html.js .reveal-right { transform: translateX(-40px); }
+  html.js .reveal-item { transform: translateY(30px); transition-duration: 0.6s; }
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  html.js .reveal-word {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.js .reveal-word.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ========================================
    Utility Classes
    ======================================== */
 .gradient-text,
@@ -174,14 +215,14 @@ body {
 
 
 .card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border-default);
+  background: var(--surface-card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover {
-  background: var(--color-bg-card-hover);
+  background: var(--surface-card-hover);
   transform: translateY(-4px);
 }
 
@@ -197,7 +238,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
+  background: var(--surface-page);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -445,7 +486,7 @@ body {
 }
 
 .toolbox-scope ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--border);
   border-radius: 4px;
 }
 

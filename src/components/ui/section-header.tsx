@@ -2,7 +2,7 @@ import { type ReactNode } from "react";
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <div className="font-mono text-[0.68rem] text-accent-primary tracking-[0.15em] uppercase mb-3">
+    <div className="font-mono text-[0.68rem] text-accent-text tracking-[0.15em] uppercase mb-3">
       {children}
     </div>
   );
@@ -20,7 +20,7 @@ export function SectionTitle({
 }) {
   return (
     <Tag
-      className={`font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-white mb-4 leading-[1.1] ${className}`}
+      className={`font-sans text-[clamp(2rem,4vw,3rem)] font-extrabold text-text-strong mb-4 leading-[1.1] ${className}`}
     >
       {children}
     </Tag>

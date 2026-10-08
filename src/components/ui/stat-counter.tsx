@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
 
 interface StatCounterProps {
   value: number;
   suffix?: string;
   label: string;
   duration?: number;
+  /** Label colour; the hero band uses text-brand-steel */
+  labelClassName?: string;
 }
 
 export function StatCounter({
@@ -15,6 +17,7 @@ export function StatCounter({
   suffix = "",
   label,
   duration = 2,
+  labelClassName = "text-text-dim",
 }: StatCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -43,20 +46,13 @@ export function StatCounter({
   }, [isInView, value, duration]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="text-center"
-    >
-      <div className="font-mono text-5xl font-bold text-accent-primary leading-none glow-text">
+    <div ref={ref} className="text-center">
+      <div className="font-mono text-5xl font-bold text-brand-cyan leading-none glow-text">
         <span>{count}{suffix}</span>
       </div>
-      <div className="font-sans text-[0.78rem] text-text-dim mt-2 uppercase tracking-[0.12em]">
+      <div className={`font-sans text-[0.78rem] mt-2 uppercase tracking-[0.12em] ${labelClassName}`}>
         {label}
       </div>
-    </motion.div>
+    </div>
   );
 }
