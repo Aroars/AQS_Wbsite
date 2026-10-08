@@ -64,24 +64,29 @@ const softwareSchema = {
 
 export default function ToolboxPage() {
   return (
-    <>
+    // data-theme-ready: page chrome is on the light/dark token model; the tool
+    // app below keeps its own dark palette (toolbox-scope) until its own sweep
+    <div data-theme-ready>
       <Navigation />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
       />
 
-      <div className="toolbox-scope pt-[80px]">
+      <div className="pt-[80px]">
         {/* The page H1 and the current tab's help, styled like a tool page's header */}
         <ToolboxIntro mode="tab" />
-        <ToolboxHeader />
 
-        <ToolboxLoader />
+        {/* The app is a dark band in both themes */}
+        <div className="toolbox-scope">
+          <ToolboxHeader />
+          <ToolboxLoader />
+        </div>
 
         {/* Crawlable index of every tool: one link per page, grouped, compact */}
         <section id="tools" className="px-6 py-12 md:py-14">
           <div className="mx-auto max-w-5xl">
-            <h2 className="font-sans text-xl md:text-2xl font-bold text-white mb-3">
+            <h2 className="font-sans text-xl md:text-2xl font-bold text-text-strong mb-3">
               What&apos;s in the toolbox
             </h2>
             <p className="text-text-body text-sm max-w-3xl leading-relaxed mb-8">
@@ -95,7 +100,7 @@ export default function ToolboxPage() {
             <div className="space-y-8">
               {groups.map((group) => (
                 <div key={group.heading}>
-                  <h3 className="font-sans text-sm font-semibold text-white mb-1">
+                  <h3 className="font-sans text-sm font-semibold text-text-strong mb-1">
                     {group.heading}
                   </h3>
                   <p className="text-text-dim text-xs leading-relaxed mb-3 max-w-3xl">
@@ -110,7 +115,7 @@ export default function ToolboxPage() {
                           <a
                             href={href}
                             title={toolDescriptions[tool.id]}
-                            className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-secondary hover:text-white hover:border-accent-primary transition-colors no-underline"
+                            className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline"
                           >
                             {tool.label}
                           </a>
@@ -126,11 +131,11 @@ export default function ToolboxPage() {
               Values are provided as engineering references and should be
               verified against manufacturer data and applicable codes before
               use in a final design. Need a conveyor sized and quoted? See our{" "}
-              <a href="/solutions/conveyors" className="text-accent-primary hover:underline">
+              <a href="/solutions/conveyors" className="text-accent-text hover:underline">
                 sanitary conveyors
               </a>{" "}
               or{" "}
-              <a href="/contact" className="text-accent-primary hover:underline">
+              <a href="/contact" className="text-accent-text hover:underline">
                 talk to an engineer
               </a>
               .
@@ -139,6 +144,6 @@ export default function ToolboxPage() {
         </section>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }

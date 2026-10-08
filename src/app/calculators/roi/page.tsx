@@ -11,25 +11,29 @@ export const metadata: Metadata = {
 
 export default function RoiCalculatorPage() {
   return (
-    <>
+    // data-theme-ready: page chrome is on the light/dark token model; the
+    // calculator keeps its own dark palette (roi-scope) for now
+    <div data-theme-ready>
       <Navigation />
-      <section className="roi-scope pt-[100px] pb-[60px] px-4 min-h-screen">
+      <section className="pt-[100px] pb-[60px] px-4 min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 roi-no-print">
-            <div className="font-mono text-[0.62rem] text-accent-primary tracking-[0.12em] uppercase mb-2">
+            <div className="font-mono text-[0.62rem] text-accent-text tracking-[0.12em] uppercase mb-2">
               Calculator
             </div>
-            <h1 className="font-sans text-[1.8rem] font-bold text-white mb-1">
+            <h1 className="font-sans text-[1.8rem] font-bold text-text-strong mb-1">
               ROI Projection Tool
             </h1>
             <p className="font-sans text-[0.9rem] text-text-body max-w-[600px]">
               Model labor savings, capacity gains, and payback timelines for your automation investment.
             </p>
           </div>
-          <RoiApp />
+          <div className="roi-scope">
+            <RoiApp />
+          </div>
         </div>
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

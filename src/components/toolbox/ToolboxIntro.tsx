@@ -9,7 +9,7 @@ import type { ToolPage } from "@/toolbox/lib/toolSeo";
 const NOTE =
   "Free, no login. Your inputs are saved in this browser. Values are engineering references — verify against manufacturer data and applicable codes before a final design.";
 
-const EYEBROW = "font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-primary";
+const EYEBROW = "font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-text";
 
 type Props =
   /** A tool's own page: the server passes the page copy; nothing changes after mount */
@@ -31,13 +31,13 @@ function Shell({ crumb, heading, children, product }: { crumb: React.ReactNode; 
     <section className="px-6 pt-10 pb-8 md:pt-14 md:pb-10">
       <div className="mx-auto max-w-5xl">
         <nav className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3 text-text-dim">{crumb}</nav>
-        <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-white mb-4">{heading}</h1>
+        <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-text-strong mb-4">{heading}</h1>
         {children}
         <p className="text-text-dim text-xs mt-4">{NOTE}</p>
         {product && (
           <p className="text-text-body text-sm mt-3">
             Built by the engineers behind{" "}
-            <Link href={product.href} className="text-accent-primary hover:underline">{product.label}</Link>.
+            <Link href={product.href} className="text-accent-text hover:underline">{product.label}</Link>.
           </p>
         )}
       </div>
@@ -49,11 +49,11 @@ function Crumb({ trail, linkHome }: { trail: string; linkHome: boolean }) {
   return (
     <>
       {linkHome ? (
-        <Link href="/toolbox" className="text-accent-primary hover:underline">Engineering Toolbox</Link>
+        <Link href="/toolbox" className="text-accent-text hover:underline">Engineering Toolbox</Link>
       ) : (
-        <span className="text-accent-primary">Engineering Toolbox</span>
+        <span className="text-accent-text">Engineering Toolbox</span>
       )}
-      <span className="mx-2 text-white/20">/</span>
+      <span className="mx-2 text-text-dim">/</span>
       <span>{trail}</span>
     </>
   );
@@ -105,7 +105,7 @@ function TabIntro() {
             {help.tools.map((tool) => (
               <details key={tool.id} className="group border-l-2 border-border pl-4">
                 <summary className="cursor-pointer select-none">
-                  <span className="font-sans font-semibold text-white group-open:text-accent-primary transition-colors">{tool.label}</span>
+                  <span className="font-sans font-semibold text-text-strong group-open:text-accent-text transition-colors">{tool.label}</span>
                   <span className="block text-text-body text-sm leading-relaxed mt-0.5">{tool.summary}</span>
                 </summary>
                 <ol className="mt-3 space-y-2 text-text-body text-sm leading-relaxed list-decimal pl-5">

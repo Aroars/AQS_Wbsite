@@ -78,28 +78,33 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <>
+    // data-theme-ready: page chrome is on the light/dark token model; the tool
+    // app below keeps its own dark palette (toolbox-scope) until its own sweep
+    <div data-theme-ready>
       <Navigation />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
-      <div className="toolbox-scope pt-[80px]">
+      <div className="pt-[80px]">
         {/* Server-rendered intro: what the tool calculates and how */}
         <ToolboxIntro mode="tool" page={page} toolLabel={tool.label} />
 
-        <ToolboxHeader />
-        <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />
+        {/* The app is a dark band in both themes */}
+        <div className="toolbox-scope">
+          <ToolboxHeader />
+          <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />
+        </div>
 
         {/* Questions engineers ask — visible copy backing the FAQPage schema */}
         {page.faq && page.faq.length > 0 && (
           <section className="px-6 pt-14 md:pt-16">
             <div className="mx-auto max-w-5xl">
-              <h2 className="font-sans text-xl md:text-2xl font-bold text-white mb-6">Questions engineers ask</h2>
+              <h2 className="font-sans text-xl md:text-2xl font-bold text-text-strong mb-6">Questions engineers ask</h2>
               <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
                 {page.faq.map((f) => (
                   <div key={f.q} className="border-l-2 border-border pl-4">
-                    <dt className="font-sans font-semibold text-white mb-1">{f.q}</dt>
+                    <dt className="font-sans font-semibold text-text-strong mb-1">{f.q}</dt>
                     <dd className="text-text-body text-sm leading-relaxed">{f.a}</dd>
                   </div>
                 ))}
@@ -113,22 +118,22 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <div className="mx-auto max-w-5xl">
             {related.length > 0 && (
               <>
-                <h2 className="font-sans text-xl md:text-2xl font-bold text-white mb-5">Related tools</h2>
+                <h2 className="font-sans text-xl md:text-2xl font-bold text-text-strong mb-5">Related tools</h2>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-12">
                   {related.map((r) => (
                     <li key={r.slug} className="border-l-2 border-border pl-4">
-                      <Link href={`/toolbox/${r.slug}`} className="font-sans font-semibold text-white hover:text-accent-primary transition-colors">{r.h1}</Link>
+                      <Link href={`/toolbox/${r.slug}`} className="font-sans font-semibold text-text-strong hover:text-accent-text transition-colors">{r.h1}</Link>
                       <p className="text-text-body text-sm leading-relaxed mt-1">{r.description}</p>
                     </li>
                   ))}
                 </ul>
               </>
             )}
-            <h2 className="font-sans text-lg font-semibold text-white mb-4">Everything in the toolbox</h2>
+            <h2 className="font-sans text-lg font-semibold text-text-strong mb-4">Everything in the toolbox</h2>
             <ul className="flex flex-wrap gap-2">
               {more.map((p) => (
                 <li key={p.slug}>
-                  <Link href={`/toolbox/${p.slug}`} className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-secondary hover:text-white hover:border-accent-primary transition-colors no-underline">
+                  <Link href={`/toolbox/${p.slug}`} className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline">
                     {p.h1}
                   </Link>
                 </li>
@@ -138,6 +143,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         </section>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
