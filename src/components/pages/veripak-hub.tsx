@@ -409,7 +409,7 @@ export function VeriPakHubContent() {
                     key={i}
                     className="font-sans text-[13px] text-text-dim py-1 flex items-center gap-2"
                   >
-                    <span className="text-text-dim text-sm">&times;</span> {t}
+                    <span className="text-text-body text-sm">&times;</span> {t}
                   </div>
                 ))}
               </div>
