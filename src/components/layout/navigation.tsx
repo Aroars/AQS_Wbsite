@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const solutions: { label: string; href: string; children?: { label: string; href: string }[] }[] = [
   { label: "VeriPak SCADA", href: "/solutions/veripak" },
@@ -54,15 +55,10 @@ export function Navigation() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-[1000]"
+        className="fixed top-0 left-0 right-0 z-[1000] bg-surface-page border-b border-border"
         style={{
           padding: scrolled ? "9px 0" : "18px 0",
-          background: scrolled
-            ? "rgba(26,29,43,0.95)"
-            : "rgba(26,29,43,0.5)",
-          backdropFilter: "blur(20px)",
-          borderBottom: `1px solid ${scrolled ? "rgba(0,194,255,0.08)" : "transparent"}`,
-          transition: "padding 250ms ease, background 250ms ease, border-bottom 250ms ease",
+          transition: "padding 250ms ease",
         }}
       >
         <div className="max-w-[1280px] mx-auto px-8 flex items-center justify-between">
@@ -83,7 +79,7 @@ export function Navigation() {
             />
             <div>
               <div
-                className="font-sans font-bold text-white"
+                className="font-sans font-bold text-text-strong"
                 style={{
                   fontSize: scrolled ? "0.95rem" : "1.12rem",
                   transition: "font-size 250ms ease",
@@ -92,7 +88,7 @@ export function Navigation() {
                 Automated Quality Solutions
               </div>
               <div
-                className="font-mono text-accent-primary/50 tracking-[0.15em] uppercase"
+                className="font-mono text-accent-text tracking-[0.15em] uppercase"
                 style={{
                   fontSize: scrolled ? "0.52rem" : "0.58rem",
                   transition: "font-size 250ms ease",
@@ -109,8 +105,8 @@ export function Navigation() {
               href="/"
               className={`font-sans font-medium transition-colors ${
                 pathname === "/"
-                  ? "text-accent-primary"
-                  : "text-text-body hover:text-white"
+                  ? "text-accent-text"
+                  : "text-text-nav hover:text-text-strong"
               }`}
               style={{
                 fontSize: scrolled ? "0.84rem" : "0.95rem",
@@ -130,8 +126,8 @@ export function Navigation() {
                 href="/solutions"
                 className={`font-sans font-medium transition-colors ${
                   isSolutionPage
-                    ? "text-accent-primary"
-                    : "text-text-body hover:text-white"
+                    ? "text-accent-text"
+                    : "text-text-nav hover:text-text-strong"
                 }`}
                 style={{
                   fontSize: scrolled ? "0.84rem" : "0.95rem",
@@ -147,12 +143,7 @@ export function Navigation() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full left-[-10px] mt-1 min-w-[210px] py-1.5 rounded-[10px] shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
-                    style={{
-                      background: "rgba(18,20,32,0.97)",
-                      backdropFilter: "blur(20px)",
-                      border: "1px solid rgba(0,0,0,0.25)",
-                    }}
+                    className="absolute top-full left-[-10px] mt-1 min-w-[210px] py-1.5 rounded-[10px] bg-surface-card border border-border shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                   >
                     {solutions.map((s) => (
                       <div key={s.href}>
@@ -160,8 +151,8 @@ export function Navigation() {
                           href={s.href}
                           className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
                             pathname === s.href || (pathname?.startsWith(s.href) && !s.children)
-                              ? "text-accent-primary"
-                              : "text-text-body hover:text-white"
+                              ? "text-accent-text"
+                              : "text-text-nav hover:text-text-strong"
                           }`}
                         >
                           {s.label}
@@ -172,8 +163,8 @@ export function Navigation() {
                             href={c.href}
                             className={`block w-full text-left font-sans text-[0.78rem] pl-[30px] pr-[18px] py-[6px] transition-colors ${
                               pathname?.startsWith(c.href)
-                                ? "text-accent-primary"
-                                : "text-text-dim hover:text-white"
+                                ? "text-accent-text"
+                                : "text-text-nav/70 hover:text-text-strong"
                             }`}
                           >
                             {c.label}
@@ -196,8 +187,8 @@ export function Navigation() {
                 href="/about"
                 className={`font-sans font-medium transition-colors ${
                   isCompanyPage
-                    ? "text-accent-primary"
-                    : "text-text-body hover:text-white"
+                    ? "text-accent-text"
+                    : "text-text-nav hover:text-text-strong"
                 }`}
                 style={{
                   fontSize: scrolled ? "0.84rem" : "0.95rem",
@@ -213,12 +204,7 @@ export function Navigation() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute top-full left-[-10px] mt-1 min-w-[160px] py-1.5 rounded-[10px] shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
-                    style={{
-                      background: "rgba(18,20,32,0.97)",
-                      backdropFilter: "blur(20px)",
-                      border: "1px solid rgba(0,0,0,0.25)",
-                    }}
+                    className="absolute top-full left-[-10px] mt-1 min-w-[160px] py-1.5 rounded-[10px] bg-surface-card border border-border shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
                   >
                     {company.map((c) => (
                       <Link
@@ -226,8 +212,8 @@ export function Navigation() {
                         href={c.href}
                         className={`block w-full text-left font-sans text-[0.84rem] px-[18px] py-[9px] transition-colors ${
                           pathname?.startsWith(c.href)
-                            ? "text-accent-primary"
-                            : "text-text-body hover:text-white"
+                            ? "text-accent-text"
+                            : "text-text-nav hover:text-text-strong"
                         }`}
                       >
                         {c.label}
@@ -242,8 +228,8 @@ export function Navigation() {
               href="/apps"
               className={`font-sans font-medium transition-colors ${
                 pathname === "/apps"
-                  ? "text-accent-primary"
-                  : "text-text-body hover:text-white"
+                  ? "text-accent-text"
+                  : "text-text-nav hover:text-text-strong"
               }`}
               style={{
                 fontSize: scrolled ? "0.84rem" : "0.95rem",
@@ -257,8 +243,8 @@ export function Navigation() {
               href="/toolbox"
               className={`font-sans font-medium transition-colors ${
                 pathname === "/toolbox"
-                  ? "text-accent-primary"
-                  : "text-text-body hover:text-white"
+                  ? "text-accent-text"
+                  : "text-text-nav hover:text-text-strong"
               }`}
               style={{
                 fontSize: scrolled ? "0.84rem" : "0.95rem",
@@ -268,10 +254,12 @@ export function Navigation() {
               Toolbox
             </Link>
 
+            <ThemeToggle />
+
             <MagneticButton
               as="a"
               href="/contact"
-              className={`font-sans font-semibold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] rounded-md shadow-[0_0_16px_rgba(0,194,255,0.2)] inline-block transition-all duration-[250ms] ${
+              className={`font-sans font-semibold text-brand-navy-deep bg-brand-cyan rounded-md inline-block transition-all duration-[250ms] hover:brightness-105 ${
                 scrolled
                   ? "text-[0.84rem] px-5 py-2.5"
                   : "text-[0.95rem] px-6 py-3"
@@ -288,18 +276,18 @@ export function Navigation() {
             aria-label="Toggle menu"
           >
             <motion.span
-              className="block w-6 h-0.5 bg-white rounded-full origin-center"
+              className="block w-6 h-0.5 bg-text-strong rounded-full origin-center"
               animate={{
                 rotate: mobileOpen ? 45 : 0,
                 y: mobileOpen ? 8 : 0,
               }}
             />
             <motion.span
-              className="block w-6 h-0.5 bg-white rounded-full"
+              className="block w-6 h-0.5 bg-text-strong rounded-full"
               animate={{ opacity: mobileOpen ? 0 : 1 }}
             />
             <motion.span
-              className="block w-6 h-0.5 bg-white rounded-full origin-center"
+              className="block w-6 h-0.5 bg-text-strong rounded-full origin-center"
               animate={{
                 rotate: mobileOpen ? -45 : 0,
                 y: mobileOpen ? -8 : 0,
@@ -317,16 +305,12 @@ export function Navigation() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[999] pt-20"
-            style={{
-              background: "rgba(26,29,43,0.98)",
-              backdropFilter: "blur(20px)",
-            }}
+            className="fixed inset-0 z-[999] pt-20 bg-surface-page overflow-y-auto"
           >
             <div className="flex flex-col items-center gap-6 pt-12">
               <Link
                 href="/"
-                className="font-sans text-lg font-medium text-white"
+                className="font-sans text-lg font-medium text-text-strong"
                 onClick={() => setMobileOpen(false)}
               >
                 Home
@@ -334,7 +318,7 @@ export function Navigation() {
               <div className="text-center">
                 <Link
                   href="/solutions"
-                  className="font-sans text-lg font-medium text-white block mb-4"
+                  className="font-sans text-lg font-medium text-text-strong block mb-4"
                   onClick={() => setMobileOpen(false)}
                 >
                   Solutions
@@ -343,7 +327,7 @@ export function Navigation() {
                   <div key={s.href}>
                     <Link
                       href={s.href}
-                      className="block font-sans text-sm text-text-body py-1.5"
+                      className="block font-sans text-sm text-text-nav py-1.5"
                       onClick={() => setMobileOpen(false)}
                     >
                       {s.label}
@@ -352,7 +336,7 @@ export function Navigation() {
                       <Link
                         key={c.href}
                         href={c.href}
-                        className="block font-sans text-xs text-text-dim py-1"
+                        className="block font-sans text-xs text-text-nav/70 py-1"
                         onClick={() => setMobileOpen(false)}
                       >
                         {c.label}
@@ -362,14 +346,14 @@ export function Navigation() {
                 ))}
               </div>
               <div className="text-center">
-                <span className="font-sans text-lg font-medium text-white block mb-4">
+                <span className="font-sans text-lg font-medium text-text-strong block mb-4">
                   Company
                 </span>
                 {company.map((c) => (
                   <Link
                     key={c.href}
                     href={c.href}
-                    className="block font-sans text-sm text-text-body py-1.5"
+                    className="block font-sans text-sm text-text-nav py-1.5"
                     onClick={() => setMobileOpen(false)}
                   >
                     {c.label}
@@ -378,25 +362,28 @@ export function Navigation() {
               </div>
               <Link
                 href="/apps"
-                className="font-sans text-lg font-medium text-white"
+                className="font-sans text-lg font-medium text-text-strong"
                 onClick={() => setMobileOpen(false)}
               >
                 Apps
               </Link>
               <Link
                 href="/toolbox"
-                className="font-sans text-lg font-medium text-white"
+                className="font-sans text-lg font-medium text-text-strong"
                 onClick={() => setMobileOpen(false)}
               >
                 Toolbox
               </Link>
-              <Link
-                href="/contact"
-                className="font-sans text-sm font-semibold text-bg-primary bg-gradient-to-br from-accent-primary to-[#0088ff] px-6 py-3 rounded-md mt-4"
-                onClick={() => setMobileOpen(false)}
-              >
-                Get a Quote
-              </Link>
+              <div className="flex items-center gap-3 mt-4 pb-10">
+                <ThemeToggle />
+                <Link
+                  href="/contact"
+                  className="font-sans text-sm font-semibold text-brand-navy-deep bg-brand-cyan px-6 py-3 rounded-md"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Get a Quote
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

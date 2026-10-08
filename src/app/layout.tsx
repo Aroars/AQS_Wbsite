@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { pageMetadata, organizationSchema, localBusinessSchema } from "@/content/seo";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "next-themes";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { GoogleAnalytics } from "@/components/ui/google-analytics";
 import "./globals.css";
@@ -48,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${dmSans.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -64,10 +65,14 @@ export default function RootLayout({
         />
       </head>
       <body>
+        {/* Light is the default for every visitor regardless of OS setting; a
+            chosen theme persists under localStorage "aqs-theme". */}
+        <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false} storageKey="aqs-theme" disableTransitionOnChange>
           <main className="relative z-10">{children}</main>
           <CookieConsent />
-          <Analytics />
-          {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
+        </ThemeProvider>
+        <Analytics />
+        {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   );
