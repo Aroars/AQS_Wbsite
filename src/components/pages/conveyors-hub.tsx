@@ -309,6 +309,14 @@ export function ConveyorsHubContent() {
               </StaggerItem>
             ))}
           </StaggerContainer>
+          <AnimatedSection>
+            <p className="mt-8 font-sans text-[0.9rem] text-text-body leading-[1.6]">
+              Why AQS builds its own conveyors, and what the purchased ones got wrong:{" "}
+              <Link href="/blog/we-bought-them-first" className="text-white font-semibold hover:text-[#cbd5e1] transition-colors">
+                read the white paper, We Bought Them First &rarr;
+              </Link>
+            </p>
+          </AnimatedSection>
         </div>
       </section>
 

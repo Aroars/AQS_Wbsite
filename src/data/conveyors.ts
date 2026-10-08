@@ -607,6 +607,7 @@ export const conveyorProjects: ConveyorProject[] = [
       related: [
         { label: "White paper: filling 1,800 lb totes at 20 °F", href: "/blog/automated-tote-filling-frozen-vegetables" },
         { label: "White paper: the pallet was blue, the sensor couldn't see it", href: "/blog/photo-eyes-retroreflective-vs-diffuse" },
+        { label: "White paper: we bought them first", href: "/blog/we-bought-them-first" },
         { label: "24V MDR Zone Conveyors", href: "/solutions/conveyors/mdr/zones" },
         { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet" },
         { label: "Zero-Pressure Accumulation", href: "/solutions/conveyors/mdr#accumulation" },

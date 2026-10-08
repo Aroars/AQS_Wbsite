@@ -119,6 +119,33 @@ export function Figure({
   );
 }
 
+/** A short muted clip in the article column, same frame as Figure. `narrow` suits a portrait phone clip. */
+export function VideoFig({
+  src, poster, alt, caption, aspect = "aspect-video", narrow = false,
+}: {
+  src: string; poster: string; alt: string; caption?: ReactNode; aspect?: string; narrow?: boolean;
+}) {
+  return (
+    <figure className={`my-8 mx-auto ${narrow ? "max-w-[380px]" : ""}`}>
+      <div className={`relative ${aspect} rounded-[14px] overflow-hidden border border-[rgba(255,255,255,0.08)] bg-black/40`}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={poster}
+          aria-label={alt}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+      </div>
+      {caption && <figcaption className="mt-2 text-[0.78rem] leading-[1.55] text-[rgba(255,255,255,0.4)]">{caption}</figcaption>}
+    </figure>
+  );
+}
+
 /** The laid-out PDF of the same paper */
 export function PdfDownload({ href, title, pages }: { href: string; title: string; pages?: string }) {
   return (

@@ -79,6 +79,7 @@
 
 ## White Papers
 
+- We Bought Them First. — why AQS builds its own sanitary conveyors: what purchased 24 VDC and sanitary belt conveyors got wrong in washdown, continuous TIG-welded frames, application-first zones, open Allen-Bradley controls, and standalone conveyor sales since early 2025 (https://automatedqs.com/blog/we-bought-them-first)
 - The Pallet Was Blue. The Sensor Couldn't See It. — why diffuse photo eyes miss dark pallets and why polarized retro-reflective sensing is the default for pallet and tote zones (https://automatedqs.com/blog/photo-eyes-retroreflective-vs-diffuse)
 - Every Inspection System Can Reject a Bad Package. VeriPak Proves a Good One. — the VeriPak Production Quality Platform: Continuous Package Awareness, Product Configuration Library, Deterministic Quality Sampling, dual-network architecture (https://automatedqs.com/blog/veripak-production-quality-platform)
 - The Lid Says Vanilla. Does the Tub Agree? — lid-to-body match inspection for ice cream tubs at 65 per minute on a split belt, two code readers and one vision sensor, IP69K (https://automatedqs.com/blog/ice-cream-lid-match-inspection)

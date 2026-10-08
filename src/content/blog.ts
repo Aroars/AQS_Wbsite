@@ -23,6 +23,21 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "we-bought-them-first",
+    title: "We Bought Them First.",
+    description:
+      "Why AQS builds its own sanitary conveyors, what the purchased ones taught us, and what that means for a plant deciding whether to let a new conveyor vendor onto the floor.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "8 min",
+    date: "October 2026",
+    isoDate: "2026-10-08",
+    content: "we-bought-them-first",
+    image: { src: "/images/blog/conveyor-origin-modular-belt-close-up.jpg", alt: "Sanitary modular belt conveyor with a continuous stainless frame, hygienic leveling feet, and quick-adjust guide rails" },
+    pdf: "/whitepapers/aqs-white-paper-we-bought-them-first.pdf",
+    tools: ["mdr-motorized-roller-selection", "belt-pull-calculator", "accumulation-conveyor-calculator"],
+  },
+  {
     slug: "photo-eyes-retroreflective-vs-diffuse",
     title: "The Pallet Was Blue. The Sensor Couldn't See It.",
     description:

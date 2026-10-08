@@ -14,10 +14,12 @@ import PostVeriPakPlatform from "@/components/blog/post-veripak-production-quali
 import PostIceCreamLidMatch from "@/components/blog/post-ice-cream-lid-match-inspection";
 import PostAutomatedToteFilling from "@/components/blog/post-automated-tote-filling-frozen-vegetables";
 import PostPhotoEyesRetroreflective from "@/components/blog/post-photo-eyes-retroreflective-vs-diffuse";
+import PostWeBoughtThemFirst from "@/components/blog/post-we-bought-them-first";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE, article, breadcrumbList } from "@/lib/schema";
 
 const contentComponents: Record<string, React.ComponentType> = {
+  "we-bought-them-first": PostWeBoughtThemFirst,
   "photo-eyes-retroreflective-vs-diffuse": PostPhotoEyesRetroreflective,
   "veripak-production-quality-platform": PostVeriPakPlatform,
   "ice-cream-lid-match-inspection": PostIceCreamLidMatch,
