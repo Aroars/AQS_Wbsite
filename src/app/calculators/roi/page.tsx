@@ -26,9 +26,7 @@ export default function RoiCalculatorPage() {
               Model labor savings, capacity gains, and payback timelines for your automation investment.
             </p>
           </div>
-          {/* Interim: the calculator keeps its own dark palette inside a readout
-              scope until its own light pass (plan commit 5) */}
-          <div className="roi-scope readout rounded-xl">
+          <div className="roi-scope">
             <RoiApp />
           </div>
         </div>

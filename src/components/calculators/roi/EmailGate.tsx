@@ -73,22 +73,22 @@ export function EmailGate({ onAccessGranted }: EmailGateProps) {
   }, [grantAccess, showButton]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'var(--roi-bg-primary)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-page">
       <div className="w-full max-w-md mx-4">
-        <div className="roi-card p-6 space-y-4">
+        <div className="bg-surface-card border border-border rounded-lg shadow-lg p-6 space-y-4">
           <div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold text-[var(--roi-text-primary)]">ROI Projection Tool</h1>
-            <p className="text-sm text-[var(--roi-text-secondary)]">Enter your email to access the calculator</p>
+            <h1 className="text-2xl font-bold text-text-strong">ROI Projection Tool</h1>
+            <p className="text-sm text-text-body">Enter your email to access the calculator</p>
           </div>
           {isLoading && (
             <div className="flex justify-center py-8">
-              <div className="w-8 h-8 border-2 border-[var(--roi-accent)] border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-accent-text border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           <div className={`hs-form-frame ${isLoading ? 'opacity-0 h-0' : 'opacity-100'}`} data-region="na1" data-form-id="c9d70c3d-fbd8-4fc2-af23-4ada6c298020" data-portal-id="23263384" />
-          <p className="text-xs text-[var(--roi-text-muted)] text-center">We respect your privacy. Your information will not be shared.</p>
+          <p className="text-xs text-text-dim text-center">We respect your privacy. Your information will not be shared.</p>
           {showContinueButton && (
-            <button onClick={grantAccess} className="w-full py-3 px-4 bg-[var(--roi-accent)] hover:opacity-90 text-white font-medium rounded-lg transition-colors">
+            <button onClick={grantAccess} className="w-full py-3 px-4 bg-brand-cyan text-brand-navy-deep hover:opacity-90 font-semibold rounded-lg transition-opacity">
               Continue to Calculator &rarr;
             </button>
           )}

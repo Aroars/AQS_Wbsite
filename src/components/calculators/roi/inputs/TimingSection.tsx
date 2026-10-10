@@ -11,8 +11,8 @@ interface TimingSectionProps {
 
 export function TimingSection({ inputs, onInputChange, modifiedFields }: TimingSectionProps) {
   return (
-    <div className="roi-card p-4 space-y-4">
-      <h3 className="roi-section-header">Timing & One-Time Impacts</h3>
+    <div className="bg-surface-card border border-border rounded-lg p-4 space-y-4">
+      <h3 className="text-xs font-semibold uppercase tracking-[0.05em] text-text-body">Timing & One-Time Impacts</h3>
       <div className="space-y-3">
         <NumberInput label="Commissioning Month" value={inputs.commissioningMonth} onChange={(v) => onInputChange('commissioningMonth', v)} min={0} max={60} isDefault={!modifiedFields.has('commissioningMonth') && inputs.commissioningMonth === DEFAULT_INPUTS.commissioningMonth} />
         <NumberInput label="Lost Production Cost ($)" value={inputs.lostProductionCost} onChange={(v) => onInputChange('lostProductionCost', v)} type="currency" min={0} isDefault={!modifiedFields.has('lostProductionCost') && inputs.lostProductionCost === DEFAULT_INPUTS.lostProductionCost} />

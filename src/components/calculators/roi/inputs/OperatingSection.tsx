@@ -14,14 +14,14 @@ export function OperatingSection({ inputs, onInputChange, modifiedFields }: Oper
   const operatingHoursPerYear = inputs.shiftsPerDay * inputs.hoursPerShift * inputs.operatingDaysPerYear;
 
   return (
-    <div className="roi-card p-4 space-y-4">
-      <h3 className="roi-section-header">Operating Profile</h3>
+    <div className="bg-surface-card border border-border rounded-lg p-4 space-y-4">
+      <h3 className="text-xs font-semibold uppercase tracking-[0.05em] text-text-body">Operating Profile</h3>
       <div className="space-y-3">
         <NumberInput label="Shifts per Day" value={inputs.shiftsPerDay} onChange={(v) => onInputChange('shiftsPerDay', v)} min={1} max={4} isDefault={!modifiedFields.has('shiftsPerDay') && inputs.shiftsPerDay === DEFAULT_INPUTS.shiftsPerDay} />
         <NumberInput label="Hours per Shift" value={inputs.hoursPerShift} onChange={(v) => onInputChange('hoursPerShift', v)} min={1} max={12} isDefault={!modifiedFields.has('hoursPerShift') && inputs.hoursPerShift === DEFAULT_INPUTS.hoursPerShift} />
         <NumberInput label="Operating Days per Year" value={inputs.operatingDaysPerYear} onChange={(v) => onInputChange('operatingDaysPerYear', v)} min={1} max={365} isDefault={!modifiedFields.has('operatingDaysPerYear') && inputs.operatingDaysPerYear === DEFAULT_INPUTS.operatingDaysPerYear} />
       </div>
-      <div className="text-sm text-[var(--roi-text-muted)] italic">&rarr; {formatNumber(operatingHoursPerYear)} hrs/year</div>
+      <div className="text-sm text-text-dim italic">&rarr; {formatNumber(operatingHoursPerYear)} hrs/year</div>
     </div>
   );
 }

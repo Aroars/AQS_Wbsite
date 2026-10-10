@@ -104,7 +104,7 @@ export function RoiApp() {
     setModifiedFields((prev) => { const next = new Set(prev); next.add(key); return next; });
   }, [setInputs]);
 
-  if (!inputs.paymentSchedule) return <div className="flex items-center justify-center h-64"><p className="text-[var(--roi-text-secondary)]">Loading...</p></div>;
+  if (!inputs.paymentSchedule) return <div className="flex items-center justify-center h-64"><p className="text-text-body">Loading...</p></div>;
 
   const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -132,33 +132,33 @@ export function RoiApp() {
 
       {/* Project Info + Print Button — only visible on screen */}
       <div className="roi-no-print mb-4">
-        <div className="roi-card p-4">
+        <div className="bg-surface-card border border-border rounded-lg p-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3">
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[var(--roi-text-muted)] uppercase tracking-wide">Project Name</label>
+                <label className="text-xs text-text-dim uppercase tracking-wide">Project Name</label>
                 <input
                   type="text"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   placeholder="e.g. Line 4 Palletizer"
-                  className="roi-input h-9 px-3 rounded-md text-sm"
+                  className="h-9 px-3 rounded-md text-sm bg-surface-page border border-border text-text-strong placeholder:text-text-dim focus:outline-none focus:border-accent-text focus:ring-2 focus:ring-accent-text/20"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-[var(--roi-text-muted)] uppercase tracking-wide">Customer</label>
+                <label className="text-xs text-text-dim uppercase tracking-wide">Customer</label>
                 <input
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   placeholder="e.g. Acme Foods"
-                  className="roi-input h-9 px-3 rounded-md text-sm"
+                  className="h-9 px-3 rounded-md text-sm bg-surface-page border border-border text-text-strong placeholder:text-text-dim focus:outline-none focus:border-accent-text focus:ring-2 focus:ring-accent-text/20"
                 />
               </div>
             </div>
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-[var(--roi-accent)] hover:opacity-90 transition-opacity shrink-0"
+              className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold bg-brand-cyan text-brand-navy-deep hover:opacity-90 transition-opacity shrink-0"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -173,9 +173,13 @@ export function RoiApp() {
         <div className="lg:max-h-[calc(100vh-200px)] lg:overflow-y-auto lg:pr-2 roi-print-inputs">
           <InputPanel inputs={inputs} onInputChange={handleInputChange} modifiedFields={modifiedFields} />
         </div>
-        <div className="space-y-4 roi-print-outputs">
-          <OutputPanel outputs={outputs} commissioningMonth={inputs.commissioningMonth} delayMonths={delayMonths} onDelayChange={setDelayMonths} />
-          <RoiChart data={shiftedChartData} breakEvenMonth={shiftedBreakEvenMonth} />
+        <div className="space-y-4 roi-print-outputs min-w-0">
+          {/* The outputs are one readout: summary tiles, payback, the margin
+              sum, and the chart share a navy-deep ground in both themes */}
+          <div className="readout rounded-xl border border-border p-4 space-y-4">
+            <OutputPanel outputs={outputs} commissioningMonth={inputs.commissioningMonth} delayMonths={delayMonths} onDelayChange={setDelayMonths} />
+            <RoiChart data={shiftedChartData} breakEvenMonth={shiftedBreakEvenMonth} />
+          </div>
           <DataSources />
         </div>
       </div>

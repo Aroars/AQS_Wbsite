@@ -51,9 +51,13 @@ export function NumberInput({
     onChange(parsed);
   };
 
+  /* Page-coloured inset on the card; an untouched default carries a soft
+     accent ring so the user can tell a starting value from one they typed */
+  const defaultRing = isDefault ? 'border-accent-text/50 ring-2 ring-accent-text/15' : 'border-border';
+
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
-      <label className={`text-sm text-[var(--roi-text-secondary)] ${!label ? 'hidden' : ''}`}>
+      <label className={`text-sm text-text-body ${!label ? 'hidden' : ''}`}>
         {tooltip ? <Tooltip content={tooltip}>{label}</Tooltip> : label}
       </label>
       <div className="relative">
@@ -66,10 +70,10 @@ export function NumberInput({
           onFocus={handleFocus}
           onBlur={handleBlur}
           step={step}
-          className={`roi-input w-full h-10 px-3 rounded-md text-right ${isDefault ? 'roi-is-default' : ''}`}
+          className={`w-full h-10 px-3 rounded-md text-right bg-surface-page border text-text-strong transition-[border-color,box-shadow] duration-150 focus:outline-none focus:border-accent-text focus:ring-2 focus:ring-accent-text/20 ${defaultRing}`}
         />
         {suffix && !isFocused && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--roi-text-muted)] pointer-events-none">{suffix}</span>
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim pointer-events-none">{suffix}</span>
         )}
       </div>
     </div>
