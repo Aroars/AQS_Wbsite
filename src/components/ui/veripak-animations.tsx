@@ -149,7 +149,7 @@ export function DeviceConnectionDiagram() {
         <span
           className="font-mono uppercase"
           style={{
-            fontSize: 9,
+            fontSize: 11,
             color: step >= 4 ? C.cyan : C.slate,
             marginTop: 4,
             letterSpacing: "0.08em",
@@ -229,7 +229,7 @@ export function DeviceConnectionDiagram() {
             <span
               className="font-mono whitespace-nowrap"
               style={{
-                fontSize: 8,
+                fontSize: 11,
                 color: allConnected ? C.slateLight : C.slate,
                 letterSpacing: "0.06em",
                 transition: "color 0.4s ease",
@@ -483,7 +483,10 @@ export function ProductJourneyAnimation() {
   const showWarn = bp && !bp.rejected && bpHasWarn && bp.pos > 38 && bp.pos < 56;
 
   return (
-    <div ref={sectionRef}>
+    // Phone widths: the diagram keeps its size and scrolls sideways rather than
+    // shrinking its labels (nothing in it renders under 11px)
+    <div ref={sectionRef} data-diagram="product-journey" className="overflow-x-auto">
+    <div className="min-w-[680px]">
       {/* Conveyor */}
       <div
         className="relative overflow-hidden"
@@ -541,7 +544,7 @@ export function ProductJourneyAnimation() {
               <div
                 className="font-mono whitespace-nowrap"
                 style={{
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: 700,
                   color: C.slate,
                   letterSpacing: "0.08em",
@@ -598,7 +601,7 @@ export function ProductJourneyAnimation() {
                 position: "relative",
               }}
             >
-              <span className="font-mono" style={{ fontSize: 7, fontWeight: 700, color: bpColor }}>
+              <span className="font-mono" style={{ fontSize: 11, fontWeight: 700, color: bpColor }}>
                 {bp.stationHits.length || ""}
               </span>
             </div>
@@ -613,7 +616,7 @@ export function ProductJourneyAnimation() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   marginBottom: 6,
-                  fontSize: 9,
+                  fontSize: 11,
                   color: rColor(lastR.ok),
                   background: `${C.navy}ee`,
                   padding: "2px 8px",
@@ -634,7 +637,7 @@ export function ProductJourneyAnimation() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   marginBottom: 6,
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: 700,
                   color: C.red,
                   background: `${C.red}15`,
@@ -655,7 +658,7 @@ export function ProductJourneyAnimation() {
                   left: "50%",
                   transform: "translateX(-50%)",
                   marginBottom: 6,
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: 700,
                   color: C.gold,
                   background: `${C.gold}12`,
@@ -688,7 +691,7 @@ export function ProductJourneyAnimation() {
               <span
                 key={i}
                 className="font-mono"
-                style={{ fontSize: 8, color: C.cyan, letterSpacing: "0.06em", opacity: 0.6 }}
+                style={{ fontSize: 11, color: C.cyan, letterSpacing: "0.06em", opacity: 0.6 }}
               >
                 {t}
               </span>
@@ -720,7 +723,7 @@ export function ProductJourneyAnimation() {
             <span
               key={h}
               className="font-mono uppercase"
-              style={{ fontSize: 9, fontWeight: 700, color: C.cyan, letterSpacing: "0.1em" }}
+              style={{ fontSize: 11, fontWeight: 700, color: C.cyan, letterSpacing: "0.1em" }}
             >
               {h}
             </span>
@@ -918,13 +921,14 @@ export function ProductJourneyAnimation() {
           />
           <span
             className="font-mono"
-            style={{ fontSize: 10, color: C.cyan, letterSpacing: "0.06em", opacity: 0.7 }}
+            style={{ fontSize: 11, color: C.cyan, letterSpacing: "0.06em", opacity: 0.7 }}
           >
             Data is tagged to the physical product \u2014 not dependent on the reject system working
             correctly
           </span>
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -977,7 +981,7 @@ export function LeakDetectionAnimation() {
   ];
 
   return (
-    <div
+    <div data-diagram="leak-detection"
       ref={containerRef}
       className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
       style={{
@@ -1003,7 +1007,7 @@ export function LeakDetectionAnimation() {
             border: `2px solid ${C.slate}55`,
           }}
         >
-          <span className="font-mono" style={{ fontSize: 9, color: C.slate, letterSpacing: "0.06em" }}>
+          <span className="font-mono" style={{ fontSize: 11, color: C.slate, letterSpacing: "0.06em" }}>
             SEALED TRAY
           </span>
         </div>
