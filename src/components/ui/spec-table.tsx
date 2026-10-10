@@ -40,7 +40,7 @@ export function SpecTable({
               </th>
               <td className="font-sans text-[0.88rem] text-text-body px-5 py-3 leading-[1.55]">
                 {r.value}
-                {r.note && <div className="font-sans text-[0.74rem] text-text-dim mt-0.5">{r.note}</div>}
+                {r.note && <div className="font-sans text-[0.74rem] text-text-body mt-0.5">{r.note}</div>}
               </td>
             </tr>
           ))}

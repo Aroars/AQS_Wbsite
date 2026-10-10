@@ -59,7 +59,7 @@ export function WhatAreYouConveying() {
                       <div className="font-sans text-[1.05rem] font-bold text-text-strong">
                         {item.label}
                       </div>
-                      <div className="font-sans text-[0.74rem] text-text-dim mt-0.5">{item.hint}</div>
+                      <div className="font-sans text-[0.74rem] text-text-body mt-0.5">{item.hint}</div>
                     </div>
                   </li>
                 );
