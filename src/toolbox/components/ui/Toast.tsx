@@ -31,7 +31,7 @@ export function ToastContainer() {
     const typeColors = {
         success: 'bg-success/90',
         error: 'bg-error/90',
-        info: 'bg-primary/90',
+        info: 'bg-accent-text/90',
     }
 
     return (

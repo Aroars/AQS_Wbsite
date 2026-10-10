@@ -25,13 +25,13 @@ export function CalcPinButton({ toolId, instanceId, examples }: { toolId: string
             <CardActions toolId={toolId} instanceId={instanceId} examples={examples} />
             {instanceId === MAIN ? (
                 <button onClick={() => pinCalculator(toolId, MAIN)} title="Pin a copy of this card to Home"
-                    className="relative p-1 rounded transition-colors text-text-muted hover:text-text-secondary">
+                    className="relative p-1 rounded transition-colors text-text-dim hover:text-text-body">
                     <Pin className="w-3.5 h-3.5" fill={pinCount > 0 ? 'currentColor' : 'none'} />
-                    {pinCount > 0 && <span className="absolute -top-1 -right-1 text-[9px] font-mono text-primary">{pinCount}</span>}
+                    {pinCount > 0 && <span className="absolute -top-1 -right-1 text-[11px] font-mono text-accent-text">{pinCount}</span>}
                 </button>
             ) : (
                 <button onClick={() => unpinCalculator(instanceId)} title="Unpin this copy from Home"
-                    className="p-1 rounded transition-colors text-primary hover:text-error">
+                    className="p-1 rounded transition-colors text-accent-text hover:text-error">
                     <PinOff className="w-3.5 h-3.5" />
                 </button>
             )}
@@ -56,12 +56,12 @@ function CardTag({ toolId, instanceId }: { toolId: string; instanceId: string })
             <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))} onBlur={save}
                 onKeyDown={(e) => { if (e.key === 'Enter') save(); if (e.key === 'Escape') setEditing(false) }}
                 maxLength={2} placeholder="A" aria-label="Card tag"
-                className="w-8 px-1 py-0.5 bg-dark-700 border border-primary rounded text-center text-xs font-mono text-primary focus:outline-none" />
+                className="w-8 px-1 py-0.5 bg-surface-card-hover border border-accent-text rounded text-center text-xs font-mono text-accent-text focus:outline-none" />
         )
     }
     return (
         <button onClick={start} title={tag ? `Tag ${tag} — click to change or clear` : 'Tag this card with a letter (A, B, C…) to tell copies apart in From bars'}
-            className={`flex items-center justify-center min-w-[1.5rem] px-1 py-0.5 rounded text-xs font-mono transition-colors ${tag ? 'bg-primary/20 text-primary border border-primary/30' : 'text-text-muted/50 hover:text-primary'}`}>
+            className={`flex items-center justify-center min-w-[1.5rem] px-1 py-0.5 rounded text-xs font-mono transition-colors ${tag ? 'bg-accent-text/20 text-accent-text border border-accent-text/30' : 'text-text-dim/50 hover:text-accent-text'}`}>
             {tag || <Tag className="w-3 h-3" />}
         </button>
     )
@@ -112,66 +112,66 @@ function CardActions({ toolId, instanceId, examples }: { toolId: string; instanc
     return (
         <div ref={ref} className="relative">
             <button onClick={() => (open ? close() : setOpen(true))} title="Save, load, copy, or clear this card"
-                className="p-1 rounded transition-colors text-text-muted hover:text-text-secondary" aria-haspopup="menu" aria-expanded={open}>
+                className="p-1 rounded transition-colors text-text-dim hover:text-text-body" aria-haspopup="menu" aria-expanded={open}>
                 <MoreHorizontal className="w-3.5 h-3.5" />
             </button>
             {open && (
-                <div className="absolute right-0 top-full mt-1 z-30 w-72 rounded-lg border border-border bg-dark-700 shadow-lg p-1.5 text-xs" role="menu">
+                <div className="absolute right-0 top-full mt-1 z-30 w-72 rounded-lg border border-border bg-surface-card-hover shadow-lg p-1.5 text-xs" role="menu">
                     {mode === 'menu' && (
                         <div className="space-y-0.5">
                             {examples && examples.length > 0 && (
-                                <button onClick={() => setMode('examples')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-strong"><BookOpen className="w-3.5 h-3.5 text-text-muted" /> Load example configuration…</button>
+                                <button onClick={() => setMode('examples')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-card-hover text-text-strong"><BookOpen className="w-3.5 h-3.5 text-text-dim" /> Load example configuration…</button>
                             )}
-                            <button onClick={() => setMode('save')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-strong"><Save className="w-3.5 h-3.5 text-text-muted" /> Save snapshot…</button>
-                            <button onClick={() => setMode('load')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-strong"><Upload className="w-3.5 h-3.5 text-text-muted" /> Load…{mine.length > 0 ? <span className="ml-auto text-text-muted font-mono">{mine.length} saved</span> : null}</button>
-                            <button onClick={copyCode} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-dark-600 text-text-strong"><Copy className="w-3.5 h-3.5 text-text-muted" /> Copy card code</button>
-                            <button onClick={clear} className={`w-full flex items-center gap-2 px-2 py-1.5 rounded transition-colors ${armed ? 'bg-error/15 text-error' : 'hover:bg-dark-600 text-text-strong'}`}>
-                                <Eraser className="w-3.5 h-3.5 text-text-muted" /> {armed ? 'Click again to clear this card' : 'Clear card'}
+                            <button onClick={() => setMode('save')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-card-hover text-text-strong"><Save className="w-3.5 h-3.5 text-text-dim" /> Save snapshot…</button>
+                            <button onClick={() => setMode('load')} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-card-hover text-text-strong"><Upload className="w-3.5 h-3.5 text-text-dim" /> Load…{mine.length > 0 ? <span className="ml-auto text-text-dim font-mono">{mine.length} saved</span> : null}</button>
+                            <button onClick={copyCode} className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-surface-card-hover text-text-strong"><Copy className="w-3.5 h-3.5 text-text-dim" /> Copy card code</button>
+                            <button onClick={clear} className={`w-full flex items-center gap-2 px-2 py-1.5 rounded transition-colors ${armed ? 'bg-error/15 text-text-strong' : 'hover:bg-surface-card-hover text-text-strong'}`}>
+                                <Eraser className="w-3.5 h-3.5 text-text-dim" /> {armed ? 'Click again to clear this card' : 'Clear card'}
                             </button>
                         </div>
                     )}
                     {mode === 'examples' && examples && (
                         <div className="space-y-1.5 p-1">
-                            <div className="text-text-muted uppercase tracking-wider text-[10px]">Known-good starting points</div>
+                            <div className="text-text-dim uppercase tracking-wider text-[11px]">Known-good starting points</div>
                             <div className="max-h-48 overflow-y-auto space-y-0.5">
                                 {examples.map((ex) => (
                                     <button key={ex.label} onClick={() => { ex.onSelect(); showToast(`Loaded ${ex.label}`); close() }}
-                                        className="w-full text-left px-2 py-1 rounded hover:bg-dark-600 text-text-strong">{ex.label}</button>
+                                        className="w-full text-left px-2 py-1 rounded hover:bg-surface-card-hover text-text-strong">{ex.label}</button>
                                 ))}
                             </div>
-                            <div className="flex justify-end"><button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-muted hover:text-text-secondary">Back</button></div>
+                            <div className="flex justify-end"><button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-dim hover:text-text-body">Back</button></div>
                         </div>
                     )}
                     {mode === 'save' && (
                         <div className="space-y-1.5 p-1">
-                            <div className="text-text-muted uppercase tracking-wider text-[10px]">Save this card</div>
+                            <div className="text-text-dim uppercase tracking-wider text-[11px]">Save this card</div>
                             <input autoFocus value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') doSave(); if (e.key === 'Escape') close() }}
-                                placeholder="name, e.g. Line 3 infeed" className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded text-text-strong focus:outline-none focus:border-primary" />
+                                placeholder="name, e.g. Line 3 infeed" className="w-full px-2 py-1.5 bg-surface-page border border-border rounded text-text-strong focus:outline-none focus:border-accent-text" />
                             <div className="flex gap-1 justify-end">
-                                <button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-muted hover:text-text-secondary">Back</button>
-                                <button onClick={doSave} className="px-2.5 py-1 rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20">Save</button>
+                                <button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-dim hover:text-text-body">Back</button>
+                                <button onClick={doSave} className="px-2.5 py-1 rounded border border-accent-text/40 bg-accent-text/10 text-accent-text hover:bg-accent-text/20">Save</button>
                             </div>
                         </div>
                     )}
                     {mode === 'load' && (
                         <div className="space-y-1.5 p-1">
-                            <div className="text-text-muted uppercase tracking-wider text-[10px]">Saved for this card type</div>
-                            {mine.length === 0 && <div className="text-text-muted px-1">Nothing saved yet.</div>}
+                            <div className="text-text-dim uppercase tracking-wider text-[11px]">Saved for this card type</div>
+                            {mine.length === 0 && <div className="text-text-dim px-1">Nothing saved yet.</div>}
                             <div className="max-h-40 overflow-y-auto space-y-0.5">
                                 {mine.map((snap) => (
                                     <div key={snap.id} className="flex items-center gap-1">
-                                        <button onClick={() => loadCode(snap.code)} className="flex-1 text-left px-2 py-1 rounded hover:bg-dark-600 text-text-strong truncate" title={describeSnapshot(decodeSnapshot(snap.code)!)}>
-                                            {snap.name} <span className="text-text-muted font-mono">{new Date(snap.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                        <button onClick={() => loadCode(snap.code)} className="flex-1 text-left px-2 py-1 rounded hover:bg-surface-card-hover text-text-strong truncate" title={describeSnapshot(decodeSnapshot(snap.code)!)}>
+                                            {snap.name} <span className="text-text-dim font-mono">{new Date(snap.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                                         </button>
-                                        <button onClick={() => deleteSnapshot(snap.id)} title="Delete" className="p-1 text-text-muted hover:text-error"><Trash2 className="w-3 h-3" /></button>
+                                        <button onClick={() => deleteSnapshot(snap.id)} title="Delete" className="p-1 text-text-dim hover:text-error"><Trash2 className="w-3 h-3" /></button>
                                     </div>
                                 ))}
                             </div>
-                            <div className="text-text-muted uppercase tracking-wider text-[10px] pt-1">Or paste a card code</div>
-                            <textarea value={code} onChange={(e) => setCode(e.target.value)} rows={2} placeholder="aqs1.…" className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded font-mono text-[11px] text-text-strong focus:outline-none focus:border-primary" />
+                            <div className="text-text-dim uppercase tracking-wider text-[11px] pt-1">Or paste a card code</div>
+                            <textarea value={code} onChange={(e) => setCode(e.target.value)} rows={2} placeholder="aqs1.…" className="w-full px-2 py-1.5 bg-surface-page border border-border rounded font-mono text-[11px] text-text-strong focus:outline-none focus:border-accent-text" />
                             <div className="flex gap-1 justify-end">
-                                <button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-muted hover:text-text-secondary">Back</button>
-                                <button onClick={() => loadCode(code)} disabled={!code.trim()} className="px-2.5 py-1 rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40">Load</button>
+                                <button onClick={() => setMode('menu')} className="px-2 py-1 rounded text-text-dim hover:text-text-body">Back</button>
+                                <button onClick={() => loadCode(code)} disabled={!code.trim()} className="px-2.5 py-1 rounded border border-accent-text/40 bg-accent-text/10 text-accent-text hover:bg-accent-text/20 disabled:opacity-40">Load</button>
                             </div>
                         </div>
                     )}

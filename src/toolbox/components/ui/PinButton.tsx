@@ -15,8 +15,8 @@ export function PinButton({ pinned, onToggle, className }: PinButtonProps) {
             className={cn(
                 'p-1 rounded transition-colors',
                 pinned
-                    ? 'text-primary hover:text-primary-light'
-                    : 'text-text-muted hover:text-text-secondary',
+                    ? 'text-accent-text hover:text-accent-text'
+                    : 'text-text-dim hover:text-text-body',
                 className
             )}
         >

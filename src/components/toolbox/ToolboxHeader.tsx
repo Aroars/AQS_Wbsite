@@ -21,16 +21,16 @@ export function ToolboxHeader() {
 
   return (
     <div ref={stripRef} id="toolbox-strip" className="toolbox-scope toolbox-snap-target">
-      <header className="relative border-b border-border bg-dark-800">
+      <header className="relative border-b border-border bg-surface-card">
         {/* Release cue: fills as upward scroll accumulates against the barrier */}
         <div
           aria-hidden="true"
-          className="absolute left-0 top-0 h-[2px] bg-primary transition-[width] duration-150 ease-out"
+          className="absolute left-0 top-0 h-[2px] bg-brand-cyan transition-[width] duration-150 ease-out"
           style={{ width: `${progress * 100}%` }}
         />
         <div className="px-4 md:px-6 py-2.5 flex items-center gap-3">
-          <div className="p-1.5 bg-primary/10 rounded-lg">
-            <Wrench className="w-5 h-5 text-primary" />
+          <div className="p-1.5 bg-accent-text/10 rounded-lg">
+            <Wrench className="w-5 h-5 text-accent-text" />
           </div>
           <div className="text-base md:text-lg font-semibold text-text-strong leading-tight m-0">
             Engineering Toolbox
@@ -38,7 +38,7 @@ export function ToolboxHeader() {
           <div className="flex-1 flex justify-center">
             <span
               aria-live="polite"
-              className={`hidden md:inline-flex items-center gap-1 text-xs text-text-muted transition-opacity duration-200 ${
+              className={`hidden md:inline-flex items-center gap-1 text-xs text-text-dim transition-opacity duration-200 ${
                 progress > 0 ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -51,11 +51,11 @@ export function ToolboxHeader() {
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("toolbox:open-palette"))}
             title="Jump to any tool"
-            className="flex items-center gap-2 px-3 py-1.5 bg-dark-900 border border-border rounded-lg text-text-muted hover:text-text-secondary hover:border-text-muted transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 bg-surface-page border border-border rounded-lg text-text-dim hover:text-text-body hover:border-border transition-colors"
           >
             <Search className="w-3.5 h-3.5" />
             <span className="text-xs hidden sm:inline">Jump to...</span>
-            <kbd className="text-[10px] font-mono px-1.5 py-0.5 bg-dark-700 border border-border rounded">{isMac ? "⌘K" : "Ctrl K"}</kbd>
+            <kbd className="text-[11px] font-mono px-1.5 py-0.5 bg-surface-card-hover border border-border rounded">{isMac ? "⌘K" : "Ctrl K"}</kbd>
           </button>
         </div>
       </header>

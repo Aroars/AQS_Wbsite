@@ -136,12 +136,12 @@ export function CommandPalette() {
 
     return (
         <div
-            className="fixed inset-0 z-50 bg-dark-900/70 backdrop-blur-sm flex items-start justify-center pt-[12vh] px-4"
+            className="fixed inset-0 z-50 bg-brand-navy-band/70 backdrop-blur-sm flex items-start justify-center pt-[12vh] px-4"
             onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false) }}
         >
-            <div className="w-full max-w-lg bg-dark-800 border border-border rounded-xl shadow-2xl overflow-hidden">
+            <div className="w-full max-w-lg bg-surface-card border border-border rounded-xl shadow-2xl overflow-hidden">
                 <div className="relative border-b border-border">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-dim" />
                     <input
                         // Synchronous focus on mount — a deferred focus would lose
                         // the first keystrokes of someone who types right after ⌘K
@@ -156,7 +156,7 @@ export function CommandPalette() {
                 </div>
                 <div ref={listRef} className="max-h-[50vh] overflow-y-auto py-1.5">
                     {items.length === 0 && (
-                        <p className="text-center text-text-muted text-sm py-6">No tools match "{query}"</p>
+                        <p className="text-center text-text-dim text-sm py-6">No tools match "{query}"</p>
                     )}
                     {items.map((item, i) => {
                         const isSel = i === selected
@@ -170,22 +170,22 @@ export function CommandPalette() {
                                 onMouseMove={() => setSelected(i)}
                                 className={cn(
                                     'w-full px-3 py-2 flex items-center gap-3 text-left text-sm transition-colors',
-                                    isSel ? 'bg-primary/10 text-text-strong' : 'text-text-secondary'
+                                    isSel ? 'bg-accent-text/10 text-text-strong' : 'text-text-body'
                                 )}
                             >
-                                <Icon className={cn('w-4 h-4 shrink-0', isSel ? 'text-primary' : 'text-text-muted')} />
+                                <Icon className={cn('w-4 h-4 shrink-0', isSel ? 'text-accent-text' : 'text-text-dim')} />
                                 <span className="flex-1 truncate">
                                     {item.type === 'tool' ? item.tool.label : `${item.category} converter`}
                                 </span>
-                                <span className="text-xs text-text-muted">
+                                <span className="text-xs text-text-dim">
                                     {item.type === 'tool' ? tabLabels[item.tool.tab] ?? item.tool.tab : 'Add'}
                                 </span>
-                                {isSel && <ArrowRight className="w-3.5 h-3.5 text-primary shrink-0" />}
+                                {isSel && <ArrowRight className="w-3.5 h-3.5 text-accent-text shrink-0" />}
                             </button>
                         )
                     })}
                 </div>
-                <div className="px-3 py-2 border-t border-border flex gap-4 text-[11px] text-text-muted">
+                <div className="px-3 py-2 border-t border-border flex gap-4 text-[11px] text-text-dim">
                     <span>↑↓ navigate</span>
                     <span>↵ open</span>
                     <span>esc close</span>
