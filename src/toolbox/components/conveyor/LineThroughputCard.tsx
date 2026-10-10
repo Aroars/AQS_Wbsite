@@ -21,18 +21,18 @@ import { emptyState, num, defaultHours, modeFields, restore, buildEntries, runSo
  * The solver is lib/calculators/lineThroughput.
  */
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
-const labelCls = 'block text-xs text-text-muted mb-1'
-const unitSelectCls = 'px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0'
-const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
-const tileLabelCls = 'text-text-muted uppercase text-[10px]'
+const inputCls = 'w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text'
+const labelCls = 'block text-xs text-text-dim mb-1'
+const unitSelectCls = 'px-1.5 py-2 bg-surface-page border border-border rounded-lg text-text-body text-xs focus:outline-none shrink-0'
+const tileCls = 'bg-surface-card rounded px-2.5 py-2'
+const tileLabelCls = 'text-text-dim uppercase text-[11px]'
 
 type FieldStatus = 'entered' | 'solved' | 'fill' | 'needed' | 'empty'
 
 function utilCls(pct: number): string {
-    if (pct > 100) return 'bg-error/10 border-error text-error'
-    if (pct >= 80) return 'bg-warning/10 border-warning text-warning'
-    return 'bg-success/10 border-success text-success'
+    if (pct > 100) return 'bg-error/10 border-error text-text-strong'
+    if (pct >= 80) return 'bg-warning/10 border-warning text-text-strong'
+    return 'bg-success/10 border-success text-text-strong'
 }
 
 interface NumFieldProps {
@@ -68,21 +68,21 @@ function NumField({ label, unit, value, status, hint, flashKey, placeholder, min
     const cls = [
         inputCls,
         big ? 'text-2xl font-semibold py-1.5' : '',
-        solved ? 'text-primary border-primary/30 pr-14' : '',
+        solved ? 'text-accent-text border-accent-text/30 pr-14' : '',
         locked ? 'border-warning/60 pr-8' : onToggleLock ? 'pr-8' : '',
         status === 'needed' ? 'border-l-2 border-l-warning' : '',
         flashKey ? 'tb-flash' : '',
     ].join(' ')
     return (
         <div>
-            <label className={big ? tileLabelCls : labelCls}>{label}{unit ? <span className="text-text-muted"> ({unit})</span> : null}</label>
+            <label className={big ? tileLabelCls : labelCls}>{label}{unit ? <span className="text-text-dim"> ({unit})</span> : null}</label>
             <div className="flex gap-1">
                 <div className="relative flex-1" key={flashKey}>
                     <input type="number" step="any" min={min ?? '0'} value={value} placeholder={placeholder}
                         onChange={(e) => onChange(e.target.value)} onBlur={onBlur} className={cls}
                         aria-description={solved ? 'solved automatically; type to override' : undefined} />
                     {solved && (
-                        <span className={`absolute ${onToggleLock ? 'right-7' : 'right-2'} top-1/2 -translate-y-1/2 text-[9px] font-mono uppercase tracking-wider text-primary/70 pointer-events-none`}>
+                        <span className={`absolute ${onToggleLock ? 'right-7' : 'right-2'} top-1/2 -translate-y-1/2 text-[11px] font-mono uppercase tracking-wider text-accent-text/70 pointer-events-none`}>
                             {status === 'fill' ? 'auto · box' : 'auto'}
                         </span>
                     )}
@@ -90,14 +90,14 @@ function NumField({ label, unit, value, status, hint, flashKey, placeholder, min
                         <button type="button" onClick={onToggleLock} tabIndex={-1}
                             title={locked ? 'Locked — the solver never changes this. Click to unlock.' : 'Lock this value so the solver never re-derives it'}
                             aria-label={locked ? 'Unlock' : 'Lock'} aria-pressed={locked}
-                            className={`absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded transition-colors ${locked ? 'text-warning' : 'text-text-muted/40 hover:text-text-secondary'}`}>
+                            className={`absolute right-1.5 top-1/2 -translate-y-1/2 p-1 rounded transition-colors ${locked ? 'text-text-strong' : 'text-text-dim/40 hover:text-text-body'}`}>
                             <LockIcon locked={!!locked} />
                         </button>
                     )}
                 </div>
                 {trailing}
             </div>
-            {hint && <div className="text-[10px] text-warning mt-0.5">{hint}</div>}
+            {hint && <div className="flex items-start gap-1.5 text-[11px] text-text-body mt-0.5"><span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-warning" aria-hidden />{hint}</div>}
         </div>
     )
 }
@@ -293,7 +293,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
 
     const packageFill = (
         <details open={!!state.fill.density}>
-            <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">
+            <summary className="text-xs text-text-body hover:text-text-strong cursor-pointer select-none">
                 Package Fill ({isBulk ? 'bag or box volume → weight per package' : 'bulk product in a fixed box'})
             </summary>
             <div className="mt-2 space-y-2">
@@ -308,7 +308,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         </div>
                     ))}
                 </div>
-                <div className="text-[10px] text-text-muted">
+                <div className="text-[11px] text-text-dim">
                     A box or bag is a fixed volume: settled density × inside volume × fill → weight per package, written into the package weight
                     field. Type a weight to override it. Real fills run 85–95%.{isBulk ? '' : ' Conveying the product loose instead? Switch to Bulk.'}
                 </div>
@@ -317,11 +317,11 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
     )
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <div>
-                    <h3 className="text-sm font-semibold text-text-strong">Belt Load <span className="text-text-muted font-normal">(lb/ft)</span></h3>
-                    <div className="text-[10px] text-text-muted">Line throughput → belt load. Enter what you know; the rest solves.</div>
+                    <h3 className="text-sm font-semibold text-text-strong">Belt Load <span className="text-text-dim font-normal">(lb/ft)</span></h3>
+                    <div className="text-[11px] text-text-dim">Line throughput → belt load. Enter what you know; the rest solves.</div>
                 </div>
                 <CalcPinButton toolId="beltLoad" instanceId={instanceId} />
             </div>
@@ -334,7 +334,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                     ]).map((t) => (
                         <button key={t.id} title={t.hint} onClick={() => setMode(t.id)}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                state.mode === t.id ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                state.mode === t.id ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {t.label}
                         </button>
@@ -358,7 +358,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         <div>
                             <label className={labelCls}>{state.rateUnit === 'lb/shift' ? 'Hours per shift' : 'Production hours per day'}</label>
                             <input type="number" min="0.5" max="24" step="any" value={state.hours} className={inputCls} onChange={(e) => setHours(e.target.value)} />
-                            <div className="text-[10px] text-text-muted mt-0.5">Hours the line actually runs — two 8-hour shifts is 16, not 24.</div>
+                            <div className="text-[11px] text-text-dim mt-0.5">Hours the line actually runs — two 8-hour shifts is 16, not 24.</div>
                         </div>
                     )}
                 </div>
@@ -374,29 +374,29 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         </div>
                         <div className="grid grid-cols-3 gap-2">
                             <div>
-                                <label className={labelCls}>Edge margin <span className="text-text-muted">(in/side)</span></label>
+                                <label className={labelCls}>Edge margin <span className="text-text-dim">(in/side)</span></label>
                                 <input type="number" min="0" step="any" value={state.edgeMargin} className={inputCls} onChange={(e) => commit({ ...state, edgeMargin: e.target.value }, null)} />
-                                <div className="text-[10px] text-text-muted mt-0.5">Bed width = belt − 2 × margin.</div>
+                                <div className="text-[11px] text-text-dim mt-0.5">Bed width = belt − 2 × margin.</div>
                             </div>
                             <div>
-                                <label className={labelCls}>Max bed depth <span className="text-text-muted">(in)</span></label>
+                                <label className={labelCls}>Max bed depth <span className="text-text-dim">(in)</span></label>
                                 <input type="number" min="0" step="any" value={state.maxDepth} placeholder="optional" className={inputCls} onChange={(e) => commit({ ...state, maxDepth: e.target.value }, null)} />
-                                <div className="text-[10px] text-text-muted mt-0.5">Side guard or flight height — checks the bed.</div>
+                                <div className="text-[11px] text-text-dim mt-0.5">Side guard or flight height — checks the bed.</div>
                             </div>
                             <div>
-                                <label className={labelCls}>Angle of repose <span className="text-text-muted">(°)</span></label>
+                                <label className={labelCls}>Angle of repose <span className="text-text-dim">(°)</span></label>
                                 <input type="number" min="0" max="89" step="any" value={state.repose} className={inputCls} onChange={(e) => setState({ ...state, repose: e.target.value })} />
-                                <div className="text-[10px] text-text-muted mt-0.5">Pile angle, for Belt Pull incline pockets.</div>
+                                <div className="text-[11px] text-text-dim mt-0.5">Pile angle, for Belt Pull incline pockets.</div>
                             </div>
                         </div>
-                        <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-3 space-y-2">
-                            <div className="text-xs text-text-secondary font-medium">Downstream packager <span className="text-text-muted font-normal">(optional)</span></div>
+                        <div className="rounded-lg border border-border bg-surface-page px-3 py-3 space-y-2">
+                            <div className="text-xs text-text-body font-medium">Downstream packager <span className="text-text-dim font-normal">(optional)</span></div>
                             <div className="grid grid-cols-2 gap-2">
                                 {field('ppm', { label: 'Bags / packages per min', unit: 'pkg/min', placeholder: 'bagger rate' })}
                                 {field('weight', { label: 'Weight per bag', unit: 'lb', placeholder: 'fill weight' })}
                             </div>
                             {packageFill}
-                            <div className="text-[10px] text-text-muted">
+                            <div className="text-[11px] text-text-dim">
                                 Only have the bagger&apos;s rate and fill? Enter them here and the line throughput backs out of them. Or enter throughput and a bag weight to get the bagger rate.
                             </div>
                         </div>
@@ -414,8 +414,8 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                     </>
                 )}
 
-                {/* 4. Results — belt load is itself a solver field */}
-                <div className="rounded-lg border border-primary/20 bg-dark-700 px-3 py-3 space-y-2">
+                {/* 4. Results — belt load is itself a solver field; the panel is a readout */}
+                <div className="readout rounded-lg border border-border px-3 py-3 space-y-2">
                     <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
                         <NumField big label="Belt load" unit="lb/ft" value={loadField.display} status={loadField.status}
                             hint={loadField.hint ?? (loadField.status === 'empty' ? (isBulk ? 'Solves from throughput ÷ belt speed, or from density × bed depth × bed width' : 'Solves from throughput ÷ belt speed, or from package weight ÷ pitch') : undefined)}
@@ -432,13 +432,13 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         {derived.lbPerMin !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Throughput</div>
-                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.lbPerMin)} lb/min <span className="text-text-muted">·</span> {fmtNum(derived.lbPerHr!)} lb/hr</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.lbPerMin)} lb/min <span className="text-text-dim">·</span> {fmtNum(derived.lbPerHr!)} lb/hr</div>
                             </div>
                         )}
                         {ppm !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>{isBulk ? 'Bags' : 'Packages'}</div>
-                                <div className="font-mono text-sm text-text-strong">{fmtNum(ppm)}/min <span className="text-text-muted">·</span> {fmtNum(ppm * 60)}/hr</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(ppm)}/min <span className="text-text-dim">·</span> {fmtNum(ppm * 60)}/hr</div>
                             </div>
                         )}
                         {weight !== null && (
@@ -450,13 +450,13 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                         {!isBulk && derived.pitchIn !== null && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Pitch</div>
-                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.pitchIn)} in <span className="text-text-muted">·</span> {derived.productsPerFt !== null ? fmtNum(derived.productsPerFt) : '—'}/ft</div>
+                                <div className="font-mono text-sm text-text-strong">{fmtNum(derived.pitchIn)} in <span className="text-text-dim">·</span> {derived.productsPerFt !== null ? fmtNum(derived.productsPerFt) : '—'}/ft</div>
                             </div>
                         )}
                         {isBulk && values.depth?.source === 'solved' && (
                             <div className={tileCls}>
                                 <div className={tileLabelCls}>Bed depth needed</div>
-                                <div className="font-mono text-sm text-primary font-semibold">{fmtNum(values.depth.value)} in{speed !== null ? ' at speed' : ''}</div>
+                                <div className="font-mono text-sm text-accent-text font-semibold">{fmtNum(values.depth.value)} in{speed !== null ? ' at speed' : ''}</div>
                             </div>
                         )}
                         {isBulk && derived.bedLbPerFt !== null && (
@@ -483,11 +483,11 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
 
                 {/* 5. Packager headroom — once a line throughput has been entered */}
                 {showHeadroom && (
-                    <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-3 space-y-2">
-                        <div className="text-xs text-text-secondary font-medium">Packager headroom check</div>
+                    <div className="rounded-lg border border-border bg-surface-page px-3 py-3 space-y-2">
+                        <div className="text-xs text-text-body font-medium">Packager headroom check</div>
                         <div className="grid grid-cols-2 gap-2">
                             <div>
-                                <label className={labelCls}>Packager nameplate rate <span className="text-text-muted">(pkg/min)</span></label>
+                                <label className={labelCls}>Packager nameplate rate <span className="text-text-dim">(pkg/min)</span></label>
                                 <input type="number" min="0" step="any" value={state.nameplate} placeholder="machine's rated max" className={inputCls}
                                     onChange={(e) => setState({ ...state, nameplate: e.target.value })} />
                             </div>
@@ -505,7 +505,7 @@ export function LineThroughputCard({ instanceId = MAIN }: { instanceId?: string 
                     </div>
                 )}
 
-                <div className="text-[10px] text-text-muted">
+                <div className="text-[11px] text-text-dim">
                     Amber fields would unlock a result; cyan fields are solved and can be typed over. Lock the two or three knowns a job starts from (the padlock in each box) and the solver only ever moves the rest. Conveyor Speed and Belt Pull pull from this card through their From bar, or link to follow it live.
                     {instanceId === MAIN ? ' This product definition is also live on the Conveyor Spec card.' : ''}
                 </div>

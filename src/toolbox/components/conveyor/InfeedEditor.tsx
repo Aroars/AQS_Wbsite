@@ -10,9 +10,9 @@ import {
     type FlowCard, type SolveFor, type InfeedReading,
 } from '@/toolbox/lib/calculators/infeedCard'
 
-export const flowInputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-l-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
-export const flowUnitCls = 'px-1.5 bg-dark-700 border border-l-0 border-border rounded-r-lg text-text-secondary text-xs focus:outline-none'
-const labelCls = 'block text-xs text-text-muted mb-1'
+export const flowInputCls = 'w-full px-2 py-2 bg-surface-page border border-border rounded-l-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text'
+export const flowUnitCls = 'px-1.5 bg-surface-card-hover border border-l-0 border-border rounded-r-lg text-text-body text-xs focus:outline-none'
+const labelCls = 'block text-xs text-text-dim mb-1'
 
 /** The shared infeed card (conveyorCards[0]) with a patch/solve-for API */
 export function useInfeed(chainId: string = MAIN) {
@@ -76,14 +76,14 @@ export function InfeedEditor({ showWeight = false, chainId = MAIN, onEdit }: { s
             <div key={f.key}>
                 <label className={labelCls}>
                     {f.label}
-                    {isTarget && <span className="ml-1.5 text-[9px] font-mono uppercase tracking-wider text-primary/80">solved</span>}
+                    {isTarget && <span className="ml-1.5 text-[11px] font-mono uppercase tracking-wider text-accent-text/80">solved</span>}
                 </label>
                 <div className="flex">
                     <input type="number" step="any" min={f.key === 'gap' ? '0' : undefined}
                         value={value} placeholder={isTarget ? '—' : f.placeholder}
                         readOnly={isTarget} tabIndex={isTarget ? -1 : undefined}
                         onChange={(e) => patch({ [f.inputKey]: e.target.value === '' ? null : parseFloat(e.target.value) })}
-                        className={`${flowInputCls} ${isTarget ? 'text-primary border-primary/30 bg-primary/5 cursor-default' : ''}`} />
+                        className={`${flowInputCls} ${isTarget ? 'text-accent-text border-accent-text/30 bg-accent-text/5 cursor-default' : ''}`} />
                     <select value={unit} onChange={(e) => setUnit(f.inputKey, f.unitType, e.target.value)} className={flowUnitCls} aria-label={`${f.label} unit`}>
                         {unitTypes[f.unitType].units.map((u: string) => <option key={u} value={u}>{u}</option>)}
                     </select>
@@ -100,7 +100,7 @@ export function InfeedEditor({ showWeight = false, chainId = MAIN, onEdit }: { s
                     {(['speed', 'rate', 'gap'] as SolveFor[]).map((t) => (
                         <button key={t} type="button" onClick={() => setSolveFor(t)}
                             className={`flex-1 px-2 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                                solveFor === t ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                solveFor === t ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {SOLVE_LABEL[t]}
                         </button>

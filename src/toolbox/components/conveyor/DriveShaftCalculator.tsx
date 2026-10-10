@@ -32,20 +32,20 @@ export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: strin
     const ok = r && r.warnings.length === 0
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Drive Shaft Deflection &amp; Twist</h3>
                 <div className="flex items-center gap-2">
-                    {r && <span className={`text-xs font-medium ${ok ? 'text-success' : 'text-error'}`}>{ok ? 'Within limits' : `${r.warnings.length} limit${r.warnings.length > 1 ? 's' : ''} exceeded`}</span>}
+                    {r && <span className="inline-flex items-center gap-1.5 text-xs font-medium text-text-strong"><span className={`inline-block w-1.5 h-1.5 rounded-full ${ok ? 'bg-success' : 'bg-error'}`} aria-hidden />{ok ? 'Within limits' : `${r.warnings.length} limit${r.warnings.length > 1 ? 's' : ''} exceeded`}</span>}
                     <CalcPinButton toolId="driveShaft" instanceId={instanceId} />
                 </div>
             </div>
             <div className="p-4 space-y-4">
                 <SourceBar handoff={handoff} />
                 {s.source && (
-                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-primary/30 bg-primary/10 text-xs text-primary">
+                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-accent-text/30 bg-accent-text/10 text-xs text-accent-text">
                         <span className="flex-1">{s.source} — check the shaft, then go up a size or shorten the bearing span if a limit is exceeded.</span>
-                        <button type="button" onClick={() => upd({ source: null })} className="text-primary/70 hover:text-primary" aria-label="Dismiss"><X className="w-3.5 h-3.5" /></button>
+                        <button type="button" onClick={() => upd({ source: null })} className="text-accent-text/70 hover:text-accent-text" aria-label="Dismiss"><X className="w-3.5 h-3.5" /></button>
                     </div>
                 )}
                 <div className="grid grid-cols-2 @md:grid-cols-3 gap-2">
@@ -58,7 +58,7 @@ export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: strin
                         <div className="flex gap-1">
                             <input type="number" min="0" step="any" value={s.size} className={inputCls} onChange={(e) => upd({ size: e.target.value })} />
                             {s.shape === 'square' && (
-                                <select value="" className="px-1.5 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none shrink-0" onChange={(e) => e.target.value && upd({ size: e.target.value })} aria-label="Common sizes">
+                                <select value="" className="px-1.5 py-2 bg-surface-page border border-border rounded-lg text-text-body text-xs focus:outline-none shrink-0" onChange={(e) => e.target.value && upd({ size: e.target.value })} aria-label="Common sizes">
                                     <option value="">common</option>
                                     {SQUARE_SHAFT_SIZES_IN.map((v) => <option key={v} value={String(Number(v.toFixed(4)))}>{v >= 1.57 && v <= 1.58 ? '40 mm' : v >= 2.36 && v <= 2.37 ? '60 mm' : `${v}"`}</option>)}
                                 </select>
@@ -93,7 +93,7 @@ export function DriveShaftCalculator({ instanceId = MAIN }: { instanceId?: strin
                             {r.warnings.map((w, i) => <div key={i} className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error">{w}</div>)}
                         </>
                     )}
-                    <div className="text-[10px] text-text-muted">
+                    <div className="text-[11px] text-text-dim">
                         δ = W(8L³ − 4Lw² + w³) ÷ (384EI) for the pull spread over the belt width w on a span L; θ = T·L_t ÷ (G·J). Square: I = a⁴/12, J = 0.1406a⁴. Limits are editable defaults — the belt manufacturer&apos;s design guide governs.
                     </div>
                 </div>

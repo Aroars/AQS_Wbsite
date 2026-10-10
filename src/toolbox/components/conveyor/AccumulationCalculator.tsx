@@ -32,7 +32,7 @@ export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: str
     const fill = r ? fillTimeSeconds(r.lengthIn, num(s.speed)) : null
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Accumulation Buffer</h3>
                 <CalcPinButton toolId="accumulation" instanceId={instanceId} />
@@ -47,7 +47,7 @@ export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: str
                 <div className="flex gap-1.5">
                     {([['length', 'Length from time'], ['time', 'Time from length']] as const).map(([id, label]) => (
                         <button key={id} onClick={() => upd({ mode: id })}
-                            className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${s.mode === id ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'}`}>{label}</button>
+                            className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${s.mode === id ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'}`}>{label}</button>
                     ))}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -69,7 +69,7 @@ export function AccumulationCalculator({ instanceId = MAIN }: { instanceId?: str
                             {fill !== null && <Tile label="Time to fill from empty">{fmtNum(fill)} s at {s.speed} ft/min</Tile>}
                         </div>
                     )}
-                    <div className="text-[10px] text-text-muted">length = ⌈rate × s ÷ 60⌉ products × (product length + gap); time = ⌊length ÷ pitch⌋ ÷ rate × 60. Products round up for length and down for time so the buffer is never short.</div>
+                    <div className="text-[11px] text-text-dim">length = ⌈rate × s ÷ 60⌉ products × (product length + gap); time = ⌊length ÷ pitch⌋ ÷ rate × 60. Products round up for length and down for time so the buffer is never short.</div>
                 </div>
             </div>
         </div>

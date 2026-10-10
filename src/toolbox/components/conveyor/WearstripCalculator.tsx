@@ -10,9 +10,9 @@ import {
     type WearstripConfig,
 } from '@/toolbox/lib/calculators/wearstrip'
 
-const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
-const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'
-const labelCls = 'block text-xs text-text-muted mb-1'
+const inputCls = 'w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text'
+const selectCls = 'w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text'
+const labelCls = 'block text-xs text-text-dim mb-1'
 
 function num(v: string, fallback = 0): number {
     const n = parseFloat(v)
@@ -21,14 +21,13 @@ function num(v: string, fallback = 0): number {
 
 function UtilBar({ label, pct, detail }: { label: string; pct: number; detail: string }) {
     const cls = pct < 60 ? 'bg-success' : pct <= 85 ? 'bg-warning' : 'bg-error'
-    const txt = pct < 60 ? 'text-success' : pct <= 85 ? 'text-warning' : 'text-error'
     return (
         <div>
             <div className="flex justify-between text-xs mb-0.5">
-                <span className="text-text-secondary">{label}</span>
-                <span className={`font-mono ${txt}`}>{pct.toFixed(0)}% <span className="text-text-muted">· {detail}</span></span>
+                <span className="text-text-body">{label}</span>
+                <span className="font-mono text-text-strong inline-flex items-center gap-1.5"><span className={`inline-block w-1.5 h-1.5 rounded-full ${cls}`} aria-hidden />{pct.toFixed(0)}% <span className="text-text-dim">· {detail}</span></span>
             </div>
-            <div className="h-1.5 bg-dark-900 rounded overflow-hidden">
+            <div className="h-1.5 bg-surface-page rounded overflow-hidden">
                 <div className={`h-full rounded ${cls}`} style={{ width: `${Math.min(pct, 100)}%` }} />
             </div>
         </div>
@@ -86,7 +85,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
     const inMm = (v: number) => `${v.toFixed(3)}" (${(v * 25.4).toFixed(2)} mm)`
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Wearstrip Span Calculator</h3>
                 <CalcPinButton toolId="wearstrip" instanceId={instanceId} />
@@ -97,7 +96,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                         {(['check', 'optimize'] as const).map((m) => (
                             <button key={m} onClick={() => setMode(m)}
                                 className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
-                                    mode === m ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
+                                    mode === m ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body'
                                 }`}>
                                 {m === 'check' ? 'Check' : 'Optimize'}
                             </button>
@@ -156,13 +155,13 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                 {stripMaterials.map((m) => <option key={m.id} value={m.id}>{m.name} — μ {m.muDynamic}, ${m.costPerIn3}/in³</option>)}
                             </select>
                         </div>
-                        <span className="text-[10px] text-text-muted self-center">μ {mat.muDynamic} — Belt Pull pulls this from its From bar</span>
+                        <span className="text-[11px] text-text-dim self-center">μ {mat.muDynamic} — Belt Pull pulls this from its From bar</span>
                     </div>
-                    <div className="text-[10px] text-text-muted">
+                    <div className="text-[11px] text-text-dim">
                         {mat.note ? `${mat.note}. ` : ''}Handbook values — verify E and creep with the supplier before locking a standard.
                     </div>
                     {cfg.materialId === 'acetal' && (
-                        <div className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error font-medium">
+                        <div className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-text-strong font-medium">
                             Acetal wearstrips must NOT run under acetal (POM) belts — like-on-like polymer galling. Confirm the belt material is not POM.
                         </div>
                     )}
@@ -205,7 +204,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                         </div>
                         {/* Uniform layout per the shop rule */}
                         {layout && (
-                            <div className="px-3 py-2 bg-dark-900 rounded text-xs text-text-secondary flex items-center justify-between gap-2 flex-wrap">
+                            <div className="px-3 py-2 bg-surface-page rounded text-xs text-text-body flex items-center justify-between gap-2 flex-wrap">
                                 <span>
                                     Uniform layout for {cfg.conveyorLengthFt} ft:{' '}
                                     <span className="font-mono text-text-strong">
@@ -214,7 +213,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                 </span>
                                 <button
                                     onClick={() => upd({ spanIn: Math.round(layout.spanIn * 100) / 100, requiredOverhangIn: Math.round(layout.overhangIn * 100) / 100 })}
-                                    className="px-2 py-1 rounded text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                                    className="px-2 py-1 rounded text-xs border border-accent-text/40 bg-accent-text/10 text-accent-text hover:bg-accent-text/20 transition-colors">
                                     Apply span + overhang
                                 </button>
                             </div>
@@ -235,25 +234,25 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             title={`${s.stripWidthIn}×${s.stripHeightIn} interior / ${s.edgeStripWidthIn}×${s.edgeStripHeightIn} edge @ ${s.spanIn.toFixed(1)}" — click to apply`}
                             className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors font-mono ${
                                 s.result.passAll
-                                    ? 'border-success/40 bg-success/10 text-success hover:bg-success/20'
-                                    : 'border-border bg-dark-900 text-text-muted hover:border-text-muted'
+                                    ? 'border-success/40 bg-success/10 text-text-strong hover:bg-success/20'
+                                    : 'border-border bg-surface-page text-text-dim hover:border-border'
                             }`}>
                             {s.result.passAll ? '✓' : '✗'} {s.name}
                         </button>
                     ))}
-                    <span className="text-[10px] text-text-muted self-center">badges = pass under current criteria; click to apply</span>
+                    <span className="text-[11px] text-text-dim self-center">badges = pass under current criteria; click to apply</span>
                 </div>
 
                 {/* Criteria */}
                 <details>
-                    <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none">Design Criteria</summary>
+                    <summary className="text-xs text-text-body hover:text-text-strong cursor-pointer select-none">Design Criteria</summary>
                     <div className="mt-2 space-y-2">
                         <div className="flex flex-wrap gap-1.5 items-center">
-                            <span className="text-xs text-text-muted">Stiffness class:</span>
+                            <span className="text-xs text-text-dim">Stiffness class:</span>
                             {stiffnessClasses.map((sc) => (
                                 <button key={sc.id} onClick={() => upd({ deflectionLimitIn: sc.limitIn })}
                                     className={`px-2 py-1 rounded text-xs border transition-colors font-mono ${
-                                        cfg.deflectionLimitIn === sc.limitIn ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'
+                                        cfg.deflectionLimitIn === sc.limitIn ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body'
                                     }`}>
                                     {sc.label} {sc.limitIn}"
                                 </button>
@@ -316,7 +315,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
 
                 {/* ── RESULTS ── */}
                 {mode === 'check' ? (
-                    <div className={`rounded-lg border overflow-hidden ${result.passAll ? 'border-success/30' : 'border-error/30'}`}>
+                    <div className={`readout rounded-lg border overflow-hidden ${result.passAll ? 'border-success/30' : 'border-error/30'}`}>
                         <div className={`px-4 py-2.5 border-b flex items-center justify-between ${
                             result.passAll ? 'bg-success/10 border-success/30' : 'bg-error/10 border-error/30'
                         }`}>
@@ -325,9 +324,9 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             </span>
                             <span className="font-mono text-sm text-text-strong">${result.totalCost.toFixed(0)}</span>
                         </div>
-                        <div className="p-3 space-y-3 bg-dark-700">
-                            <div className="text-xs text-text-secondary">
-                                Governing criterion: <span className="text-primary font-medium">{result.governing}</span>
+                        <div className="p-3 space-y-3">
+                            <div className="text-xs text-text-body">
+                                Governing criterion: <span className="text-accent-text font-medium">{result.governing}</span>
                             </div>
                             <div className="space-y-2">
                                 <UtilBar label="Point-load deflection (feel)" pct={result.pointCheck.utilizationPct}
@@ -345,15 +344,15 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             </div>
 
                             {/* Inverse readout: the feel budget in pounds */}
-                            <div className="px-3 py-2 bg-dark-800 border-l-2 border-primary rounded text-xs text-text-secondary">
+                            <div className="px-3 py-2 bg-surface-card border-l-2 border-accent-text rounded text-xs text-text-body">
                                 Feel budget: this span reaches the {cfg.deflectionLimitIn}" limit at a{' '}
-                                <span className="font-mono text-primary font-semibold">{result.allowablePointLbf.toFixed(0)} lbf</span> press
+                                <span className="font-mono text-accent-text font-semibold">{result.allowablePointLbf.toFixed(0)} lbf</span> press
                                 ({cfg.stripsUnderPress} strips). A firm hand is ~20–40 lbf; deflection under ~0.010–0.020" is imperceptible through the belt.
                             </div>
 
                             {/* Derived overhang — the one-solve output */}
-                            <div className="px-3 py-2 bg-dark-800 border-l-2 border-primary rounded text-xs text-text-secondary">
-                                Max end overhang for this profile: <span className="font-mono text-primary font-semibold">{result.maxOverhangIn.toFixed(1)}"</span>
+                            <div className="px-3 py-2 bg-surface-card border-l-2 border-accent-text rounded text-xs text-text-body">
+                                Max end overhang for this profile: <span className="font-mono text-accent-text font-semibold">{result.maxOverhangIn.toFixed(1)}"</span>
                                 {' '}(limited by {result.overhangGovernedBy === 'deflection' ? 'tip deflection' : 'stress at the last support'};
                                 full {(cfg.pointLoadLbf / cfg.cantileverStrips).toFixed(0)} lbf on {cfg.cantileverStrips} strip{cfg.cantileverStrips > 1 ? 's' : ''}).
                                 {result.overhangCheck && !result.overhangCheck.pass && (
@@ -364,22 +363,22 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             </div>
 
                             <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="bg-dark-800 rounded px-2.5 py-2">
-                                    <span className="text-text-muted">Cost: </span>
+                                <div className="bg-surface-card rounded px-2.5 py-2">
+                                    <span className="text-text-dim">Cost: </span>
                                     <span className="font-mono text-text-strong">${result.plasticCost.toFixed(0)} plastic + ${result.supportCost.toFixed(0)} steel ({result.supportCount} supports)</span>
                                 </div>
-                                <div className="bg-dark-800 rounded px-2.5 py-2">
-                                    <span className="text-text-muted">vs 1.5×2 @ 18": </span>
+                                <div className="bg-surface-card rounded px-2.5 py-2">
+                                    <span className="text-text-dim">vs 1.5×2 @ 18": </span>
                                     <span className="font-mono text-text-strong">
                                         {result.plasticSavedPct >= 0 ? '−' : '+'}{Math.abs(result.plasticSavedPct).toFixed(0)}% plastic, {result.supportsSavedPer10Ft >= 0 ? '−' : '+'}{Math.abs(result.supportsSavedPer10Ft).toFixed(1)} supports/10 ft
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="text-[10px] text-text-muted">
-                                Thermal: strips grow ≈ <span className="font-mono text-text-secondary">{result.thermalGrowthIn.toFixed(2)}"</span> over
+                            <div className="text-[11px] text-text-dim">
+                                Thermal: strips grow ≈ <span className="font-mono text-text-body">{result.thermalGrowthIn.toFixed(2)}"</span> over
                                 {' '}{cfg.conveyorLengthFt} ft on a 73→140°F washdown swing — use slotted mounting.
-                                E derated to <span className="font-mono text-text-secondary">{(result.eEffectivePsi / 1000).toFixed(0)} ksi</span> at {cfg.tempF}°F.
+                                E derated to <span className="font-mono text-text-body">{(result.eEffectivePsi / 1000).toFixed(0)} ksi</span> at {cfg.tempF}°F.
                             </div>
                             {result.warnings.map((w, i) => (
                                 <div key={i} className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-warning">{w}</div>
@@ -387,7 +386,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                         </div>
                     </div>
                 ) : (
-                    <div className="space-y-2">
+                    <div className="readout rounded-lg border border-border p-3 space-y-2">
                         {optimized.length === 0 ? (
                             <div className="px-3 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error">
                                 Nothing in the design space passes these criteria — relax the stiffness class, raise the temp rating, or reduce the required overhang.
@@ -396,7 +395,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                             <>
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-xs">
-                                        <thead><tr className="text-text-muted border-b border-border">
+                                        <thead><tr className="bg-surface-page text-text-dim border-b border-border">
                                             <th className="py-1.5 text-left">Profile</th>
                                             <th className="py-1.5 text-right">Span</th>
                                             <th className="py-1.5 text-right">Strips</th>
@@ -412,19 +411,19 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                                 return (
                                                     <tr key={`${o.stripWidthIn}x${o.stripHeightIn}@${o.spanIn}`}
                                                         onClick={() => { setMode('check'); upd({ stripWidthIn: o.stripWidthIn, stripHeightIn: o.stripHeightIn, spanIn: o.spanIn, stripCount: o.stripCount }) }}
-                                                        className={`border-b border-border/50 font-mono cursor-pointer hover:bg-dark-700 ${
-                                                            isCheapest ? 'bg-success/5' : isStiffest ? 'bg-primary/5' : ''
+                                                        className={`border-b border-border-soft font-mono cursor-pointer hover:bg-surface-card-hover ${
+                                                            isCheapest ? 'bg-success/5' : isStiffest ? 'bg-accent-text/10' : ''
                                                         }`}>
                                                         <td className="py-1.5 text-text-strong">
                                                             {o.stripWidthIn}×{o.stripHeightIn}
-                                                            {isCheapest && <span className="ml-1 text-success text-[10px]">cheapest</span>}
-                                                            {isStiffest && <span className="ml-1 text-primary text-[10px]">stiffest/$</span>}
+                                                            {isCheapest && <span className="ml-1 text-success text-[11px]">cheapest</span>}
+                                                            {isStiffest && <span className="ml-1 text-accent-text text-[11px]">stiffest/$</span>}
                                                         </td>
-                                                        <td className="py-1.5 text-right text-text-secondary">{o.spanIn}"</td>
-                                                        <td className="py-1.5 text-right text-text-secondary">{o.stripCount}</td>
-                                                        <td className="py-1.5 text-right text-text-secondary">{o.result.pointDeflIn.toFixed(3)}</td>
-                                                        <td className="py-1.5 text-right text-text-secondary">{o.result.maxOverhangIn.toFixed(1)}"</td>
-                                                        <td className="py-1.5 text-right text-text-muted">{o.result.plasticVolumeIn3.toFixed(0)}</td>
+                                                        <td className="py-1.5 text-right text-text-body">{o.spanIn}"</td>
+                                                        <td className="py-1.5 text-right text-text-body">{o.stripCount}</td>
+                                                        <td className="py-1.5 text-right text-text-body">{o.result.pointDeflIn.toFixed(3)}</td>
+                                                        <td className="py-1.5 text-right text-text-body">{o.result.maxOverhangIn.toFixed(1)}"</td>
+                                                        <td className="py-1.5 text-right text-text-dim">{o.result.plasticVolumeIn3.toFixed(0)}</td>
                                                         <td className="py-1.5 text-right text-text-strong">${o.result.totalCost.toFixed(0)}</td>
                                                     </tr>
                                                 )
@@ -432,7 +431,7 @@ export function WearstripCalculator({ instanceId = MAIN }: { instanceId?: string
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="text-[10px] text-text-muted">
+                                <div className="text-[11px] text-text-dim">
                                     Enumerates heights × widths × spans at the lateral-rule strip count ({optimized[0]?.stripCount}); passing configs
                                     ranked by plastic + support cost. Click a row to load it in Check mode.
                                 </div>

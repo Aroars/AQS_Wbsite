@@ -62,7 +62,7 @@ function ConveyorDiagram({ type, geo, isMetric, lengthLabel }: {
                 <line x1={pad} y1={baseY} x2={pad + len} y2={baseY} stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" />
                 <circle cx={pad} cy={baseY} r="3" fill="#3b82f6" />
                 <circle cx={pad + len} cy={baseY} r="3" fill="#3b82f6" />
-                <text x={pad + len / 2} y={baseY - 8} fill="#93a3b8" fontSize="9" textAnchor="middle">
+                <text x={pad + len / 2} y={baseY - 8} fill="#93a3b8" fontSize="11" textAnchor="middle">
                     {displayVal(geo.floorLength)} {lengthLabel}
                 </text>
             </svg>
@@ -83,13 +83,13 @@ function ConveyorDiagram({ type, geo, isMetric, lengthLabel }: {
                 {/* Height line */}
                 <line x1={pad + floorLen} y1={baseY} x2={pad + floorLen} y2={baseY - heightPx} stroke="#eab308" strokeWidth="1" strokeDasharray="3,3" />
                 {/* Labels */}
-                <text x={pad + floorLen / 2} y={baseY + 12} fill="#93a3b8" fontSize="8" textAnchor="middle">
+                <text x={pad + floorLen / 2} y={baseY + 12} fill="#93a3b8" fontSize="11" textAnchor="middle">
                     {displayVal(geo.floorLength)} {lengthLabel}
                 </text>
-                <text x={pad + floorLen + 8} y={baseY - heightPx / 2} fill="#eab308" fontSize="8" textAnchor="start">
+                <text x={pad + floorLen + 8} y={baseY - heightPx / 2} fill="#eab308" fontSize="11" textAnchor="start">
                     {displayVal(Math.abs(geo.heightDiff))} {lengthLabel}
                 </text>
-                <text x={pad + 10} y={baseY - 6} fill="#60a5fa" fontSize="8">
+                <text x={pad + 10} y={baseY - 6} fill="#60a5fa" fontSize="11">
                     {geo.angle?.toFixed(1)}°
                 </text>
             </svg>
@@ -138,10 +138,10 @@ function ConveyorDiagram({ type, geo, isMetric, lengthLabel }: {
 /** Step header component */
 function StepHeader({ step, label, status }: { step: number; label: string; status: 'pending' | 'active' | 'complete' | 'skipped' }) {
     const styles = {
-        pending: 'bg-dark-900 text-text-muted border-border',
-        active: 'bg-primary/10 text-primary border-primary/30',
-        complete: 'bg-success/10 text-success border-success/30',
-        skipped: 'bg-dark-900 text-text-muted border-border opacity-70',
+        pending: 'bg-surface-page text-text-dim border-border',
+        active: 'bg-accent-text/10 text-accent-text border-accent-text/30',
+        complete: 'bg-success/10 text-text-strong border-success/30',
+        skipped: 'bg-surface-page text-text-dim border-border opacity-70',
     }
     const icons = { pending: '○', active: '←', complete: '✓', skipped: '–' }
 
@@ -153,8 +153,8 @@ function StepHeader({ step, label, status }: { step: number; label: string; stat
     )
 }
 
-const inputClass = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
-const labelCls = 'block text-xs text-text-muted mb-1'
+const inputClass = 'w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text'
+const labelCls = 'block text-xs text-text-dim mb-1'
 
 export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}) {
     const loadJson = useAppStore((s) => s.loadDefinition)
@@ -282,7 +282,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
     const typeDef = conveyorTypes[conveyorType]
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Incline Conveyor Length &amp; Angle</h3>
                 <CalcPinButton toolId="conveyorSpec" instanceId={instanceId} />
@@ -309,7 +309,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                             setIsMetric(metric)
                         }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isMetric === metric ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isMetric === metric ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {metric ? 'Metric' : 'Imperial'}
                         </button>
@@ -324,17 +324,17 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                     {Object.entries(conveyorTypes).map(([key, ct]: any) => (
                         <button key={key} onClick={() => setConveyorType(key as ConveyorType)}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                                conveyorType === key ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                conveyorType === key ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {ct.name}
                         </button>
                     ))}
                 </div>
 
-                <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body">
                     {typeDef.description}
                     {conveyorType !== 'straight' && (
-                        <span className="text-text-muted"> — Enter any 2 values to auto-calculate the rest.</span>
+                        <span className="text-text-dim"> — Enter any 2 values to auto-calculate the rest.</span>
                     )}
                 </div>
 
@@ -384,14 +384,14 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
 
                 {/* Geometry error */}
                 {geo?.error && (
-                    <div className="px-3 py-2 bg-error/10 border border-error/30 rounded-lg text-xs text-error">{geo.error}</div>
+                    <div className="px-3 py-2 bg-error/10 border-l-2 border-error rounded-lg text-xs text-text-body">{geo.error}</div>
                 )}
 
-                {/* Geometry results */}
+                {/* Geometry results: a readout, so the drawing keeps its dark canvas in both themes */}
                 {geoSolved && (
-                    <div className="rounded-lg border border-primary/20 bg-dark-700 overflow-hidden">
+                    <div className="readout rounded-lg border border-border overflow-hidden">
                         {/* SVG Diagram */}
-                        <div className="px-3 py-2 bg-dark-800">
+                        <div className="px-3 py-2 bg-surface-card">
                             <ConveyorDiagram type={conveyorType} geo={geo} isMetric={isMetric} lengthLabel={lengthLabel} />
                         </div>
 
@@ -399,18 +399,18 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 {geo.totalFloorLength != null && (
                                     <>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Total Floor:</span><span className="font-mono text-text-strong">{displayFt(geo.totalFloorLength)} {lengthLabel}</span></div>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Total Actual:</span><span className="font-mono text-text-strong">{displayFt(geo.totalActualLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-body">Total Floor:</span><span className="font-mono text-text-strong">{displayFt(geo.totalFloorLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-body">Total Actual:</span><span className="font-mono text-text-strong">{displayFt(geo.totalActualLength)} {lengthLabel}</span></div>
                                     </>
                                 )}
                                 {geo.totalFloorLength == null && (
                                     <>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Floor Length:</span><span className="font-mono text-text-strong">{displayFt(geo.floorLength)} {lengthLabel}</span></div>
-                                        <div className="flex justify-between"><span className="text-text-secondary">Actual Length:</span><span className="font-mono text-text-strong">{displayFt(geo.actualLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-body">Floor Length:</span><span className="font-mono text-text-strong">{displayFt(geo.floorLength)} {lengthLabel}</span></div>
+                                        <div className="flex justify-between"><span className="text-text-body">Actual Length:</span><span className="font-mono text-text-strong">{displayFt(geo.actualLength)} {lengthLabel}</span></div>
                                     </>
                                 )}
-                                <div className="flex justify-between"><span className="text-text-secondary">Height:</span><span className="font-mono text-text-strong">{displayFt(geo.heightDiff)} {lengthLabel}</span></div>
-                                <div className="flex justify-between"><span className="text-text-secondary">Angle:</span><span className="font-mono text-text-strong">{geo.angle?.toFixed(1)}°</span></div>
+                                <div className="flex justify-between"><span className="text-text-body">Height:</span><span className="font-mono text-text-strong">{displayFt(geo.heightDiff)} {lengthLabel}</span></div>
+                                <div className="flex justify-between"><span className="text-text-body">Angle:</span><span className="font-mono text-text-strong">{geo.angle?.toFixed(1)}°</span></div>
                             </div>
 
                             {/* Angle annotation: packages get the retention advice; bulk gets the plain-belt limit */}
@@ -418,7 +418,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                                 if (productType === 'bulk') {
                                     const past = pastPlainLimit
                                     return (
-                                        <div className={`mt-2 px-3 py-1.5 rounded border-l-2 text-xs bg-dark-800 ${past ? 'text-warning border-warning' : 'text-success border-success'}`}>
+                                        <div className={`mt-2 px-3 py-1.5 rounded border-l-2 text-xs bg-surface-card ${past ? 'text-warning border-warning' : 'text-success border-success'}`}>
                                             {past
                                                 ? `${angleDeg.toFixed(1)}° is past the ${plainLimit}° plain-belt limit for loose product — it slides back. Flights turn the bed into pockets — size them on the Belt Pull incline section after sending the path.`
                                                 : `${angleDeg.toFixed(1)}° is within the ${plainLimit}° plain-belt limit for loose product — a bed carries without flights. Flights are optional here.`}
@@ -428,7 +428,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                                 const ann = getAngleAnnotation(angleDeg)
                                 const colors = { success: 'text-success border-success', warning: 'text-warning border-warning', error: 'text-error border-error' }
                                 return (
-                                    <div className={`mt-2 px-3 py-1.5 rounded border-l-2 text-xs ${colors[ann.status]} bg-dark-800`}>
+                                    <div className={`mt-2 px-3 py-1.5 rounded border-l-2 text-xs ${colors[ann.status]} bg-surface-card`}>
                                         {ann.text}
                                     </div>
                                 )
@@ -441,17 +441,17 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                 <StepHeader step={2} label="Product Loading" status={step2Status} />
 
                 {!geoSolved ? (
-                    <div className="text-xs text-text-muted px-3 py-2">Complete Step 1 geometry to unlock loading.</div>
+                    <div className="text-xs text-text-dim px-3 py-2">Complete Step 1 geometry to unlock loading.</div>
                 ) : load ? (
-                    <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
-                        <span className="text-text-muted">From Belt Load: </span>
+                    <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body">
+                        <span className="text-text-dim">From Belt Load: </span>
                         <span className="text-text-strong">{describeLoad(load)}</span>
-                        {load.lbPerFt !== null && <span className="font-mono text-primary"> · {load.lbPerFt.toFixed(2)} lb/ft</span>}
-                        <div className="text-[10px] text-text-muted mt-0.5">Change it on the Belt Load card; this card and Belt Pull follow.</div>
+                        {load.lbPerFt !== null && <span className="font-mono text-accent-text"> · {load.lbPerFt.toFixed(2)} lb/ft</span>}
+                        <div className="text-[11px] text-text-dim mt-0.5">Change it on the Belt Load card; this card and Belt Pull follow.</div>
                     </div>
                 ) : (
                     <>
-                        <div className="text-[10px] text-text-muted">
+                        <div className="text-[11px] text-text-dim">
                             No product defined on the Belt Load card yet — enter discrete pieces here, or define bulk product there to unlock the flight solver.
                         </div>
                         <div className="grid grid-cols-1 @md:grid-cols-3 gap-3">
@@ -471,24 +471,24 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
 
                         {/* Manual loading results */}
                         {hasManualLoading && loading && (
-                            <div className="rounded-lg border border-primary/20 bg-dark-700 p-3 space-y-3">
+                            <div className="readout rounded-lg border border-border p-3 space-y-3">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-dark-800 rounded-lg px-3 py-3 text-center">
-                                        <div className="text-xs text-text-muted">Products on Conveyor</div>
-                                        <div className="font-mono text-xl font-semibold text-primary">{loading.productsOnConveyor}</div>
+                                    <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                                        <div className="text-xs text-text-dim">Products on Conveyor</div>
+                                        <div className="font-mono text-xl font-semibold text-accent-text">{loading.productsOnConveyor}</div>
                                     </div>
-                                    <div className="bg-dark-800 rounded-lg px-3 py-3 text-center">
-                                        <div className="text-xs text-text-muted">Total Load</div>
-                                        <div className="font-mono text-xl font-semibold text-primary">{displayLbs(loading.totalProductWeight ?? null)} {weightLabel}</div>
+                                    <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                                        <div className="text-xs text-text-dim">Total Load</div>
+                                        <div className="font-mono text-xl font-semibold text-accent-text">{displayLbs(loading.totalProductWeight ?? null)} {weightLabel}</div>
                                     </div>
                                 </div>
-                                <div className="bg-dark-800 rounded-lg px-3 py-2 text-center">
-                                    <div className="text-xs text-text-muted">Belt Loading</div>
+                                <div className="bg-surface-card rounded-lg px-3 py-2 text-center">
+                                    <div className="text-xs text-text-dim">Belt Loading</div>
                                     <div className="font-mono text-sm text-text-strong">
                                         {displayLoadPerLen(loading.beltLoading ?? null)} {isMetric ? 'kg/m' : 'lbs/ft'}
                                     </div>
                                 </div>
-                                <div className="px-3 py-1.5 bg-dark-800 rounded border-l-2 border-primary text-xs text-text-secondary">
+                                <div className="px-3 py-1.5 bg-surface-card rounded border-l-2 border-accent-text text-xs text-text-body">
                                     {getLoadingAnnotation(loading.totalProductWeight ?? 0, totalActualFt ?? 1)}
                                 </div>
                             </div>
@@ -499,7 +499,7 @@ export function ConveyorSpec({ instanceId = MAIN }: { instanceId?: string } = {}
                 {/* ── STEP 3: HAND OFF ── */}
                 {geoSolved && (
                     <button onClick={sendPath}
-                        className="w-full px-3 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors flex items-center justify-center gap-1.5">
+                        className="w-full px-3 py-2 rounded-lg text-xs border border-accent-text/40 bg-accent-text/10 text-accent-text hover:bg-accent-text/20 transition-colors flex items-center justify-center gap-1.5">
                         Send path {loadReady ? '+ product ' : ''}to Belt Pull <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                 )}

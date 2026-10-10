@@ -100,16 +100,16 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
     const scenarioRows: ScenarioRow[] = s.scenarios.length > 0 ? s.scenarios : (hasPull ? [{ id: 'entered', label: 'Entered floors', cont: contFloor, peak: peakFloor }] : [])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Torque &amp; Motor</h3>
                 <CalcPinButton toolId="driveMotor" instanceId={instanceId} />
             </div>
             <div className="p-4 space-y-4">
                 {s.source && (
-                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-primary/30 bg-primary/10 text-xs text-primary">
+                    <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-accent-text/30 bg-accent-text/10 text-xs text-accent-text">
                         <span className="flex-1">{s.source}{s.scenarioLabel ? ` — ${s.scenarioLabel} × SF ${s.serviceFactor}` : ''}</span>
-                        <button type="button" onClick={() => upd({ source: null })} className="text-primary/70 hover:text-primary" aria-label="Dismiss"><X className="w-3.5 h-3.5" /></button>
+                        <button type="button" onClick={() => upd({ source: null })} className="text-accent-text/70 hover:text-accent-text" aria-label="Dismiss"><X className="w-3.5 h-3.5" /></button>
                     </div>
                 )}
 
@@ -129,7 +129,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                 <div className="flex gap-1.5">
                     {(['sprocket', 'drum'] as const).map((d) => (
                         <button key={d} onClick={() => upd({ driveType: d })}
-                            className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${s.driveType === d ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary'}`}>
+                            className={`px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${s.driveType === d ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body'}`}>
                             {d === 'drum' ? 'Powered Pulley / Drum' : 'Sprocket-Driven Shaft'}
                         </button>
                     ))}
@@ -179,17 +179,17 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                         <Field label="Motor speed" unit="rpm" hint="1750 for a 4-pole 60 Hz motor"><input type="number" min="0" step="any" value={s.motorRpm} className={inputCls} onChange={(e) => upd({ motorRpm: e.target.value })} /></Field>
                         <Field label="Drive efficiency" unit="%" hint="gearmotor and belt drive losses; 85 typical"><input type="number" min="1" max="100" step="any" value={s.efficiency} className={inputCls} onChange={(e) => upd({ efficiency: e.target.value })} /></Field>
                     </div>
-                    <div className="text-[10px] text-text-muted">
+                    <div className="text-[11px] text-text-dim">
                         hp = pull × ft/min ÷ 33,000 · torque = pull × PD ÷ 2 · rpm = ft/min × 12 ÷ (π × PD) · ratio = motor rpm ÷ shaft rpm. Motor sizes are catalog steps at or above the requirement.
                     </div>
                 </div>
 
                 {/* 4. OneMotion auto-pick (moved from Belt Pull) */}
                 {picks && (
-                    <details open={s.driveType === 'drum'} className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
+                    <details open={s.driveType === 'drum'} className="readout rounded-lg border border-border px-3 py-2.5 space-y-2">
                         <summary className="cursor-pointer select-none flex items-center justify-between flex-wrap gap-2">
-                            <span className="text-xs text-text-secondary uppercase tracking-wider">OneMotion Auto-Pick ({s.width}″ belt){picks.recommended ? <span className="normal-case tracking-normal text-success"> — {picks.recommended.series}</span> : <span className="normal-case tracking-normal text-error"> — none passes</span>}</span>
-                            <span className="text-[10px] text-text-muted font-mono">needs {picks.contN.toFixed(0)} N cont · {picks.peakN.toFixed(0)} N peak</span>
+                            <span className="text-xs text-text-body uppercase tracking-wider">OneMotion Auto-Pick ({s.width}″ belt){picks.recommended ? <span className="normal-case tracking-normal text-success"> — {picks.recommended.series}</span> : <span className="normal-case tracking-normal text-error"> — none passes</span>}</span>
+                            <span className="text-[11px] text-text-dim font-mono">needs {picks.contN.toFixed(0)} N cont · {picks.peakN.toFixed(0)} N peak</span>
                         </summary>
                         {picks.recommended ? (
                             <div className="px-2.5 py-2 bg-success/10 border-l-2 border-success rounded text-xs text-success">
@@ -206,24 +206,24 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                             </div>
                         )}
                         <table className="w-full text-xs">
-                            <thead><tr className="text-text-muted border-b border-border">
+                            <thead><tr className="bg-surface-page text-text-dim border-b border-border">
                                 <th className="py-1 text-left">Series</th><th className="py-1 text-right">Width</th><th className="py-1 text-right">Rated (N)</th>
                                 <th className="py-1 text-right">Cont</th><th className="py-1 text-right">Peak</th><th className="py-1 text-right">RPM</th>
                             </tr></thead>
                             <tbody>
                                 {picks.rows.map((r) => (
-                                    <tr key={r.series} className={`border-b border-border/50 font-mono ${r.passes ? '' : 'opacity-60'}`}>
-                                        <td className={`py-1 font-sans ${r.passes ? 'text-text-strong' : 'text-text-muted'}`}>{r.passes ? '✓ ' : ''}{r.series}</td>
-                                        <td className={`py-1 text-right ${r.fits ? 'text-text-secondary' : 'text-error'}`}>{r.fits ? 'fits' : 'no'}</td>
-                                        <td className="py-1 text-right text-text-secondary">{r.pullN.toFixed(0)}</td>
+                                    <tr key={r.series} className={`border-b border-border-soft hover:bg-surface-card-hover font-mono ${r.passes ? '' : 'opacity-60'}`}>
+                                        <td className={`py-1 font-sans ${r.passes ? 'text-text-strong' : 'text-text-dim'}`}>{r.passes ? '✓ ' : ''}{r.series}</td>
+                                        <td className={`py-1 text-right ${r.fits ? 'text-text-body' : 'text-error'}`}>{r.fits ? 'fits' : 'no'}</td>
+                                        <td className="py-1 text-right text-text-body">{r.pullN.toFixed(0)}</td>
                                         <td className={`py-1 text-right ${utilizationCls(Math.min(r.contUtil, 999))}`}>{Number.isFinite(r.contUtil) ? `${r.contUtil.toFixed(0)}%` : '—'}</td>
                                         <td className={`py-1 text-right ${utilizationCls(Math.min(r.peakUtil, 999))}`}>{Number.isFinite(r.peakUtil) ? `${r.peakUtil.toFixed(0)}%` : '—'}</td>
-                                        <td className={`py-1 text-right ${r.rpmOk ? 'text-text-secondary' : 'text-error'}`}>{r.rpm.toFixed(0)}<span className="text-text-muted"> / {r.minRpm}–{r.maxRpm}</span></td>
+                                        <td className={`py-1 text-right ${r.rpmOk ? 'text-text-body' : 'text-error'}`}>{r.rpm.toFixed(0)}<span className="text-text-dim"> / {r.minRpm}–{r.maxRpm}</span></td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <div className="text-[10px] text-text-muted">
+                        <div className="text-[11px] text-text-dim">
                             Verdicts use the vendor belt-pull rating at this width (not torque ÷ radius) and the peak-to-continuous torque ratio for startup. Smallest passing series is recommended; the manual entry below is the sign-off path.
                         </div>
                     </details>
@@ -231,11 +231,11 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
 
                 {/* 5. Manual drive capability (moved from Belt Pull) */}
                 <details>
-                    <summary className="text-xs text-text-secondary hover:text-text-strong cursor-pointer select-none uppercase tracking-wider">Manual drive entry &amp; utilisation</summary>
+                    <summary className="text-xs text-text-body hover:text-text-strong cursor-pointer select-none uppercase tracking-wider">Manual drive entry &amp; utilisation</summary>
                     <div className="mt-2 space-y-2">
                         {s.driveType === 'drum' ? (
                             <>
-                                <div className="text-[10px] text-warning">Use the vendor&apos;s belt pull rating, NOT torque — drum motors are derated below torque ÷ radius.</div>
+                                <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-[11px] text-text-body">Use the vendor&apos;s belt pull rating, NOT torque — drum motors are derated below torque ÷ radius.</div>
                                 <Field label="Rated continuous pull" unit="N" hint={num(s.ratedPullN) > 0 ? `= ${(num(s.ratedPullN) / LBF_TO_N).toFixed(1)} lbf` : undefined}>
                                     <input type="number" min="0" step="any" value={s.ratedPullN} className={inputCls} onChange={(e) => upd({ ratedPullN: e.target.value, presetSeries: '' })} />
                                 </Field>
@@ -246,7 +246,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                     <Field label="Sprocket bore" unit="mm"><input type="number" min="0" step="any" value={s.boreMm} className={inputCls} onChange={(e) => upd({ boreMm: e.target.value })} /></Field>
                                     <Field label="Motor shell" unit="mm"><input type="number" min="0" step="any" value={s.shellMm} className={inputCls} onChange={(e) => upd({ shellMm: e.target.value })} /></Field>
                                 </div>
-                                <div className="text-[10px] text-text-muted">
+                                <div className="text-[11px] text-text-dim">
                                     Chordal PD = pitch ÷ sin(180°/z). Vendors may dimension non-chordally — override from the sprocket drawing. Fewer teeth = smaller radius = less torque needed (10T vs 11T on S-200 ≈ −9% torque).
                                 </div>
                                 <div className="grid grid-cols-3 gap-2">
@@ -256,16 +256,16 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                 </div>
                                 <div className="flex items-end gap-2">
                                     <div className="flex-1"><Field label="From catalog N·m (ambiguous rating)"><input type="number" min="0" step="any" value={s.catalogNm} className={inputCls} onChange={(e) => upd({ catalogNm: e.target.value })} /></Field></div>
-                                    <select value={s.catalogInterp} onChange={(e) => upd({ catalogInterp: e.target.value })} className="px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-secondary text-xs focus:outline-none">
+                                    <select value={s.catalogInterp} onChange={(e) => upd({ catalogInterp: e.target.value })} className="px-2 py-2 bg-surface-page border border-border rounded-lg text-text-body text-xs focus:outline-none">
                                         <option value="1">catalog = continuous (÷1)</option>
                                         <option value="2">catalog = peak, 2× (÷2)</option>
                                         <option value="3">catalog = peak, 3× (÷3)</option>
                                     </select>
                                     <button onClick={() => { const c = num(s.catalogNm); if (c > 0) upd({ peakNm: String(c), contNm: (c / num(s.catalogInterp, 3)).toFixed(2), usedCatalog: true }) }}
-                                        className="px-2.5 py-2 rounded-lg text-xs border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Fill</button>
+                                        className="px-2.5 py-2 rounded-lg text-xs border border-accent-text/40 bg-accent-text/10 text-accent-text hover:bg-accent-text/20 transition-colors">Fill</button>
                                 </div>
                                 {s.usedCatalog && (
-                                    <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-warning">
+                                    <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-text-body">
                                         Catalog Nm values are UNVERIFIED as continuous vs peak (AMO rows show motors named by peak; the catalog footnote says 2× FLA, the AMO shows 3× — unresolved vendor contradiction). Confirm the AMO row (continuous / peak / FLA) with the vendor before ordering.
                                     </div>
                                 )}
@@ -276,26 +276,26 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                         </Field>
 
                         {drive && hasPull && (
-                            <div className="rounded-lg border border-border bg-dark-900/50 px-3 py-2.5 space-y-2">
+                            <div className="readout rounded-lg border border-border px-3 py-2.5 space-y-2">
                                 {drive.screens.map((sc, i) => <div key={i} className="px-2.5 py-2 bg-error/10 border-l-2 border-error rounded text-xs text-error font-medium">{sc}</div>)}
-                                <div className="text-xs text-text-secondary">
+                                <div className="text-xs text-text-body">
                                     Available pull: <span className="font-mono text-text-strong">{drive.availableN.toFixed(0)} N cont ({(drive.availableN / LBF_TO_N).toFixed(1)} lbf)</span>
-                                    <span className="font-mono text-text-muted"> · {drive.peakN.toFixed(0)} N peak</span>
-                                    {drive.pdMm !== null && <span className="font-mono text-text-muted"> · PD {(drive.pdMm / 25.4).toFixed(2)}&quot;</span>}
-                                    {thermal !== 1 && <span className="font-mono text-text-muted"> · cool-adj ×{thermal.toFixed(2)}</span>}
+                                    <span className="font-mono text-text-dim"> · {drive.peakN.toFixed(0)} N peak</span>
+                                    {drive.pdMm !== null && <span className="font-mono text-text-dim"> · PD {(drive.pdMm / 25.4).toFixed(2)}&quot;</span>}
+                                    {thermal !== 1 && <span className="font-mono text-text-dim"> · cool-adj ×{thermal.toFixed(2)}</span>}
                                     {drive.rpm !== null && (
                                         <span className="ml-2">· RPM: <span className={`font-mono ${drive.maxRpm !== null && drive.rpm > drive.maxRpm ? 'text-error' : 'text-text-strong'}`}>{drive.rpm.toFixed(0)}</span>
-                                            {drive.maxRpm !== null && <span className="text-text-muted font-mono"> / {drive.maxRpm} max</span>}</span>
+                                            {drive.maxRpm !== null && <span className="text-text-dim font-mono"> / {drive.maxRpm} max</span>}</span>
                                     )}
                                 </div>
                                 {drive.maxRpm !== null && drive.rpm !== null && drive.rpm > drive.maxRpm && <div className="text-xs text-error">Required RPM exceeds the motor&apos;s rating — belt speed unreachable with this drive.</div>}
                                 {drive.pdMm !== null && (
-                                    <div className="text-xs font-mono text-text-secondary">
-                                        Torque floors @ PD radius: continuous ≥ {(contFloor * (drive.pdMm / 25.4 / 2) * LB_IN_TO_NM).toFixed(2)} Nm<span className="text-text-muted"> · </span>peak ≥ {(peakFloor * (drive.pdMm / 25.4 / 2) * LB_IN_TO_NM).toFixed(2)} Nm
+                                    <div className="text-xs font-mono text-text-body">
+                                        Torque floors @ PD radius: continuous ≥ {(contFloor * (drive.pdMm / 25.4 / 2) * LB_IN_TO_NM).toFixed(2)} Nm<span className="text-text-dim"> · </span>peak ≥ {(peakFloor * (drive.pdMm / 25.4 / 2) * LB_IN_TO_NM).toFixed(2)} Nm
                                     </div>
                                 )}
                                 <table className="w-full text-xs">
-                                    <thead><tr className="text-text-muted border-b border-border">
+                                    <thead><tr className="bg-surface-page text-text-dim border-b border-border">
                                         <th className="py-1 text-left">Scenario</th><th className="py-1 text-right">Cont floor (lbf)</th><th className="py-1 text-right">Cont util</th>
                                         {thermal !== 1 && <th className="py-1 text-right">Cool-adj</th>}<th className="py-1 text-right">Peak util</th>
                                     </tr></thead>
@@ -304,9 +304,9 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                             const contFloorN = row.cont * LBF_TO_N; const peakFloorN = row.peak * LBF_TO_N
                                             const util = (contFloorN / drive.availableN) * 100; const utilAdj = (contFloorN / (drive.availableN * thermal)) * 100; const peakUtil = (peakFloorN / drive.peakN) * 100
                                             return (
-                                                <tr key={row.id} className="border-b border-border/50 font-mono">
+                                                <tr key={row.id} className="border-b border-border-soft hover:bg-surface-card-hover font-mono">
                                                     <td className="py-1 text-text-strong font-sans">{row.label}</td>
-                                                    <td className="py-1 text-right text-text-secondary">{row.cont.toFixed(1)}</td>
+                                                    <td className="py-1 text-right text-text-body">{row.cont.toFixed(1)}</td>
                                                     <td className={`py-1 text-right font-semibold ${utilizationCls(util)}`}>{util.toFixed(0)}%</td>
                                                     {thermal !== 1 && <td className={`py-1 text-right ${utilizationCls(utilAdj)}`}>{utilAdj.toFixed(0)}%</td>}
                                                     <td className={`py-1 text-right ${utilizationCls(peakUtil)}`}>{peakUtil.toFixed(0)}%</td>
@@ -315,7 +315,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                                         })}
                                     </tbody>
                                 </table>
-                                <div className="text-[10px] text-text-muted">
+                                <div className="text-[11px] text-text-dim">
                                     Verdicts run on Central × scenario × SF{s.serviceFactor ? ` ${s.serviceFactor}` : ''}; peak floor = {s.breakawayFactor}× continuous. Green &lt;60% · yellow 60–85% · red &gt;85%. Size 3+ turns to Degraded, 1–2 turns to Worn.
                                 </div>
                             </div>
@@ -323,7 +323,7 @@ export function DriveMotorCalculator({ instanceId = MAIN }: { instanceId?: strin
                     </div>
                 </details>
 
-                <div className="text-[10px] text-text-muted">Drive Shaft pulls the pull, torque, width and pitch diameter from this card — open its From bar.</div>
+                <div className="text-[11px] text-text-dim">Drive Shaft pulls the pull, torque, width and pitch diameter from this card — open its From bar.</div>
             </div>
         </div>
     )

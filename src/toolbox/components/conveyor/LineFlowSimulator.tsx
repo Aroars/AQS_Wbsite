@@ -75,14 +75,14 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
     })
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Line Flow Simulator</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="lineFlow" instanceId={instanceId} />
                     {cards.length > 0 && (
-                        <span className={`flex items-center gap-1 text-xs ${
-                            chainFeasibility === 'ok' ? 'text-success' : chainFeasibility === 'warning' ? 'text-warning' : 'text-error'
+                        <span className={`flex items-center gap-1 text-xs text-text-strong px-2 py-0.5 rounded border-l-2 ${
+                            chainFeasibility === 'ok' ? 'bg-success/10 border-success' : chainFeasibility === 'warning' ? 'bg-warning/10 border-warning' : 'bg-error/10 border-error'
                         }`}>
                             {chainFeasibility === 'ok' ? <CheckCircle className="w-3.5 h-3.5" /> : chainFeasibility === 'warning' ? <AlertTriangle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
                             {chainFeasibility === 'ok' ? 'Feasible' : chainFeasibility === 'warning' ? 'Warning' : 'Error'}
@@ -91,8 +91,8 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                 </div>
             </div>
             <div className="p-4 space-y-4">
-                <div className="text-[10px] text-text-muted">
-                    Starts from the <a href="#tool-conveyorFlow" className="text-primary hover:underline">Conveyor Speed</a> infeed — the same card, edited in either place. Add cards to follow the product downstream.
+                <div className="text-[11px] text-text-dim">
+                    Starts from the <a href="#tool-conveyorFlow" className="text-accent-text hover:underline">Conveyor Speed</a> infeed — the same card, edited in either place. Add cards to follow the product downstream.
                 </div>
                 {cards.map((card, cardIndex) => {
                     const typeDef = cardTypes[card.type]
@@ -109,10 +109,10 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {feasibility !== 'ok' && !outputs.pristine && (
-                                        <span className={`text-xs ${feasibility === 'warning' ? 'text-warning' : 'text-error'}`}>{feasibility === 'warning' ? '⚠' : '✗'}</span>
+                                        <span className={`text-xs text-text-strong px-1.5 rounded border-l-2 ${feasibility === 'warning' ? 'bg-warning/10 border-warning' : 'bg-error/10 border-error'}`}>{feasibility === 'warning' ? '⚠' : '✗'}</span>
                                     )}
                                     {typeDef.deletable && (
-                                        <button onClick={() => removeCard(cardIndex)} className="p-1 text-text-muted hover:text-error transition-colors">
+                                        <button onClick={() => removeCard(cardIndex)} className="p-1 text-text-dim hover:text-error transition-colors">
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
                                     )}
@@ -132,10 +132,10 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                         if (input.type === 'select') {
                                             return (
                                                 <div key={input.key}>
-                                                    <label className="block text-xs text-text-muted mb-1">{input.label}</label>
+                                                    <label className="block text-xs text-text-dim mb-1">{input.label}</label>
                                                     <select value={String(card.inputs[input.key] ?? input.options[0])}
                                                         onChange={(e) => handleSelectChange(cardIndex, input.key, e.target.value)}
-                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-strong text-xs focus:outline-none focus:border-primary">
+                                                        className="w-full px-2 py-1.5 bg-surface-page border border-border rounded-lg text-text-strong text-xs focus:outline-none focus:border-accent-text">
                                                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                                         {input.options.map((opt: any) => (
                                                             <option key={opt} value={opt}>{input.optionsFull ? input.optionsFull[input.options.indexOf(opt)] : opt}</option>
@@ -147,30 +147,30 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                                         if (input.type === 'text') {
                                             return (
                                                 <div key={input.key}>
-                                                    <label className="block text-xs text-text-muted mb-1">{input.label}</label>
+                                                    <label className="block text-xs text-text-dim mb-1">{input.label}</label>
                                                     <input type="text" value={String(card.inputs[input.key] ?? '')}
                                                         onChange={(e) => handleInputChange(cardIndex, input.key, e.target.value)} placeholder={input.placeholder}
-                                                        className="w-full px-2 py-1.5 bg-dark-900 border border-border rounded-lg text-text-strong text-xs font-mono focus:outline-none focus:border-primary" />
+                                                        className="w-full px-2 py-1.5 bg-surface-page border border-border rounded-lg text-text-strong text-xs font-mono focus:outline-none focus:border-accent-text" />
                                                 </div>
                                             )
                                         }
                                         return (
                                             <div key={input.key}>
-                                                <label className="block text-xs text-text-muted mb-1">{input.label}</label>
+                                                <label className="block text-xs text-text-dim mb-1">{input.label}</label>
                                                 <div className="flex">
                                                     <input type="number" value={card.inputs[input.key] === null || card.inputs[input.key] === undefined ? '' : String(card.inputs[input.key])}
                                                         onChange={(e) => handleInputChange(cardIndex, input.key, e.target.value)} placeholder={input.placeholder}
                                                         min={input.min} max={input.max} step="any"
-                                                        className="flex-1 px-2 py-1.5 bg-dark-900 border border-border rounded-l-lg text-text-strong text-xs font-mono focus:outline-none focus:border-primary" />
+                                                        className="flex-1 px-2 py-1.5 bg-surface-page border border-border rounded-l-lg text-text-strong text-xs font-mono focus:outline-none focus:border-accent-text" />
                                                     {input.unitType && unitTypes[input.unitType] && (
                                                         <select value={card.units[input.key] ?? unitTypes[input.unitType].default}
                                                             onChange={(e) => handleUnitChange(cardIndex, input.key, e.target.value)}
-                                                            className="px-1.5 bg-dark-700 border border-l-0 border-border rounded-r-lg text-text-secondary text-xs focus:outline-none">
+                                                            className="px-1.5 bg-surface-card-hover border border-l-0 border-border rounded-r-lg text-text-body text-xs focus:outline-none">
                                                             {unitTypes[input.unitType].units.map((u: string) => <option key={u} value={u}>{u}</option>)}
                                                         </select>
                                                     )}
                                                     {input.suffix && !input.unitType && (
-                                                        <span className="flex items-center px-2 bg-dark-700 border border-l-0 border-border rounded-r-lg text-text-muted text-xs">{input.suffix}</span>
+                                                        <span className="flex items-center px-2 bg-surface-card-hover border border-l-0 border-border rounded-r-lg text-text-dim text-xs">{input.suffix}</span>
                                                     )}
                                                 </div>
                                             </div>
@@ -180,22 +180,22 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                             </div>
 
                             {!outputs.pristine && outputs.productSpeed > 0 && (
-                                <div className="px-3 py-2 border-t border-border/50 bg-dark-900/50">
+                                <div className="readout px-3 py-2 border-t border-border">
                                     <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                                         <div className="flex justify-between">
-                                            <span className="text-text-muted">Speed:</span>
+                                            <span className="text-text-dim">Speed:</span>
                                             <span className="font-mono text-text-strong">{formatValue(fromBase(outputs.productSpeed, card.units.productSpeed || 'ft/min', 'speed'))} {card.units.productSpeed || 'ft/min'}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-text-muted">Rate:</span>
+                                            <span className="text-text-dim">Rate:</span>
                                             <span className="font-mono text-text-strong">{formatValue(outputs.ppm, 1)} PPM</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-text-muted">Gap:</span>
+                                            <span className="text-text-dim">Gap:</span>
                                             <span className="font-mono text-text-strong">{formatValue(fromBase(outputs.productGap, card.units.productGap || 'in', 'length'))} {card.units.productGap || 'in'}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-text-muted">Gap Time:</span>
+                                            <span className="text-text-dim">Gap Time:</span>
                                             <span className="font-mono text-text-strong">{formatValue(outputs.gapTimeAvailable * 1000, 0)} ms</span>
                                         </div>
                                     </div>
@@ -214,18 +214,18 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
 
                 <div className="relative">
                     <button onClick={() => setShowAddMenu(!showAddMenu)}
-                        className="w-full px-3 py-2 border border-dashed border-border rounded-lg text-text-muted text-sm hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-1.5">
+                        className="w-full px-3 py-2 border border-dashed border-border rounded-lg text-text-dim text-sm hover:border-accent-text hover:text-accent-text transition-colors flex items-center justify-center gap-1.5">
                         <Plus className="w-4 h-4" /> Add Card
                     </button>
                     {showAddMenu && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-dark-700 border border-border rounded-lg shadow-lg z-10 overflow-hidden">
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-surface-card border border-border rounded-lg shadow-lg z-10 overflow-hidden">
                             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                             {addableTypes.map(([key, type]: [string, any]) => (
                                 <button key={key} onClick={() => addCard(key)}
-                                    className="w-full px-3 py-2 text-left text-sm hover:bg-dark-600 transition-colors flex items-center gap-2">
+                                    className="w-full px-3 py-2 text-left text-sm hover:bg-surface-card-hover transition-colors flex items-center gap-2">
                                     <span style={{ color: type.color }}>{type.icon}</span>
                                     <span className="text-text-strong">{type.name}</span>
-                                    <span className="text-text-muted text-xs ml-auto">{type.description || ''}</span>
+                                    <span className="text-text-dim text-xs ml-auto">{type.description || ''}</span>
                                 </button>
                             ))}
                         </div>
