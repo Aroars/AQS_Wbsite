@@ -286,7 +286,7 @@ export function VeriPakHubContent() {
                 {/* Subheadline */}
                 <p className="font-sans text-[clamp(16px,2vw,20px)] text-[#CBD5E1] leading-[1.65] mb-8 max-w-[600px]">
                   Your plant runs quality checks on every package. But when an
-                  auditor or a customer asks you to prove a <em className="text-text-strong not-italic font-medium">specific</em> package
+                  auditor or a customer asks you to prove a <em className="text-white not-italic font-medium">specific</em> package
                   passed &mdash; you can&apos;t. VeriPak changes that.
                 </p>
 
