@@ -75,7 +75,7 @@ export default function ToolboxPage() {
         {/* The page H1 and the current tab's help, styled like a tool page's header */}
         <ToolboxIntro mode="tab" />
 
-        {/* The app is a dark band in both themes */}
+        {/* toolbox-scope carries the app's scrollbar and focus rules only */}
         <div className="toolbox-scope">
           <ToolboxHeader />
           <ToolboxLoader />
@@ -113,7 +113,7 @@ export default function ToolboxPage() {
                           <a
                             href={href}
                             title={toolDescriptions[tool.id]}
-                            className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline"
+                            className="inline-block font-mono text-[11px] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline"
                           >
                             {tool.label}
                           </a>

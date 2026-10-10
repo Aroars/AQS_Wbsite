@@ -12,11 +12,11 @@ const ToolboxApp = dynamic(() => import("@/toolbox/ToolboxApp"), {
   loading: () => (
     <div
       id="toolbox-app"
-      className="min-h-[80vh] bg-dark-900 flex items-center justify-center"
+      className="min-h-[80vh] bg-surface-page flex items-center justify-center"
       aria-busy="true"
     >
-      <div className="flex items-center gap-3 text-text-muted font-mono text-xs tracking-[0.12em] uppercase">
-        <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
+      <div className="flex items-center gap-3 text-text-dim font-mono text-xs tracking-[0.12em] uppercase">
+        <span className="inline-block w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
         Loading toolbox
       </div>
     </div>

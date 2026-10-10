@@ -88,7 +88,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         {/* Server-rendered intro: what the tool calculates and how */}
         <ToolboxIntro mode="tool" page={page} toolLabel={tool.label} />
 
-        {/* The app is a dark band in both themes */}
+        {/* toolbox-scope carries the app's scrollbar and focus rules only */}
         <div className="toolbox-scope">
           <ToolboxHeader />
           <ToolboxLoader initialTool={page.toolId} initialSection={page.section} />
@@ -131,7 +131,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             <ul className="flex flex-wrap gap-2">
               {more.map((p) => (
                 <li key={p.slug}>
-                  <Link href={`/toolbox/${p.slug}`} className="inline-block font-mono text-[0.62rem] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline">
+                  <Link href={`/toolbox/${p.slug}`} className="inline-block font-mono text-[11px] tracking-[0.06em] uppercase rounded-full px-3 py-1.5 border border-border text-text-body hover:text-text-strong hover:border-accent-text transition-colors no-underline">
                     {p.h1}
                   </Link>
                 </li>

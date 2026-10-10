@@ -9,7 +9,7 @@ import type { ToolPage } from "@/toolbox/lib/toolSeo";
 const NOTE =
   "Free, no login. Your inputs are saved in this browser. Values are engineering references — verify against manufacturer data and applicable codes before a final design.";
 
-const EYEBROW = "font-mono text-[0.62rem] tracking-[0.12em] uppercase text-accent-text";
+const EYEBROW = "font-mono text-[11px] tracking-[0.12em] uppercase text-accent-text";
 
 type Props =
   /** A tool's own page: the server passes the page copy; nothing changes after mount */
@@ -30,7 +30,7 @@ function Shell({ crumb, heading, children, product }: { crumb: React.ReactNode; 
   return (
     <section className="px-6 pt-10 pb-8 md:pt-14 md:pb-10">
       <div className="mx-auto max-w-5xl">
-        <nav className="font-mono text-[0.58rem] tracking-[0.12em] uppercase mb-3 text-text-dim">{crumb}</nav>
+        <nav className="font-mono text-[11px] tracking-[0.12em] uppercase mb-3 text-text-dim">{crumb}</nav>
         <h1 className="font-sans text-[clamp(1.8rem,3.5vw,2.6rem)] font-extrabold text-text-strong mb-4">{heading}</h1>
         {children}
         <p className="text-text-dim text-xs mt-4">{NOTE}</p>
