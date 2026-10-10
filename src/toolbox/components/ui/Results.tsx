@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 
 /** Shared result-panel pieces for the calculator cards */
-export const panelCls = 'rounded-lg border border-primary/20 bg-dark-700 px-3 py-3 space-y-2'
-export const tileCls = 'bg-dark-800 rounded px-2.5 py-2'
+export const panelCls = 'readout rounded-lg border border-border px-3 py-3 space-y-2'
+export const tileCls = 'bg-surface-card rounded px-2.5 py-2'
 export const tileLabelCls = 'text-text-dim uppercase text-[10px]'
 export const inputCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary'
 export const selectCls = 'w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary'

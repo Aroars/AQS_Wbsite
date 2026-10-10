@@ -12,15 +12,8 @@
   --color-accent-conveyor: #66b3ff;
   --color-accent-warning: #f5a623;
 
-  /* Engineering Toolbox tokens (src/toolbox) — text-primary is the semantic text-strong below */
-  --color-dark-900: #0A1628;
-  --color-dark-800: #0F1D2F;
-  --color-dark-700: #162A40;
-  --color-primary: #00B4D8;
-  --color-primary-dark: #0077B6;
-  --color-primary-light: #90E0EF;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
+  /* Engineering Toolbox status colours (src/toolbox). On light surfaces they
+     are fills, edges, and tints only; as text they live on the readout. */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
@@ -33,8 +26,10 @@
    Theme tokens (light-theme transition plan, section 3)
 
    Semantic tokens flip with [data-theme]; brand tokens never change.
-   The toolbox and ROI calculator (toolbox-scope, roi-scope) keep the
-   dark values in both themes until their own sweep.
+   The readout layer (.readout) is dark in both themes: results panels,
+   logs, and charts inside the toolbox sit on brand navy deep and carry
+   the dark-theme text values, the way the hero band and the HMI screens
+   do. See docs/toolbox-light-theme-plan.md.
    ======================================== */
 :root {
   --surface-page: #F3F5F8;
@@ -49,12 +44,12 @@
   --accent-text: #007099;
   --logo-filter: grayscale(1);
   --logo-opacity: 0.55;
+  --surface-readout: #0A1628;
   color-scheme: light;
 }
 
 [data-theme="dark"],
-.toolbox-scope,
-.roi-scope {
+.readout {
   --surface-page: #1A1D2B;
   --surface-card: #13151F;
   --surface-card-hover: #0E1019;
@@ -88,6 +83,27 @@
   --color-brand-steel: #94A3B8;
   --color-brand-navy-band: #1A1D2B;
   --color-brand-navy-deep: #0A1628;
+
+  /* Readout layer: dark in both themes (text inside uses the semantic names,
+     which .readout resolves to the dark values) */
+  --color-surface-readout: #0A1628;
+
+  /* Toolbox token names on the semantic model (transition shim, removed in
+     the final toolbox commit): page / card / readout, body / dim, accent */
+  --color-dark-900: var(--surface-page);
+  --color-dark-800: var(--surface-card);
+  --color-dark-700: var(--surface-card-hover);
+  --color-primary: var(--accent-text);
+  --color-primary-dark: var(--accent-text);
+  --color-primary-light: var(--accent-text);
+  --color-text-secondary: var(--text-body);
+  --color-text-muted: var(--text-dim);
+}
+
+/* The readout panel itself: navy deep, with inherited text on the dark values */
+.readout {
+  background-color: var(--surface-readout);
+  color: var(--text-strong);
 }
 
 /* ========================================
@@ -489,7 +505,7 @@ body {
 }
 
 .toolbox-scope ::-webkit-scrollbar-track {
-  background: var(--color-dark-900);
+  background: var(--surface-page);
 }
 
 .toolbox-scope ::-webkit-scrollbar-thumb {
@@ -498,7 +514,7 @@ body {
 }
 
 .toolbox-scope ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  background: var(--text-dim);
 }
 
 /* Remove number input spinners */
@@ -514,7 +530,7 @@ body {
 }
 
 .toolbox-scope :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--accent-text);
   outline-offset: 2px;
 }
 
@@ -531,8 +547,8 @@ html.toolbox-snap {
 
 /* Toolbox solver fields: a solved value that just changed flashes once */
 @keyframes tb-flash {
-  0% { box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.9); background-color: rgba(0, 180, 216, 0.22); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 180, 216, 0); background-color: var(--color-dark-900); }
+  0% { box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.9); background-color: rgba(0, 194, 255, 0.22); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 194, 255, 0); background-color: var(--surface-page); }
 }
 .tb-flash {
   animation: tb-flash 1.5s ease-out;
