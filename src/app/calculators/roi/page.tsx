@@ -16,7 +16,7 @@ export default function RoiCalculatorPage() {
       <section className="pt-[100px] pb-[60px] px-4 min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 roi-no-print">
-            <div className="font-mono text-[0.62rem] text-accent-text tracking-[0.12em] uppercase mb-2">
+            <div className="font-mono text-[11px] text-accent-text tracking-[0.12em] uppercase mb-2">
               Calculator
             </div>
             <h1 className="font-sans text-[1.8rem] font-bold text-text-strong mb-1">

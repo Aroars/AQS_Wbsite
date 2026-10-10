@@ -87,17 +87,6 @@
   /* Readout layer: dark in both themes (text inside uses the semantic names,
      which .readout resolves to the dark values) */
   --color-surface-readout: #0A1628;
-
-  /* Toolbox token names on the semantic model (transition shim, removed in
-     the final toolbox commit): page / card / readout, body / dim, accent */
-  --color-dark-900: var(--surface-page);
-  --color-dark-800: var(--surface-card);
-  --color-dark-700: var(--surface-card-hover);
-  --color-primary: var(--accent-text);
-  --color-primary-dark: var(--accent-text);
-  --color-primary-light: var(--accent-text);
-  --color-text-secondary: var(--text-body);
-  --color-text-muted: var(--text-dim);
 }
 
 /* The readout panel itself: navy deep, with inherited text on the dark values */

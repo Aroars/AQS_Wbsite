@@ -104,7 +104,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                         <div key={card.id} className="border rounded-lg overflow-hidden" style={{ borderColor: typeDef.color + '40' }}>
                             <div className="flex items-center justify-between px-3 py-2" style={{ background: typeDef.color + '15' }}>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm" style={{ color: typeDef.color }}>{typeDef.icon}</span>
+                                    <span className="text-sm text-text-strong">{typeDef.icon}</span>
                                     <span className="text-sm font-medium text-text-strong">{typeDef.name}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -223,7 +223,7 @@ export function LineFlowSimulator({ instanceId = MAIN }: { instanceId?: string }
                             {addableTypes.map(([key, type]: [string, any]) => (
                                 <button key={key} onClick={() => addCard(key)}
                                     className="w-full px-3 py-2 text-left text-sm hover:bg-surface-card-hover transition-colors flex items-center gap-2">
-                                    <span style={{ color: type.color }}>{type.icon}</span>
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded text-text-strong" style={{ background: type.color + '22' }}>{type.icon}</span>
                                     <span className="text-text-strong">{type.name}</span>
                                     <span className="text-text-dim text-xs ml-auto">{type.description || ''}</span>
                                 </button>
