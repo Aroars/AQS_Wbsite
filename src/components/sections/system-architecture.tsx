@@ -955,9 +955,10 @@ function StageCard({
         }}
       >
         {/* Icon */}
+        {/* Glyph in strong text; the stage colour is the tint behind it */}
         <div
-          className="text-2xl mb-1.5 leading-none"
-          style={{ color: stageColor }}
+          className="text-2xl mb-1.5 leading-none w-10 h-10 rounded-lg flex items-center justify-center text-text-strong"
+          style={{ background: `${stageColor}22` }}
         >
           {stage.icon}
         </div>
