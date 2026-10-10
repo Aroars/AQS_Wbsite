@@ -57,13 +57,13 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
     }, [areaMemory, totalUnit])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Area Calculator</h3>
                 <div className="flex items-center gap-2">
                     <CalcPinButton toolId="area" instanceId={instanceId} />
                     {areaMemory.length > 0 && (
-                        <button onClick={clearAreaMemory} className="text-xs text-text-muted hover:text-error transition-colors">
+                        <button onClick={clearAreaMemory} className="text-xs text-text-dim hover:text-text-strong transition-colors">
                             Clear Memory
                         </button>
                     )}
@@ -73,11 +73,11 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
             <div className="p-4 space-y-4">
                 {/* Shape selector */}
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Shape</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Shape</label>
                     <select
                         value={shape}
                         onChange={(e) => { setShape(e.target.value); setDimensions([]) }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text"
                     >
                         {shapes.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -85,11 +85,11 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
 
                 {/* Input unit */}
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Input Unit</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Input Unit</label>
                     <select
                         value={inputUnit}
                         onChange={(e) => setInputUnit(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text"
                     >
                         {lengthUnits.map((u) => <option key={u} value={u}>{u} ({unitCategories['Length'].units[u].symbol})</option>)}
                     </select>
@@ -99,7 +99,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                 <div className="grid grid-cols-2 gap-3">
                     {inputs.map((label, i) => (
                         <div key={`${shape}-${label}`}>
-                            <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">{label}</label>
+                            <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">{label}</label>
                             <input
                                 type="number"
                                 value={dimensions[i] || ''}
@@ -107,7 +107,7 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                                 placeholder="0"
                                 min="0"
                                 step="any"
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary"
+                                className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text"
                             />
                         </div>
                     ))}
@@ -115,27 +115,27 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
 
                 {/* Output unit + result */}
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Output Unit</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Output Unit</label>
                     <select
                         value={outputUnit}
                         onChange={(e) => setOutputUnit(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary"
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text"
                     >
                         {areaUnits.map((u) => <option key={u} value={u}>{u} ({unitCategories['Area'].units[u].symbol})</option>)}
                     </select>
                 </div>
 
                 {calculatedArea !== null && (
-                    <div className="flex items-center justify-between bg-dark-700 rounded-lg px-4 py-3">
+                    <div className="readout flex items-center justify-between rounded-lg border border-border px-4 py-3">
                         <div>
-                            <span className="text-xs text-text-muted uppercase">Area</span>
-                            <div className="text-lg font-mono font-semibold text-primary">
-                                {formatNumber(calculatedArea)} <span className="text-sm text-text-secondary">{unitCategories['Area'].units[outputUnit]?.symbol}</span>
+                            <span className="text-xs text-text-dim uppercase">Area</span>
+                            <div className="text-lg font-mono font-semibold text-accent-text">
+                                {formatNumber(calculatedArea)} <span className="text-sm text-text-body">{unitCategories['Area'].units[outputUnit]?.symbol}</span>
                             </div>
                         </div>
                         <button
                             onClick={handleAddToMemory}
-                            className="flex items-center gap-1.5 px-3 py-2 bg-primary/10 border border-primary/30 rounded-lg text-primary text-sm hover:bg-primary/20 transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-2 bg-accent-text/10 border border-accent-text/30 rounded-lg text-accent-text text-sm hover:bg-accent-text/20 transition-colors"
                         >
                             <Plus className="w-3.5 h-3.5" /> Memory
                         </button>
@@ -146,33 +146,33 @@ export function AreaCalculator({ instanceId = MAIN }: { instanceId?: string } = 
                 {areaMemory.length > 0 && (
                     <div className="border-t border-border pt-4 space-y-2">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs text-text-secondary uppercase tracking-wider">Memory ({areaMemory.length})</span>
+                            <span className="text-xs text-text-body uppercase tracking-wider">Memory ({areaMemory.length})</span>
                             <div className="flex items-center gap-2">
                                 <select
                                     value={totalUnit}
                                     onChange={(e) => setTotalUnit(e.target.value)}
-                                    className="px-2 py-1 bg-dark-900 border border-border rounded text-text-strong text-xs focus:outline-none focus:border-primary"
+                                    className="px-2 py-1 bg-surface-page border border-border rounded text-text-strong text-xs focus:outline-none focus:border-accent-text"
                                 >
                                     {areaUnits.map((u) => <option key={u} value={u}>{unitCategories['Area'].units[u].symbol}</option>)}
                                 </select>
                             </div>
                         </div>
                         {areaMemory.map((entry) => (
-                            <div key={entry.id} className="flex items-center justify-between bg-dark-900 rounded-lg px-3 py-2">
+                            <div key={entry.id} className="flex items-center justify-between bg-surface-page rounded-lg px-3 py-2">
                                 <div>
-                                    <span className="text-xs text-text-muted">{entry.shape}</span>
+                                    <span className="text-xs text-text-dim">{entry.shape}</span>
                                     <div className="font-mono text-sm text-text-strong">
                                         {formatNumber(convertUnits(entry.area, entry.unit, totalUnit, 'Area'))} {unitCategories['Area'].units[totalUnit]?.symbol}
                                     </div>
                                 </div>
-                                <button onClick={() => removeAreaMemory(entry.id)} className="p-1 text-text-muted hover:text-error transition-colors">
+                                <button onClick={() => removeAreaMemory(entry.id)} className="p-1 text-text-dim hover:text-error transition-colors">
                                     <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                             </div>
                         ))}
-                        <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-lg px-3 py-2">
-                            <span className="text-xs text-text-secondary uppercase">Total</span>
-                            <span className="font-mono font-semibold text-primary">
+                        <div className="readout flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                            <span className="text-xs text-text-body uppercase">Total</span>
+                            <span className="font-mono font-semibold text-accent-text">
                                 {formatNumber(total)} {unitCategories['Area'].units[totalUnit]?.symbol}
                             </span>
                         </div>

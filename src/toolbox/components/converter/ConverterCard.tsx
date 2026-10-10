@@ -99,11 +99,11 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
     const category = unitCategories[converter.category]
     if (!category) {
         return (
-            <div className="bg-dark-800 border border-error/30 rounded-xl px-4 py-3 flex items-center justify-between">
-                <span className="text-xs text-text-secondary">
+            <div className="bg-surface-card border border-error/30 border-l-4 border-l-error rounded-xl px-4 py-3 flex items-center justify-between">
+                <span className="text-xs text-text-body">
                     Unknown category "{converter.category}" — this converter is from an older version.
                 </span>
-                <button onClick={handleDelete} className="p-1.5 rounded-md text-text-muted hover:text-error hover:bg-error/10 transition-colors" title="Delete">
+                <button onClick={handleDelete} className="p-1.5 rounded-md text-text-dim hover:text-error hover:bg-error/10 transition-colors" title="Delete">
                     <Trash2 className="w-3.5 h-3.5" />
                 </button>
             </div>
@@ -121,12 +121,12 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
     }
 
     return (
-        <div className={cn('bg-dark-800 border border-border rounded-xl', compact && 'text-sm')}>
+        <div className={cn('bg-surface-card border border-border rounded-xl', compact && 'text-sm')}>
             {/* Header */}
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     {IconRenderer && (
-                        <span className="text-primary">
+                        <span className="text-accent-text">
                             {IconRenderer({ className: 'w-4 h-4' })}
                         </span>
                     )}
@@ -138,7 +138,7 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                     <button
                         onClick={() => reorderConverters(position, position - 1)}
                         disabled={position <= 0}
-                        className="p-1.5 rounded-md text-text-muted hover:text-text-secondary hover:bg-dark-700 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-text-muted"
+                        className="p-1.5 rounded-md text-text-dim hover:text-text-body hover:bg-surface-card-hover transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-text-dim"
                         title="Move up"
                     >
                         <ChevronUp className="w-3.5 h-3.5" />
@@ -146,21 +146,21 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                     <button
                         onClick={() => reorderConverters(position, position + 1)}
                         disabled={position >= count - 1}
-                        className="p-1.5 rounded-md text-text-muted hover:text-text-secondary hover:bg-dark-700 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-text-muted"
+                        className="p-1.5 rounded-md text-text-dim hover:text-text-body hover:bg-surface-card-hover transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-text-dim"
                         title="Move down"
                     >
                         <ChevronDown className="w-3.5 h-3.5" />
                     </button>
                     <button
                         onClick={handleDuplicate}
-                        className="p-1.5 rounded-md text-text-muted hover:text-text-secondary hover:bg-dark-700 transition-colors"
+                        className="p-1.5 rounded-md text-text-dim hover:text-text-body hover:bg-surface-card-hover transition-colors"
                         title="Duplicate"
                     >
                         <Copy className="w-3.5 h-3.5" />
                     </button>
                     <button
                         onClick={handleDelete}
-                        className="p-1.5 rounded-md text-text-muted hover:text-error hover:bg-error/10 transition-colors"
+                        className="p-1.5 rounded-md text-text-dim hover:text-error hover:bg-error/10 transition-colors"
                         title="Delete"
                     >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -178,14 +178,14 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                             value={converter.fromValue}
                             onChange={(e) => handleFromChange(e.target.value)}
                             placeholder="Enter value"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-primary transition-colors"
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-accent-text transition-colors"
                             step="any"
                         />
                     </div>
                     <select
                         value={converter.fromUnit}
                         onChange={(e) => handleUnitChange('from', e.target.value)}
-                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text transition-colors"
                     >
                         {unitNames.map((name) => (
                             <option key={name} value={name}>
@@ -199,7 +199,7 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                 <div className="flex justify-center">
                     <button
                         onClick={handleSwapUnits}
-                        className="p-2 rounded-full bg-dark-700 border border-border hover:border-primary hover:text-primary text-text-muted transition-colors"
+                        className="p-2 rounded-full bg-surface-card-hover border border-border hover:border-accent-text hover:text-accent-text text-text-dim transition-colors"
                         title="Swap units"
                     >
                         <ArrowUpDown className="w-4 h-4" />
@@ -214,14 +214,14 @@ export function ConverterCard({ converter, compact }: ConverterCardProps) {
                             value={converter.toValue}
                             onChange={(e) => handleToChange(e.target.value)}
                             placeholder="Result"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-primary transition-colors"
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono focus:outline-none focus:border-accent-text transition-colors"
                             step="any"
                         />
                     </div>
                     <select
                         value={converter.toUnit}
                         onChange={(e) => handleUnitChange('to', e.target.value)}
-                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="min-w-[90px] max-w-[150px] px-2 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text transition-colors"
                     >
                         {unitNames.map((name) => (
                             <option key={name} value={name}>

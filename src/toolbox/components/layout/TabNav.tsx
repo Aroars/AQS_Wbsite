@@ -16,7 +16,7 @@ export function TabNav() {
     const setActiveTab = useAppStore((s) => s.setActiveTab)
 
     return (
-        <nav className="border-b border-border bg-dark-800/50 sticky top-[53px] z-40 backdrop-blur-sm">
+        <nav className="border-b border-border bg-surface-card/50 sticky top-[53px] z-40 backdrop-blur-sm">
             <div className="px-4 md:px-6">
                 <div className="flex gap-1 overflow-x-auto">
                     {tabs.map(({ id, label, icon: Icon }) => (
@@ -26,8 +26,8 @@ export function TabNav() {
                             className={cn(
                                 'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                                 activeTab === id
-                                    ? 'border-primary text-primary'
-                                    : 'border-transparent text-text-muted hover:text-text-secondary hover:border-border'
+                                    ? 'border-accent-text text-accent-text'
+                                    : 'border-transparent text-text-body hover:text-text-strong hover:border-border'
                             )}
                         >
                             <Icon className="w-4 h-4" />

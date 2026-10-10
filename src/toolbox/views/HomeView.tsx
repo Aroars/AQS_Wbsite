@@ -78,7 +78,7 @@ function PinnedSlot({ kind, id, index, count, children }: {
                         onClick={() => movePinned(kind, id, -1)}
                         disabled={index <= 0}
                         title="Move earlier"
-                        className="p-1 rounded-md bg-dark-700 border border-border text-text-muted hover:text-text-secondary hover:border-text-muted transition-colors disabled:opacity-30"
+                        className="p-1 rounded-md bg-surface-card-hover border border-border text-text-dim hover:text-text-body hover:border-accent-text/40 transition-colors disabled:opacity-30"
                     >
                         <ChevronUp className="w-3.5 h-3.5" />
                     </button>
@@ -86,7 +86,7 @@ function PinnedSlot({ kind, id, index, count, children }: {
                         onClick={() => movePinned(kind, id, 1)}
                         disabled={index >= count - 1}
                         title="Move later"
-                        className="p-1 rounded-md bg-dark-700 border border-border text-text-muted hover:text-text-secondary hover:border-text-muted transition-colors disabled:opacity-30"
+                        className="p-1 rounded-md bg-surface-card-hover border border-border text-text-dim hover:text-text-body hover:border-accent-text/40 transition-colors disabled:opacity-30"
                     >
                         <ChevronDown className="w-3.5 h-3.5" />
                     </button>
@@ -117,18 +117,18 @@ export function HomeView() {
                     </h2>
                     <button
                         onClick={() => setActiveTab('convert')}
-                        className="text-xs text-primary hover:text-primary-light transition-colors"
+                        className="text-xs text-accent-text hover:text-text-strong transition-colors"
                     >
                         + Add
                     </button>
                 </div>
 
                 {savedConverters.length === 0 ? (
-                    <div className="bg-dark-800 border border-border rounded-xl p-6 text-center">
-                        <p className="text-text-secondary text-sm mb-2">No saved converters</p>
+                    <div className="bg-surface-card border border-border rounded-xl p-6 text-center">
+                        <p className="text-text-body text-sm mb-2">No saved converters</p>
                         <button
                             onClick={() => setActiveTab('convert')}
-                            className="text-xs text-primary hover:text-primary-light transition-colors"
+                            className="text-xs text-accent-text hover:text-text-strong transition-colors"
                         >
                             Browse categories
                         </button>
@@ -151,7 +151,7 @@ export function HomeView() {
             {hasPinned && (
                 <div className="lg:w-2/3 space-y-4">
                     <div className="flex items-center gap-2">
-                        <Pin className="w-3.5 h-3.5 text-primary" />
+                        <Pin className="w-3.5 h-3.5 text-accent-text" />
                         <h2 className="text-sm font-semibold text-text-strong uppercase tracking-wider">
                             Pinned
                         </h2>

@@ -23,7 +23,7 @@ export function DowntimeCalculator({ instanceId = MAIN }: { instanceId?: string 
     const ready = r !== null && (num(s.units) ?? 0) + (num(s.crew) ?? 0) > 0
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Line Downtime Cost</h3>
                 <CalcPinButton toolId="downtime" instanceId={instanceId} />
@@ -54,7 +54,7 @@ export function DowntimeCalculator({ instanceId = MAIN }: { instanceId?: string 
                             {r!.perAvailabilityPoint !== null && <Tile label="One availability point">{money(r!.perAvailabilityPoint)} / year</Tile>}
                         </div>
                     )}
-                    <div className="text-[10px] text-text-muted">cost/min = units/min × margin + crew × rate ÷ 60 + overhead ÷ 60; per year = cost/min × minutes/shift × shifts × days. One availability point = 1% of scheduled 8-hour shifts.</div>
+                    <div className="text-[11px] text-text-dim">cost/min = units/min × margin + crew × rate ÷ 60 + overhead ÷ 60; per year = cost/min × minutes/shift × shifts × days. One availability point = 1% of scheduled 8-hour shifts.</div>
                 </div>
             </div>
         </div>

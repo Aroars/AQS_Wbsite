@@ -26,13 +26,13 @@ export function CategoryGrid() {
         <div className="space-y-4">
             {/* Search */}
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-dim" />
                 <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search categories..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-dark-800 border border-border rounded-xl text-text-strong text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-surface-card border border-border rounded-xl text-text-strong text-sm focus:outline-none focus:border-accent-text transition-colors"
                 />
             </div>
 
@@ -47,12 +47,12 @@ export function CategoryGrid() {
                         <button
                             key={category}
                             onClick={() => handleAddConverter(category)}
-                            className="bg-dark-800 border border-border rounded-xl p-4 text-left hover:border-primary/50 hover:bg-dark-700/50 transition-all group"
+                            className="bg-surface-card border border-border rounded-xl p-4 text-left hover:border-accent-text hover:bg-surface-card-hover transition-all group"
                         >
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-3">
                                     {IconRenderer && (
-                                        <span className="text-text-muted group-hover:text-primary transition-colors">
+                                        <span className="text-text-dim group-hover:text-accent-text transition-colors">
                                             {IconRenderer({ className: 'w-5 h-5' })}
                                         </span>
                                     )}
@@ -60,18 +60,18 @@ export function CategoryGrid() {
                                         <div className="text-sm font-medium text-text-strong">
                                             {category}
                                         </div>
-                                        <div className="text-xs text-text-muted mt-0.5">
+                                        <div className="text-xs text-text-dim mt-0.5">
                                             {unitCount} units
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {savedCount > 0 && (
-                                        <span className="text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                                        <span className="text-xs text-accent-text bg-accent-text/10 px-1.5 py-0.5 rounded">
                                             {savedCount}
                                         </span>
                                     )}
-                                    <Plus className="w-4 h-4 text-text-muted group-hover:text-primary transition-colors" />
+                                    <Plus className="w-4 h-4 text-text-dim group-hover:text-accent-text transition-colors" />
                                 </div>
                             </div>
                         </button>
@@ -80,7 +80,7 @@ export function CategoryGrid() {
             </div>
 
             {categories.length === 0 && (
-                <p className="text-center text-text-muted py-8 text-sm">
+                <p className="text-center text-text-dim py-8 text-sm">
                     No categories match "{search}"
                 </p>
             )}
