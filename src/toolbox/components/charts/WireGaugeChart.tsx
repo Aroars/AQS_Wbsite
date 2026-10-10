@@ -84,7 +84,7 @@ export function WireGaugeChart() {
     }, [insulation, vdCurrent, vdLength, vdVoltage, vdPhase, sizes, data, ampData, isAwg])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Wire Gauge & Ampacity</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('wiregauge')} />
@@ -101,32 +101,32 @@ export function WireGaugeChart() {
                             setVdVoltage(String(voltageOptions[awg ? 'imperial' : 'metric'][0].value))
                         }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isAwg === awg ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isAwg === awg ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {awg ? 'AWG' : 'Metric'}
                         </button>
                     ))}
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Wire Size</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Wire Size</label>
                     <select value={wireSize} onChange={(e) => setWireSize(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                         <option value="">Select size...</option>
                         {sizes.map((s) => <option key={s} value={s}>{data[s]?.label ?? s}</option>)}
                     </select>
                 </div>
                 {wireInfo && (
-                    <div className="bg-dark-700 rounded-lg px-3 py-3">
-                        <div className="text-xs text-text-muted uppercase mb-2">Wire Specifications</div>
+                    <div className="readout rounded-lg border border-border px-3 py-3">
+                        <div className="text-xs text-text-dim uppercase mb-2">Wire Specifications</div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">Diameter:</span><span className="font-mono text-text-strong">{wireInfo.diameter_mm} mm</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Area:</span><span className="font-mono text-text-strong">{wireInfo.area_mm2} mm²</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Resistance:</span>
+                            <div className="flex justify-between"><span className="text-text-body">Diameter:</span><span className="font-mono text-text-strong">{wireInfo.diameter_mm} mm</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">Area:</span><span className="font-mono text-text-strong">{wireInfo.area_mm2} mm²</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">Resistance:</span>
                                 <span className="font-mono text-text-strong">{isAwg ? `${wireInfo.resistance_ohm_per_1000ft} Ω/kft` : `${wireInfo.resistance_ohm_per_km} Ω/km`}</span>
                             </div>
                             {crossEquivalent && (
-                                <div className="flex justify-between"><span className="text-text-secondary">{isAwg ? 'Metric:' : 'AWG:'}</span>
-                                    <span className="font-mono text-primary">{crossEquivalent}</span>
+                                <div className="flex justify-between"><span className="text-text-body">{isAwg ? 'Metric:' : 'AWG:'}</span>
+                                    <span className="font-mono text-accent-text">{crossEquivalent}</span>
                                 </div>
                             )}
                         </div>
@@ -134,67 +134,67 @@ export function WireGaugeChart() {
                 )}
                 {wireSize && (
                     <div>
-                        <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Insulation Type</label>
+                        <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Insulation Type</label>
                         <select value={insulation} onChange={(e) => setInsulation(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                             <option value="">Select insulation...</option>
                             {insulationTypes.map((t) => <option key={t} value={t}>{t} — {(insulationInfo as any)[t]?.temp ?? ''}</option>)}
                         </select>
                     </div>
                 )}
                 {ampacity !== null && (
-                    <div className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-3 text-center">
-                        <div className="text-xs text-text-muted uppercase">Ampacity</div>
-                        <div className="font-mono text-xl font-semibold text-primary">{ampacity} A</div>
+                    <div className="readout rounded-lg border border-border px-3 py-3 text-center">
+                        <div className="text-xs text-text-dim uppercase">Ampacity</div>
+                        <div className="font-mono text-xl font-semibold text-accent-text">{ampacity} A</div>
                     </div>
                 )}
 
                 {/* Voltage drop calculator */}
                 {wireSize && (
                     <div className="border-t border-border pt-3 space-y-3">
-                        <div className="text-xs text-text-secondary uppercase tracking-wider">Voltage Drop Calculator</div>
+                        <div className="text-xs text-text-body uppercase tracking-wider">Voltage Drop Calculator</div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Length ({isAwg ? 'ft' : 'm'})</label>
+                                <label className="block text-xs text-text-dim mb-1">Length ({isAwg ? 'ft' : 'm'})</label>
                                 <input type="number" value={vdLength} onChange={(e) => setVdLength(e.target.value)} placeholder="0" min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                             </div>
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Current (A)</label>
+                                <label className="block text-xs text-text-dim mb-1">Current (A)</label>
                                 <input type="number" value={vdCurrent} onChange={(e) => setVdCurrent(e.target.value)} placeholder="0" min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                             </div>
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Voltage</label>
+                                <label className="block text-xs text-text-dim mb-1">Voltage</label>
                                 <select value={vdVoltage} onChange={(e) => setVdVoltage(e.target.value)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                                     {((isAwg ? voltageOptions.imperial : voltageOptions.metric) ?? []).map((v: any) => <option key={v.value} value={v.value}>{v.label}</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Phase</label>
+                                <label className="block text-xs text-text-dim mb-1">Phase</label>
                                 <select value={vdPhase} onChange={(e) => setVdPhase(e.target.value as any)}
-                                    className="w-full px-2 py-2 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                                    className="w-full px-2 py-2 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                                     <option value="single">1φ</option>
                                     <option value="three">3φ</option>
                                 </select>
                             </div>
                         </div>
                         {voltageDrop && (
-                            <div className={`rounded-lg px-3 py-3 ${
-                                voltageDrop.status === 'ok' ? 'bg-success/10 border border-success/30' :
-                                voltageDrop.status === 'warning' ? 'bg-warning/10 border border-warning/30' :
-                                'bg-error/10 border border-error/30'
+                            <div className={`readout rounded-lg border border-border border-l-2 px-3 py-3 ${
+                                voltageDrop.status === 'ok' ? 'border-l-success' :
+                                voltageDrop.status === 'warning' ? 'border-l-warning' :
+                                'border-l-error'
                             }`}>
                                 <div className="text-center">
-                                    <div className="text-xs text-text-muted uppercase">Voltage Drop</div>
+                                    <div className="text-xs text-text-dim uppercase">Voltage Drop</div>
                                     <div className={`font-mono text-lg font-semibold ${
                                         voltageDrop.status === 'ok' ? 'text-success' : voltageDrop.status === 'warning' ? 'text-warning' : 'text-error'
                                     }`}>
                                         {voltageDrop.drop}V ({voltageDrop.pct}%)
                                     </div>
                                 </div>
-                                <div className="text-xs text-text-secondary mt-2 leading-relaxed">
+                                <div className="text-xs text-text-body mt-2 leading-relaxed">
                                     {voltageDrop.status === 'ok'
                                         ? 'Within NEC recommended limits. Voltage drop under 3% is ideal for branch circuits — equipment will operate at full efficiency.'
                                         : voltageDrop.status === 'warning'
@@ -207,25 +207,25 @@ export function WireGaugeChart() {
                         {/* Reverse lookup: requirement-first answer */}
                         {recommendation && (
                             recommendation.pick ? (
-                                <div className={`rounded-lg px-3 py-2.5 border ${recommendation.strict ? 'bg-success/10 border-success/30' : 'bg-warning/10 border-warning/30'}`}>
-                                    <div className="text-xs text-text-muted uppercase mb-0.5">
+                                <div className={`rounded-lg px-3 py-2.5 border-l-2 ${recommendation.strict ? 'bg-success/10 border-success' : 'bg-warning/10 border-warning'}`}>
+                                    <div className="text-xs text-text-dim uppercase mb-0.5">
                                         Smallest wire for {recommendation.current} A over {recommendation.len} {isAwg ? 'ft' : 'm'}
                                     </div>
-                                    <div className={`text-sm font-mono font-semibold ${recommendation.strict ? 'text-success' : 'text-warning'}`}>
+                                    <div className="text-sm font-mono font-semibold text-text-strong">
                                         {recommendation.pick.label} — {recommendation.pick.amp} A ampacity, {recommendation.pick.pct.toFixed(1)}% drop
                                     </div>
                                     {!recommendation.strict && (
-                                        <div className="text-xs text-warning mt-0.5">Drop is in the 3–5% band — fine per NEC total budget, upsize for sensitive loads.</div>
+                                        <div className="text-xs text-text-body mt-0.5">Drop is in the 3–5% band — fine per NEC total budget, upsize for sensitive loads.</div>
                                     )}
                                     {recommendation.pick.size !== wireSize && (
                                         <button onClick={() => setWireSize(recommendation.pick!.size)}
-                                            className="mt-1.5 text-xs text-primary hover:text-primary-light transition-colors">
+                                            className="mt-1.5 text-xs text-accent-text hover:text-accent-text transition-colors">
                                             Select {recommendation.pick.label} →
                                         </button>
                                     )}
                                 </div>
                             ) : (
-                                <div className="rounded-lg px-3 py-2.5 border bg-error/10 border-error/30 text-xs text-error">
+                                <div className="rounded-lg px-3 py-2.5 border-l-2 bg-error/10 border-error text-xs text-text-body">
                                     No {isAwg ? 'AWG' : 'metric'} size with {insulation} passes {recommendation.current} A at this length — shorten the run, raise voltage, or parallel conductors.
                                 </div>
                             )

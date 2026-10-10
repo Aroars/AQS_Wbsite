@@ -80,10 +80,10 @@ export function PneumaticChart() {
         const extMmS = ext.mmPerSec
         // Simple guidance band: <50 mm/s reads tubing-starved, >800 mm/s needs flow control
         const speedNote = extMmS < 50
-            ? { text: 'Slow — tubing is the bottleneck. Step up a tube ID for more speed.', cls: 'border-warning text-warning' }
+            ? { text: 'Slow — tubing is the bottleneck. Step up a tube ID for more speed.', cls: 'border-warning bg-warning/10' }
             : extMmS > 800
-            ? { text: 'Very fast — fit flow controls to avoid end-of-stroke slamming.', cls: 'border-warning text-warning' }
-            : { text: 'Typical working speed range for this tubing and bore.', cls: 'border-success text-success' }
+            ? { text: 'Very fast — fit flow controls to avoid end-of-stroke slamming.', cls: 'border-warning bg-warning/10' }
+            : { text: 'Typical working speed range for this tubing and bore.', cls: 'border-success bg-success/10' }
         return {
             extendSpeed: extSpeed,
             retractSpeed: retSpeed,
@@ -97,7 +97,7 @@ export function PneumaticChart() {
     }, [results, stroke, tubingIdx, tubingOptions, bore, rod, pressure, isMetric, lineFlow])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Pneumatic Cylinder Sizing</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('pneumatic')} />
@@ -107,74 +107,74 @@ export function PneumaticChart() {
                     {[true, false].map((metric) => (
                         <button key={String(metric)} onClick={() => { setIsMetric(metric); setBore(''); setRod(''); setPressure('') }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isMetric === metric ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isMetric === metric ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {metric ? 'Metric' : 'Imperial'}
                         </button>
                     ))}
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Bore Size</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Bore Size</label>
                     <select value={bore} onChange={(e) => { setBore(e.target.value); setRod('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                         <option value="">Select bore...</option>
                         {bores.map((b: string) => <option key={b} value={b}>{formatBoreSize(b, isMetric)}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Rod Size</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Rod Size</label>
                     <select value={rod} onChange={(e) => setRod(e.target.value)} disabled={rods.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text disabled:opacity-50">
                         <option value="">Select rod...</option>
                         {rods.map((r: string) => <option key={r} value={r}>{formatRodSize(r, isMetric)}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Pressure (gauge)</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Pressure (gauge)</label>
                     <select value={pressure} onChange={(e) => setPressure(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                         <option value="">Select pressure...</option>
                         {pressureOptions.map((p: any) => <option key={p.value} value={p.value}>{p.label}</option>)}
                     </select>
                     {pressureInfo && (
                         <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-                            <div className="bg-dark-900 rounded-lg px-2.5 py-2 border-l-2 border-primary">
-                                <div className="text-text-muted uppercase text-[10px]">Gauge</div>
+                            <div className="bg-surface-page rounded-lg px-2.5 py-2 border-l-2 border-accent-text">
+                                <div className="text-text-dim uppercase text-[11px]">Gauge</div>
                                 <div className="font-mono text-text-strong">{pressureInfo.barG.toFixed(1)} bar(g) · {pressureInfo.psiG.toFixed(1)} psig</div>
                             </div>
-                            <div className="bg-dark-900 rounded-lg px-2.5 py-2 border-l-2 border-text-muted">
-                                <div className="text-text-muted uppercase text-[10px]">Absolute (+1 atm)</div>
+                            <div className="bg-surface-page rounded-lg px-2.5 py-2 border-l-2 border-border">
+                                <div className="text-text-dim uppercase text-[11px]">Absolute (+1 atm)</div>
                                 <div className="font-mono text-text-strong">{pressureInfo.barA.toFixed(2)} bar(a) · {pressureInfo.psiA.toFixed(1)} psia</div>
                             </div>
-                            <div className="col-span-2 text-[10px] text-text-muted">
+                            <div className="col-span-2 text-[11px] text-text-dim">
                                 Force uses gauge pressure; free-air flow and consumption use absolute (×{pressureInfo.cr.toFixed(1)} compression).
                             </div>
                         </div>
                     )}
                 </div>
                 {results && (
-                    <div className="grid grid-cols-2 gap-3 mt-2">
-                        <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                            <div className="text-xs text-text-muted uppercase">Extend Force</div>
-                            <div className="font-mono text-lg font-semibold text-primary">{results.extendForce?.toFixed(1)} {isMetric ? 'N' : 'lbf'}</div>
+                    <div className="readout rounded-lg border border-border p-3 grid grid-cols-2 gap-3 mt-2">
+                        <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                            <div className="text-xs text-text-dim uppercase">Extend Force</div>
+                            <div className="font-mono text-lg font-semibold text-accent-text">{results.extendForce?.toFixed(1)} {isMetric ? 'N' : 'lbf'}</div>
                         </div>
-                        <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                            <div className="text-xs text-text-muted uppercase">Retract Force</div>
-                            <div className="font-mono text-lg font-semibold text-primary">{results.retractForce?.toFixed(1)} {isMetric ? 'N' : 'lbf'}</div>
+                        <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                            <div className="text-xs text-text-dim uppercase">Retract Force</div>
+                            <div className="font-mono text-lg font-semibold text-accent-text">{results.retractForce?.toFixed(1)} {isMetric ? 'N' : 'lbf'}</div>
                         </div>
                     </div>
                 )}
                 {results && (
                     <div className="border-t border-border pt-3 grid grid-cols-1 @md:grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Stroke Length ({isMetric ? 'mm' : 'in'})</label>
+                            <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Stroke Length ({isMetric ? 'mm' : 'in'})</label>
                             <input type="number" value={stroke} onChange={(e) => setStroke(e.target.value)} placeholder="Enter stroke" min="0" step="any"
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                                className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                         </div>
                         <div>
-                            <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Supply Tubing</label>
+                            <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Supply Tubing</label>
                             <select value={tubingIdx} onChange={(e) => setTubingIdx(e.target.value)}
-                                className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                                className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                                 {tubingOptions.map((t: any, i: number) => <option key={t.label} value={i}>{t.label}</option>)}
                             </select>
                         </div>
@@ -183,38 +183,38 @@ export function PneumaticChart() {
                 {/* Line flow & pressure drop — Festo-style: what can this tube actually deliver? */}
                 {results && (
                     <div className="border-t border-border pt-3 space-y-2">
-                        <div className="text-xs text-text-secondary uppercase tracking-wider">Line Flow & Pressure Drop</div>
+                        <div className="text-xs text-text-body uppercase tracking-wider">Line Flow & Pressure Drop</div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Required at Cylinder ({isMetric ? 'bar g' : 'psig'})</label>
+                                <label className="block text-xs text-text-dim mb-1">Required at Cylinder ({isMetric ? 'bar g' : 'psig'})</label>
                                 <input type="number" value={lineOutlet} onChange={(e) => setLineOutlet(e.target.value)}
                                     placeholder={isMetric ? 'e.g. 4' : 'e.g. 60'} min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                             </div>
                             <div>
-                                <label className="block text-xs text-text-muted mb-1">Line Length ({isMetric ? 'm' : 'ft'})</label>
+                                <label className="block text-xs text-text-dim mb-1">Line Length ({isMetric ? 'm' : 'ft'})</label>
                                 <input type="number" value={lineLength} onChange={(e) => setLineLength(e.target.value)}
                                     placeholder={isMetric ? 'e.g. 2' : 'e.g. 6'} min="0" step="any"
-                                    className="w-full px-3 py-2 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                                    className="w-full px-3 py-2 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                             </div>
                         </div>
                         {lineFlow && (
-                            <div className="rounded-lg border border-primary/20 bg-dark-700 px-3 py-2.5 space-y-1.5">
+                            <div className="readout rounded-lg border border-border px-3 py-2.5 space-y-1.5">
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-xs text-text-muted uppercase">Deliverable Flow</span>
-                                    <span className="font-mono text-lg font-semibold text-primary">
+                                    <span className="text-xs text-text-dim uppercase">Deliverable Flow</span>
+                                    <span className="font-mono text-lg font-semibold text-accent-text">
                                         {isMetric ? `${lineFlow.lpm.toFixed(0)} l/min` : `${lineFlow.scfm.toFixed(1)} SCFM`}
                                     </span>
-                                    <span className="font-mono text-xs text-text-muted">
+                                    <span className="font-mono text-xs text-text-dim">
                                         free air ({isMetric ? `${lineFlow.scfm.toFixed(1)} SCFM` : `${lineFlow.lpm.toFixed(0)} l/min`})
                                     </span>
                                 </div>
-                                <div className="text-xs font-mono text-text-secondary">
+                                <div className="text-xs font-mono text-text-body">
                                     {(lineFlow.supplyAbsBar - 1.013).toFixed(1)} bar(g)/{lineFlow.supplyAbsBar.toFixed(2)} bar(a)
                                     {' → '}
                                     {(lineFlow.outletAbsBar - 1.013).toFixed(1)} bar(g)/{lineFlow.outletAbsBar.toFixed(2)} bar(a)
                                 </div>
-                                <div className="text-xs font-mono text-text-muted">
+                                <div className="text-xs font-mono text-text-dim">
                                     Δp {isMetric ? `${lineFlow.dropBar.toFixed(2)} bar` : `${(lineFlow.dropBar * 14.5038).toFixed(1)} psi`} (same in gauge or absolute) · {lineFlow.idMm.toFixed(1)} mm ID · {lineFlow.velocity.toFixed(0)} m/s
                                 </div>
                                 {lineFlow.choked && (
@@ -227,7 +227,7 @@ export function PneumaticChart() {
                                         Very high line velocity — expect extra losses from every fitting and elbow.
                                     </div>
                                 )}
-                                <div className="text-[10px] text-text-muted">
+                                <div className="text-[11px] text-text-dim">
                                     Isothermal pipe-flow estimate incl. fitting allowance (±10% vs manufacturer data). Speeds below now use this flow and the outlet pressure.
                                 </div>
                             </div>
@@ -237,24 +237,24 @@ export function PneumaticChart() {
 
                 {speedResults && (
                     <>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                                <div className="text-xs text-text-muted uppercase">Extend</div>
+                        <div className="readout rounded-lg border border-border p-3 grid grid-cols-2 gap-3">
+                            <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                                <div className="text-xs text-text-dim uppercase">Extend</div>
                                 <div className="font-mono font-semibold text-text-strong">{speedResults.extendTime?.toFixed(2)}s</div>
-                                <div className="text-xs text-text-muted font-mono">{speedResults.extendSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
+                                <div className="text-xs text-text-dim font-mono">{speedResults.extendSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
                             </div>
-                            <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                                <div className="text-xs text-text-muted uppercase">Retract</div>
+                            <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                                <div className="text-xs text-text-dim uppercase">Retract</div>
                                 <div className="font-mono font-semibold text-text-strong">{speedResults.retractTime?.toFixed(2)}s</div>
-                                <div className="text-xs text-text-muted font-mono">{speedResults.retractSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
+                                <div className="text-xs text-text-dim font-mono">{speedResults.retractSpeed?.toFixed(0)} {isMetric ? 'mm/s' : 'in/s'}</div>
                             </div>
                         </div>
-                        <div className={`px-3 py-2 bg-dark-900/50 border-l-2 rounded text-xs ${speedResults.speedNote.cls}`}>
+                        <div className={`px-3 py-2 border-l-2 rounded text-xs text-text-body ${speedResults.speedNote.cls}`}>
                             {speedResults.speedNote.text}
                         </div>
-                        <div className="text-xs text-text-muted">
-                            Air per extend stroke: <span className="font-mono text-text-secondary">{speedResults.airPerExtend?.toFixed(2)} {isMetric ? 'L' : 'in³'}</span> free air.
-                            Flow basis: <span className="font-mono text-text-secondary">{speedResults.flowScfm.toFixed(1)} SCFM</span>{' '}
+                        <div className="text-xs text-text-dim">
+                            Air per extend stroke: <span className="font-mono text-text-body">{speedResults.airPerExtend?.toFixed(2)} {isMetric ? 'L' : 'in³'}</span> free air.
+                            Flow basis: <span className="font-mono text-text-body">{speedResults.flowScfm.toFixed(1)} SCFM</span>{' '}
                             {speedResults.flowSource === 'line'
                                 ? 'from the line calc above (at outlet pressure).'
                                 : 'from the tubing rating — fill in the line calc for the run-specific number.'}

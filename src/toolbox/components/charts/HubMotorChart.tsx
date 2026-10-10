@@ -60,7 +60,7 @@ export function HubMotorChart() {
     }
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Hub Motor (MDR) Selection</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('hubmotor')} />
@@ -81,7 +81,7 @@ export function HubMotorChart() {
                             setIsMetric(metric)
                         }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isMetric === metric ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isMetric === metric ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {metric ? 'Metric' : 'Imperial'}
                         </button>
@@ -89,39 +89,39 @@ export function HubMotorChart() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                        <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Conveyor Width ({isMetric ? 'mm' : 'in'})</label>
+                        <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Conveyor Width ({isMetric ? 'mm' : 'in'})</label>
                         <input type="number" value={width} onChange={(e) => setWidth(e.target.value)} placeholder="e.g. 450" min="0" step="any"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                     </div>
                     <div>
-                        <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Min Torque ({isMetric ? 'N·m' : 'ft·lb'})</label>
+                        <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Min Torque ({isMetric ? 'N·m' : 'ft·lb'})</label>
                         <input type="number" value={torqueFilter} onChange={(e) => setTorqueFilter(e.target.value)} placeholder="Optional" min="0" step="any"
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
                     </div>
                 </div>
 
                 {/* Recommendation — requirement-first answer with safety-factor margin */}
                 {advice && (
                     advice.recommended ? (
-                        <div className={`rounded-lg px-3 py-2.5 border ${advice.recommended.meetsTorqueWithSafety ? 'bg-success/10 border-success/30' : 'bg-warning/10 border-warning/30'}`}>
-                            <div className="text-xs text-text-muted uppercase mb-0.5">Recommended</div>
-                            <div className={`text-sm font-mono font-semibold ${advice.recommended.meetsTorqueWithSafety ? 'text-success' : 'text-warning'}`}>
+                        <div className={`rounded-lg px-3 py-2.5 border-l-2 ${advice.recommended.meetsTorqueWithSafety ? 'bg-success/10 border-success' : 'bg-warning/10 border-warning'}`}>
+                            <div className="text-xs text-text-dim uppercase mb-0.5">Recommended</div>
+                            <div className="text-sm font-mono font-semibold text-text-strong">
                                 {advice.recommended.series} — {toDisplay(advice.recommended.torque)} {isMetric ? 'N·m' : 'ft·lb'} at this width ({advice.recommended.safetyFactor.toFixed(1)}× required)
                             </div>
-                            <div className="text-xs text-text-secondary mt-0.5">
+                            <div className="text-xs text-text-body mt-0.5">
                                 {advice.recommended.meetsTorqueWithSafety
                                     ? 'Meets the 1.5× thermal safety margin.'
                                     : 'Meets required torque but under the 1.5× thermal margin — expect duty-cycle limits.'}
                                 {advice.alternatives.length > 0 && ` Alternatives: ${advice.alternatives.map((a: any) => a.series).join(', ')}.`}
                             </div>
                             <button onClick={() => setSelectedSeries(advice.recommended.series)}
-                                className="mt-1 text-xs text-primary hover:text-primary-light transition-colors">View details →</button>
+                                className="mt-1 text-xs text-accent-text hover:text-accent-text transition-colors">View details →</button>
                         </div>
                     ) : (
-                        <div className="rounded-lg px-3 py-2.5 border bg-error/10 border-error/30 text-xs">
-                            <span className="text-error font-medium">No motor meets this torque at this width.</span>
+                        <div className="rounded-lg px-3 py-2.5 border-l-2 bg-error/10 border-error text-xs">
+                            <span className="text-text-strong font-medium">No motor meets this torque at this width.</span>
                             {advice.nearMiss && (
-                                <span className="text-text-secondary">
+                                <span className="text-text-body">
                                     {' '}Near miss: <span className="font-mono">{advice.nearMiss.series}</span>{' '}
                                     {advice.nearMiss.meetsTorque
                                         ? `has the torque but needs ${advice.nearMiss.minLength}–${advice.nearMiss.maxLength} mm width.`
@@ -135,30 +135,33 @@ export function HubMotorChart() {
                 {/* Motor comparison table */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-xs">
-                        <thead><tr className="text-text-muted border-b border-border">
-                            <th className="py-2 text-left">Series</th>
-                            <th className="py-2 text-left">Ø {isMetric ? 'mm' : 'in'}</th>
-                            <th className="py-2 text-left">Torque {isMetric ? 'N·m' : 'ft·lb'}</th>
-                            <th className="py-2 text-left">Belt Pull {isMetric ? 'N' : 'lbf'}</th>
-                            {widthMm > 0 && <th className="py-2 text-left">Fit</th>}
+                        <thead><tr className="bg-surface-page text-text-dim border-b border-border">
+                            <th className="px-2 py-2 text-left">Series</th>
+                            <th className="px-2 py-2 text-left">Ø {isMetric ? 'mm' : 'in'}</th>
+                            <th className="px-2 py-2 text-left">Torque {isMetric ? 'N·m' : 'ft·lb'}</th>
+                            <th className="px-2 py-2 text-left">Belt Pull {isMetric ? 'N' : 'lbf'}</th>
+                            {widthMm > 0 && <th className="px-2 py-2 text-left">Fit</th>}
                         </tr></thead>
                         <tbody>
                             {filteredMotors.map((m: any) => {
                                 const fit = widthMm ? checkMotorFit(m, widthMm) : null
+                                const sel = m.series === selectedSeries
+                                const body = sel ? 'text-text-strong' : 'text-text-body'
                                 return (
                                     <tr key={m.series}
-                                        onClick={() => setSelectedSeries(m.series === selectedSeries ? '' : m.series)}
-                                        className={`border-b border-border/50 cursor-pointer transition-colors ${
-                                            m.series === selectedSeries ? 'bg-primary/5' : 'hover:bg-dark-700'
+                                        onClick={() => setSelectedSeries(sel ? '' : m.series)}
+                                        className={`border-b border-border-soft cursor-pointer transition-colors ${
+                                            sel ? 'bg-accent-text/10' : 'hover:bg-surface-card-hover'
                                         }`}>
-                                        <td className="py-2 font-mono text-text-strong">{m.series}</td>
-                                        <td className="py-2 font-mono text-text-secondary">{isMetric ? m.diameter : (m.diameter / 25.4).toFixed(1)}</td>
-                                        <td className="py-2 font-mono text-text-secondary">{toDisplay(m.torque ?? m.maxTorque)}</td>
-                                        <td className="py-2 font-mono text-text-secondary">{toDisplay(m.beltPull ?? m.maxBeltPull, true)}</td>
+                                        <td className="px-2 py-2 font-mono text-text-strong">{m.series}</td>
+                                        <td className={`px-2 py-2 font-mono ${body}`}>{isMetric ? m.diameter : (m.diameter / 25.4).toFixed(1)}</td>
+                                        <td className={`px-2 py-2 font-mono ${body}`}>{toDisplay(m.torque ?? m.maxTorque)}</td>
+                                        <td className={`px-2 py-2 font-mono ${body}`}>{toDisplay(m.beltPull ?? m.maxBeltPull, true)}</td>
                                         {widthMm > 0 && (
-                                            <td className="py-2">
-                                                <span className={`text-xs ${fit === 'fits' ? 'text-success' : 'text-warning'}`}
+                                            <td className="px-2 py-2">
+                                                <span className="text-xs text-text-strong inline-flex items-center gap-1.5 whitespace-nowrap"
                                                     title={fit === 'fits' ? 'Fits this width' : fit === 'too-narrow' ? `Conveyor narrower than motor minimum (${m.minLength} mm)` : `Conveyor wider than motor maximum (${m.maxLength} mm)`}>
+                                                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${fit === 'fits' ? 'bg-success' : 'bg-warning'}`} aria-hidden />
                                                     {fit === 'fits' ? '✓' : fit === 'too-narrow' ? '⚠ under min' : '⚠ over max'}
                                                 </span>
                                             </td>
@@ -170,14 +173,14 @@ export function HubMotorChart() {
                     </table>
                 </div>
                 {filteredMotors.length === 0 && (
-                    <p className="text-center text-text-muted text-sm py-4">No motors match the filter criteria</p>
+                    <p className="text-center text-text-dim text-sm py-4">No motors match the filter criteria</p>
                 )}
 
                 {/* Selected motor detail */}
                 {selectedMotor && (
-                    <div className="bg-dark-700 rounded-lg px-3 py-3 mt-2">
+                    <div className="readout rounded-lg border border-border px-3 py-3 mt-2">
                         <div className="flex items-center justify-between mb-2">
-                            <div className="text-sm font-semibold text-primary">{selectedMotor.series}</div>
+                            <div className="text-sm font-semibold text-accent-text">{selectedMotor.series}</div>
                             {selectedMotor.fit && (
                                 <span className={`text-xs px-2 py-0.5 rounded ${
                                     selectedMotor.fit === 'fits' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
@@ -187,10 +190,10 @@ export function HubMotorChart() {
                             )}
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">RPM (60Hz):</span><span className="font-mono text-text-strong">{selectedMotor.rpm60Hz}</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Width Range:</span><span className="font-mono text-text-strong">{selectedMotor.minLength}-{selectedMotor.maxLength}mm</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.torque ?? selectedMotor.maxTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
-                            <div className="flex justify-between"><span className="text-text-secondary">Peak Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.peakTorque ?? selectedMotor.maxPeakTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">RPM (60Hz):</span><span className="font-mono text-text-strong">{selectedMotor.rpm60Hz}</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">Width Range:</span><span className="font-mono text-text-strong">{selectedMotor.minLength}-{selectedMotor.maxLength}mm</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.torque ?? selectedMotor.maxTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
+                            <div className="flex justify-between"><span className="text-text-body">Peak Torque:</span><span className="font-mono text-text-strong">{toDisplay(selectedMotor.peakTorque ?? selectedMotor.maxPeakTorque)} {isMetric ? 'N·m' : 'ft·lb'}</span></div>
                         </div>
                     </div>
                 )}

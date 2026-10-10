@@ -69,31 +69,31 @@ function ToleranceZoneDiagram({ result, fitStyle, holeClass, shaftClass }: {
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ maxHeight: '140px' }}>
             {/* Zero line */}
             <line x1="10" y1={zeroY} x2={w - 10} y2={zeroY} stroke="#4a5568" strokeWidth="1" strokeDasharray="4,3" />
-            <text x="8" y={zeroY - 4} fill="#718096" fontSize="9" textAnchor="end">0</text>
+            <text x="8" y={zeroY - 4} className="fill-text-dim" fontSize="11" textAnchor="end">0</text>
 
             {/* Hole tolerance zone */}
             <rect x={holeX - barW / 2} y={holeTopY} width={barW} height={holeBotY - holeTopY}
                 fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" strokeWidth="1.5" rx="2" />
-            <text x={holeX} y={h - 4} fill="#93a3b8" fontSize="10" textAnchor="middle" fontFamily="monospace">{holeClass}</text>
-            <text x={holeX} y={12} fill="#93a3b8" fontSize="8" textAnchor="middle">HOLE</text>
+            <text x={holeX} y={h - 4} className="fill-text-body" fontSize="11" textAnchor="middle" fontFamily="monospace">{holeClass}</text>
+            <text x={holeX} y={12} className="fill-text-body" fontSize="11" textAnchor="middle">HOLE</text>
             {/* Deviation labels */}
-            <text x={holeX - barW / 2 - 3} y={holeTopY + 4} fill="#60a5fa" fontSize="8" textAnchor="end" fontFamily="monospace">
+            <text x={holeX - barW / 2 - 3} y={holeTopY + 4} fill="#60a5fa" fontSize="11" textAnchor="end" fontFamily="monospace">
                 {holeUpper >= 0 ? '+' : ''}{(holeUpper * 1000).toFixed(0)}μm
             </text>
-            <text x={holeX - barW / 2 - 3} y={holeBotY + 4} fill="#60a5fa" fontSize="8" textAnchor="end" fontFamily="monospace">
+            <text x={holeX - barW / 2 - 3} y={holeBotY + 4} fill="#60a5fa" fontSize="11" textAnchor="end" fontFamily="monospace">
                 {holeLower >= 0 ? '+' : ''}{(holeLower * 1000).toFixed(0)}μm
             </text>
 
             {/* Shaft tolerance zone */}
             <rect x={shaftX - barW / 2} y={shaftTopY} width={barW} height={shaftBotY - shaftTopY}
                 fill={`${fitStyle.svgFill}33`} stroke={fitStyle.svgStroke} strokeWidth="1.5" rx="2" />
-            <text x={shaftX} y={h - 4} fill="#93a3b8" fontSize="10" textAnchor="middle" fontFamily="monospace">{shaftClass}</text>
-            <text x={shaftX} y={12} fill="#93a3b8" fontSize="8" textAnchor="middle">SHAFT</text>
+            <text x={shaftX} y={h - 4} className="fill-text-body" fontSize="11" textAnchor="middle" fontFamily="monospace">{shaftClass}</text>
+            <text x={shaftX} y={12} className="fill-text-body" fontSize="11" textAnchor="middle">SHAFT</text>
             {/* Deviation labels */}
-            <text x={shaftX + barW / 2 + 3} y={shaftTopY + 4} fill={fitStyle.svgFill} fontSize="8" textAnchor="start" fontFamily="monospace">
+            <text x={shaftX + barW / 2 + 3} y={shaftTopY + 4} fill={fitStyle.svgFill} fontSize="11" textAnchor="start" fontFamily="monospace">
                 {shaftUpper >= 0 ? '+' : ''}{(shaftUpper * 1000).toFixed(0)}μm
             </text>
-            <text x={shaftX + barW / 2 + 3} y={shaftBotY + 4} fill={fitStyle.svgFill} fontSize="8" textAnchor="start" fontFamily="monospace">
+            <text x={shaftX + barW / 2 + 3} y={shaftBotY + 4} fill={fitStyle.svgFill} fontSize="11" textAnchor="start" fontFamily="monospace">
                 {shaftLower >= 0 ? '+' : ''}{(shaftLower * 1000).toFixed(0)}μm
             </text>
         </svg>
@@ -160,7 +160,7 @@ export function ToleranceChart() {
     ] : []
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Hole/Shaft Tolerance (ISO 286)</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('tolerance')} />
@@ -180,7 +180,7 @@ export function ToleranceChart() {
                             setIsMetric(metric)
                         }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isMetric === metric ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isMetric === metric ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {metric ? 'Metric (mm)' : 'Imperial (in)'}
                         </button>
@@ -188,12 +188,12 @@ export function ToleranceChart() {
                 </div>
 
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Nominal Diameter</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Nominal Diameter</label>
                     <div className="flex gap-2">
                         <input type="number" value={diameter} onChange={(e) => setDiameter(e.target.value)}
                             placeholder={isMetric ? 'e.g. 25' : 'e.g. 1.000'} min="0" step="any"
-                            className="flex-1 px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-primary" />
-                        <span className="flex items-center px-3 bg-dark-700 border border-border rounded-lg text-text-muted text-sm">
+                            className="flex-1 px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong font-mono text-sm focus:outline-none focus:border-accent-text" />
+                        <span className="flex items-center px-3 bg-surface-page border border-border rounded-lg text-text-dim text-sm">
                             {isMetric ? 'mm' : 'in'}
                         </span>
                     </div>
@@ -201,16 +201,16 @@ export function ToleranceChart() {
 
                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                        <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Hole Class</label>
+                        <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Hole Class</label>
                         <select value={holeClass} onChange={(e) => setHoleClass(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                             {(holeClasses as any[]).map((c: string) => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Shaft Class</label>
+                        <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Shaft Class</label>
                         <select value={shaftClass} onChange={(e) => setShaftClass(e.target.value)}
-                            className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                            className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                             {(shaftClasses as any[]).map((c: string) => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
@@ -226,8 +226,8 @@ export function ToleranceChart() {
                                     onClick={() => { setHoleClass(f.hole); setShaftClass(f.shaft) }}
                                     className={`px-2 py-1 rounded text-xs font-mono border transition-colors flex items-center gap-1.5 ${
                                         isActive
-                                            ? 'border-primary bg-primary/10 text-primary'
-                                            : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                            ? 'border-accent-text bg-accent-text/10 text-accent-text'
+                                            : 'border-border bg-surface-page text-text-body hover:border-border'
                                     }`}>
                                     <span className={`w-1.5 h-1.5 rounded-full ${categoryDot[type]}`} />
                                     {f.hole}/{f.shaft}
@@ -239,26 +239,26 @@ export function ToleranceChart() {
 
                 {/* Active fit description */}
                 {activeFit && (
-                    <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                    <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body">
                         <strong className="text-text-strong">{activeFit.name}</strong> ({activeFit.hole}/{activeFit.shaft}) — {activeFit.description}
                         {fitApplications[activeFit.name] && (
-                            <div className="mt-1 text-text-muted">{fitApplications[activeFit.name]}</div>
+                            <div className="mt-1 text-text-dim">{fitApplications[activeFit.name]}</div>
                         )}
                     </div>
                 )}
 
                 {/* ── RESULT ZONE ── */}
                 {result && fitStyle && (
-                    <div className="rounded-lg border border-primary/20 bg-dark-700 overflow-hidden">
+                    <div className="readout rounded-lg border border-border overflow-hidden">
                         {/* Result header with fit badge */}
                         <div className={`px-4 py-3 ${fitStyle.bg} border-b ${fitStyle.border} flex items-center justify-between`}>
                             <div>
                                 <span className={`text-sm font-semibold ${fitStyle.color}`}>{fitStyle.label}</span>
                                 <span className="ml-2 font-mono text-sm text-text-strong">{holeClass}/{shaftClass}</span>
-                                {activeFit && <span className="ml-2 text-xs text-text-muted">— {activeFit.name}</span>}
+                                {activeFit && <span className="ml-2 text-xs text-text-dim">— {activeFit.name}</span>}
                             </div>
                             {diameter && (
-                                <span className="text-xs font-mono text-text-muted">
+                                <span className="text-xs font-mono text-text-dim">
                                     Ø{parseFloat(diameter).toFixed(isMetric ? 1 : 3)} {isMetric ? 'mm' : 'in'}
                                 </span>
                             )}
@@ -266,24 +266,24 @@ export function ToleranceChart() {
 
                         <div className="p-4 space-y-4">
                             {/* Natural language description */}
-                            <div className="text-xs text-text-secondary">
+                            <div className="text-xs text-text-body">
                                 {fitTypeDescriptions[result.fitType]}
                             </div>
 
                             {/* Primary result: Max/Min clearance — large and prominent */}
                             <div className="grid grid-cols-2 gap-3">
                                 {primaryCards.map((card) => (
-                                    <div key={card.label} className="bg-dark-800 rounded-lg px-4 py-3 text-center">
-                                        <div className="text-xs text-text-muted uppercase mb-1">{card.label}</div>
+                                    <div key={card.label} className="bg-surface-card rounded-lg px-4 py-3 text-center">
+                                        <div className="text-xs text-text-dim uppercase mb-1">{card.label}</div>
                                         <div className={`font-mono text-xl font-semibold ${fitStyle.color}`}>{card.text}</div>
-                                        <div className="text-xs text-text-muted font-mono">{unitLabel}</div>
+                                        <div className="text-xs text-text-dim font-mono">{unitLabel}</div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* SVG Tolerance Zone Diagram */}
-                            <div className="bg-dark-800 rounded-lg px-3 py-3">
-                                <div className="text-xs text-text-muted uppercase mb-2 tracking-wider">Tolerance Zone Diagram</div>
+                            <div className="bg-surface-card rounded-lg px-3 py-3">
+                                <div className="text-xs text-text-dim uppercase mb-2 tracking-wider">Tolerance Zone Diagram</div>
                                 <ToleranceZoneDiagram
                                     result={result}
                                     fitStyle={fitStyle}
@@ -294,21 +294,21 @@ export function ToleranceChart() {
 
                             {/* Limit dimensions — always visible; the headline is what goes on the drawing */}
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-dark-800 rounded-lg px-3 py-3">
-                                    <div className="text-xs text-text-muted uppercase mb-1">Hole ({holeClass})</div>
+                                <div className="bg-surface-card rounded-lg px-3 py-3">
+                                    <div className="text-xs text-text-dim uppercase mb-1">Hole ({holeClass})</div>
                                     <div className="font-mono text-sm text-text-strong">
                                         Ø{fmtNum(result.nominalMm + result.holeUpper)} / Ø{fmtNum(result.nominalMm + result.holeLower)} {unitLabel}
                                     </div>
-                                    <div className="text-xs text-text-muted mt-1 font-mono">
+                                    <div className="text-xs text-text-dim mt-1 font-mono">
                                         {fmtDev(result.holeUpper)} / {fmtDev(result.holeLower)} {unitLabel} ({fmtUm(result.holeUpper)} / {fmtUm(result.holeLower)} μm)
                                     </div>
                                 </div>
-                                <div className="bg-dark-800 rounded-lg px-3 py-3">
-                                    <div className="text-xs text-text-muted uppercase mb-1">Shaft ({shaftClass})</div>
+                                <div className="bg-surface-card rounded-lg px-3 py-3">
+                                    <div className="text-xs text-text-dim uppercase mb-1">Shaft ({shaftClass})</div>
                                     <div className="font-mono text-sm text-text-strong">
                                         Ø{fmtNum(result.nominalMm + result.shaftUpper)} / Ø{fmtNum(result.nominalMm + result.shaftLower)} {unitLabel}
                                     </div>
-                                    <div className="text-xs text-text-muted mt-1 font-mono">
+                                    <div className="text-xs text-text-dim mt-1 font-mono">
                                         {fmtDev(result.shaftUpper)} / {fmtDev(result.shaftLower)} {unitLabel} ({fmtUm(result.shaftUpper)} / {fmtUm(result.shaftLower)} μm)
                                     </div>
                                 </div>

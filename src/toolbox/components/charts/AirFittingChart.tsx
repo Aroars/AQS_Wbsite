@@ -50,46 +50,46 @@ export function AirFittingChart() {
     }, [threadType, threadSize, sizeInfo])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Air Fittings & Threads</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('airfitting')} />
             </div>
             <div className="p-4 space-y-4">
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Thread Type</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Thread Type</label>
                     <select value={threadType} onChange={(e) => { setThreadType(e.target.value); setThreadSize('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                         <option value="">Select thread type...</option>
                         {types.map((t: string) => <option key={t} value={t}>{t} — {(threadTypes as any)[t]?.fullName ?? ''}</option>)}
                     </select>
                 </div>
                 {typeInfo && (
-                    <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary space-y-1">
+                    <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body space-y-1">
                         <div><strong>Type:</strong> {typeInfo.type} — {typeInfo.sealMethod}</div>
                         {typeInfo.angle && <div><strong>Angle:</strong> {typeInfo.angle}</div>}
                         <div>{typeInfo.description}</div>
-                        {typeInfo.notes && <div className="text-text-muted italic">Note: {typeInfo.notes}</div>}
+                        {typeInfo.notes && <div className="text-text-dim italic">Note: {typeInfo.notes}</div>}
                     </div>
                 )}
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Thread Size</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Thread Size</label>
                     <select value={threadSize} onChange={(e) => setThreadSize(e.target.value)} disabled={sizes.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text disabled:opacity-50">
                         <option value="">Select size...</option>
                         {sizes.map((s: string) => <option key={s} value={s}>{s}</option>)}
                     </select>
                 </div>
                 {sizeInfo && (
-                    <div className="bg-dark-700 rounded-lg px-3 py-3 space-y-2">
-                        <div className="text-xs text-text-muted uppercase">Size Details</div>
+                    <div className="readout rounded-lg border border-border px-3 py-3 space-y-2">
+                        <div className="text-xs text-text-dim uppercase">Size Details</div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex justify-between"><span className="text-text-secondary">OD:</span><span className="font-mono text-text-strong">{sizeInfo.od} mm</span></div>
-                            {sizeInfo.tpi && <div className="flex justify-between"><span className="text-text-secondary">TPI:</span><span className="font-mono text-text-strong">{sizeInfo.tpi}</span></div>}
-                            {sizeInfo.pitch && <div className="flex justify-between"><span className="text-text-secondary">Pitch:</span><span className="font-mono text-text-strong">{sizeInfo.pitch} mm</span></div>}
+                            <div className="flex justify-between"><span className="text-text-body">OD:</span><span className="font-mono text-text-strong">{sizeInfo.od} mm</span></div>
+                            {sizeInfo.tpi && <div className="flex justify-between"><span className="text-text-body">TPI:</span><span className="font-mono text-text-strong">{sizeInfo.tpi}</span></div>}
+                            {sizeInfo.pitch && <div className="flex justify-between"><span className="text-text-body">Pitch:</span><span className="font-mono text-text-strong">{sizeInfo.pitch} mm</span></div>}
                         </div>
                         {((sizeInfo.tubeSizesMetric?.length ?? 0) > 0 || (sizeInfo.tubeSizesImperial?.length ?? 0) > 0) && (
-                            <div className="text-xs text-text-secondary">
+                            <div className="text-xs text-text-body">
                                 Push-in tube:{' '}
                                 <span className="font-mono text-text-strong">
                                     {sizeInfo.tubeSizesMetric?.length > 0
@@ -106,7 +106,7 @@ export function AirFittingChart() {
                                         c.samePitch ? 'border-error bg-error/10' : 'border-warning bg-warning/5'
                                     }`}>
                                         <span className="font-mono text-text-strong">{c.key}</span>{' '}
-                                        <span className="text-text-secondary">
+                                        <span className="text-text-body">
                                             ({c.tpi} TPI, ΔOD {c.dOd >= 0 ? '+' : ''}{c.dOd.toFixed(2)} mm) —{' '}
                                         </span>
                                         {c.samePitch ? (
@@ -128,39 +128,40 @@ export function AirFittingChart() {
                 {/* Thread Compatibility Cross-Reference */}
                 {relevantCrossover.length > 0 && (
                     <div className="border-t border-border pt-3 space-y-4">
-                        <div className="text-xs text-text-secondary uppercase tracking-wider">Thread Compatibility</div>
-                        <div className="text-xs text-text-muted">What threads can connect with the selected type.</div>
+                        <div className="text-xs text-text-body uppercase tracking-wider">Thread Compatibility</div>
+                        <div className="text-xs text-text-dim">What threads can connect with the selected type.</div>
                         {relevantCrossover.map((group: any, gi: number) => {
                             const isWarning = group.group === 'NOT Compatible'
                             return (
                                 <div key={gi}>
-                                    <div className={`text-xs font-medium mb-1 ${isWarning ? 'text-error' : 'text-success'}`}>
+                                    <div className="text-xs font-medium mb-1 text-text-strong flex items-center gap-1.5">
+                                        <span className={`inline-block w-1.5 h-1.5 rounded-full ${isWarning ? 'bg-error' : 'bg-success'}`} aria-hidden />
                                         {isWarning ? '✕ ' : '✓ '}{group.group}
                                     </div>
-                                    <div className="px-3 py-1.5 bg-dark-900 rounded text-xs text-text-muted mb-2">
+                                    <div className="px-3 py-1.5 bg-surface-page rounded text-xs text-text-dim mb-2">
                                         {group.explanation}
                                     </div>
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-xs">
-                                            <thead><tr className="text-text-muted border-b border-border">
-                                                <th className="py-1.5 text-left">Male</th>
-                                                <th className="py-1.5 text-left">Female</th>
-                                                <th className="py-1.5 text-left">Seals?</th>
-                                                <th className="py-1.5 text-left">Notes</th>
+                                            <thead><tr className="bg-surface-page text-text-dim border-b border-border">
+                                                <th className="px-2 py-1.5 text-left">Male</th>
+                                                <th className="px-2 py-1.5 text-left">Female</th>
+                                                <th className="px-2 py-1.5 text-left">Seals?</th>
+                                                <th className="px-2 py-1.5 text-left">Notes</th>
                                             </tr></thead>
                                             <tbody>
                                                 {group.compatibility.map((row: any, ri: number) => (
-                                                    <tr key={ri} className="border-b border-border/50">
-                                                        <td className="py-1.5 font-mono text-text-strong">{row.male}</td>
-                                                        <td className="py-1.5 font-mono text-text-strong">{row.female}</td>
-                                                        <td className="py-1.5">
+                                                    <tr key={ri} className="border-b border-border-soft hover:bg-surface-card-hover">
+                                                        <td className="px-2 py-1.5 font-mono text-text-strong">{row.male}</td>
+                                                        <td className="px-2 py-1.5 font-mono text-text-strong">{row.female}</td>
+                                                        <td className="px-2 py-1.5">
                                                             {row.compatible === false
-                                                                ? <span className="text-error font-semibold">✕ DO NOT USE</span>
+                                                                ? <span className="px-1.5 py-0.5 rounded bg-error/10 border-l-2 border-error text-text-strong font-semibold whitespace-nowrap">✕ DO NOT USE</span>
                                                                 : row.seals
-                                                                ? <span className="text-success">✓ Yes</span>
-                                                                : <span className="text-warning">⚠ Seal needed</span>}
+                                                                ? <span className="px-1.5 py-0.5 rounded bg-success/10 border-l-2 border-success text-text-strong whitespace-nowrap">✓ Yes</span>
+                                                                : <span className="px-1.5 py-0.5 rounded bg-warning/10 border-l-2 border-warning text-text-strong whitespace-nowrap">⚠ Seal needed</span>}
                                                         </td>
-                                                        <td className="py-1.5 text-text-secondary">{row.note}</td>
+                                                        <td className="px-2 py-1.5 text-text-body">{row.note}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>

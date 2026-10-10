@@ -130,7 +130,7 @@ export function BoltChart() {
     // Reset happens in the toggle's onClick, NOT in an effect on isMetric — the
     // cross-reference link must be able to flip the system and select a size together.
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Bolt, Tap & Drill Sizes</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('bolt')} />
@@ -147,7 +147,7 @@ export function BoltChart() {
                                 setSearch('')
                             }}
                             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                isMetric === metric ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                isMetric === metric ? 'border-accent-text bg-accent-text/10 text-accent-text' : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {metric ? 'Metric' : 'Imperial'}
                         </button>
@@ -156,13 +156,13 @@ export function BoltChart() {
 
                 {/* Search input */}
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Search Bolt Size</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Search Bolt Size</label>
                     <input
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={isMetric ? 'e.g. M8, M10...' : 'e.g. 1/4, #10...'}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary placeholder:text-text-muted"
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text placeholder:text-text-dim"
                     />
                 </div>
 
@@ -172,27 +172,27 @@ export function BoltChart() {
                         <button key={s} onClick={() => setSelectedSize(s)}
                             className={`px-2.5 py-1.5 rounded-lg text-xs font-mono border transition-colors ${
                                 selectedSize === s
-                                    ? 'border-primary bg-primary/10 text-primary'
-                                    : 'border-border bg-dark-900 text-text-secondary hover:border-text-muted'
+                                    ? 'border-accent-text bg-accent-text/10 text-accent-text'
+                                    : 'border-border bg-surface-page text-text-body hover:border-border'
                             }`}>
                             {s}
                         </button>
                     ))}
                     {filteredSizes.length === 0 && (
-                        <div className="text-xs text-text-muted py-2">No sizes match "{search}"</div>
+                        <div className="text-xs text-text-dim py-2">No sizes match "{search}"</div>
                     )}
                 </div>
 
                 {/* Result card */}
                 {boltInfo && (
-                    <div className="rounded-lg border border-primary/20 bg-dark-700 overflow-hidden">
+                    <div className="readout rounded-lg border border-border overflow-hidden">
                         {/* Header */}
-                        <div className="px-4 py-3 bg-primary/5 border-b border-primary/20 flex items-center justify-between">
+                        <div className="px-4 py-3 bg-accent-text/5 border-b border-accent-text/20 flex items-center justify-between">
                             <div>
                                 <span className="font-mono text-lg text-text-strong font-semibold">{selectedSize}</span>
-                                <span className="ml-2 text-sm text-text-secondary">{boltInfo.thread}</span>
+                                <span className="ml-2 text-sm text-text-body">{boltInfo.thread}</span>
                             </div>
-                            <span className="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                            <span className="text-xs px-2 py-0.5 rounded bg-accent-text/10 text-accent-text font-medium">
                                 {isMetric ? 'Metric' : 'Imperial'}
                             </span>
                         </div>
@@ -200,21 +200,21 @@ export function BoltChart() {
                         <div className="p-4 space-y-3">
                             {/* Annotation */}
                             {annotation && (
-                                <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                                <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body">
                                     {annotation}
                                 </div>
                             )}
 
                             {/* Specs */}
                             <div>
-                                <div className="text-xs text-text-muted uppercase mb-2 tracking-wider">Specifications</div>
+                                <div className="text-xs text-text-dim uppercase mb-2 tracking-wider">Specifications</div>
                                 <div className="grid grid-cols-2 gap-2 text-sm">
-                                    <div className="flex justify-between bg-dark-800 rounded px-3 py-1.5">
-                                        <span className="text-text-secondary">Pitch</span>
+                                    <div className="flex justify-between bg-surface-card rounded px-3 py-1.5">
+                                        <span className="text-text-body">Pitch</span>
                                         <span className="font-mono text-text-strong">{boltInfo.pitch}{isMetric ? ' mm' : ' TPI'}</span>
                                     </div>
-                                    <div className="flex justify-between bg-dark-800 rounded px-3 py-1.5">
-                                        <span className="text-text-secondary">Major Ø</span>
+                                    <div className="flex justify-between bg-surface-card rounded px-3 py-1.5">
+                                        <span className="text-text-body">Major Ø</span>
                                         <span className="font-mono text-text-strong">
                                             {isMetric
                                                 ? `${boltInfo.majorDia} mm`
@@ -228,14 +228,14 @@ export function BoltChart() {
                             {/* Tap Drill — highlighted as primary result */}
                             {boltInfo.tapDrill && (
                                 <div>
-                                    <div className="text-xs text-text-muted uppercase mb-2 tracking-wider">Tap Drill</div>
-                                    <div className="bg-dark-800 rounded-lg px-4 py-3 border border-success/20">
+                                    <div className="text-xs text-text-dim uppercase mb-2 tracking-wider">Tap Drill</div>
+                                    <div className="bg-surface-card rounded-lg px-4 py-3 border border-success/20">
                                         <div className="flex items-baseline gap-3 mb-1">
                                             <span className="font-mono text-xl text-success font-semibold">
                                                 {boltInfo.tapDrill.mm} mm
                                             </span>
-                                            <span className="text-text-muted">|</span>
-                                            <span className="font-mono text-sm text-text-secondary">
+                                            <span className="text-text-dim">|</span>
+                                            <span className="font-mono text-sm text-text-body">
                                                 {boltInfo.tapDrill.inch}
                                                 {boltInfo.tapDrill.numberDrill && boltInfo.tapDrill.numberDrill !== '—' && boltInfo.tapDrill.inch === '—'
                                                     ? ` (${boltInfo.tapDrill.numberDrill} drill)`
@@ -243,7 +243,7 @@ export function BoltChart() {
                                                 }
                                             </span>
                                         </div>
-                                        <div className="text-xs text-text-muted">
+                                        <div className="text-xs text-text-dim">
                                             Decimal: {boltInfo.tapDrill.decimal.toFixed(4)}"
                                             {boltInfo.tapDrill.numberDrill && boltInfo.tapDrill.numberDrill !== '—' && boltInfo.tapDrill.inch !== '—'
                                                 ? ` — Number drill: ${boltInfo.tapDrill.numberDrill}`
@@ -259,7 +259,7 @@ export function BoltChart() {
                                             with % thread engagement so you know what the substitution costs */}
                                         {substitutions.length > 0 && (
                                             <div className="mt-3 pt-3 border-t border-border/50">
-                                                <div className="text-xs text-text-muted uppercase tracking-wider mb-1.5">
+                                                <div className="text-xs text-text-dim uppercase tracking-wider mb-1.5">
                                                     Drill Index Substitutions
                                                 </div>
                                                 <div className="space-y-1">
@@ -267,20 +267,20 @@ export function BoltChart() {
                                                         const st = engagementStatus(sub.engagement)
                                                         return (
                                                             <div key={sub.system} className="flex items-center gap-2 text-xs">
-                                                                <span className="text-text-muted w-14">{sub.system}</span>
+                                                                <span className="text-text-dim w-14">{sub.system}</span>
                                                                 <span className="font-mono text-text-strong w-16">{sub.label}</span>
-                                                                <span className="font-mono text-text-secondary w-20">{sub.sizeMm.toFixed(3)} mm</span>
-                                                                <span className="font-mono text-text-muted w-16">
+                                                                <span className="font-mono text-text-body w-20">{sub.sizeMm.toFixed(3)} mm</span>
+                                                                <span className="font-mono text-text-dim w-16">
                                                                     {sub.delta >= 0 ? '+' : ''}{sub.delta.toFixed(3)}
                                                                 </span>
-                                                                <span className={`px-1.5 py-0.5 rounded border font-mono text-[10px] ${st.cls}`}>
+                                                                <span className={`px-1.5 py-0.5 rounded border font-mono text-[11px] ${st.cls}`}>
                                                                     {st.label}
                                                                 </span>
                                                             </div>
                                                         )
                                                     })}
                                                 </div>
-                                                <div className="text-[10px] text-text-muted mt-1.5">
+                                                <div className="text-[11px] text-text-dim mt-1.5">
                                                     % = thread engagement. 60–85% good (75% standard) · &lt;50% weak threads · &gt;95% tap breakage risk
                                                 </div>
                                             </div>
@@ -292,17 +292,17 @@ export function BoltChart() {
                             {/* Clearance Holes */}
                             {boltInfo.clearance && (
                                 <div>
-                                    <div className="text-xs text-text-muted uppercase mb-2 tracking-wider">Clearance Holes</div>
+                                    <div className="text-xs text-text-dim uppercase mb-2 tracking-wider">Clearance Holes</div>
                                     <div className="grid grid-cols-2 gap-2">
-                                        <div className="bg-dark-800 rounded-lg px-3 py-2">
-                                            <div className="text-xs text-text-muted mb-1">Close Fit</div>
+                                        <div className="bg-surface-card rounded-lg px-3 py-2">
+                                            <div className="text-xs text-text-dim mb-1">Close Fit</div>
                                             <div className="font-mono text-sm text-text-strong">{boltInfo.clearance.close.mm} mm</div>
-                                            <div className="font-mono text-xs text-text-muted">{boltInfo.clearance.close.inch}</div>
+                                            <div className="font-mono text-xs text-text-dim">{boltInfo.clearance.close.inch}</div>
                                         </div>
-                                        <div className="bg-dark-800 rounded-lg px-3 py-2">
-                                            <div className="text-xs text-text-muted mb-1">Normal Fit</div>
+                                        <div className="bg-surface-card rounded-lg px-3 py-2">
+                                            <div className="text-xs text-text-dim mb-1">Normal Fit</div>
                                             <div className="font-mono text-sm text-text-strong">{boltInfo.clearance.normal.mm} mm</div>
-                                            <div className="font-mono text-xs text-text-muted">{boltInfo.clearance.normal.inch}</div>
+                                            <div className="font-mono text-xs text-text-dim">{boltInfo.clearance.normal.inch}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -310,15 +310,15 @@ export function BoltChart() {
 
                             {/* Cross-reference */}
                             {crossRef && (
-                                <div className="bg-dark-800 rounded-lg px-3 py-2 border border-border">
+                                <div className="bg-surface-card rounded-lg px-3 py-2 border border-border">
                                     <div className="flex items-center gap-2 text-xs flex-wrap">
-                                        <span className="text-text-muted">Closest {isMetric ? 'imperial' : 'metric'}:</span>
+                                        <span className="text-text-dim">Closest {isMetric ? 'imperial' : 'metric'}:</span>
                                         <button
                                             onClick={() => { setIsMetric(!isMetric); setSelectedSize(crossRef.key); setSearch('') }}
-                                            className="font-mono text-primary hover:underline cursor-pointer">
+                                            className="font-mono text-accent-text hover:underline cursor-pointer">
                                             {crossRef.key}
                                         </button>
-                                        <span className="text-text-muted">
+                                        <span className="text-text-dim">
                                             (Ø{crossRef.dia.toFixed(2)} mm — {crossRef.diff < 0.5 ? 'very close' : crossRef.diff < 1 ? 'close' : 'approximate'} match)
                                         </span>
                                     </div>
@@ -328,10 +328,10 @@ export function BoltChart() {
                             {/* Related sizes */}
                             {related.length > 0 && (
                                 <div className="flex items-center gap-2 text-xs flex-wrap">
-                                    <span className="text-text-muted">Adjacent sizes:</span>
+                                    <span className="text-text-dim">Adjacent sizes:</span>
                                     {related.map((r) => (
                                         <button key={r} onClick={() => { setSelectedSize(r); setSearch('') }}
-                                            className="font-mono text-text-secondary hover:text-primary transition-colors px-2 py-0.5 rounded border border-border hover:border-primary">
+                                            className="font-mono text-text-body hover:text-accent-text transition-colors px-2 py-0.5 rounded border border-border hover:border-accent-text">
                                             {r}
                                         </button>
                                     ))}
@@ -344,7 +344,7 @@ export function BoltChart() {
                 {/* Collapsible full table */}
                 <button
                     onClick={() => setShowAllSizes(!showAllSizes)}
-                    className="w-full text-left text-xs text-text-secondary hover:text-text-strong transition-colors flex items-center gap-1">
+                    className="w-full text-left text-xs text-text-body hover:text-text-strong transition-colors flex items-center gap-1">
                     <span className="transition-transform inline-block" style={{ transform: showAllSizes ? 'rotate(90deg)' : 'rotate(0deg)' }}>&#9656;</span>
                     {showAllSizes ? 'Hide' : 'Show'} full {isMetric ? 'metric' : 'imperial'} reference table
                 </button>
@@ -353,12 +353,12 @@ export function BoltChart() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                             <thead>
-                                <tr className="text-text-muted border-b border-border">
-                                    <th className="py-2 text-left">Size</th>
-                                    <th className="py-2 text-left">Thread</th>
-                                    <th className="py-2 text-left">Tap Drill</th>
-                                    <th className="py-2 text-left">Close</th>
-                                    <th className="py-2 text-left">Normal</th>
+                                <tr className="bg-surface-page text-text-dim border-b border-border">
+                                    <th className="px-2 py-2 text-left">Size</th>
+                                    <th className="px-2 py-2 text-left">Thread</th>
+                                    <th className="px-2 py-2 text-left">Tap Drill</th>
+                                    <th className="px-2 py-2 text-left">Close</th>
+                                    <th className="px-2 py-2 text-left">Normal</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -366,17 +366,18 @@ export function BoltChart() {
                                     const d = getBoltData(s)
                                     if (!d) return null
                                     const isActive = s === selectedSize
+                                    const body = isActive ? 'text-text-strong' : 'text-text-body'
                                     return (
                                         <tr key={s}
                                             onClick={() => { setSelectedSize(s); setSearch(''); setShowAllSizes(false) }}
-                                            className={`border-b border-border/50 cursor-pointer transition-colors ${
-                                                isActive ? 'bg-primary/10' : 'hover:bg-dark-700'
+                                            className={`border-b border-border-soft cursor-pointer transition-colors ${
+                                                isActive ? 'bg-accent-text/10' : 'hover:bg-surface-card-hover'
                                             }`}>
-                                            <td className="py-1.5 font-mono text-text-strong font-medium">{s}</td>
-                                            <td className="py-1.5 text-text-secondary">{d.thread}</td>
-                                            <td className="py-1.5 font-mono text-text-strong">{d.tapDrill?.mm ?? '—'} mm</td>
-                                            <td className="py-1.5 font-mono text-text-secondary">{d.clearance?.close?.mm ?? '—'} mm</td>
-                                            <td className="py-1.5 font-mono text-text-secondary">{d.clearance?.normal?.mm ?? '—'} mm</td>
+                                            <td className="px-2 py-1.5 font-mono text-text-strong font-medium">{s}</td>
+                                            <td className={`px-2 py-1.5 ${body}`}>{d.thread}</td>
+                                            <td className="px-2 py-1.5 font-mono text-text-strong">{d.tapDrill?.mm ?? '—'} mm</td>
+                                            <td className={`px-2 py-1.5 font-mono ${body}`}>{d.clearance?.close?.mm ?? '—'} mm</td>
+                                            <td className={`px-2 py-1.5 font-mono ${body}`}>{d.clearance?.normal?.mm ?? '—'} mm</td>
                                         </tr>
                                     )
                                 })}

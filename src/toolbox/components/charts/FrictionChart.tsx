@@ -20,51 +20,51 @@ export function FrictionChart() {
     }, [matA, matB, condition])
 
     return (
-        <div className="bg-dark-800 border border-border rounded-xl">
+        <div className="bg-surface-card border border-border rounded-xl">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-text-strong">Friction Coefficients</h3>
                 <PinButton pinned={pinned} onToggle={() => togglePin('friction')} />
             </div>
             <div className="p-4 space-y-4">
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Material A</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Material A</label>
                     <select value={matA} onChange={(e) => { setMatA(e.target.value); setMatB(''); setCondition('') }}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text">
                         <option value="">Select material...</option>
                         {allMaterials.map((m: string) => <option key={m} value={m}>{m}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Material B</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Material B</label>
                     <select value={matB} onChange={(e) => { setMatB(e.target.value); setCondition('') }} disabled={!matA}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text disabled:opacity-50">
                         <option value="">Select material...</option>
                         {compatibleB.map((m: string) => <option key={m} value={m}>{m}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label className="block text-xs text-text-secondary uppercase mb-1 tracking-wider">Surface Condition</label>
+                    <label className="block text-xs text-text-body uppercase mb-1 tracking-wider">Surface Condition</label>
                     <select value={condition} onChange={(e) => setCondition(e.target.value)} disabled={conditions.length === 0}
-                        className="w-full px-3 py-2.5 bg-dark-900 border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-primary disabled:opacity-50">
+                        className="w-full px-3 py-2.5 bg-surface-page border border-border rounded-lg text-text-strong text-sm focus:outline-none focus:border-accent-text disabled:opacity-50">
                         <option value="">Select condition...</option>
                         {conditions.map((c: string) => <option key={c} value={c}>{c}</option>)}
                     </select>
                 </div>
                 {(matA === 'Modular Belt' || matB === 'Modular Belt') && (
-                    <div className="px-3 py-2 bg-primary/5 border-l-2 border-primary rounded text-xs text-text-secondary">
+                    <div className="px-3 py-2 bg-accent-text/5 border-l-2 border-accent-text rounded text-xs text-text-body">
                         Belt-on-wearstrip values are the dynamic μ the Belt Pull and Wearstrip Span calculators use, for the AQS standard acetal belt on each rail.
                         Acetal rails are never run under acetal belts (like-on-like galling). Pairs by belt material — POM, PP, and PE on each rail — are on the toolbox roadmap.
                     </div>
                 )}
                 {result && (
-                    <div className="grid grid-cols-2 gap-3 mt-4">
-                        <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                            <div className="text-xs text-text-muted uppercase">Static (μₛ)</div>
-                            <div className="font-mono text-lg font-semibold text-primary">{result.static?.toFixed(2) ?? 'N/A'}</div>
+                    <div className="readout rounded-lg border border-border p-3 grid grid-cols-2 gap-3 mt-4">
+                        <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                            <div className="text-xs text-text-dim uppercase">Static (μₛ)</div>
+                            <div className="font-mono text-lg font-semibold text-accent-text">{result.static?.toFixed(2) ?? 'N/A'}</div>
                         </div>
-                        <div className="bg-dark-700 rounded-lg px-3 py-3 text-center">
-                            <div className="text-xs text-text-muted uppercase">Kinetic (μₖ)</div>
-                            <div className="font-mono text-lg font-semibold text-primary">{result.kinetic?.toFixed(2) ?? 'N/A'}</div>
+                        <div className="bg-surface-card rounded-lg px-3 py-3 text-center">
+                            <div className="text-xs text-text-dim uppercase">Kinetic (μₖ)</div>
+                            <div className="font-mono text-lg font-semibold text-accent-text">{result.kinetic?.toFixed(2) ?? 'N/A'}</div>
                         </div>
                     </div>
                 )}
