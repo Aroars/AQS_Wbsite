@@ -36,6 +36,8 @@ export interface ConveyorTypePage {
   faq: FAQItem[];
   /** Toolbox page slugs for the "Size It Yourself" strip */
   tools: string[];
+  /** A white paper on this type, linked under the construction cards */
+  whitePaper?: { lead: string; title: string; href: string };
 }
 
 /* Claims used below are the ones AQS stands behind today: designed to 3-A
@@ -106,6 +108,11 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "Will it run in a freezer?", a: "Yes — freezer-rated builds use low-temperature seals and lubricants and manage condensation where the belt crosses into ambient air, rated to −40 °F." },
     ],
     tools: ["belt-pull-calculator", "conveyor-speed-calculator", "uhmw-wearstrip-span-calculator", "modular-belt-drive-shaft-calculator"],
+    whitePaper: {
+      lead: "How the AQS spline backbone compares with welded box frames and tube spines on a curved, washdown conveyor:",
+      title: "Three Ways to Hold Up a Conveyor",
+      href: "/blog/three-ways-to-hold-up-a-conveyor",
+    },
   },
   {
     family: "belt",
