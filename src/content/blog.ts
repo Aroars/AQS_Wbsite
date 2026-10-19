@@ -23,6 +23,21 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "three-ways-to-hold-up-a-conveyor",
+    title: "Three Ways to Hold Up a Conveyor.",
+    description:
+      "Welded box frames, tube spines, and the AQS formed spline backbone: how the three frame architectures behind sanitary radius conveyors compare in a washdown plant, using each builder's published numbers.",
+    category: "White Paper",
+    categoryColor: "#4D9FFF",
+    readTime: "12 min",
+    date: "October 2026",
+    isoDate: "2026-10-19",
+    content: "three-ways-to-hold-up-a-conveyor",
+    image: { src: "/images/blog/spline-s-curve-conveyor-render.jpg", alt: "Engineering render of an AQS spline S-curve conveyor with a blue side-flexing modular belt through two opposed turns and a below-deck drive" },
+    pdf: "/whitepapers/aqs-white-paper-three-ways-to-hold-up-a-conveyor.pdf",
+    tools: ["belt-pull-calculator", "uhmw-wearstrip-span-calculator", "conveyor-speed-calculator", "sheet-metal-gauge-chart"],
+  },
+  {
     slug: "we-bought-them-first",
     title: "We Bought Them First.",
     description:

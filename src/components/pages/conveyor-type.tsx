@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { ConveyorBreadcrumb } from "@/components/ui/conveyor-breadcrumb";
@@ -124,6 +125,16 @@ export function ConveyorTypeContent({ page }: { page: ConveyorTypePage }) {
                 </AnimatedSection>
               ))}
             </div>
+          )}
+          {page.whitePaper && (
+            <AnimatedSection>
+              <p className="mt-8 font-sans text-[0.9rem] text-text-body leading-[1.6]">
+                {page.whitePaper.lead}{" "}
+                <Link href={page.whitePaper.href} className="text-accent-text font-semibold hover:text-text-strong transition-colors">
+                  read the white paper, {page.whitePaper.title} &rarr;
+                </Link>
+              </p>
+            </AnimatedSection>
           )}
         </div>
       </section>
