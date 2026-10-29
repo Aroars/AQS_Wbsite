@@ -86,7 +86,7 @@ export const blogPosts: BlogPost[] = [
     slug: "ice-cream-lid-match-inspection",
     title: "The Lid Says Vanilla. Does the Tub Agree?",
     description:
-      "A VeriPak inspection system reads the lid and sidewall UPC of every ice cream tub at 65 per minute, rejects mismatches, and logs the rest.",
+      "A VeriPak visual quality assurance system reads the lid and sidewall UPC of every ice cream tub at 65 per minute, rejects mismatches, and logs the rest.",
     category: "White Paper",
     categoryColor: "#4D9FFF",
     readTime: "9 min",

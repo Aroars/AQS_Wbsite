@@ -183,7 +183,7 @@ export default function PostIceCreamLidMatch() {
       </P>
 
       <Figure
-        src="/images/blog/lid-match-installed-line.jpg"
+        src="/images/blog/lid-match-installed-line-retouched.jpg"
         alt="Lid-match inspection system installed on an ice cream packaging line with a reject table beside it"
         caption="Installed between the lidder and the case packer. Reject table at left, downstream conveyor at right."
         width={1800}
