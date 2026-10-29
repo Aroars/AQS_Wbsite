@@ -93,7 +93,7 @@ export const blogPosts: BlogPost[] = [
     date: "September 2026",
     isoDate: "2026-09-24",
     content: "ice-cream-lid-match-inspection",
-    image: { src: "/images/blog/lid-match-inspection-system-shop.jpg", alt: "Stainless lid-match inspection system with controls enclosure and inspection shroud" },
+    image: { src: "/images/blog/lid-match-inspection-system-shop-veripak.jpg", alt: "Stainless VeriPak lid-match inspection system with controls enclosure, touchscreen, stack light, and inspection shroud on one frame" },
     pdf: "/whitepapers/aqs-white-paper-veripak-ice-cream-lid-match.pdf",
     tools: ["conveyor-speed-calculator", "product-giveaway-calculator"],
   },
