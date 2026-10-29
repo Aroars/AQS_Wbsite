@@ -13,11 +13,11 @@ export default function PostIceCreamLidMatch() {
       </Lead>
 
       <Figure
-        src="/images/blog/lid-match-inspection-system-shop.jpg"
-        alt="Stainless lid-match inspection system with controls enclosure, touchscreen, and inspection shroud on one frame"
-        caption="The lid-match inspection system before shipment: split-belt conveyor, inspection shroud, and controls enclosure on one frame. The system was commissioned under the EvacuPak name and is now supported as part of the VeriPak family; the machine in these photos carries the earlier badge."
+        src="/images/blog/lid-match-inspection-system-shop-veripak.jpg"
+        alt="Stainless VeriPak lid-match inspection system with controls enclosure, touchscreen, stack light, and inspection shroud on one frame"
+        caption="VeriPak lid-match system on the shop floor before shipment, designed by the AQS engineering team. The split-belt conveyor, inspection shroud, and controls enclosure share one frame, and the operator touchscreen handles flavor changes from a single dropdown."
         width={1800}
-        height={1294}
+        height={1350}
         priority
       />
 
@@ -136,6 +136,14 @@ export default function PostIceCreamLidMatch() {
         identifier, and the checkweigh setpoints, and recipes can be browsed on the HMI while the current one is still
         running.
       </P>
+
+      <Figure
+        src="/images/blog/lid-match-hmi-closeup.jpg"
+        alt="Close-up of the operator touchscreen with start, stop, and reset buttons on the lid-match system controls enclosure"
+        caption="Operator touchscreen on the VeriPak lid-match system. Conveyor and inspection are started from the HMI, and the stack light shows reject, underweight, barcode, and inspection status."
+        width={800}
+        height={800}
+      />
 
       <H2>Verification Is the Product</H2>
       <P>
