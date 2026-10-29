@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   AnimatedSection,
@@ -17,6 +17,14 @@ import {
   REP_CYAN,
   REP_GOLD,
 } from "@/data/reps";
+import {
+  CHECK_FAILED,
+  HoneypotField,
+  TurnstileSlot,
+  honeypotValue,
+  useFormAge,
+  type TurnstileHandle,
+} from "@/components/ui/form-guard";
 
 /* ================================================
    Reason Card (hover lift)
@@ -235,12 +243,25 @@ function RepContactForm() {
   const [status, setStatus] = useState<
     "idle" | "sending" | "sent" | "error"
   >("idle");
+  const [checkError, setCheckError] = useState<string | null>(null);
+  const turnstile = useRef<TurnstileHandle>(null);
+  const formAge = useFormAge();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name || !form.email) return;
+    const honeypot = honeypotValue(e.currentTarget);
+    const elapsedMs = formAge();
     setStatus("sending");
+    setCheckError(null);
     try {
+      const check = await turnstile.current?.getToken();
+      if (check?.error) {
+        setCheckError(check.error);
+        setStatus("error");
+        return;
+      }
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -249,11 +270,22 @@ function RepContactForm() {
           email: form.email,
           company: form.company,
           message: `[Rep Inquiry]\nTerritory: ${form.company}\n\n${form.message}`,
+          company_website: honeypot,
+          elapsedMs,
+          turnstileToken: check?.token,
         }),
       });
-      setStatus(res.ok ? "sent" : "error");
+      if (res.ok) {
+        setStatus("sent");
+      } else {
+        const data = await res.json().catch(() => null);
+        if (data?.code === "turnstile") setCheckError(CHECK_FAILED);
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
+    } finally {
+      turnstile.current?.reset();
     }
   };
 
@@ -359,6 +391,8 @@ function RepContactForm() {
                   />
                 </div>
               </div>
+              <HoneypotField />
+              <TurnstileSlot ref={turnstile} />
               <div className="flex gap-4 items-center flex-wrap">
                 <button
                   type="submit"
@@ -380,7 +414,7 @@ function RepContactForm() {
               </div>
               {status === "error" && (
                 <p className="font-sans text-text-strong text-[0.84rem] mt-3 rounded-md border border-accent-red/30 bg-accent-red/10 px-4 py-3">
-                  Something went wrong. Please try again or email us directly.
+                  {checkError ?? "Something went wrong. Please try again or email us directly."}
                 </p>
               )}
             </form>
