@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { checkContact } from "@/lib/contact-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -105,14 +106,22 @@ function buildInternalEmail(
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, company, message, solutions } = body;
+    const guard = await checkContact(body, {
+      secret: process.env.TURNSTILE_SECRET_KEY?.trim(),
+      ip: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(),
+    });
 
-    if (!name || !email || !company || !message) {
+    if (guard.action === "drop") {
+      return NextResponse.json({ success: true });
+    }
+    if (guard.action === "reject") {
       return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
+        { error: guard.error, code: guard.code },
+        { status: guard.status }
       );
     }
+    const { fields, html } = guard;
+    const { email, company } = fields;
 
     if (!process.env.RESEND_API_KEY) {
       console.error("Missing RESEND_API_KEY env var");
@@ -124,11 +133,6 @@ export async function POST(request: Request) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const solutionList =
-      Array.isArray(solutions) && solutions.length > 0
-        ? solutions.join(", ")
-        : "Not specified";
-
     // Send both emails in parallel
     const [internal, confirmation] = await Promise.all([
       // Email 1: Internal notification to AQS team
@@ -137,7 +141,7 @@ export async function POST(request: Request) {
         to: ["info@automatedqs.com"],
         replyTo: email,
         subject: `New Quote Request — ${company}`,
-        html: buildInternalEmail(name, email, phone, company, message, solutionList),
+        html: buildInternalEmail(html.name, html.email, html.phone, html.company, html.message, html.solutionList),
       }),
       // Email 2: Confirmation to the user
       resend.emails.send({
@@ -145,7 +149,7 @@ export async function POST(request: Request) {
         to: [email],
         replyTo: "info@automatedqs.com",
         subject: "We received your request — AQS",
-        html: buildConfirmationEmail(name, solutionList),
+        html: buildConfirmationEmail(html.name, html.solutionList),
       }),
     ]);
 
