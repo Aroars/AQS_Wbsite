@@ -1,9 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import {
+  CHECK_FAILED,
+  HoneypotField,
+  TurnstileSlot,
+  honeypotValue,
+  useFormAge,
+  type TurnstileHandle,
+} from "@/components/ui/form-guard";
 
 const solutionOptions = [
   "VeriPak SCADA",
@@ -26,6 +34,9 @@ export function ContactContent() {
     solutions: [] as string[],
   });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [checkError, setCheckError] = useState<string | null>(null);
+  const turnstile = useRef<TurnstileHandle>(null);
+  const formAge = useFormAge();
 
   const toggleSolution = (s: string) => {
     setFormData((prev) => ({
@@ -36,25 +47,44 @@ export function ContactContent() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const honeypot = honeypotValue(e.currentTarget);
+    const elapsedMs = formAge();
     setStatus("sending");
+    setCheckError(null);
 
     try {
+      const check = await turnstile.current?.getToken();
+      if (check?.error) {
+        setCheckError(check.error);
+        setStatus("error");
+        return;
+      }
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          company_website: honeypot,
+          elapsedMs,
+          turnstileToken: check?.token,
+        }),
       });
 
       if (res.ok) {
         setStatus("success");
         setFormData({ name: "", email: "", phone: "", company: "", message: "", solutions: [] });
       } else {
+        const data = await res.json().catch(() => null);
+        if (data?.code === "turnstile") setCheckError(CHECK_FAILED);
         setStatus("error");
       }
     } catch {
       setStatus("error");
+    } finally {
+      turnstile.current?.reset();
     }
   };
 
@@ -194,12 +224,19 @@ export function ContactContent() {
                 />
               </div>
 
+              <HoneypotField />
+              <TurnstileSlot ref={turnstile} />
+
               {status === "error" && (
                 <p className="font-sans text-[0.85rem] text-text-strong rounded-lg border border-accent-red/30 bg-accent-red/10 px-4 py-3">
-                  Something went wrong. Please email us directly at{" "}
-                  <a href="mailto:info@automatedqs.com" className="underline">
-                    info@automatedqs.com
-                  </a>
+                  {checkError ?? (
+                    <>
+                      Something went wrong. Please email us directly at{" "}
+                      <a href="mailto:info@automatedqs.com" className="underline">
+                        info@automatedqs.com
+                      </a>
+                    </>
+                  )}
                 </p>
               )}
 
