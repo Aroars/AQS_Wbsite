@@ -45,7 +45,6 @@ export const products = [
       "Continuous TIG-welded 304/316 mirror-polish stainless \u2014 zero harborage points",
       "IP54 through full IP69K high-pressure caustic washdown",
       "Belt, MDR, chain, incline/decline, accumulation, arctic-rated, merge/divert",
-      "Instant quoting via the rep proposal tool \u2014 hand the customer a number same day",
     ],
   },
   {
@@ -64,42 +63,8 @@ export const products = [
 export const partnerSteps = [
   { num: "01", accent: REP_CYAN,  title: "Register Your Interest",          body: "Fill out the form below or email sales@automatedqs.com. Tell us about your territory, your current line card, and the industries you call on." },
   { num: "02", accent: REP_GOLD,  title: "Discovery Call with AQS",         body: "We\u2019ll walk through the product lineup, discuss your typical customer base, and confirm fit. If it\u2019s a good match, we move fast \u2014 no lengthy approval process." },
-  { num: "03", accent: REP_GREEN, title: "Rep Agreement & Onboarding",      body: "You\u2019ll receive a territory agreement, access to the rep portal and quoting tools, full marketing materials, and a dedicated AQS engineering contact for technical support." },
+  { num: "03", accent: REP_GREEN, title: "Rep Agreement & Onboarding",      body: "You\u2019ll receive a territory agreement, full marketing materials, and a dedicated AQS engineering contact for technical support." },
   { num: "04", accent: REP_BLUE,  title: "Bring Us Your First Opportunity", body: "Introduce us to a prospect. AQS supports the technical side \u2014 site review, system recommendation, proposal \u2014 while you manage the relationship. We close it together." },
-];
-
-// ─── Rep tools ───
-export const repTools = [
-  {
-    icon: "\uD83D\uDCC8",
-    title: "Project ROI Calculator",
-    accent: REP_CYAN,
-    tag: "Rep Portal",
-    url: "apps.automatedqs.com",
-    urlPath: "/roi",
-    body: "Walk into any customer meeting and leave with a number. Input their line speed, downtime history, audit labor hours, and recall exposure \u2014 the tool builds a payback model on the spot. When the prospect asks \u2018what\u2019s this worth to us?\u2019, you have the answer before they finish the sentence.",
-    features: [
-      "Calculates payback period, year-1 ROI, and 5-year value",
-      "Inputs: throughput, downtime events, audit labor, recall history",
-      "Supports VeriPak, IntelliPak, and conveyor system scenarios",
-      "Generates a branded PDF summary to share or leave behind",
-    ],
-  },
-  {
-    icon: "\uD83C\uDFD7\uFE0F",
-    title: "Conveyor Proposal Tool",
-    accent: REP_GOLD,
-    tag: "Rep Portal",
-    url: "apps.automatedqs.com",
-    urlPath: "/conveyors",
-    body: "Configure a custom conveyor system and hand the customer a priced proposal the same day you walk their line. Select conveyor type, dimensions, washdown rating, drive technology, and controls package \u2014 the tool prices it against approved AQS rate tables and generates a formatted proposal.",
-    features: [
-      "Full configurator: belt, MDR, chain, incline, arctic, merge/divert",
-      "Select material grade (304/316), IP rating, drive, and controls package",
-      "Instant pricing from approved AQS rate tables",
-      "Outputs a formatted project proposal ready for customer review",
-    ],
-  },
 ];
 
 // ─── Downloads ───

@@ -91,7 +91,7 @@ export const pageMetadata = {
   reps: {
     title: "Sales Representative Resources | AQS Partner Portal",
     description:
-      "Resources and information for authorized AQS sales representatives. Access product specs, quoting tools, and sales support materials.",
+      "Resources and information for authorized AQS sales representatives. Access product specs and sales support materials.",
   },
   about: {
     title: "About AQS | Packaging Automation Engineers in Nampa, Idaho",
@@ -102,11 +102,6 @@ export const pageMetadata = {
     title: "Get a Quote | Contact Automated Quality Solutions",
     description:
       "Request a quote for VeriPak SCADA, IntelliPak conveyors, custom sanitary conveyors, robotics, or leak detection. Contact AQS at (208) 297-4420 or sales@automatedqs.com.",
-  },
-  apps: {
-    title: "Digital Tools & Apps | Conveyor Quoting & ROI Calculator | AQS",
-    description:
-      "AQS builds purpose-built digital tools for packaging automation sales — including a conveyor quote builder with 3D preview and an ROI projection calculator for capital equipment decisions.",
   },
   toolbox: {
     title: "Free Engineering Toolbox — Conveyor Calculators | AQS",

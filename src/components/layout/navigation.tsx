@@ -224,36 +224,6 @@ export function Navigation() {
               </AnimatePresence>
             </div>
 
-            <Link
-              href="/apps"
-              className={`font-sans font-medium transition-colors ${
-                pathname === "/apps"
-                  ? "text-accent-text"
-                  : "text-text-nav hover:text-text-strong"
-              }`}
-              style={{
-                fontSize: scrolled ? "0.84rem" : "0.95rem",
-                transition: "font-size 250ms ease",
-              }}
-            >
-              Apps
-            </Link>
-
-            <Link
-              href="/toolbox"
-              className={`font-sans font-medium transition-colors ${
-                pathname === "/toolbox"
-                  ? "text-accent-text"
-                  : "text-text-nav hover:text-text-strong"
-              }`}
-              style={{
-                fontSize: scrolled ? "0.84rem" : "0.95rem",
-                transition: "font-size 250ms ease",
-              }}
-            >
-              Toolbox
-            </Link>
-
             <ThemeToggle />
 
             <MagneticButton
@@ -360,20 +330,6 @@ export function Navigation() {
                   </Link>
                 ))}
               </div>
-              <Link
-                href="/apps"
-                className="font-sans text-lg font-medium text-text-strong"
-                onClick={() => setMobileOpen(false)}
-              >
-                Apps
-              </Link>
-              <Link
-                href="/toolbox"
-                className="font-sans text-lg font-medium text-text-strong"
-                onClick={() => setMobileOpen(false)}
-              >
-                Toolbox
-              </Link>
               <div className="flex items-center gap-3 mt-4 pb-10">
                 <ThemeToggle />
                 <Link

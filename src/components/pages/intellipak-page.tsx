@@ -466,14 +466,6 @@ export function IntelliPakContent() {
               >
                 Start a Project Review &rarr;
               </Link>
-              <a
-                href="https://apps.automatedqs.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans font-semibold text-[15px] px-8 py-3.5 rounded-lg border border-border text-accent-text hover:border-accent-text transition-all duration-200"
-              >
-                Run the ROI Calculator &rarr;
-              </a>
             </div>
           </AnimatedSection>
         </div>

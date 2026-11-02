@@ -19,21 +19,11 @@ const companyLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const toolLinks = [
-  { label: "Belt Pull Calculator", href: "/toolbox/belt-pull-calculator" },
-  { label: "Conveyor Speed Calculator", href: "/toolbox/conveyor-speed-calculator" },
-  { label: "Throughput Calculator", href: "/toolbox/conveyor-throughput-calculator" },
-  { label: "MDR Motorized Roller Selection", href: "/toolbox/mdr-motorized-roller-selection" },
-  { label: "Motor Sizing Calculator", href: "/toolbox/conveyor-motor-sizing-calculator" },
-  { label: "Product Giveaway Calculator", href: "/toolbox/product-giveaway-calculator" },
-  { label: "All engineering tools →", href: "/toolbox" },
-];
-
 /* Dark in both themes: brand tokens only (plan section 5j). */
 export function Footer() {
   return (
     <footer className="bg-brand-navy-deep border-t border-[#1E3048] pt-11 pb-8 px-8">
-      <div className="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1.1fr_1fr_1fr] gap-7">
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-7">
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -67,22 +57,6 @@ export function Footer() {
               className={`block font-sans text-[#CBD5E1] hover:text-white transition-colors mb-1.5 ${
                 link.sub ? "pl-3 text-[0.72rem]" : "text-[0.78rem]"
               }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Engineering Tools */}
-        <div>
-          <div className="font-mono text-[0.58rem] text-brand-cyan tracking-[0.12em] uppercase mb-3">
-            Engineering Tools
-          </div>
-          {toolLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block font-sans text-[0.78rem] text-[#CBD5E1] hover:text-white transition-colors mb-1.5"
             >
               {link.label}
             </Link>
