@@ -50,7 +50,6 @@
 - Tool-less disassembly with quick-release belt lifters
 - FDA-approved belting; USDA accepted; designed to 3-A Sanitary Standards
 - IP54 through IP69K protection ratings
-- Free sizing calculators (no login): belt pull (https://automatedqs.com/toolbox/belt-pull-calculator), conveyor speed (https://automatedqs.com/toolbox/conveyor-speed-calculator), throughput and belt load (https://automatedqs.com/toolbox/conveyor-throughput-calculator), motor sizing (https://automatedqs.com/toolbox/conveyor-motor-sizing-calculator), MDR roller selection (https://automatedqs.com/toolbox/mdr-motorized-roller-selection), incline geometry (https://automatedqs.com/toolbox/incline-conveyor-calculator); full toolbox at https://automatedqs.com/toolbox
 
 ### EvacuPak — Liquid Recovery System
 - URL: https://www.automatedqs.com/solutions/evacupak

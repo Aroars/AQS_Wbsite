@@ -115,7 +115,7 @@ export const categories: ConveyorCategory[] = [
       },
       {
         q: "How steep can an incline conveyor run?",
-        a: "Without cleats the limit is the product's friction on the belt. Cleated or sidewall belts carry product up much steeper angles, and Z-frame designs keep the infeed and discharge horizontal. The incline calculator in the toolbox works the geometry for a given rise and floor space.",
+        a: "Without cleats the limit is the product's friction on the belt. Cleated or sidewall belts carry product up much steeper angles, and Z-frame designs keep the infeed and discharge horizontal.",
       },
     ],
     types: [
@@ -620,7 +620,6 @@ export const conveyorProjects: ConveyorProject[] = [
         { label: "Pallet Conveyors", href: "/solutions/conveyors/pallet" },
         { label: "Zero-Pressure Accumulation", href: "/solutions/conveyors/mdr#accumulation" },
         { label: "Freezer & Arctic Conveyors", href: "/solutions/conveyors/belt#freezer-arctic" },
-        { label: "MDR Roller Selection Chart", href: "/toolbox/mdr-motorized-roller-selection" },
         { label: "VeriPak SCADA", href: "/solutions/veripak" },
       ],
       about: ["24V MDR conveyor", "Pallet conveyor", "Zero-pressure accumulation", "Freezer conveyor", "Tote filling"],

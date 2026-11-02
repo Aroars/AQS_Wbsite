@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
-import { ToolboxLinks } from "@/components/sections/toolbox-links";
 import { ConveyorsHubContent } from "@/components/pages/conveyors-hub";
 import { SystemArchitecture } from "@/components/sections/system-architecture";
 import { FAQSection } from "@/components/sections/faq-section";
@@ -38,7 +37,6 @@ export default function ConveyorsPage() {
       />
       <Navigation />
       <ConveyorsHubContent />
-      <ToolboxLinks tools={['belt-pull-calculator', 'conveyor-speed-calculator', 'conveyor-throughput-calculator', 'mdr-motorized-roller-selection', 'incline-conveyor-calculator', 'uhmw-wearstrip-span-calculator']} />
       <SystemArchitecture currentProduct="conveyors" />
       <FAQSection items={conveyorFAQs} />
       <ConveyorCTA />

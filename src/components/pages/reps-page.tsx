@@ -11,7 +11,6 @@ import {
   reasons,
   products,
   partnerSteps,
-  repTools,
   downloads,
   productPills,
   REP_CYAN,
@@ -53,108 +52,6 @@ function ReasonCard({
       <p className="font-sans text-[0.875rem] text-text-body leading-[1.75] m-0">
         {body}
       </p>
-    </div>
-  );
-}
-
-/* ================================================
-   Tool Card
-   ================================================ */
-function ToolCard({
-  icon,
-  title,
-  accent,
-  tag,
-  url,
-  urlPath,
-  body,
-  features,
-}: {
-  icon: string;
-  title: string;
-  accent: string;
-  tag: string;
-  url: string;
-  urlPath: string;
-  body: string;
-  features: string[];
-}) {
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      className="rounded-xl p-9 relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
-      style={{
-        background: hov ? "var(--surface-card-hover)" : "var(--surface-card)",
-        border: `1px solid ${hov ? accent + "4D" : "var(--border)"}`,
-        boxShadow: hov
-          ? "0 20px 40px rgba(10,22,40,0.14)"
-          : "0 4px 12px rgba(10,22,40,0.06)",
-      }}
-    >
-      {/* Corner glow */}
-      <div
-        className="absolute top-0 right-0 w-[100px] h-[100px] pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at top right, ${accent}10 0%, transparent 70%)`,
-        }}
-      />
-      <div className="flex justify-between items-start mb-5">
-        <div
-          className="w-12 h-12 rounded-[10px] flex items-center justify-center text-[1.4rem]"
-          style={{
-            background: `${accent}18`,
-            border: `1px solid ${accent}30`,
-          }}
-        >
-          {icon}
-        </div>
-        <span
-          className="font-mono text-[0.62rem] uppercase tracking-[0.14em] px-2.5 py-0.5 rounded-full text-accent-text"
-          style={{
-            background: `${accent}14`,
-            border: `1px solid ${accent}28`,
-          }}
-        >
-          {tag}
-        </span>
-      </div>
-      <h3 className="font-sans text-[1.35rem] font-extrabold text-text-strong mb-1.5">
-        {title}
-      </h3>
-      <p className="font-mono text-[0.74rem] tracking-[0.06em] mb-5 text-accent-text">
-        {url}
-        <span className="opacity-60">{urlPath}</span>
-      </p>
-      <p className="font-sans text-[0.88rem] text-text-body leading-[1.75] mb-6">
-        {body}
-      </p>
-      <div className="flex flex-col gap-2.5 mb-7">
-        {features.map((f, i) => (
-          <div key={i} className="flex gap-2.5">
-            <span className="shrink-0 leading-[1.55] text-accent-text">
-              &#x2713;
-            </span>
-            <span className="font-sans text-[0.84rem] text-text-body leading-[1.6]">
-              {f}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-[0.84rem] font-bold tracking-[0.03em]"
-        style={{
-          background: accent,
-          color: "var(--brand-navy-deep)",
-          boxShadow: hov
-            ? `0 4px 20px ${accent}45`
-            : `0 0 14px ${accent}25`,
-          transition: "box-shadow 0.3s",
-        }}
-      >
-        Access in Rep Portal &rarr;
-      </div>
     </div>
   );
 }
@@ -650,72 +547,6 @@ export function RepsPageContent() {
               </div>
             </AnimatedSection>
           ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          REP TOOLS
-          ══════════════════════════════════════════ */}
-      <section
-        id="tools"
-        className="py-[88px] px-8 relative overflow-hidden"
-      >
-        <div className="max-w-[1100px] mx-auto relative z-10">
-          <AnimatedSection>
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 mb-3"
-              style={{
-                background: `${REP_GOLD}12`,
-                border: `1px solid ${REP_GOLD}30`,
-              }}
-            >
-              <span className="font-mono text-[0.62rem] tracking-[0.18em] uppercase text-accent-text">
-                Rep-Exclusive Access
-              </span>
-            </div>
-            <h2 className="font-sans font-extrabold text-[clamp(1.7rem,3.5vw,2.6rem)] text-text-strong mb-3.5">
-              Tools Built to Help You Close
-            </h2>
-            <p className="font-sans text-text-dim leading-[1.7] max-w-[560px] mb-13">
-              Authorized AQS reps get access to two web tools that turn customer
-              conversations into proposals &mdash; without waiting on
-              engineering or a quote desk.
-            </p>
-          </AnimatedSection>
-
-          <StaggerContainer className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {repTools.map((t, i) => (
-              <StaggerItem key={i}>
-                <ToolCard {...t} />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-
-          <AnimatedSection delay={0.15}>
-            <div
-              className="mt-6 px-6 py-4 rounded-lg flex items-center gap-3 flex-wrap"
-              style={{
-                background: "var(--surface-card)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <span className="text-[1.1rem]">&#x1F512;</span>
-              <p className="font-sans text-[0.84rem] text-text-dim leading-[1.65] m-0 flex-1">
-                <strong className="text-text-body">
-                  Rep credentials required.
-                </strong>{" "}
-                Both tools live in the AQS Rep Portal. You&apos;ll receive login
-                credentials and a full tool walkthrough as part of your
-                onboarding. Questions?{" "}
-                <a
-                  href="mailto:sales@automatedqs.com"
-                  className="no-underline text-accent-text"
-                >
-                  sales@automatedqs.com
-                </a>
-              </p>
-            </div>
-          </AnimatedSection>
         </div>
       </section>
 

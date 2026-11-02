@@ -1,25 +1,62 @@
 # Automated Quality Solutions — robots.txt
 # https://automatedqs.com
 
+# Toolbox, calculators, and /apps are hidden while TOOLBOX_ENABLED is false in next.config.ts.
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/
 
 # Sitemap
 Sitemap: https://automatedqs.com/sitemap.xml
 
-# AI Crawlers — allowed for maximum visibility
+# AI Crawlers — allowed for maximum visibility, except the hidden tool routes
 User-agent: GPTBot
 Allow: /
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/
 
 User-agent: Bytespider
 Allow: /
+Disallow: /toolbox
+Disallow: /toolbox/
+Disallow: /calculators
+Disallow: /calculators/
+Disallow: /apps
+Disallow: /apps/

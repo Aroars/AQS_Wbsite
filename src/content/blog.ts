@@ -7,8 +7,6 @@ export interface BlogPost {
   readTime: string;
   date: string;
   content: string;
-  /** Toolbox slugs worth linking from this post ("Size it yourself" callout) */
-  tools?: string[];
   /** ISO date for Article schema; `date` stays the display string */
   isoDate?: string;
   /** Social preview image (Open Graph) and Article schema image */
@@ -35,7 +33,6 @@ export const blogPosts: BlogPost[] = [
     content: "three-ways-to-hold-up-a-conveyor",
     image: { src: "/images/blog/spline-s-curve-conveyor-render.jpg", alt: "Engineering render of an AQS spline S-curve conveyor with a blue side-flexing modular belt through two opposed turns and a below-deck drive" },
     pdf: "/whitepapers/aqs-white-paper-three-ways-to-hold-up-a-conveyor.pdf",
-    tools: ["belt-pull-calculator", "uhmw-wearstrip-span-calculator", "conveyor-speed-calculator", "sheet-metal-gauge-chart"],
   },
   {
     slug: "we-bought-them-first",
@@ -50,7 +47,6 @@ export const blogPosts: BlogPost[] = [
     content: "we-bought-them-first",
     image: { src: "/images/blog/conveyor-origin-modular-belt-close-up.jpg", alt: "Sanitary modular belt conveyor with a continuous stainless frame, hygienic leveling feet, and quick-adjust guide rails" },
     pdf: "/whitepapers/aqs-white-paper-we-bought-them-first.pdf",
-    tools: ["mdr-motorized-roller-selection", "belt-pull-calculator", "accumulation-conveyor-calculator"],
   },
   {
     slug: "photo-eyes-retroreflective-vs-diffuse",
@@ -65,7 +61,6 @@ export const blogPosts: BlogPost[] = [
     content: "photo-eyes-retroreflective-vs-diffuse",
     image: { src: "/images/blog/photo-eyes-blue-pallet-on-mdr-line.jpg", alt: "A blue pooled rental pallet staged on a stainless 24 VDC MDR pallet conveyor" },
     pdf: "/whitepapers/aqs-white-paper-photo-eyes-retroreflective.pdf",
-    tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "light-curtain-safety-distance-calculator"],
   },
   {
     slug: "veripak-production-quality-platform",
@@ -80,7 +75,6 @@ export const blogPosts: BlogPost[] = [
     content: "veripak-production-quality-platform",
     image: { src: "/images/blog/veripak-platform-architecture.jpg", alt: "VeriPak Production Quality Platform architecture diagram" },
     pdf: "/whitepapers/aqs-white-paper-veripak-production-quality-platform.pdf",
-    tools: ["product-giveaway-calculator", "packaging-line-downtime-cost-calculator"],
   },
   {
     slug: "ice-cream-lid-match-inspection",
@@ -95,7 +89,6 @@ export const blogPosts: BlogPost[] = [
     content: "ice-cream-lid-match-inspection",
     image: { src: "/images/blog/lid-match-inspection-system-shop-veripak.jpg", alt: "Stainless VeriPak lid-match inspection system with controls enclosure, touchscreen, stack light, and inspection shroud on one frame" },
     pdf: "/whitepapers/aqs-white-paper-veripak-ice-cream-lid-match.pdf",
-    tools: ["conveyor-speed-calculator", "product-giveaway-calculator"],
   },
   {
     slug: "automated-tote-filling-frozen-vegetables",
@@ -110,7 +103,6 @@ export const blogPosts: BlogPost[] = [
     content: "automated-tote-filling-frozen-vegetables",
     image: { src: "/images/blog/tote-filling-system-24v-mdr-pallet-loop.jpg", alt: "Stainless 24 VDC MDR pallet conveyor circuit with swept-radius corners and a scale deck" },
     pdf: "/whitepapers/aqs-white-paper-densification-tote-filling.pdf",
-    tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "conveyor-throughput-calculator"],
   },
   {
     slug: "what-is-packaging-scada",
@@ -134,7 +126,6 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min",
     date: "March 2026",
     content: "mag-drive-vs-conventional-gearbox",
-    tools: ["mdr-motorized-roller-selection", "belt-pull-calculator", "conveyor-speed-calculator", "conveyor-throughput-calculator"],
   },
   {
     slug: "mechanical-vs-vision-leak-detection",

@@ -1,11 +1,29 @@
 import type { NextConfig } from "next";
 
+// Engineering Toolbox, ROI calculator, and the /apps index.
+// false sends those routes home with a 307 so browsers do not cache a permanent redirect.
+// Flip to true to serve the pages again.
+const TOOLBOX_ENABLED = false;
+
+const HIDDEN_TOOL_REDIRECTS: { source: string; destination: string; permanent: false }[] =
+  TOOLBOX_ENABLED
+    ? []
+    : [
+        "/toolbox",
+        "/toolbox/:path*",
+        "/calculators",
+        "/calculators/:path*",
+        "/apps",
+        "/apps/:path*",
+      ].map((source) => ({ source, destination: "/", permanent: false }));
+
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {
     return [
+      ...HIDDEN_TOOL_REDIRECTS,
       // Toolbox: search-first slugs (2026-09)
       {
         source: "/toolbox/wearstrip-span-calculator",

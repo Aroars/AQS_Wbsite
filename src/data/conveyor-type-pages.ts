@@ -34,8 +34,6 @@ export interface ConveyorTypePage {
   /** Spotlight slug; the card shows only if that project has a spotlight body */
   relatedProject?: string;
   faq: FAQItem[];
-  /** Toolbox page slugs for the "Size It Yourself" strip */
-  tools: string[];
   /** A white paper on this type, linked under the construction cards */
   whitePaper?: { lead: string; title: string; href: string };
 }
@@ -60,7 +58,7 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       "A radius belt conveyor (also called a curved belt conveyor) carries product around a turn on a single continuous belt, so a 45°, 90°, 180°, or S-curve path needs no transfer plate, no gap, and no second drive.",
     intro: [
       "AQS builds radius conveyors on continuous TIG-welded 304 or 316 stainless frames with side-flexing modular belt from Intralox or Habasit, or a radius flat belt where the product needs a smooth surface. The frame is sloped to shed water, the guide rails are curved sanitary stainless, and the belt rides on curved UHMW wearstrips — the same construction standard as every other AQS conveyor, designed to 3-A Sanitary Standards with FDA-approved contact materials.",
-      "The inside radius is set by the belt's collapse factor, not by the frame, so the tightest turn a line can make depends on the belt AQS selects for the product. That choice, and the pull the drive has to overcome through the turn, is worked in the belt pull calculator below.",
+      "The inside radius is set by the belt's collapse factor, not by the frame, so the tightest turn a line can make depends on the belt AQS selects for the product. That choice, and the pull the drive has to overcome through the turn, is set with the belt.",
     ],
     whereUsed: [
       { context: "Line reversals", detail: "A 180° turn brings product back alongside the infeed, so a long line fits a short room and one operator can reach both ends." },
@@ -103,11 +101,10 @@ export const conveyorTypePages: ConveyorTypePage[] = [
     },
     faq: [
       { q: "Why use a curve instead of a transfer between two straight conveyors?", a: "A transfer is a gap, a dead plate, and usually a second drive — three things that catch product, collect residue, and need their own cleaning. A radius belt conveyor carries product through the turn on one belt with one drive, so there is nothing to tumble on and nothing extra to wash." },
-      { q: "How tight can the turn be?", a: "The minimum inside radius is the belt's collapse factor multiplied by its width. A 12 in side-flexing belt with a collapse factor of 2.2 needs a 26.4 in inside radius. AQS picks the belt for the product first, then sets the turn; the belt pull calculator flags a radius below the belt's minimum." },
+      { q: "How tight can the turn be?", a: "The minimum inside radius is the belt's collapse factor multiplied by its width. A 12 in side-flexing belt with a collapse factor of 2.2 needs a 26.4 in inside radius. AQS picks the belt for the product first, then sets the turn, and flags a radius below the belt's minimum." },
       { q: "Can a radius belt conveyor be washdown-rated?", a: "Yes. AQS builds radius conveyors on continuous TIG-welded 304 or 316 stainless frames with sloped members, IP65 washdown components as standard and IP69K where the room is hosed at high pressure, designed to 3-A Sanitary Standards." },
       { q: "Will it run in a freezer?", a: "Yes — freezer-rated builds use low-temperature seals and lubricants and manage condensation where the belt crosses into ambient air, rated to −40 °F." },
     ],
-    tools: ["belt-pull-calculator", "conveyor-speed-calculator", "uhmw-wearstrip-span-calculator", "modular-belt-drive-shaft-calculator"],
     whitePaper: {
       lead: "How the AQS spline backbone compares with welded box frames and tube spines on a curved, washdown conveyor:",
       title: "Three Ways to Hold Up a Conveyor",
@@ -128,7 +125,7 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       "An incline conveyor (or decline conveyor, running the other way) moves product between elevations on a cleated, textured, or sidewall belt, with a nosebar or Z-frame transition so product is not dropped at either end.",
     intro: [
       "AQS builds inclines as straight ramps, L-frames with a horizontal infeed, and Z-frames with horizontal infeed and discharge, on continuous TIG-welded 304 or 316 stainless frames designed to 3-A Sanitary Standards. Cleated and sidewall modular belts from Intralox or Habasit carry packaged product and loose bulk product up angles a plain belt cannot hold, and the frame is sloped so washdown water runs off instead of following the belt.",
-      "The angle, the cleat height and pitch, and the belt pull through the transitions are the numbers that decide whether the conveyor works. The incline calculator below solves the geometry from the rise and the floor space available; the belt pull calculator sizes the drive.",
+      "The angle, the cleat height and pitch, and the belt pull through the transitions are the numbers that decide whether the conveyor works. AQS sets the geometry from the rise and the floor space available, and sizes the drive from the belt pull.",
     ],
     whereUsed: [
       { context: "Floor to mezzanine", detail: "Lift product from a floor-level packer to an elevated inspection, casing, or palletizing level in the footprint of a ramp." },
@@ -164,12 +161,11 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { src: "/images/conveyors/full-line.jpg", alt: "Elevated stainless incline conveyor feeding a mezzanine in a food production facility", caption: "Floor-to-mezzanine incline on a packaging line." },
     ],
     faq: [
-      { q: "How steep can an incline conveyor run without cleats?", a: "It depends on the product's friction on the belt — a plain belt holds most packaged product only to a modest angle before it slides. Cleated belts carry product up much steeper angles and sidewall belts take loose product nearly vertical. The incline calculator works the geometry; AQS confirms the belt against the product." },
+      { q: "How steep can an incline conveyor run without cleats?", a: "It depends on the product's friction on the belt — a plain belt holds most packaged product only to a modest angle before it slides. Cleated belts carry product up much steeper angles and sidewall belts take loose product nearly vertical. AQS works the geometry from the rise and the floor space, then confirms the belt against the product." },
       { q: "Z-frame or straight incline?", a: "A Z-frame keeps both ends horizontal, so product loads flat off an upstream conveyor and discharges flat into the next machine. A straight incline or L-frame is shorter and cheaper where one end can sit at the angle." },
       { q: "Can it carry loose bulk product?", a: "Yes. Sidewall belts with cleats carry pieces, granules, and frozen product up to hoppers, weighers, and baggers; the belt is selected for the product's density and angle of repose." },
       { q: "Will it run in a freezer?", a: "Yes. Freezer-rated inclines use low-temperature seals and lubricants and manage condensation at the freezer-to-ambient transition, rated to −40 °F." },
     ],
-    tools: ["incline-conveyor-calculator", "belt-pull-calculator", "conveyor-motor-sizing-calculator", "conveyor-throughput-calculator"],
   },
   {
     family: "mdr",
@@ -227,7 +223,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "Is MDR conveyor washdown-rated?", a: "Yes. AQS builds MDR on continuous TIG-welded stainless frames with washdown-rated PulseRoller options, IP67 drive cards, and sealed connections, with IP69K-capable frames where the room is hosed at high pressure and temperature." },
       { q: "How much power does an MDR conveyor use?", a: "Only occupied zones run, so a long accumulation conveyor draws power in proportion to the product on it rather than its length. Each zone is a low-voltage 24 VDC drive, so the conveyor needs no motor starters or VFDs." },
     ],
-    tools: ["mdr-motorized-roller-selection", "accumulation-conveyor-calculator", "line-flow-simulator", "conveyor-throughput-calculator"],
   },
   {
     family: "belt",
@@ -280,7 +275,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "Can the belt run frosted?", a: "Yes. A running freezer belt carries frost every shift; the belt and cleats are chosen so frost does not change how they grip the product, and the open frame lets sanitation de-ice and wash it down quickly." },
       { q: "Do you build freezer-rated MDR and pallet conveyors?", a: "Yes. The same cold specification carries into 24V MDR zones and pallet conveyors for staging cases and pallets inside cold storage — AQS has run 24V MDR pallet loops in a 0–20 °F freezer area." },
     ],
-    tools: ["belt-pull-calculator", "incline-conveyor-calculator", "conveyor-motor-sizing-calculator", "friction-coefficient-table"],
   },
   {
     family: "mdr",
@@ -296,7 +290,7 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       "An accumulation conveyor (zero-pressure accumulation, or ZPA conveyor) buffers product between two machines that do not run at the same speed, holding cases, trays, or pallets in a queue without letting them push on each other.",
     intro: [
       "AQS builds accumulation as 24V MDR zones for cases and pallets — each zone stops its own roller when the zone ahead is full — and as belt or modular-belt accumulation for trays and packages that need a continuous surface. Both run on continuous TIG-welded stainless frames designed to 3-A Sanitary Standards, with washdown-rated PulseRoller options and IP67 drive cards where the room is hosed down.",
-      "The buffer is sized in seconds of downstream stoppage at the incoming rate, then turned into feet of conveyor at the product's closed-up pitch. The accumulation calculator below does that arithmetic; the line flow simulator shows what the whole line does when a downstream machine stops.",
+      "The buffer is sized in seconds of downstream stoppage at the incoming rate, then turned into feet of conveyor at the product's closed-up pitch.",
     ],
     whereUsed: [
       { context: "Ahead of a case packer or palletizer", detail: "Hold cases through a jam clear or a pallet change so the upstream line never stops." },
@@ -315,7 +309,7 @@ export const conveyorTypePages: ConveyorTypePage[] = [
     specs: [
       { label: "Types", value: "24V MDR zone accumulation (cases, pallets); modular belt accumulation (trays, packages)" },
       { label: "Release modes", value: "Singulated (one per zone) or slug (train release), selectable per zone" },
-      { label: "Buffer capacity", value: "Sized in seconds of stoppage at the incoming rate — see the accumulation calculator" },
+      { label: "Buffer capacity", value: "Sized in seconds of stoppage at the incoming rate" },
       { label: "Conveyor width", value: TODO },
       { label: "Zone length", value: TODO },
       { label: "Speed", value: TODO },
@@ -332,12 +326,11 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { src: "/images/conveyors/renders/serpentine-accumulation-conveyor-line-layout.png", alt: "Engineering render of a packaging line with a serpentine zero-pressure accumulation section, lane divider, and HMI between the infeed and outfeed", caption: "Serpentine accumulation folds minutes of buffer into a short room.", kind: "render" },
     ],
     faq: [
-      { q: "How long does an accumulation conveyor need to be?", a: "Rate × buffer time ÷ 60 × closed-up pitch. Buffering 30 seconds at 40 cases per minute with a 12 in pitch is 20 cases, or 20 ft of conveyor. The accumulation calculator in the toolbox works it from your numbers." },
+      { q: "How long does an accumulation conveyor need to be?", a: "Rate × buffer time ÷ 60 × closed-up pitch. Buffering 30 seconds at 40 cases per minute with a 12 in pitch is 20 cases, or 20 ft of conveyor." },
       { q: "What is zero-pressure accumulation?", a: "A queue in which each product stops before it touches the one ahead. In MDR, each zone stops its own roller when the next zone is occupied; in belt accumulation, a low-friction belt slips under product held against a stop. Either way nothing is crushed at the head of the line." },
       { q: "Singulated or slug release?", a: "Singulated releases one product per zone with a gap, which a labeler or scanner needs. Slug release lets the whole queue move as a train, which is faster into a palletizer. AQS sets it per zone and the downstream machine can switch it." },
       { q: "Is accumulation conveyor washdown-rated?", a: "Yes. AQS builds it on continuous TIG-welded stainless frames with washdown-rated PulseRoller options, IP67 drive cards, and sealed sensors, designed to 3-A Sanitary Standards." },
     ],
-    tools: ["accumulation-conveyor-calculator", "line-flow-simulator", "mdr-motorized-roller-selection", "conveyor-speed-calculator"],
   },
   {
     family: "mdr",
@@ -387,12 +380,11 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { src: "/images/conveyors/modular-belt-line.jpg", alt: "Long multi-lane sanitary modular belt line with guide rails staged in the AQS shop", caption: "Multi-lane sanitary line staged before shipment." },
     ],
     faq: [
-      { q: "What happens to the gap after a merge?", a: "Two lines' worth of product now share one belt, so either the belt runs faster or the gap closes. AQS sets which one happens for the downstream machine, and the line flow simulator in the toolbox shows the result before anything is built." },
+      { q: "What happens to the gap after a merge?", a: "Two lines' worth of product now share one belt, so either the belt runs faster or the gap closes. AQS sets which one happens for the downstream machine." },
       { q: "Pneumatic or servo divert?", a: "A pneumatic pusher is simple and fast for light cases going to one of two lanes. A servo lane divider positions every product to any lane at high rates with gentle handling, and it changes pattern per SKU without hardware changes." },
       { q: "Can the divert route on an inspection result?", a: "Yes. A VeriPak checkweigher, metal detector, or vision result reaches the PLC before the product reaches the divert, so the failed package is pulled to the reject lane and the event is logged." },
       { q: "Is a merge and divert conveyor washdown-rated?", a: "Yes. The divert mechanism, guarding, and the conveyors around it are continuous TIG-welded stainless with sealed pneumatics and sensors, designed to 3-A Sanitary Standards." },
     ],
-    tools: ["line-flow-simulator", "conveyor-speed-calculator", "accumulation-conveyor-calculator", "light-curtain-safety-distance-calculator"],
   },
   {
     family: "pallet",
@@ -443,7 +435,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "Can a chain conveyor be washdown-rated?", a: "Yes. Stainless chain and sprockets on a continuous TIG-welded stainless frame with sealed drives from IP65 to IP69K, designed to 3-A Sanitary Standards." },
       { q: "Does it integrate with the stretch wrapper and palletizer?", a: "Yes. The handshakes for the wrapper, strapper, labeler, pallet dispenser, and a KUKA or conventional palletizer run on the line's Allen-Bradley PLC, with VeriPak reporting when the plant wants pallet-level records." },
     ],
-    tools: ["conveyor-throughput-calculator", "conveyor-motor-sizing-calculator", "mdr-motorized-roller-selection", "machine-guard-opening-distance"],
   },
   {
     family: "belt",
@@ -505,7 +496,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       alt: "Sanitary belt conveyor with automatically adjusting guide rails closing in on a bottle",
       caption: "Auto-adjusting guide rails resetting for a container change.",
     },
-    tools: ["conveyor-speed-calculator", "belt-pull-calculator", "conveyor-throughput-calculator", "uhmw-wearstrip-span-calculator"],
   },
   {
     family: "belt",
@@ -533,7 +523,7 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { title: "Module selection", body: "Flat, raised-rib, friction-top, perforated, or side-flexing modules from Intralox or Habasit, in FDA-approved acetal, polypropylene, or polyethylene for the product and the temperature." },
       { title: "Sprocket drive", body: "Positively driven by stainless or plastic sprockets on a square shaft, so the belt tracks itself and never depends on friction to move." },
       { title: "Quick belt removal", body: "Pull the hinge rods and the belt lifts off for a full washdown of the wearstrips and frame." },
-      { title: "UHMW wearstrips", body: "The belt rides on UHMW carryway and return wearstrips laid out for the load; the wearstrip span calculator sizes them." },
+      { title: "UHMW wearstrips", body: "The belt rides on UHMW carryway and return wearstrips laid out for the load and the span." },
       { title: "Welded, sloped frame", body: "Continuous TIG welds on 304 or 316 stainless with sloped members and open sides — designed to 3-A Sanitary Standards." },
       { title: "Drive choice", body: "Gear motor with VFD or One Motion Mag-Drive hub motor with no gearbox and no oil, IP69K sealed." },
     ],
@@ -567,7 +557,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "Does a modular belt need tracking?", a: "No. It is positively driven by sprockets on a square shaft, so it cannot wander the way a friction-driven flat belt can. It does need the right sprocket pitch and wearstrip layout, which AQS sizes for the load." },
       { q: "Can it run through a curve?", a: "Yes. Side-flexing modules carry product through 45°, 90°, 180°, and S-curve turns on one belt; the inside radius is the belt's collapse factor times its width." },
     ],
-    tools: ["belt-pull-calculator", "uhmw-wearstrip-span-calculator", "modular-belt-drive-shaft-calculator", "conveyor-speed-calculator"],
   },
   {
     family: "pallet",
@@ -630,7 +619,6 @@ export const conveyorTypePages: ConveyorTypePage[] = [
       { q: "How do pallets turn a corner?", a: "On swept-radius sections with tapered rollers, driven like any other zone, so the pallet turns 90° without a turntable or pneumatics and can enter 40\" or 48\" side leading." },
       { q: "Is pallet conveyor washdown-rated?", a: "Yes. Continuous TIG-welded stainless frames, sealed drives from IP65 to IP69K, IP67 drive cards, and NEMA 4X enclosures, designed to 3-A Sanitary Standards — and freezer-rated where the room is cold." },
     ],
-    tools: ["mdr-motorized-roller-selection", "conveyor-throughput-calculator", "accumulation-conveyor-calculator", "machine-guard-opening-distance"],
   },
 ];
 

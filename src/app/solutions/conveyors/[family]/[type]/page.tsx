@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
-import { ToolboxLinks } from "@/components/sections/toolbox-links";
 import { FAQSection } from "@/components/sections/faq-section";
 import { ConveyorCTA } from "@/components/sections/conveyor-cta";
 import { ConveyorTypeContent } from "@/components/pages/conveyor-type";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE, breadcrumbList, faqPage, service } from "@/lib/schema";
-import { CONVEYOR_ACCENT, categories } from "@/data/conveyors";
+import { categories } from "@/data/conveyors";
 import { conveyorTypePages, getTypePageBySlug, typePageHref } from "@/data/conveyor-type-pages";
 
 // Static segments (belt/, mdr/, pallet/, projects/) win over this route, so
@@ -63,7 +62,6 @@ export default async function ConveyorTypePage({ params }: { params: Params }) {
       />
       <Navigation />
       <ConveyorTypeContent page={page} />
-      <ToolboxLinks tools={page.tools} title="Size It Yourself" accent={CONVEYOR_ACCENT} />
       <FAQSection items={page.faq} />
       <ConveyorCTA />
       <Footer />

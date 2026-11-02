@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
 import { GiveawayCalculatorStandalone } from "@/toolbox/components/calculators/GiveawayCalculator";
@@ -24,10 +23,6 @@ export function GiveawaySection() {
           <div className="toolbox-scope rounded-xl border border-border bg-surface-page p-5 md:p-6 mt-2">
             <GiveawayCalculatorStandalone />
           </div>
-          <p className="font-sans text-text-body text-[0.82rem] mt-4">
-            Want to keep your numbers? The same calculator lives in the{" "}
-            <Link href="/toolbox/product-giveaway-calculator" className="text-accent-text hover:underline">Engineering Toolbox</Link>, where inputs are saved in your browser.
-          </p>
         </AnimatedSection>
       </div>
     </section>
