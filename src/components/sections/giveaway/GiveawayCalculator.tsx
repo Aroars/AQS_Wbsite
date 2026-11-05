@@ -1,9 +1,6 @@
 import { useMemo, useState } from 'react'
-import { CalcPinButton } from '@/toolbox/components/ui/CalcPinButton'
-import { useInstanceState, MAIN } from '@/toolbox/hooks/useToolState'
-import { giveaway, fromLb, toLb, WEIGHT_UNITS, type WeightUnit } from '@/toolbox/lib/calculators/giveaway'
-import { fmtNum } from '@/toolbox/lib/calculators/lineThroughput'
-import { BigResult, Tile, Field, panelCls, inputCls, selectCls } from '@/toolbox/components/ui/Results'
+import { giveaway, fromLb, toLb, WEIGHT_UNITS, type WeightUnit } from './giveaway'
+import { BigResult, Tile, Field, panelCls, inputCls, selectCls } from './ui'
 
 export interface GiveawayState {
     target: string; actual: string; unit: WeightUnit; ppm: string; hours: string; days: string
@@ -11,12 +8,17 @@ export interface GiveawayState {
 }
 export const giveawayInitial: GiveawayState = { target: '', actual: '', unit: 'g', ppm: '', hours: '16', days: '250', cost: '', costUnit: 'lb', improved: '', systemCost: '' }
 const num = (v: string): number | null => { const n = parseFloat(v); return Number.isFinite(n) ? n : null }
+const fmtNum = (v: number, sig = 4): string => {
+    if (!Number.isFinite(v)) return '—'
+    if (v === 0) return '0'
+    if (Math.abs(v) >= 1000) return Math.round(v).toLocaleString('en-US')
+    return String(Number(v.toPrecision(sig)))
+}
 const money = (v: number) => v.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
 
 /**
  * Product giveaway core: what overfill costs, and what a checkweigher holding a
- * tighter target saves. Stateless so the VeriPak page can embed it; the
- * toolbox wrapper below adds persistence and a pin.
+ * tighter target saves. Stateless so the VeriPak page can embed it.
  */
 export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: GiveawayState; setS: (next: GiveawayState) => void; compact?: boolean }) {
     const upd = (patch: Partial<GiveawayState>) => setS({ ...s, ...patch })
@@ -74,20 +76,6 @@ export function GiveawayCalculatorCore({ s, setS, compact = false }: { s: Giveaw
                 {r && r.overfillPerPkg < 0 && <div className="px-2.5 py-2 bg-warning/10 border-l-2 border-warning rounded text-xs text-warning">The average fill is below the declared weight — that is underfill, a compliance problem rather than giveaway.</div>}
                 <div className="text-[11px] text-text-dim">giveaway = (actual − target) × packages/min × 60 × hours/day × days/year; cost = giveaway × product cost. Savings compare against the overfill a feedback loop holds.</div>
             </div>
-        </div>
-    )
-}
-
-/** Toolbox card: persisted state and a pin around the core */
-export function GiveawayCalculator({ instanceId = MAIN }: { instanceId?: string } = {}) {
-    const [s, setS] = useInstanceState<GiveawayState>('giveaway', instanceId, giveawayInitial)
-    return (
-        <div className="bg-surface-card border border-border rounded-xl">
-            <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-text-strong">Product Giveaway</h3>
-                <CalcPinButton toolId="giveaway" instanceId={instanceId} />
-            </div>
-            <div className="p-4"><GiveawayCalculatorCore s={s} setS={setS} /></div>
         </div>
     )
 }

@@ -1,21 +1,22 @@
 import type { NextConfig } from "next";
 
-// Engineering Toolbox, ROI calculator, and the /apps index.
-// false sends those routes home with a 307 so browsers do not cache a permanent redirect.
-// Flip to true to serve the pages again.
-const TOOLBOX_ENABLED = false;
+// Governs the quoting-tool apps index (/apps) only.
+// false sends /apps home with a 307 so browsers do not cache a permanent redirect.
+// Flip to true to serve the page again.
+const APPS_ENABLED = false;
 
-const HIDDEN_TOOL_REDIRECTS: { source: string; destination: string; permanent: false }[] =
-  TOOLBOX_ENABLED
+const APPS_REDIRECTS: { source: string; destination: string; permanent: false }[] =
+  APPS_ENABLED
     ? []
-    : [
-        "/toolbox",
-        "/toolbox/:path*",
-        "/calculators",
-        "/calculators/:path*",
-        "/apps",
-        "/apps/:path*",
-      ].map((source) => ({ source, destination: "/", permanent: false }));
+    : ["/apps", "/apps/:path*"].map((source) => ({ source, destination: "/", permanent: false }));
+
+// The Engineering Toolbox and ROI calculator moved to Roars OS; old URLs go home.
+const REMOVED_TOOL_REDIRECTS: { source: string; destination: string; permanent: true }[] = [
+  "/toolbox",
+  "/toolbox/:path*",
+  "/calculators",
+  "/calculators/:path*",
+].map((source) => ({ source, destination: "/", permanent: true }));
 
 const nextConfig: NextConfig = {
   images: {
@@ -23,54 +24,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      ...HIDDEN_TOOL_REDIRECTS,
-      // Toolbox: search-first slugs (2026-09)
-      {
-        source: "/toolbox/wearstrip-span-calculator",
-        destination: "/toolbox/uhmw-wearstrip-span-calculator",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/mdr-hub-motor-selection",
-        destination: "/toolbox/mdr-motorized-roller-selection",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/modular-belt-specs",
-        destination: "/toolbox/modular-belt-comparison-chart",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/guard-opening-distance",
-        destination: "/toolbox/machine-guard-opening-distance",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/friction-coefficient-chart",
-        destination: "/toolbox/friction-coefficient-table",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/air-fitting-thread-chart",
-        destination: "/toolbox/pipe-thread-air-fitting-reference",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/expression-calculator",
-        destination: "/toolbox/engineering-expression-calculator",
-        permanent: true,
-      },
-      {
-        source: "/toolbox/electrical-power-calculator",
-        destination: "/toolbox/panel-load-kw-to-amps-calculator",
-        permanent: true,
-      },
-      // Toolbox: the belt load page became the throughput calculator
-      {
-        source: "/toolbox/belt-load-calculator",
-        destination: "/toolbox/conveyor-throughput-calculator",
-        permanent: true,
-      },
+      ...REMOVED_TOOL_REDIRECTS,
+      ...APPS_REDIRECTS,
       // Old Wix site URLs → new Next.js routes
       {
         source: "/palletizingwithrobotics",

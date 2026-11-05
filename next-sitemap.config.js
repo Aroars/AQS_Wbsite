@@ -5,7 +5,8 @@ module.exports = {
   changefreq: "weekly",
   priority: 0.7,
   sitemapSize: 5000,
-  // Toolbox, calculators, and /apps stay out of the sitemap while TOOLBOX_ENABLED is false in next.config.ts.
+  // The toolbox and calculators are gone (permanent redirects in next.config.ts) and /apps is gated by
+  // APPS_ENABLED there, so none of them belong in the sitemap.
   exclude: ["/api/*", "/toolbox", "/toolbox/*", "/calculators", "/calculators/*", "/apps", "/apps/*"],
   transform: async (config, path) => {
     // Higher priority for key pages
