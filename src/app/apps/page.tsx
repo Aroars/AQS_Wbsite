@@ -4,13 +4,13 @@ import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
-  title: "Digital Tools & Apps | Conveyor Quoting & ROI Calculator | AQS",
+  title: "Conveyor Quote Builder | AQS Apps | AQS",
   description:
-    "AQS builds purpose-built digital tools for packaging automation sales — including a conveyor quote builder with 3D preview and an ROI projection calculator for capital equipment decisions.",
+    "AQS builds a purpose-built conveyor quote builder for packaging automation sales, with 3D preview, materials configuration, and one-click PDF quotes.",
   openGraph: {
-    title: "Digital Tools & Apps | Conveyor Quoting & ROI Calculator | AQS",
+    title: "Conveyor Quote Builder | AQS Apps | AQS",
     description:
-      "AQS builds purpose-built digital tools for packaging automation sales — including a conveyor quote builder with 3D preview and an ROI projection calculator for capital equipment decisions.",
+      "AQS builds a purpose-built conveyor quote builder for packaging automation sales, with 3D preview, materials configuration, and one-click PDF quotes.",
   },
 };
 
@@ -32,42 +32,6 @@ const apps = [
       "One-click PDF generation and quote delivery",
     ],
     footer: "Authorized reps and partners",
-  },
-  {
-    title: "ROI Projection Tool",
-    badge: "FINANCIAL TOOL",
-    accent: "#00C6D7",
-    href: "/calculators/roi",
-    external: false,
-    loginRequired: true,
-    comingSoon: false,
-    description:
-      "Build a conservative 60-month financial projection for capital equipment purchases. Calculate break-even timelines, labor savings, and capacity gains with interactive charts ready for executive presentations.",
-    features: [
-      "Break-even analysis with month-by-month tracking",
-      "Labor savings and capacity benefit calculators",
-      "Interactive cumulative cash flow visualization",
-      "Conservative methodology — no inflated projections",
-    ],
-    footer: "Authorized reps and partners",
-  },
-  {
-    title: "Engineering Toolbox",
-    badge: "ENGINEERING TOOL",
-    accent: "#00B4D8",
-    href: "/toolbox",
-    external: false,
-    loginRequired: false,
-    comingSoon: false,
-    description:
-      "Conveyor calculators, unit converters, and engineering reference charts in one browser tab. Built for engineers docked beside CAD — your work is saved locally, no account needed.",
-    features: [
-      "Belt pull, conveyor flow, belt load, and wearstrip span calculators",
-      "Reference charts: bolts, wire gauge, ISO fits, pneumatics, safety",
-      "Unit converter with saved, pinnable converters",
-      "Command palette (⌘K) to jump to any tool by name or size",
-    ],
-    footer: "Free for everyone",
   },
 ] as const;
 
@@ -137,17 +101,15 @@ export default function AppsPage() {
               AQS Apps
             </h1>
             <p className="text-text-body text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Purpose-built tools that help our team, partners, and fellow
-              engineers move faster — from quoting custom conveyors and
-              building defensible ROI projections to everyday conveyor math
-              and reference lookups.
+              A purpose-built tool that helps our team and partners move
+              faster when quoting custom conveyors.
             </p>
           </div>
         </section>
 
         {/* App Cards Grid */}
         <section className="px-6 pb-20">
-          <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mx-auto max-w-xl grid grid-cols-1 gap-8">
             {apps.map((app) => {
               const cardContent = (
                 <div

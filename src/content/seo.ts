@@ -103,11 +103,6 @@ export const pageMetadata = {
     description:
       "Request a quote for VeriPak SCADA, IntelliPak conveyors, custom sanitary conveyors, robotics, or leak detection. Contact AQS at (208) 297-4420 or sales@automatedqs.com.",
   },
-  toolbox: {
-    title: "Free Engineering Toolbox — Conveyor Calculators | AQS",
-    description:
-      "Free browser-based engineering toolbox: belt pull, conveyor speed and throughput calculators, unit converters, and reference charts. No login, saved locally.",
-  },
   blog: {
     title: "Blog | Packaging Automation Insights | AQS",
     description:

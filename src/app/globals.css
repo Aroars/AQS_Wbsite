@@ -12,11 +12,9 @@
   --color-accent-conveyor: #66b3ff;
   --color-accent-warning: #f5a623;
 
-  /* Engineering Toolbox status colours (src/toolbox). On light surfaces they
-     are fills, edges, and tints only; as text they live on the readout. */
-  --color-success: #10B981;
+  /* Status colour used by the giveaway calculator warning. On light surfaces it
+     is a fill, edge, or tint only; as text it lives on the readout. */
   --color-warning: #F59E0B;
-  --color-error: #EF4444;
 
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -27,9 +25,8 @@
 
    Semantic tokens flip with [data-theme]; brand tokens never change.
    The readout layer (.readout) is dark in both themes: results panels,
-   logs, and charts inside the toolbox sit on brand navy deep and carry
-   the dark-theme text values, the way the hero band and the HMI screens
-   do. See docs/toolbox-light-theme-plan.md.
+   logs, and charts sit on brand navy deep and carry the dark-theme text
+   values, the way the hero band and the HMI screens do.
    ======================================== */
 :root {
   --surface-page: #F3F5F8;
@@ -391,63 +388,4 @@ body {
     margin: 0.5in;
     size: letter;
   }
-}
-
-/* ========================================
-   Engineering Toolbox Scoped Styles
-   (base rules from the standalone app's index.css, limited to .toolbox-scope)
-   ======================================== */
-.toolbox-scope ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.toolbox-scope ::-webkit-scrollbar-track {
-  background: var(--surface-page);
-}
-
-.toolbox-scope ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-.toolbox-scope ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
-}
-
-/* Remove number input spinners */
-.toolbox-scope input[type="number"]::-webkit-inner-spin-button,
-.toolbox-scope input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.toolbox-scope input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.toolbox-scope :focus-visible {
-  outline: 2px solid var(--accent-text);
-  outline-offset: 2px;
-}
-
-/* Toolbox scroll snap: the title strip docks under the site nav (53px once
-   scrolled) and acts as a barrier on the way back up — see useSnapBarrier. */
-html.toolbox-snap {
-  scroll-snap-type: y proximity;
-}
-
-.toolbox-snap-target {
-  scroll-snap-align: start;
-  scroll-margin-top: 53px;
-}
-
-/* Toolbox solver fields: a solved value that just changed flashes once */
-@keyframes tb-flash {
-  0% { box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.9); background-color: rgba(0, 194, 255, 0.22); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 194, 255, 0); background-color: var(--surface-page); }
-}
-.tb-flash {
-  animation: tb-flash 1.5s ease-out;
 }

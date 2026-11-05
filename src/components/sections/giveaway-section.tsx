@@ -2,7 +2,7 @@
 
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionLabel, SectionTitle, SectionDesc } from "@/components/ui/section-header";
-import { GiveawayCalculatorStandalone } from "@/toolbox/components/calculators/GiveawayCalculator";
+import { GiveawayCalculatorStandalone } from "@/components/sections/giveaway/GiveawayCalculator";
 
 /** The product giveaway calculator embedded on the VeriPak page */
 export function GiveawaySection() {
@@ -19,8 +19,7 @@ export function GiveawaySection() {
           </SectionDesc>
         </AnimatedSection>
         <AnimatedSection delay={0.15}>
-          {/* toolbox-scope keeps the embedded calculator on the dark token values until the toolbox sweep */}
-          <div className="toolbox-scope rounded-xl border border-border bg-surface-page p-5 md:p-6 mt-2">
+          <div className="rounded-xl border border-border bg-surface-page p-5 md:p-6 mt-2">
             <GiveawayCalculatorStandalone />
           </div>
         </AnimatedSection>
